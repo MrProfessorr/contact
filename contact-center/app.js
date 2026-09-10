@@ -11,9 +11,9 @@ import {
 
 
 
-/* =========================================
+/* =========================================================
    FIREBASE
-========================================= */
+========================================================= */
 
 const firebaseConfig = {
 
@@ -49,9 +49,55 @@ const db =
 
 
 
-/* =========================================
+/* =========================================================
+   LOADING SETTINGS
+
+   3000 = 3 seconds
+
+   Kalau mahu:
+   300ms  = 300
+   2 sec  = 2000
+   3 sec  = 3000
+   5 sec  = 5000
+========================================================= */
+
+const LOADER_MIN_MS =
+  3000;
+
+
+const LOADER_MAX_MS =
+  10000;
+
+
+const loaderStartedAt =
+  Date.now();
+
+
+const firebaseReady = {
+
+  contacts: false,
+  notices: false,
+  settings: false
+
+};
+
+
+
+/* =========================================================
    DOM
-========================================= */
+========================================================= */
+
+const pageLoader =
+  document.getElementById(
+    "pageLoader"
+  );
+
+
+const loaderTitle =
+  document.getElementById(
+    "loaderTitle"
+  );
+
 
 const contactList =
   document.getElementById(
@@ -101,10 +147,16 @@ const closeImageModal =
   );
 
 
+const modalBackdrop =
+  document.getElementById(
+    "modalBackdrop"
+  );
 
-/* =========================================
+
+
+/* =========================================================
    STATE
-========================================= */
+========================================================= */
 
 let contacts = [];
 
@@ -116,9 +168,110 @@ let searchText =
 
 
 
-/* =========================================
-   SAFE HTML
-========================================= */
+/* =========================================================
+   PAGE LOADER
+========================================================= */
+
+function markReady(section) {
+
+  firebaseReady[section] =
+    true;
+
+
+  const allReady =
+    firebaseReady.contacts &&
+    firebaseReady.notices &&
+    firebaseReady.settings;
+
+
+  if (allReady) {
+
+    finishLoader();
+
+  }
+
+}
+
+
+
+function finishLoader() {
+
+  if (
+    pageLoader.classList.contains(
+      "hide"
+    )
+  ) {
+    return;
+  }
+
+
+  const elapsed =
+    Date.now() -
+    loaderStartedAt;
+
+
+  const remaining =
+    Math.max(
+      0,
+      LOADER_MIN_MS - elapsed
+    );
+
+
+  setTimeout(
+    hideLoader,
+    remaining
+  );
+
+}
+
+
+
+function hideLoader() {
+
+  pageLoader
+    .classList
+    .add(
+      "hide"
+    );
+
+
+  document.body
+    .classList
+    .remove(
+      "page-loading"
+    );
+
+
+  setTimeout(
+    () => {
+
+      pageLoader.style.display =
+        "none";
+
+    },
+    650
+  );
+
+}
+
+
+
+/*
+  Safety:
+  kalau internet/Firebase terlalu lambat,
+  loader tidak terkunci selamanya.
+*/
+
+setTimeout(
+  hideLoader,
+  LOADER_MAX_MS
+);
+
+
+
+/* =========================================================
+   SAFE TEXT
+========================================================= */
 
 function safe(value = "") {
 
@@ -153,50 +306,57 @@ function safe(value = "") {
 
 
 
-/* =========================================
+/* =========================================================
    SAFE URL
-========================================= */
+========================================================= */
 
 function safeUrl(value = "") {
 
-  const url =
-    String(value || "")
+  const valueString =
+    String(
+      value || ""
+    )
       .trim();
 
 
-  if (!url) {
+  if (!valueString) {
     return "";
   }
 
 
   try {
 
-    const parsed =
-      new URL(url);
+    const url =
+      new URL(
+        valueString
+      );
 
 
     if (
-      parsed.protocol ===
-        "http:" ||
-      parsed.protocol ===
-        "https:"
+      url.protocol === "http:" ||
+      url.protocol === "https:"
     ) {
 
-      return parsed.href;
+      return url.href;
+
     }
 
-  } catch (_) {
+  } catch (error) {
+
+    return "";
+
   }
 
 
   return "";
+
 }
 
 
 
-/* =========================================
-   BUILD CONTACT LINK
-========================================= */
+/* =========================================================
+   CONTACT LINK
+========================================================= */
 
 function buildLink(contact) {
 
@@ -223,41 +383,47 @@ function buildLink(contact) {
 
 
 
-  /* CUSTOM LINK */
+  /*
+    CUSTOM LINK
+  */
 
   if (custom) {
 
     try {
 
-      const withProtocol =
+      const finalCustom =
         /^https?:\/\//i.test(custom)
+
           ? custom
-          : "https://" + custom;
+
+          : "https://" +
+            custom;
 
 
-      const parsed =
-        new URL(withProtocol);
+      return new URL(
+        finalCustom
+      ).href;
 
+    } catch (error) {
 
-      if (
-        parsed.protocol === "http:" ||
-        parsed.protocol === "https:"
-      ) {
+      console.warn(
+        "Invalid custom link:",
+        custom
+      );
 
-        return parsed.href;
-      }
-
-    } catch (_) {
     }
 
   }
 
 
 
-  /* WHATSAPP */
+  /*
+    WHATSAPP
+  */
 
   if (
-    type === "whatsapp"
+    type ===
+    "whatsapp"
   ) {
 
     const number =
@@ -276,14 +442,18 @@ function buildLink(contact) {
       "https://wa.me/" +
       number
     );
+
   }
 
 
 
-  /* TELEGRAM */
+  /*
+    TELEGRAM
+  */
 
   if (
-    type === "telegram"
+    type ===
+    "telegram"
   ) {
 
     const username =
@@ -295,7 +465,7 @@ function buildLink(contact) {
         )
 
         .replace(
-          "@",
+          /^@/,
           ""
         )
 
@@ -313,11 +483,14 @@ function buildLink(contact) {
         username
       )
     );
+
   }
 
 
 
-  /* NORMAL URL */
+  /*
+    OTHER WEBSITE
+  */
 
   if (
     type === "website" ||
@@ -328,64 +501,76 @@ function buildLink(contact) {
 
     try {
 
-      const withProtocol =
+      const finalUrl =
         /^https?:\/\//i.test(value)
+
           ? value
-          : "https://" + value;
+
+          : "https://" +
+            value;
 
 
-      const parsed =
-        new URL(withProtocol);
+      return new URL(
+        finalUrl
+      ).href;
 
+    } catch (error) {
 
-      if (
-        parsed.protocol === "http:" ||
-        parsed.protocol === "https:"
-      ) {
+      return "#";
 
-        return parsed.href;
-      }
-
-    } catch (_) {
     }
 
   }
 
 
   return "#";
+
 }
 
 
 
-/* =========================================
+/* =========================================================
    CONTACT ICON
-========================================= */
+========================================================= */
 
 function getContactIcon(type) {
 
   type =
-    String(type || "")
+    String(
+      type || ""
+    )
       .toLowerCase();
 
 
-  switch (type) {
+  switch(type) {
 
     case "whatsapp":
+
       return "💬";
 
+
     case "telegram":
+
       return "✈️";
 
+
     case "facebook":
+
       return "f";
 
+
     case "instagram":
+
       return "◎";
 
+
     case "website":
+
       return "🌐";
 
+
     default:
+
       return "↗";
 
   }
@@ -394,24 +579,31 @@ function getContactIcon(type) {
 
 
 
-/* =========================================
+/* =========================================================
    STATUS
-========================================= */
+========================================================= */
 
 function statusText(status) {
 
-  switch (status) {
+  switch(status) {
 
     case "active":
+
       return "● ACTIVE";
 
+
     case "problem":
+
       return "● PROBLEM";
 
+
     case "closed":
+
       return "● CLOSED";
 
+
     default:
+
       return "● UNKNOWN";
 
   }
@@ -419,17 +611,23 @@ function statusText(status) {
 }
 
 
+
 function statusClass(status) {
 
-  switch (status) {
+  switch(status) {
 
     case "active":
+
       return "status-active";
 
+
     case "problem":
+
       return "status-problem";
 
+
     default:
+
       return "status-closed";
 
   }
@@ -438,9 +636,9 @@ function statusClass(status) {
 
 
 
-/* =========================================
+/* =========================================================
    COUNTERS
-========================================= */
+========================================================= */
 
 function updateCounters() {
 
@@ -491,42 +689,50 @@ function updateCounters() {
 
 
 
-/* =========================================
-   FILTER CONTACTS
-========================================= */
+/* =========================================================
+   FILTER
+========================================================= */
 
 function getFilteredContacts() {
 
   return contacts.filter(
     item => {
 
-      const filterMatch =
-        currentFilter === "all" ||
+      const matchesFilter =
+
+        currentFilter ===
+        "all"
+
+        ||
+
         item.status ===
-          currentFilter;
+        currentFilter;
 
 
-      const content =
+      const haystack =
         [
+
           item.name,
           item.value,
           item.type,
           item.description
+
         ]
-          .join(" ")
-          .toLowerCase();
+
+        .join(" ")
+
+        .toLowerCase();
 
 
-      const searchMatch =
-        content.includes(
-          searchText
-            .toLowerCase()
+      const matchesSearch =
+        haystack.includes(
+          searchText.toLowerCase()
         );
 
 
       return (
-        filterMatch &&
-        searchMatch
+        matchesFilter &&
+        matchesSearch
       );
 
     }
@@ -536,9 +742,9 @@ function getFilteredContacts() {
 
 
 
-/* =========================================
+/* =========================================================
    RENDER CONTACTS
-========================================= */
+========================================================= */
 
 function renderContacts() {
 
@@ -546,11 +752,18 @@ function renderContacts() {
     getFilteredContacts();
 
 
-  /* RIGHT CONTACT LIST */
-
   contactList.innerHTML =
     "";
 
+
+  statusList.innerHTML =
+    "";
+
+
+
+  /*
+    NO RESULTS
+  */
 
   if (
     !filtered.length
@@ -563,167 +776,6 @@ function renderContacts() {
       </div>
       `;
 
-  } else {
-
-    filtered.forEach(
-      item => {
-
-        const link =
-          buildLink(item);
-
-
-        const isClosed =
-          item.status ===
-          "closed";
-
-
-        let iconHTML =
-          getContactIcon(
-            item.type
-          );
-
-
-        const image =
-          safeUrl(
-            item.imageUrl
-          );
-
-
-        if (image) {
-
-          iconHTML =
-            `
-            <img
-              src="${safe(image)}"
-              alt="${safe(item.name || "Contact")}"
-              loading="lazy"
-            >
-            `;
-        }
-
-
-        contactList
-          .insertAdjacentHTML(
-            "beforeend",
-            `
-
-            <article
-              class="contact-card"
-            >
-
-              <div
-                class="contact-icon"
-              >
-                ${iconHTML}
-              </div>
-
-
-              <div
-                class="contact-content"
-              >
-
-                <h3
-                  title="${safe(item.name || "Contact")}"
-                >
-                  ${safe(item.name || "Contact")}
-                </h3>
-
-
-                <div
-                  class="contact-value"
-                >
-                  ${safe(item.value || "")}
-                </div>
-
-
-                <span
-                  class="status-badge ${statusClass(item.status)}"
-                >
-                  ${statusText(item.status)}
-                </span>
-
-
-                ${
-                  item.description
-
-                    ? `
-                      <div
-                        class="contact-description"
-                      >
-                        ${safe(item.description)}
-                      </div>
-                    `
-
-                    : ""
-                }
-
-              </div>
-
-
-              <a
-                href="${safe(link)}"
-
-                class="contact-open ${
-                  isClosed
-                    ? "closed"
-                    : ""
-                }"
-
-                ${
-                  !isClosed &&
-                  link !== "#"
-
-                    ? `
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    `
-
-                    : ""
-                }
-              >
-
-                ${
-                  isClosed
-                    ? "UNAVAILABLE"
-
-                    : (
-                        item.type ===
-                          "whatsapp"
-
-                          ? "OPEN WHATSAPP"
-
-                          : item.type ===
-                              "telegram"
-
-                            ? "OPEN TELEGRAM"
-
-                            : "OPEN CONTACT"
-                      )
-                }
-
-              </a>
-
-            </article>
-
-            `
-          );
-
-      }
-    );
-
-  }
-
-
-
-  /* LEFT STATUS */
-
-  statusList.innerHTML =
-    "";
-
-
-  if (
-    !filtered.length
-  ) {
 
     statusList.innerHTML =
       `
@@ -732,29 +784,197 @@ function renderContacts() {
       </div>
       `;
 
+
     return;
+
   }
 
 
+
+  /*
+    CONTACT CARDS
+  */
+
   filtered.forEach(
     item => {
+
+      const link =
+        buildLink(item);
+
+
+      const isClosed =
+        item.status ===
+        "closed";
+
+
+      const image =
+        safeUrl(
+          item.imageUrl
+        );
+
+
+      let iconHtml =
+        getContactIcon(
+          item.type
+        );
+
+
+      if (image) {
+
+        iconHtml =
+          `
+          <img
+            src="${safe(image)}"
+            alt="${safe(item.name || "Contact")}"
+            loading="lazy"
+          >
+          `;
+
+      }
+
+
+
+      let buttonText =
+        "OPEN CONTACT";
+
+
+      if (
+        item.type ===
+        "whatsapp"
+      ) {
+
+        buttonText =
+          "OPEN WHATSAPP";
+
+      }
+
+
+      if (
+        item.type ===
+        "telegram"
+      ) {
+
+        buttonText =
+          "OPEN TELEGRAM";
+
+      }
+
+
+      if (
+        isClosed
+      ) {
+
+        buttonText =
+          "UNAVAILABLE";
+
+      }
+
+
+
+      contactList
+        .insertAdjacentHTML(
+          "beforeend",
+          `
+
+          <article class="contact-card">
+
+            <div class="contact-icon">
+
+              ${iconHtml}
+
+            </div>
+
+
+            <div class="contact-content">
+
+              <h3
+                title="${safe(item.name || "Contact")}"
+              >
+                ${safe(item.name || "Contact")}
+              </h3>
+
+
+              <div class="contact-value">
+
+                ${safe(item.value || "")}
+
+              </div>
+
+
+              <span
+                class="
+                  status-badge
+                  ${statusClass(item.status)}
+                "
+              >
+                ${statusText(item.status)}
+              </span>
+
+
+              ${
+                item.description
+
+                  ? `
+                    <div class="contact-description">
+
+                      ${safe(item.description)}
+
+                    </div>
+                  `
+
+                  : ""
+              }
+
+            </div>
+
+
+            <a
+              href="${safe(link)}"
+
+              class="
+                contact-open
+                ${isClosed ? "closed" : ""}
+              "
+
+              ${
+                !isClosed &&
+                link !== "#"
+
+                  ? `
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  `
+
+                  : ""
+              }
+            >
+
+              ${buttonText}
+
+            </a>
+
+          </article>
+
+          `
+        );
+
+
+
+      /*
+        SIDEBAR ITEM
+      */
 
       statusList
         .insertAdjacentHTML(
           "beforeend",
           `
 
-          <div
-            class="status-item"
-          >
+          <div class="status-item">
 
-            <div
-              class="status-top"
-            >
+            <div class="status-top">
 
               <div
                 class="status-name"
-
                 title="${safe(item.name || "Contact")}"
               >
                 ${safe(item.name || "Contact")}
@@ -762,7 +982,10 @@ function renderContacts() {
 
 
               <span
-                class="status-badge ${statusClass(item.status)}"
+                class="
+                  status-badge
+                  ${statusClass(item.status)}
+                "
               >
                 ${statusText(item.status)}
               </span>
@@ -770,10 +993,10 @@ function renderContacts() {
             </div>
 
 
-            <div
-              class="status-value"
-            >
+            <div class="status-value">
+
               ${safe(item.value || "")}
+
             </div>
 
           </div>
@@ -788,15 +1011,17 @@ function renderContacts() {
 
 
 
-/* =========================================
+/* =========================================================
    FIREBASE CONTACTS
-========================================= */
+========================================================= */
 
 onValue(
+
   ref(
     db,
     "contacts"
   ),
+
 
   snapshot => {
 
@@ -837,12 +1062,18 @@ onValue(
 
     renderContacts();
 
+
+    markReady(
+      "contacts"
+    );
+
   },
+
 
   error => {
 
     console.error(
-      "Contacts error:",
+      "Contacts:",
       error
     );
 
@@ -858,18 +1089,24 @@ onValue(
     statusList.innerHTML =
       `
       <div class="empty">
-        Unable to load contact status.
+        Unable to load status.
       </div>
       `;
 
+
+    markReady(
+      "contacts"
+    );
+
   }
+
 );
 
 
 
-/* =========================================
+/* =========================================================
    SEARCH
-========================================= */
+========================================================= */
 
 searchInput
   .addEventListener(
@@ -882,25 +1119,19 @@ searchInput
           .trim();
 
 
-      if (searchText) {
-
-        clearSearch
-          .classList
-          .add("show");
-
-      } else {
-
-        clearSearch
-          .classList
-          .remove("show");
-
-      }
+      clearSearch
+        .classList
+        .toggle(
+          "show",
+          Boolean(searchText)
+        );
 
 
       renderContacts();
 
     }
   );
+
 
 
 clearSearch
@@ -914,22 +1145,27 @@ clearSearch
       searchText =
         "";
 
+
       clearSearch
         .classList
-        .remove("show");
+        .remove(
+          "show"
+        );
 
-      searchInput.focus();
 
       renderContacts();
+
+
+      searchInput.focus();
 
     }
   );
 
 
 
-/* =========================================
-   FILTER
-========================================= */
+/* =========================================================
+   STATUS FILTER
+========================================================= */
 
 document
   .querySelectorAll(
@@ -950,12 +1186,15 @@ document
               )
 
               .forEach(
-                btn =>
-                  btn
+                item => {
+
+                  item
                     .classList
                     .remove(
                       "active"
-                    )
+                    );
+
+                }
               );
 
 
@@ -981,15 +1220,17 @@ document
 
 
 
-/* =========================================
-   NOTICE
-========================================= */
+/* =========================================================
+   FIREBASE NOTICES
+========================================================= */
 
 onValue(
+
   ref(
     db,
     "notices"
   ),
+
 
   snapshot => {
 
@@ -1018,11 +1259,17 @@ onValue(
         .sort(
           (a, b) => {
 
+            /*
+              PINNED FIRST
+            */
+
             if (
               a.pinned &&
               !b.pinned
             ) {
+
               return -1;
+
             }
 
 
@@ -1030,9 +1277,15 @@ onValue(
               !a.pinned &&
               b.pinned
             ) {
+
               return 1;
+
             }
 
+
+            /*
+              NEWEST FIRST
+            */
 
             return (
 
@@ -1060,6 +1313,7 @@ onValue(
       "";
 
 
+
     if (
       !notices.length
     ) {
@@ -1071,15 +1325,25 @@ onValue(
         </div>
         `;
 
+
+      markReady(
+        "notices"
+      );
+
+
       return;
+
     }
+
 
 
     notices.forEach(
       item => {
 
-        const id =
-          safe(item.id);
+        const noticeId =
+          safe(
+            item.id
+          );
 
 
         const image =
@@ -1088,13 +1352,44 @@ onValue(
           );
 
 
-        let imageHTML =
+        const message =
+          String(
+            item.message ||
+            ""
+          );
+
+
+        /*
+          COLLAPSE LONG CAPTION
+
+          > 180 chars
+          OR
+          > 4 lines
+        */
+
+        const shouldCollapse =
+
+          message.length >
+          180
+
+          ||
+
+          message
+            .split("\n")
+            .length >
+          4;
+
+
+
+        let imageHtml =
           "";
 
 
-        if (image) {
+        if (
+          image
+        ) {
 
-          imageHTML =
+          imageHtml =
             `
 
             <div
@@ -1114,11 +1409,11 @@ onValue(
               >
 
 
-              <span
-                class="image-preview-badge"
-              >
+              <div class="preview-button">
+
                 ⛶ Preview
-              </span>
+
+              </div>
 
             </div>
 
@@ -1127,40 +1422,54 @@ onValue(
         }
 
 
+
         const timestamp =
+
           item.updatedAt ||
+
           item.createdAt;
 
 
-        const dateText =
-          timestamp
 
-            ? new Date(
+        let dateText =
+          "";
+
+
+        if (
+          timestamp
+        ) {
+
+          try {
+
+            dateText =
+              new Date(
                 timestamp
               )
                 .toLocaleString(
                   undefined,
                   {
+
                     dateStyle:
                       "medium",
 
                     timeStyle:
                       "short"
+
                   }
-                )
+                );
 
-            : "";
+          } catch (error) {
 
+            dateText =
+              new Date(
+                timestamp
+              )
+                .toLocaleString();
 
-        const message =
-          String(
-            item.message || ""
-          );
+          }
 
+        }
 
-        const shouldCollapse =
-          message.length > 180 ||
-          message.split("\n").length > 4;
 
 
         noticeList
@@ -1168,25 +1477,21 @@ onValue(
             "beforeend",
             `
 
-            <article
-              class="notice-card"
-            >
+            <article class="notice-card">
 
-              ${imageHTML}
+              ${imageHtml}
 
 
-              <div
-                class="notice-body"
-              >
+              <div class="notice-body">
 
-                <div
-                  class="notice-meta"
-                >
 
-                  <span
-                    class="notice-tag"
-                  >
+                <div class="notice-meta">
+
+
+                  <span class="notice-tag">
+
                     NOTICE
+
                   </span>
 
 
@@ -1194,35 +1499,42 @@ onValue(
                     item.pinned
 
                       ? `
-                        <span
-                          class="pinned-tag"
-                        >
+                        <span class="pinned-tag">
+
                           📌 PINNED
+
                         </span>
                       `
 
                       : ""
                   }
 
+
                 </div>
+
 
 
                 <h3>
+
                   ${safe(item.title || "Notice")}
+
                 </h3>
 
 
-                <div
-                  id="message-${id}"
 
-                  class="notice-message ${
-                    shouldCollapse
-                      ? "collapsed"
-                      : ""
-                  }"
+                <div
+                  id="notice-message-${noticeId}"
+
+                  class="
+                    notice-message
+                    ${shouldCollapse ? "collapsed" : ""}
+                  "
                 >
+
                   ${safe(message)}
+
                 </div>
+
 
 
                 ${
@@ -1230,13 +1542,15 @@ onValue(
 
                     ? `
                       <button
+                        class="notice-expand"
+
                         type="button"
 
-                        class="notice-expand visible"
-
-                        data-expand-target="message-${id}"
+                        data-target="notice-message-${noticeId}"
                       >
+
                         Read more ↓
+
                       </button>
                     `
 
@@ -1244,21 +1558,22 @@ onValue(
                 }
 
 
-                <div
-                  class="notice-footer"
-                >
 
-                  <div
-                    class="notice-date"
-                  >
+                <div class="notice-footer">
+
+                  <div class="notice-date">
+
                     ${
                       dateText
 
                         ? "Updated " +
-                          safe(dateText)
+                          safe(
+                            dateText
+                          )
 
                         : ""
                     }
+
                   </div>
 
                 </div>
@@ -1274,16 +1589,22 @@ onValue(
     );
 
 
-    setupNoticeExpand();
+    setupNoticeButtons();
 
     setupImagePreview();
 
+
+    markReady(
+      "notices"
+    );
+
   },
+
 
   error => {
 
     console.error(
-      "Notice error:",
+      "Notices:",
       error
     );
 
@@ -1295,16 +1616,22 @@ onValue(
       </div>
       `;
 
+
+    markReady(
+      "notices"
+    );
+
   }
+
 );
 
 
 
-/* =========================================
-   NOTICE READ MORE
-========================================= */
+/* =========================================================
+   READ MORE / SHOW LESS
+========================================================= */
 
-function setupNoticeExpand() {
+function setupNoticeButtons() {
 
   document
     .querySelectorAll(
@@ -1319,25 +1646,25 @@ function setupNoticeExpand() {
             "click",
             () => {
 
-              const id =
+              const targetId =
                 button.dataset
-                  .expandTarget;
+                  .target;
 
 
-              const message =
+              const target =
                 document
                   .getElementById(
-                    id
+                    targetId
                   );
 
 
-              if (!message) {
+              if (!target) {
                 return;
               }
 
 
-              const isCollapsed =
-                message
+              const collapsed =
+                target
                   .classList
                   .contains(
                     "collapsed"
@@ -1345,10 +1672,10 @@ function setupNoticeExpand() {
 
 
               if (
-                isCollapsed
+                collapsed
               ) {
 
-                message
+                target
                   .classList
                   .remove(
                     "collapsed"
@@ -1360,7 +1687,7 @@ function setupNoticeExpand() {
 
               } else {
 
-                message
+                target
                   .classList
                   .add(
                     "collapsed"
@@ -1382,9 +1709,9 @@ function setupNoticeExpand() {
 
 
 
-/* =========================================
+/* =========================================================
    IMAGE PREVIEW
-========================================= */
+========================================================= */
 
 function setupImagePreview() {
 
@@ -1401,18 +1728,18 @@ function setupImagePreview() {
             "click",
             () => {
 
-              const image =
+              const url =
                 element.dataset
                   .previewImage;
 
 
-              if (!image) {
+              if (!url) {
                 return;
               }
 
 
               openPreview(
-                image
+                url
               );
 
             }
@@ -1425,12 +1752,10 @@ function setupImagePreview() {
 
 
 
-function openPreview(
-  imageUrl
-) {
+function openPreview(url) {
 
   modalImage.src =
-    imageUrl;
+    url;
 
 
   imageModal
@@ -1501,11 +1826,7 @@ closeImageModal
   );
 
 
-imageModal
-  .querySelector(
-    ".modal-backdrop"
-  )
-
+modalBackdrop
   .addEventListener(
     "click",
     closePreview
@@ -1519,12 +1840,7 @@ document
 
       if (
         event.key ===
-          "Escape" &&
-        imageModal
-          .classList
-          .contains(
-            "open"
-          )
+        "Escape"
       ) {
 
         closePreview();
@@ -1536,15 +1852,17 @@ document
 
 
 
-/* =========================================
+/* =========================================================
    SETTINGS
-========================================= */
+========================================================= */
 
 onValue(
+
   ref(
     db,
     "settings"
   ),
+
 
   snapshot => {
 
@@ -1552,6 +1870,11 @@ onValue(
       snapshot.val() ||
       {};
 
+
+
+    /*
+      SITE NAME
+    */
 
     if (
       settings.siteName
@@ -1565,11 +1888,21 @@ onValue(
           settings.siteName;
 
 
+      loaderTitle
+        .textContent =
+          settings.siteName;
+
+
       document.title =
         settings.siteName;
 
     }
 
+
+
+    /*
+      SUBTITLE
+    */
 
     if (
       settings.subtitle
@@ -1585,13 +1918,20 @@ onValue(
     }
 
 
+
+    /*
+      LOGO
+    */
+
     const logo =
       safeUrl(
         settings.logoUrl
       );
 
 
-    if (logo) {
+    if (
+      logo
+    ) {
 
       document
         .getElementById(
@@ -1602,6 +1942,11 @@ onValue(
 
     }
 
+
+
+    /*
+      FOOTER
+    */
 
     if (
       settings.footerText
@@ -1617,25 +1962,51 @@ onValue(
     }
 
 
+
+    /*
+      LAST UPDATE
+    */
+
     if (
       settings.updatedAt
     ) {
-
-      const update =
-        new Date(
-          settings.updatedAt
-        );
-
 
       document
         .getElementById(
           "lastUpdated"
         )
         .textContent =
+
           "Last update: " +
-          update.toLocaleString();
+
+          new Date(
+            settings.updatedAt
+          )
+            .toLocaleString();
 
     }
 
+
+
+    markReady(
+      "settings"
+    );
+
+  },
+
+
+  error => {
+
+    console.error(
+      "Settings:",
+      error
+    );
+
+
+    markReady(
+      "settings"
+    );
+
   }
+
 );

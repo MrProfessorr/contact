@@ -62,7 +62,7 @@ const db =
 ========================================================= */
 
 const LOADER_MIN_MS =
-  3000;
+  300;
 
 
 const LOADER_MAX_MS =
@@ -2162,31 +2162,6 @@ onValue(
     */
 document.title =
   "Official Support Center";
-
-    /*
-      LOGO
-    */
-
-    const logo =
-      safeUrl(
-        settings.logoUrl
-      );
-
-
-    if (
-      logo
-    ) {
-
-      document
-        .getElementById(
-          "siteLogo"
-        )
-        .src =
-          logo;
-
-    }
-
-
 
     /*
       FOOTER

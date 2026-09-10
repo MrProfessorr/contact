@@ -1224,106 +1224,502 @@ document
    FIREBASE NOTICES
 ========================================================= */
 
+/* =========================================================
+   FIREBASE NOTICES - FIXED
+========================================================= */
+
 onValue(
-
-  ref(
-    db,
-    "notices"
-  ),
-
+  ref(db, "notices"),
 
   snapshot => {
 
-    const data =
-      snapshot.val() ||
-      {};
+    try {
+
+      const rawData =
+        snapshot.val();
 
 
-    const notices =
-      Object
-        .entries(data)
+      console.log(
+        "NOTICE DATA:",
+        rawData
+      );
 
-        .map(
-          ([id, value]) => ({
-            id,
-            ...value
-          })
-        )
 
-        .filter(
-          item =>
-            item.active !==
-            false
-        )
+      /*
+        Kalau database notices kosong
+      */
 
-        .sort(
-          (a, b) => {
+      if (!rawData) {
 
-            /*
-              PINNED FIRST
-            */
+        noticeList.innerHTML = `
+          <div class="empty">
+            No announcements at the moment.
+          </div>
+        `;
+
+        markReady("notices");
+
+        return;
+      }
+
+
+      /*
+        CONVERT FIREBASE OBJECT TO ARRAY
+      */
+
+      let notices =
+        Object.entries(rawData)
+          .map(([id, data]) => {
+
+            return {
+              id,
+              ...(data || {})
+            };
+
+          });
+
+
+      /*
+        NORMALIZE ACTIVE VALUE
+
+        Support:
+        true
+        false
+        "true"
+        "false"
+        undefined
+      */
+
+      notices =
+        notices.filter(
+          item => {
+
+            const value =
+              item.active;
+
 
             if (
-              a.pinned &&
-              !b.pinned
+              value === false ||
+              value === "false" ||
+              value === 0 ||
+              value === "0"
             ) {
 
-              return -1;
+              return false;
 
             }
 
 
-            if (
-              !a.pinned &&
-              b.pinned
-            ) {
-
-              return 1;
-
-            }
-
-
-            /*
-              NEWEST FIRST
-            */
-
-            return (
-
-              Number(
-                b.updatedAt ||
-                b.createdAt ||
-                0
-              )
-
-              -
-
-              Number(
-                a.updatedAt ||
-                a.createdAt ||
-                0
-              )
-
-            );
+            return true;
 
           }
         );
 
 
-    noticeList.innerHTML =
-      "";
+      /*
+        PINNED FIRST
+        NEWEST SECOND
+      */
+
+      notices.sort(
+        (a, b) => {
+
+          const aPinned =
+            a.pinned === true ||
+            a.pinned === "true";
 
 
+          const bPinned =
+            b.pinned === true ||
+            b.pinned === "true";
 
-    if (
-      !notices.length
-    ) {
+
+          if (
+            aPinned &&
+            !bPinned
+          ) {
+
+            return -1;
+
+          }
+
+
+          if (
+            !aPinned &&
+            bPinned
+          ) {
+
+            return 1;
+
+          }
+
+
+          const aTime =
+            Number(
+              a.updatedAt ||
+              a.createdAt ||
+              0
+            );
+
+
+          const bTime =
+            Number(
+              b.updatedAt ||
+              b.createdAt ||
+              0
+            );
+
+
+          return (
+            bTime -
+            aTime
+          );
+
+        }
+      );
+
+
+      /*
+        CLEAR LOADING
+      */
 
       noticeList.innerHTML =
-        `
-        <div class="empty">
-          No announcements at the moment.
-        </div>
+        "";
+
+
+      /*
+        Kalau semua notice HIDDEN
+      */
+
+      if (!notices.length) {
+
+        noticeList.innerHTML = `
+          <div class="empty">
+            No active announcements.
+          </div>
         `;
+
+        markReady("notices");
+
+        return;
+      }
+
+
+
+      /*
+        RENDER EACH NOTICE
+      */
+
+      notices.forEach(
+        item => {
+
+          try {
+
+            /*
+              ID
+            */
+
+            const noticeId =
+              String(item.id)
+                .replace(
+                  /[^a-zA-Z0-9_-]/g,
+                  ""
+                );
+
+
+            /*
+              TITLE
+            */
+
+            const title =
+              String(
+                item.title ||
+                "Notice"
+              )
+                .trim();
+
+
+            /*
+              MESSAGE
+
+              Support juga kalau suatu masa
+              field admin dinamakan caption/text.
+            */
+
+            const message =
+              String(
+                item.message ??
+                item.caption ??
+                item.text ??
+                ""
+              )
+
+                .replace(
+                  /\r\n/g,
+                  "\n"
+                )
+
+                .replace(
+                  /\n{3,}/g,
+                  "\n\n"
+                )
+
+                .trim();
+
+
+
+            /*
+              IMAGE
+
+              Support beberapa nama field
+            */
+
+            const rawImage =
+              item.imageUrl ||
+              item.image ||
+              item.imageURL ||
+              item.photoUrl ||
+              "";
+
+
+            const image =
+              safeUrl(
+                rawImage
+              );
+
+
+
+            /*
+              PIN
+            */
+
+            const pinned =
+              item.pinned === true ||
+              item.pinned === "true";
+
+
+
+            /*
+              IMAGE HTML
+            */
+
+            let imageHtml =
+              "";
+
+
+            if (image) {
+
+              imageHtml = `
+
+                <div
+                  class="notice-image-wrap"
+                  data-preview-image="${safe(image)}"
+                >
+
+                  <img
+                    class="notice-img"
+                    src="${safe(image)}"
+                    alt="${safe(title)}"
+                    loading="lazy"
+                    onerror="
+                      this.closest('.notice-image-wrap').style.display='none'
+                    "
+                  >
+
+                  <div class="preview-button">
+                    ⛶ Preview
+                  </div>
+
+                </div>
+
+              `;
+
+            }
+
+
+
+            /*
+              DATE
+            */
+
+            const timestamp =
+              Number(
+                item.updatedAt ||
+                item.createdAt ||
+                0
+              );
+
+
+            let dateText =
+              "";
+
+
+            if (
+              timestamp > 0
+            ) {
+
+              try {
+
+                dateText =
+                  new Date(
+                    timestamp
+                  )
+                    .toLocaleString(
+                      undefined,
+                      {
+                        dateStyle:
+                          "medium",
+
+                        timeStyle:
+                          "short"
+                      }
+                    );
+
+              } catch {
+
+                dateText =
+                  new Date(
+                    timestamp
+                  )
+                    .toLocaleString();
+
+              }
+
+            }
+
+
+
+            /*
+              CARD
+            */
+
+            const html = `
+
+              <article class="notice-card">
+
+                ${imageHtml}
+
+
+                <div class="notice-body">
+
+
+                  <div class="notice-meta">
+
+                    <span class="notice-tag">
+                      NOTICE
+                    </span>
+
+
+                    ${
+                      pinned
+
+                        ? `
+                          <span class="pinned-tag">
+                            📌 PINNED
+                          </span>
+                        `
+
+                        : ""
+                    }
+
+                  </div>
+
+
+
+                  <h3>
+                    ${safe(title)}
+                  </h3>
+
+
+
+                  ${
+                    message
+
+                      ? `
+
+                        <div
+                          id="notice-message-${noticeId}"
+                          class="notice-message"
+                        >
+                          ${safe(message)}
+                        </div>
+
+
+                        <button
+                          class="notice-expand"
+                          type="button"
+                          data-target="notice-message-${noticeId}"
+                        >
+                          Expand ↓
+                        </button>
+
+                      `
+
+                      : `
+
+                        <div class="notice-message">
+                          No caption.
+                        </div>
+
+                      `
+                  }
+
+
+
+                  <div class="notice-footer">
+
+                    <div class="notice-date">
+
+                      ${
+                        dateText
+
+                          ? "Updated " +
+                            safe(dateText)
+
+                          : ""
+                      }
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+              </article>
+
+            `;
+
+
+            noticeList
+              .insertAdjacentHTML(
+                "beforeend",
+                html
+              );
+
+
+          } catch (itemError) {
+
+            console.error(
+              "NOTICE ITEM ERROR:",
+              item.id,
+              itemError
+            );
+
+          }
+
+        }
+      );
+
+
+
+      /*
+        SETUP AFTER HTML EXISTS
+      */
+
+      setupNoticeButtons();
+
+      setupImagePreview();
 
 
       markReady(
@@ -1331,251 +1727,30 @@ onValue(
       );
 
 
-      return;
+    } catch (error) {
+
+      console.error(
+        "NOTICE RENDER ERROR:",
+        error
+      );
+
+
+      noticeList.innerHTML = `
+
+        <div class="empty">
+
+          Failed to display announcements.
+
+        </div>
+
+      `;
+
+
+      markReady(
+        "notices"
+      );
 
     }
-
-
-
-    notices.forEach(
-      item => {
-
-        const noticeId =
-          safe(
-            item.id
-          );
-
-
-        const image =
-          safeUrl(
-            item.imageUrl
-          );
-
-
-/*
-  CLEAN NOTICE MESSAGE
-
-  - kekalkan ENTER customer/admin
-  - buang blank line terlalu banyak
-  - trim space di awal dan akhir
-*/
-
-const message =
-  String(
-    item.message || ""
-  )
-
-    .replace(
-      /\r\n/g,
-      "\n"
-    )
-
-    .replace(
-      /\n{3,}/g,
-      "\n\n"
-    )
-
-    .trim();
-
-
-
-        let imageHtml =
-          "";
-
-
-        if (
-          image
-        ) {
-
-          imageHtml =
-            `
-
-            <div
-              class="notice-image-wrap"
-
-              data-preview-image="${safe(image)}"
-            >
-
-              <img
-                class="notice-img"
-
-                src="${safe(image)}"
-
-                alt="${safe(item.title || "Notice")}"
-
-                loading="lazy"
-              >
-
-
-              <div class="preview-button">
-
-                ⛶ Preview
-
-              </div>
-
-            </div>
-
-            `;
-
-        }
-
-
-
-        const timestamp =
-
-          item.updatedAt ||
-
-          item.createdAt;
-
-
-
-        let dateText =
-          "";
-
-
-        if (
-          timestamp
-        ) {
-
-          try {
-
-            dateText =
-              new Date(
-                timestamp
-              )
-                .toLocaleString(
-                  undefined,
-                  {
-
-                    dateStyle:
-                      "medium",
-
-                    timeStyle:
-                      "short"
-
-                  }
-                );
-
-          } catch (error) {
-
-            dateText =
-              new Date(
-                timestamp
-              )
-                .toLocaleString();
-
-          }
-
-        }
-
-
-
-        noticeList
-          .insertAdjacentHTML(
-            "beforeend",
-            `
-
-            <article class="notice-card">
-
-              ${imageHtml}
-
-
-              <div class="notice-body">
-
-
-                <div class="notice-meta">
-
-
-                  <span class="notice-tag">
-
-                    NOTICE
-
-                  </span>
-
-
-                  ${
-                    item.pinned
-
-                      ? `
-                        <span class="pinned-tag">
-
-                          📌 PINNED
-
-                        </span>
-                      `
-
-                      : ""
-                  }
-
-
-                </div>
-
-
-
-                <h3>
-
-                  ${safe(item.title || "Notice")}
-
-                </h3>
-
-
-
-<div
-  id="notice-message-${noticeId}"
-  class="notice-message"
->
-  ${safe(message)}
-</div>
-
-
-<button
-  class="notice-expand"
-  type="button"
-  data-target="notice-message-${noticeId}"
->
-  Expand ↓
-</button>
-
-
-
-                <div class="notice-footer">
-
-                  <div class="notice-date">
-
-                    ${
-                      dateText
-
-                        ? "Updated " +
-                          safe(
-                            dateText
-                          )
-
-                        : ""
-                    }
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </article>
-
-            `
-          );
-
-      }
-    );
-
-
-    setupNoticeButtons();
-
-    setupImagePreview();
-
-
-    markReady(
-      "notices"
-    );
 
   },
 
@@ -1583,17 +1758,20 @@ const message =
   error => {
 
     console.error(
-      "Notices:",
+      "FIREBASE NOTICE ERROR:",
       error
     );
 
 
-    noticeList.innerHTML =
-      `
+    noticeList.innerHTML = `
+
       <div class="empty">
+
         Unable to load announcements.
+
       </div>
-      `;
+
+    `;
 
 
     markReady(
@@ -1603,7 +1781,6 @@ const message =
   }
 
 );
-
 
 
 /* =========================================================

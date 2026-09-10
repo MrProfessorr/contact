@@ -1866,56 +1866,27 @@ input {
 
 
 .contact-open {
-
   grid-column:
     1 / -1;
-
   width: 100%;
-
   margin-top: 1px;
-
-  padding:
-    9px 12px;
-
+  padding:9px 12px;
   text-align: center;
-
   text-decoration: none;
-
   color: white;
-
-  border:
-    1px solid rgba(84,156,255,.32);
-
-  border-radius: 9px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #2b72e5,
-      #2054b6
-    );
-
-  box-shadow:
-    0 8px 18px rgba(29,90,194,.15);
-
-  font-size: 8px;
-
-  font-weight: 900;
-
+  border-radius: 6px;
+  background-color: #cd9f15;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 14px 0px;
+  font-size: 12px;
+  font-weight: 600;
   letter-spacing: .4px;
-
-  transition:
-    .18s ease;
+  transition:.18s ease;
 }
 
 
 .contact-open:hover {
-
-  filter:
-    brightness(1.12);
-
-  transform:
-    translateY(-1px);
+filter:brightness(1.12);
+transform:translateY(-1px);
 }
 
 

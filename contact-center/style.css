@@ -792,17 +792,13 @@ input {
 ========================================================= */
 
 .status-panel {
-
   position: sticky;
-
-  top: 101px;
-
-  max-height:
-    calc(100vh - 120px);
-
+  top: 88px;
+  height: auto;
+  max-height: none;
   display: flex;
-
   flex-direction: column;
+  overflow: hidden;
 }
 
 
@@ -978,16 +974,12 @@ input {
 /* SCROLLABLE STATUS */
 
 .status-list {
-
   min-height: 0;
-
+  flex: 1;
   overflow-y: auto;
-
   overscroll-behavior: contain;
-
   padding: 12px;
 }
-
 
 .status-list::-webkit-scrollbar {
   width: 5px;

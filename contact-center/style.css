@@ -737,7 +737,7 @@ input {
   overflow: hidden;
   border:1px solid var(--border);
   border-radius:var(--radius);
-  background: linear-gradient(360deg, #525252 0%, #0A0A0A 100%);
+  background: linear-gradient(360deg, #1c1c1c 0%, #0A0A0A 100%);
   box-shadow:var(--shadow);
 }
 

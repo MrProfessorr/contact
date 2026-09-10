@@ -68,20 +68,13 @@ const LOADER_MIN_MS =
 const LOADER_MAX_MS =
   10000;
 
-
 const loaderStartedAt =
   Date.now();
 
-
 const firebaseReady = {
-
   contacts: false,
-  notices: false,
-  settings: false
-
+  notices: false
 };
-
-
 
 /* =========================================================
    DOM
@@ -178,10 +171,9 @@ function markReady(section) {
     true;
 
 
-  const allReady =
-    firebaseReady.contacts &&
-    firebaseReady.notices &&
-    firebaseReady.settings;
+const allReady =
+  firebaseReady.contacts &&
+  firebaseReady.notices;
 
 
   if (allReady) {
@@ -2134,98 +2126,3 @@ document
 
     }
   );
-
-
-
-/* =========================================================
-   SETTINGS
-========================================================= */
-
-onValue(
-
-  ref(
-    db,
-    "settings"
-  ),
-
-
-  snapshot => {
-
-    const settings =
-      snapshot.val() ||
-      {};
-
-
-
-    /*
-      SITE NAME
-    */
-document.title =
-  "Official Support Center";
-
-    /*
-      FOOTER
-    */
-
-    if (
-      settings.footerText
-    ) {
-
-      document
-        .getElementById(
-          "footerText"
-        )
-        .textContent =
-          settings.footerText;
-
-    }
-
-
-
-    /*
-      LAST UPDATE
-    */
-
-    if (
-      settings.updatedAt
-    ) {
-
-      document
-        .getElementById(
-          "lastUpdated"
-        )
-        .textContent =
-
-          "Last update: " +
-
-          new Date(
-            settings.updatedAt
-          )
-            .toLocaleString();
-
-    }
-
-
-
-    markReady(
-      "settings"
-    );
-
-  },
-
-
-  error => {
-
-    console.error(
-      "Settings:",
-      error
-    );
-
-
-    markReady(
-      "settings"
-    );
-
-  }
-
-);

@@ -18,7 +18,7 @@
   --panel2: rgba(17, 30, 48, .92);
   --panel3: #0b1422;
 
-  --border: rgba(126, 161, 211, .14);
+  --border: #F8DD76;
   --border-hover: rgba(70, 153, 255, .42);
 
   --text: #f5f8ff;
@@ -36,7 +36,7 @@
   --shadow:
     0 20px 60px rgba(0, 0, 0, .30);
 
-  --radius: 16px;
+  --radius: 12px;
 }
 
 
@@ -731,28 +731,13 @@ input {
    CARDS
 ========================================================= */
 
-.status-panel,
-.content-card {
-
+.status-panel, .content-card {
   min-width: 0;
-
   overflow: hidden;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    var(--radius);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(14,25,41,.94),
-      rgba(9,17,29,.94)
-    );
-
-  box-shadow:
-    var(--shadow);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:linear-gradient(145deg,rgba(14,25,41,.94),rgba(9,17,29,.94));
+  box-shadow:var(--shadow);
 }
 
 

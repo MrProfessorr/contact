@@ -863,10 +863,7 @@ input {
 
 
 .filter-btn:hover {
-  border-color:
-    var(--border-hover);
-  transform:
-    translateY(-1px);
+  border-color: var(--border-hover);
 }
 
 

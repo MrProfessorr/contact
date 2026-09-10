@@ -1592,64 +1592,152 @@ input {
 }
 
 
+/* =========================================================
+   NOTICE CAPTION - NEW EXPAND / COLLAPSE
+========================================================= */
+
 .notice-message {
 
-  color:
-    var(--text2);
+  position: relative;
+
+  width: 100%;
+
+  color: var(--text2);
 
   font-size: 11px;
 
-  line-height: 1.75;
+  line-height: 1.7;
 
-  white-space: pre-wrap;
+  /*
+    pre-line lebih sesuai daripada pre-wrap:
+    ENTER masih dikekalkan tetapi spacing tak rosakkan
+    collapse.
+  */
+  white-space: pre-line;
 
   overflow-wrap: anywhere;
 
   word-break: break-word;
+
+  transition:
+    max-height .35s ease;
+
 }
 
+
+/*
+  Default caption.
+  Tidak clamp menggunakan -webkit-line-clamp lagi.
+*/
 
 .notice-message.collapsed {
 
-  display:
-    -webkit-box;
-
-  -webkit-box-orient:
-    vertical;
-
-  -webkit-line-clamp:
-    3;
+  max-height: 112px;
 
   overflow: hidden;
+
 }
 
 
+/*
+  Gradient kecil pada bahagian bawah
+  supaya customer tahu masih ada text lagi.
+*/
+
+.notice-message.collapsed::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 28px;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(12,22,36,0),
+      rgba(12,22,36,.98)
+    );
+
+}
+
+
+/*
+  Selepas Expand
+*/
+
+.notice-message.expanded {
+
+  max-height: none;
+
+  overflow: visible;
+
+}
+
+
+.notice-message.expanded::after {
+
+  display: none;
+
+}
+
+
+/*
+  EXPAND BUTTON
+*/
+
 .notice-expand {
 
-  display: inline-flex;
+  display: none;
 
-  margin-top: 8px;
+  align-items: center;
+
+  gap: 5px;
+
+  margin-top: 9px;
 
   padding: 0;
 
   border: 0;
 
+  outline: 0;
+
   cursor: pointer;
 
-  color:
-    #6fa6ff;
+  color: #65a4ff;
 
-  background:
-    transparent;
+  background: transparent;
 
   font-size: 9px;
 
   font-weight: 800;
+
+  transition:
+    color .18s ease,
+    transform .18s ease;
+
+}
+
+
+.notice-expand.show {
+
+  display: inline-flex;
+
 }
 
 
 .notice-expand:hover {
-  color: #a0c5ff;
+
+  color: #a3c8ff;
+
+  transform: translateX(2px);
+
 }
 
 
@@ -2662,6 +2750,31 @@ body.modal-open {
 
     right: 8px;
     bottom: 8px;
+  }
+
+}
+@media(max-width: 760px) {
+
+  .notice-message {
+
+    font-size: 10px;
+
+    line-height: 1.65;
+
+  }
+
+
+  .notice-message.collapsed {
+
+    max-height: 100px;
+
+  }
+
+
+  .notice-expand {
+
+    font-size: 9px;
+
   }
 
 }

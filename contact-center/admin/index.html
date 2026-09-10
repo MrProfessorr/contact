@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+
+  <title>Admin</title>
+
+</head>
+
+<body>
+
+<p>
+  Loading admin...
+</p>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyDl9m6icGPQ_vPh030_-vwBrYFL9sV1jZ8",
+
+  authDomain:
+    "support-pwa.firebaseapp.com",
+
+  databaseURL:
+    "https://support-pwa-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  projectId:
+    "support-pwa",
+
+  storageBucket:
+    "support-pwa.firebasestorage.app",
+
+  messagingSenderId:
+    "1036053746669",
+
+  appId:
+    "1:1036053746669:web:952df405b937cefe6d8de4"
+};
+
+
+const app =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(app);
+
+
+onAuthStateChanged(
+  auth,
+  user => {
+
+    if (user) {
+
+      location.replace(
+        "./contacts.html"
+      );
+
+    } else {
+
+      location.replace(
+        "./login.html"
+      );
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>

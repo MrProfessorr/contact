@@ -100,17 +100,6 @@ input {
   font: inherit;
 }
 
-
-.header-inner {
-  width: min(1280px, calc(100% - 40px));
-  min-height: 64px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
 .brand {
   min-width: 0;
   display: flex;
@@ -565,22 +554,15 @@ input {
 ========================================================= */
 
 .top-header {
-
   position: sticky;
-
   top: 0;
-
   z-index: 100;
-
   background:
     rgba(4, 9, 16, .82);
-
   border-bottom:
     1px solid rgba(255,255,255,.055);
-
   backdrop-filter:
     blur(18px);
-
   -webkit-backdrop-filter:
     blur(18px);
 }
@@ -588,31 +570,26 @@ input {
 
 .header-inner {
   width: min(1280px, calc(100% - 40px));
-  min-height: 105px;
+  min-height: 64px;
   margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding: 15px 0;
+  gap: 10px;
+  padding:0;
 }
 
 
 .brand {
-
   min-width: 0;
-
   display: flex;
-
   align-items: center;
-
   gap: 13px;
 }
 
 .brand-text {
   min-width: 0;
 }
-
 
 .brand h1 {
   margin-bottom: 4px;
@@ -672,11 +649,6 @@ input {
   }
 
 }
-
-
-
-
-
 
 .hero-copy h2 {
 

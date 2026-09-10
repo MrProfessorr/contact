@@ -24,7 +24,7 @@
 
   --text: #f5f8ff;
   --text2: #cad5e5;
-  --muted: #7d8da5;
+  --muted: #F8DD76;
 
   --blue: #438cff;
   --blue2: #2468dc;
@@ -50,15 +50,10 @@ html {
 
 
 body {
-
   width: 100%;
   min-height: 100vh;
-
   overflow-x: hidden;
-
-  color:
-    var(--text);
-
+  color:var(--text);
   font-family:
     Inter,
     system-ui,
@@ -67,27 +62,7 @@ body {
     "Segoe UI",
     Arial,
     sans-serif;
-
-  background:
-
-    radial-gradient(
-      circle at 88% 5%,
-      rgba(46, 120, 255, .15),
-      transparent 32%
-    ),
-
-    radial-gradient(
-      circle at 5% 65%,
-      rgba(33, 217, 239, .06),
-      transparent 25%
-    ),
-
-    linear-gradient(
-      180deg,
-      #07101d 0%,
-      #050a12 45%,
-      #04080f 100%
-    );
+  background: #0A0A0A;
 }
 
 
@@ -119,9 +94,9 @@ input {
   margin-bottom: 8px;
   padding: 5px 9px;
   border-radius: 7px;
-  color: #72a6ff;
-  border: 1px solid rgba(67,140,255,.18);
-  background: rgba(67,140,255,.07);
+  color: #F8DD76;
+  border: 1px solid #f8dd76;
+  background: #18150b;
   font-size: 8px;
   font-weight: 900;
   letter-spacing: 1.6px;
@@ -129,34 +104,21 @@ input {
 
 
 .brand h1 {
-
   margin-bottom: 7px;
-
   font-size: clamp(24px, 3vw, 38px);
-
   line-height: 1.1;
-
   font-weight: 900;
-
   letter-spacing: -1px;
-
   white-space: normal;
 }
 
 .brand p {
-
   max-width: 650px;
-
   color: var(--muted);
-
   font-size: 11px;
-
   line-height: 1.6;
-
   white-space: normal;
-
   overflow: visible;
-
   text-overflow: unset;
 }
 /* =========================================================

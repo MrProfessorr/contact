@@ -540,8 +540,7 @@ input {
   position: sticky;
   top: 0;
   z-index: 100;
-  background:
-    rgba(4, 9, 16, .82);
+  background: linear-gradient(185deg, #525252 0%, #0A0A0A 100%);
   border-bottom:
     1px solid rgba(255,255,255,.055);
   backdrop-filter:

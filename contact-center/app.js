@@ -1352,32 +1352,30 @@ onValue(
           );
 
 
-        const message =
-          String(
-            item.message ||
-            ""
-          );
+/*
+  CLEAN NOTICE MESSAGE
 
+  - kekalkan ENTER customer/admin
+  - buang blank line terlalu banyak
+  - trim space di awal dan akhir
+*/
 
-        /*
-          COLLAPSE LONG CAPTION
+const message =
+  String(
+    item.message || ""
+  )
 
-          > 180 chars
-          OR
-          > 4 lines
-        */
+    .replace(
+      /\r\n/g,
+      "\n"
+    )
 
-        const shouldCollapse =
+    .replace(
+      /\n{3,}/g,
+      "\n\n"
+    )
 
-          message.length >
-          180
-
-          ||
-
-          message
-            .split("\n")
-            .length >
-          4;
+    .trim();
 
 
 

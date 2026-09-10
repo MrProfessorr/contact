@@ -19,6 +19,7 @@
   --panel3: #0b1422;
 
   --border: #F8DD76;
+  --border2: #f9ff00;
   --border-hover: rgba(70, 153, 255, .42);
 
   --text: #f5f8ff;
@@ -986,36 +987,21 @@ input {
 
 
 .status-item {
-
   margin-bottom: 8px;
-
   padding: 12px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 11px;
-
-  background:
-    rgba(255,255,255,.025);
-
-  transition:
-    .18s ease;
+  border:1px solid var(--border2);
+  border-radius: 10px;
+  background:rgba(255,255,255,.025);
+  transition:.18s ease;
 }
-
 
 .status-item:last-child {
   margin-bottom: 0;
 }
 
-
 .status-item:hover {
-
-  border-color:
-    rgba(71,148,255,.24);
-
-  background:
-    rgba(255,255,255,.04);
+  border-color: #fdff9b;
+  background: #fdff9b;
 }
 
 

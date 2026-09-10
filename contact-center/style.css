@@ -669,76 +669,7 @@ input {
 
 
 
-/* =========================================================
-   HERO
-========================================================= */
 
-.hero {
-
-  border-bottom:
-    1px solid rgba(255,255,255,.035);
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(24,53,93,.29),
-      transparent
-    );
-}
-
-
-.hero-inner {
-
-  width:
-    min(1280px, calc(100% - 40px));
-
-  margin: auto;
-
-  padding:
-    38px 0 31px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 40px;
-}
-
-
-.hero-copy {
-
-  max-width: 700px;
-}
-
-
-.hero-label {
-
-  display: inline-flex;
-
-  margin-bottom: 11px;
-
-  padding:
-    5px 9px;
-
-  border-radius: 7px;
-
-  color:
-    #71a5ff;
-
-  border:
-    1px solid rgba(67,140,255,.15);
-
-  background:
-    rgba(67,140,255,.07);
-
-  font-size: 8px;
-
-  font-weight: 900;
-
-  letter-spacing: 1.6px;
-}
 
 
 .hero-copy h2 {
@@ -782,63 +713,6 @@ input {
 
   line-height: 1.7;
 }
-
-
-.hero-live-card {
-
-  flex: 0 0 auto;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 11px;
-
-  padding:
-    13px 15px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 14px;
-
-  background:
-    rgba(10,18,31,.67);
-
-  box-shadow:
-    var(--shadow);
-}
-
-
-.hero-live-icon {
-
-  width: 36px;
-  height: 36px;
-
-  flex:
-    0 0 36px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 10px;
-
-  color:
-    var(--green);
-
-  background:
-    rgba(40,228,154,.085);
-
-  border:
-    1px solid rgba(40,228,154,.14);
-
-  font-size: 13px;
-
-  font-weight: 900;
-}
-
 
 .hero-live-card strong {
 

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>Admin Login</title>
+
+<link
+  rel="stylesheet"
+  href="./admin.css"
+>
+
+</head>
+
+
+<body class="login-page">
+
+
+<div class="login-card">
+
+  <div class="login-logo">
+    ⚡
+  </div>
+
+  <h1>
+    Admin Login
+  </h1>
+
+  <p>
+    Official Support Management
+  </p>
+
+
+  <div
+    id="loginError"
+    class="error-box hidden"
+  ></div>
+
+
+  <form id="loginForm">
+
+    <div class="form-group">
+
+      <label>
+        Email
+      </label>
+
+      <input
+        type="email"
+        id="email"
+        required
+        placeholder="Admin email"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Password
+      </label>
+
+      <input
+        type="password"
+        id="password"
+        required
+        placeholder="Password"
+      >
+
+    </div>
+
+
+    <button
+      class="btn btn-primary full"
+      type="submit"
+    >
+      LOGIN
+    </button>
+
+  </form>
+
+</div>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyDl9m6icGPQ_vPh030_-vwBrYFL9sV1jZ8",
+
+  authDomain:
+    "support-pwa.firebaseapp.com",
+
+  databaseURL:
+    "https://support-pwa-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  projectId:
+    "support-pwa",
+
+  storageBucket:
+    "support-pwa.firebasestorage.app",
+
+  messagingSenderId:
+    "1036053746669",
+
+  appId:
+    "1:1036053746669:web:952df405b937cefe6d8de4"
+};
+
+
+const app =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(app);
+
+
+const form =
+  document.getElementById("loginForm");
+
+const errorBox =
+  document.getElementById("loginError");
+
+
+onAuthStateChanged(
+  auth,
+  user => {
+
+    if (user) {
+
+      location.replace(
+        "./contacts.html"
+      );
+
+    }
+
+  }
+);
+
+
+form.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+
+    errorBox
+      .classList
+      .add("hidden");
+
+
+    const email =
+      document
+        .getElementById("email")
+        .value
+        .trim();
+
+
+    const password =
+      document
+        .getElementById("password")
+        .value;
+
+
+    try {
+
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+
+      location.replace(
+        "./contacts.html"
+      );
+
+
+    } catch (error) {
+
+      console.error(error);
+
+
+      errorBox.textContent =
+        "Email or password incorrect.";
+
+
+      errorBox
+        .classList
+        .remove("hidden");
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>

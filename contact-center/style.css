@@ -1619,15 +1619,8 @@ input {
 
 
 .contact-card:hover {
-
-  transform:
-    translateY(-2px);
-
-  border-color:
-    var(--border-hover);
-
-  background:
-    rgba(41,99,181,.055);
+  border-color: var(--border2);
+  background: rgba(255,255,255,0.20);
 }
 
 
@@ -1692,18 +1685,11 @@ input {
 
 
 .contact-description {
-
   margin-top: 7px;
-
-  color:
-    var(--muted);
-
-  font-size: 8px;
-
+  color: var(--muted);
+  font-size: 12px;
   line-height: 1.5;
-
   overflow-wrap: anywhere;
-
   word-break: break-word;
 }
 

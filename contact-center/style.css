@@ -1265,24 +1265,15 @@ input {
 
 
 .notice-img {
-
   display: block;
-
   width: 100%;
-
   height: auto;
-
   max-height: 360px;
-
   object-fit: contain;
-
   object-position: center;
-
   margin: auto;
-
-  transition:
-    transform .3s ease,
-    filter .3s ease;
+  padding:10px;
+  transition:transform .3s ease,filter .3s ease;
 }
 
 

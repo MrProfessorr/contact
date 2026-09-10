@@ -2160,49 +2160,8 @@ onValue(
     /*
       SITE NAME
     */
-
-    if (
-      settings.siteName
-    ) {
-
-      document
-        .getElementById(
-          "siteName"
-        )
-        .textContent =
-          settings.siteName;
-
-
-      loaderTitle
-        .textContent =
-          settings.siteName;
-
-
-      document.title =
-        settings.siteName;
-
-    }
-
-
-
-    /*
-      SUBTITLE
-    */
-
-    if (
-      settings.subtitle
-    ) {
-
-      document
-        .getElementById(
-          "siteSubtitle"
-        )
-        .textContent =
-          settings.subtitle;
-
-    }
-
-
+document.title =
+  "Official Support Center";
 
     /*
       LOGO

@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>Manage Contacts</title>
+
+<link
+  rel="stylesheet"
+  href="./admin.css"
+>
+
+</head>
+
+<body>
+
+
+<nav class="admin-nav">
+
+  <div class="admin-nav-inner">
+
+    <div class="admin-brand">
+
+      <h1>
+        Support Admin
+      </h1>
+
+      <p id="adminEmail">
+        Loading...
+      </p>
+
+    </div>
+
+
+    <div class="nav-links">
+
+      <a
+        class="active"
+        href="./contacts.html"
+      >
+        Contacts
+      </a>
+
+      <a href="./notices.html">
+        Notices
+      </a>
+
+      <a href="./settings.html">
+        Settings
+      </a>
+
+      <a
+        href="../index.html"
+        target="_blank"
+      >
+        Customer
+      </a>
+
+      <a
+        href="javascript:void(0)"
+        id="logoutBtn"
+      >
+        Logout
+      </a>
+
+    </div>
+
+  </div>
+
+</nav>
+
+
+
+<main class="admin-container">
+
+  <div class="page-title">
+
+    <div>
+
+      <h2>
+        Contacts
+      </h2>
+
+      <p>
+        Add, edit and manage contact status.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="admin-grid">
+
+
+    <!-- FORM -->
+
+    <section class="card">
+
+      <h3 id="formTitle">
+        Add Contact
+      </h3>
+
+
+      <form id="contactForm">
+
+
+        <input
+          type="hidden"
+          id="editId"
+        >
+
+
+        <div class="form-group">
+
+          <label>
+            Contact Name
+          </label>
+
+          <input
+            id="name"
+            required
+            placeholder="PRIMARY WHATSAPP"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Type
+          </label>
+
+          <select id="type">
+
+            <option value="whatsapp">
+              WhatsApp
+            </option>
+
+            <option value="telegram">
+              Telegram
+            </option>
+
+            <option value="website">
+              Website
+            </option>
+
+            <option value="facebook">
+              Facebook
+            </option>
+
+            <option value="instagram">
+              Instagram
+            </option>
+
+            <option value="other">
+              Other
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Number / Username / URL
+          </label>
+
+          <input
+            id="value"
+            required
+            placeholder="+601162042105"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Custom Link
+          </label>
+
+          <input
+            id="link"
+            placeholder="Optional"
+          >
+
+          <div class="help-text">
+            WhatsApp dan Telegram tak perlu isi
+            custom link.
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Status
+          </label>
+
+          <select id="status">
+
+            <option value="active">
+              🟢 ACTIVE
+            </option>
+
+            <option value="problem">
+              🟡 PROBLEM
+            </option>
+
+            <option value="closed">
+              🔴 CLOSED
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Description
+          </label>
+
+          <textarea
+            id="description"
+            placeholder="Main official support..."
+          ></textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Image URL
+          </label>
+
+          <input
+            id="imageUrl"
+            placeholder="https://..."
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Sort Order
+          </label>
+
+          <input
+            id="sortOrder"
+            type="number"
+            min="1"
+            value="1"
+          >
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="btn btn-green full"
+        >
+          SAVE CONTACT
+        </button>
+
+
+        <button
+          type="button"
+          id="cancelBtn"
+          class="btn btn-dark full hidden"
+          style="margin-top:8px;"
+        >
+          CANCEL EDIT
+        </button>
+
+      </form>
+
+    </section>
+
+
+
+    <!-- LIST -->
+
+    <section class="card">
+
+      <h3>
+        Contact List
+      </h3>
+
+
+      <div
+        id="contactList"
+        class="admin-list"
+      >
+
+        <div class="empty">
+          Loading...
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+
+<script type="module">
+
+import {
+
+  db,
+  requireAdmin,
+  setupLogout,
+  safe,
+
+  ref,
+  push,
+  set,
+  update,
+  remove,
+  onValue
+
+} from "./admin.js";
+
+
+requireAdmin();
+
+setupLogout();
+
+
+const form =
+  document.getElementById(
+    "contactForm"
+  );
+
+const editId =
+  document.getElementById(
+    "editId"
+  );
+
+const list =
+  document.getElementById(
+    "contactList"
+  );
+
+const cancel =
+  document.getElementById(
+    "cancelBtn"
+  );
+
+
+let cache = {};
+
+
+/* SAVE */
+
+form.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+
+    const data = {
+
+      name:
+        document
+          .getElementById("name")
+          .value
+          .trim(),
+
+      type:
+        document
+          .getElementById("type")
+          .value,
+
+      value:
+        document
+          .getElementById("value")
+          .value
+          .trim(),
+
+      link:
+        document
+          .getElementById("link")
+          .value
+          .trim(),
+
+      status:
+        document
+          .getElementById("status")
+          .value,
+
+      description:
+        document
+          .getElementById(
+            "description"
+          )
+          .value
+          .trim(),
+
+      imageUrl:
+        document
+          .getElementById(
+            "imageUrl"
+          )
+          .value
+          .trim(),
+
+      sortOrder:
+        Number(
+          document
+            .getElementById(
+              "sortOrder"
+            )
+            .value || 999
+        ),
+
+      updatedAt:
+        Date.now()
+
+    };
+
+
+    try {
+
+      if (editId.value) {
+
+        await update(
+
+          ref(
+            db,
+            "contacts/" +
+            editId.value
+          ),
+
+          data
+        );
+
+      } else {
+
+        const newRef =
+          push(
+            ref(
+              db,
+              "contacts"
+            )
+          );
+
+
+        await set(
+          newRef,
+          {
+            ...data,
+            createdAt:
+              Date.now()
+          }
+        );
+
+      }
+
+
+      resetForm();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Failed: " +
+        error.message
+      );
+
+    }
+
+  }
+);
+
+
+/* RESET */
+
+function resetForm() {
+
+  form.reset();
+
+  editId.value = "";
+
+  document
+    .getElementById(
+      "sortOrder"
+    )
+    .value =
+    "1";
+
+  document
+    .getElementById(
+      "status"
+    )
+    .value =
+    "active";
+
+  document
+    .getElementById(
+      "formTitle"
+    )
+    .textContent =
+    "Add Contact";
+
+  cancel
+    .classList
+    .add("hidden");
+}
+
+
+cancel.addEventListener(
+  "click",
+  resetForm
+);
+
+
+/* EDIT */
+
+window.editContact =
+function(id) {
+
+  const item =
+    cache[id];
+
+  if (!item)
+    return;
+
+
+  editId.value =
+    id;
+
+  document
+    .getElementById("name")
+    .value =
+    item.name || "";
+
+  document
+    .getElementById("type")
+    .value =
+    item.type || "whatsapp";
+
+  document
+    .getElementById("value")
+    .value =
+    item.value || "";
+
+  document
+    .getElementById("link")
+    .value =
+    item.link || "";
+
+  document
+    .getElementById("status")
+    .value =
+    item.status || "active";
+
+  document
+    .getElementById("description")
+    .value =
+    item.description || "";
+
+  document
+    .getElementById("imageUrl")
+    .value =
+    item.imageUrl || "";
+
+  document
+    .getElementById("sortOrder")
+    .value =
+    item.sortOrder || 1;
+
+
+  document
+    .getElementById("formTitle")
+    .textContent =
+    "Edit Contact";
+
+
+  cancel
+    .classList
+    .remove("hidden");
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+};
+
+
+/* DELETE */
+
+window.deleteContact =
+async function(id) {
+
+  if (
+    !confirm(
+      "Delete this contact?"
+    )
+  ) {
+    return;
+  }
+
+
+  await remove(
+    ref(
+      db,
+      "contacts/" + id
+    )
+  );
+
+};
+
+
+/* LIST */
+
+onValue(
+  ref(
+    db,
+    "contacts"
+  ),
+  snapshot => {
+
+    cache =
+      snapshot.val() || {};
+
+
+    const items =
+      Object.entries(cache)
+        .map(
+          ([id,value]) => ({
+            id,
+            ...value
+          })
+        )
+        .sort(
+          (a,b) =>
+            Number(
+              a.sortOrder || 999
+            ) -
+            Number(
+              b.sortOrder || 999
+            )
+        );
+
+
+    list.innerHTML = "";
+
+
+    if (!items.length) {
+
+      list.innerHTML = `
+        <div class="empty">
+          No contacts yet.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    items.forEach(item => {
+
+      let statusClass =
+        "closed-status";
+
+
+      if (
+        item.status ===
+        "active"
+      ) {
+
+        statusClass =
+          "active-status";
+      }
+
+
+      if (
+        item.status ===
+        "problem"
+      ) {
+
+        statusClass =
+          "problem-status";
+      }
+
+
+      list.insertAdjacentHTML(
+        "beforeend",
+        `
+
+        <div class="admin-item">
+
+          <div class="item-top">
+
+            <div>
+
+              <h4>
+                ${safe(item.name)}
+              </h4>
+
+              <p>
+                ${safe(item.type)}
+                •
+                ${safe(item.value)}
+              </p>
+
+            </div>
+
+            <span
+              class="status ${statusClass}"
+            >
+              ${safe(
+                (
+                  item.status ||
+                  "closed"
+                ).toUpperCase()
+              )}
+            </span>
+
+          </div>
+
+
+          ${
+            item.description
+            ?
+            `
+              <p style="margin-top:8px;">
+                ${safe(item.description)}
+              </p>
+            `
+            :
+            ""
+          }
+
+
+          ${
+            item.imageUrl
+            ?
+            `
+              <img
+                src="${safe(item.imageUrl)}"
+                class="preview"
+              >
+            `
+            :
+            ""
+          }
+
+
+          <div class="admin-actions">
+
+            <button
+              class="action-btn action-edit"
+              onclick="editContact('${item.id}')"
+            >
+              EDIT
+            </button>
+
+            <button
+              class="action-btn action-delete"
+              onclick="deleteContact('${item.id}')"
+            >
+              DELETE
+            </button>
+
+          </div>
+
+        </div>
+
+        `
+      );
+
+    });
+
+  }
+);
+
+</script>
+
+</body>
+</html>

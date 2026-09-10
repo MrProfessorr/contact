@@ -603,21 +603,14 @@ input {
 
 
 .header-inner {
-
-  width:
-    min(1280px, calc(100% - 40px));
-
-  min-height: 82px;
-
+  width: min(1280px, calc(100% - 40px));
+  min-height: 105px;
   margin: auto;
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 20px;
+  padding: 15px 0;
 }
 
 
@@ -632,112 +625,40 @@ input {
   gap: 13px;
 }
 
-
-.logo-box {
-
-  width: 51px;
-  height: 51px;
-
-  flex: 0 0 51px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  padding: 4px;
-
-  border-radius: 15px;
-
-  border:
-    1px solid rgba(255,255,255,.10);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,.09),
-      rgba(255,255,255,.025)
-    );
-}
-
-
-.site-logo {
-
-  width: 100%;
-  height: 100%;
-
-  display: block;
-
-  object-fit: contain;
-
-  border-radius: 11px;
-}
-
-
 .brand-text {
   min-width: 0;
 }
 
 
 .brand h1 {
-
   margin-bottom: 4px;
-
   font-size: 19px;
-
   font-weight: 800;
-
   white-space: nowrap;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
 }
 
 
-.brand p {
-
-  max-width: 500px;
-
-  color:
-    var(--muted);
-
-  font-size: 10px;
-
-  white-space: nowrap;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
+.brand {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0;
 }
 
 
 .live-indicator {
-
   display: inline-flex;
-
   align-items: center;
-
   gap: 7px;
-
-  padding:
-    8px 12px;
-
-  color:
-    var(--green);
-
-  border:
-    1px solid rgba(40,228,154,.25);
-
+  padding:8px 12px;
+  color:var(--green);
+  border:1px solid rgba(40,228,154,.25);
   border-radius: 999px;
-
-  background:
-    rgba(40,228,154,.075);
-
+  background:rgba(40,228,154,.075);
   font-size: 9px;
-
   font-weight: 900;
-
   letter-spacing: .6px;
 }
 

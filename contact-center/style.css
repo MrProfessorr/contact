@@ -854,6 +854,7 @@ input {
   min-width: 20px;
   height: 20px;
   display: flex;
+   broder:1px solid #f9ff00;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
@@ -907,9 +908,9 @@ input {
 .status-item {
   margin-bottom: 8px;
   padding: 12px;
-  border:1px solid var(--border2);
-  border-radius: 10px;
-  background:rgba(255,255,255,.025);
+  border:1px solid var(--border);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #525252 0%, #0A0A0A 100%);
   transition:.18s ease;
 }
 
@@ -918,8 +919,8 @@ input {
 }
 
 .status-item:hover {
-  border-color: #fdff9b;
-  background: #fdff9b;
+  border-color: var(--border2);
+  background: rgba(255, 255, 255, 0.20);
 }
 
 
@@ -1634,25 +1635,15 @@ input {
 
 
 .contact-icon {
-
   width: 48px;
   height: 48px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   overflow: hidden;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 12px;
-
-  background:
-    rgba(4,10,18,.72);
-
+  border:1px solid var(--border2);
+  border-radius: 10px;
+  background:#0a0a0a;
   font-size: 20px;
 }
 

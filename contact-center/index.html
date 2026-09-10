@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
 
@@ -10,10 +11,10 @@
 
   <meta
     name="theme-color"
-    content="#090d13"
+    content="#07101f"
   >
 
-  <title>Official Support Center</title>
+  <title>Contact Us</title>
 
   <link
     rel="stylesheet"
@@ -23,34 +24,58 @@
 
 <body>
 
+<div class="ambient ambient-one"></div>
+<div class="ambient ambient-two"></div>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
 <header class="top-header">
 
   <div class="header-inner">
 
     <div class="brand">
 
-      <img
-        id="siteLogo"
-        src="./assets/logo.svg"
-        class="site-logo"
-        alt="Logo"
-      >
+      <div class="logo-box">
 
-      <div>
+        <img
+          id="siteLogo"
+          src="./assets/logo.svg"
+          class="site-logo"
+          alt="Logo"
+        >
+
+      </div>
+
+      <div class="brand-text">
+
         <h1 id="siteName">
-          Official Support Center
+          Contact Us
         </h1>
 
         <p id="siteSubtitle">
           Official contacts and announcements
         </p>
+
       </div>
 
     </div>
 
-    <div class="live-indicator">
-      <span class="live-dot"></span>
-      LIVE
+
+    <div class="header-right">
+
+      <div class="live-indicator">
+
+        <span class="live-dot"></span>
+
+        <span>
+          LIVE
+        </span>
+
+      </div>
+
     </div>
 
   </div>
@@ -58,23 +83,89 @@
 </header>
 
 
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+
+      <span class="hero-label">
+        OFFICIAL SUPPORT CENTER
+      </span>
+
+      <h2>
+        Stay connected with our
+        <span>official channels.</span>
+      </h2>
+
+      <p>
+        Check active contacts, service status and the latest
+        announcements in one place.
+      </p>
+
+    </div>
+
+
+    <div class="hero-status">
+
+      <div class="hero-status-icon">
+        ✓
+      </div>
+
+      <div>
+        <strong>
+          Live Information
+        </strong>
+
+        <small>
+          Updates automatically
+        </small>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     PAGE
+========================= -->
+
 <div class="page-container">
 
   <div class="customer-layout">
 
-    <!-- LEFT STATUS -->
+
+    <!-- =====================
+         SIDEBAR
+    ====================== -->
 
     <aside class="status-panel">
 
       <div class="panel-heading">
 
-        <h2>
-          Contact Status
-        </h2>
+        <div class="panel-icon">
+          ◉
+        </div>
 
-        <p>
-          Check our latest official contact status.
-        </p>
+        <div>
+
+          <h2>
+            Contact Status
+          </h2>
+
+          <p>
+            Check availability before contacting us.
+          </p>
+
+        </div>
 
       </div>
 
@@ -85,37 +176,45 @@
           class="filter-btn active"
           data-filter="all"
         >
-          All
+          <span>All</span>
+          <strong id="countAll">0</strong>
         </button>
 
         <button
           class="filter-btn"
           data-filter="active"
         >
-          Active
+          <span>Active</span>
+          <strong id="countActive">0</strong>
         </button>
 
         <button
           class="filter-btn"
           data-filter="problem"
         >
-          Problem
+          <span>Problem</span>
+          <strong id="countProblem">0</strong>
         </button>
 
         <button
           class="filter-btn"
           data-filter="closed"
         >
-          Closed
+          <span>Closed</span>
+          <strong id="countClosed">0</strong>
         </button>
 
       </div>
 
 
-      <div id="statusList">
+      <div
+        id="statusList"
+        class="status-list"
+      >
 
         <div class="loading">
-          Loading...
+          <span class="spinner"></span>
+          Loading contacts...
         </div>
 
       </div>
@@ -123,25 +222,42 @@
     </aside>
 
 
-    <!-- RIGHT CONTENT -->
+
+    <!-- =====================
+         MAIN
+    ====================== -->
 
     <main class="content-area">
 
 
       <!-- NOTICE -->
 
-      <section class="content-card">
+      <section class="content-card notice-section">
 
         <div class="section-title">
 
-          <div>
-            <span class="small-title">
-              ANNOUNCEMENT
-            </span>
+          <div class="section-title-left">
 
-            <h2>
-              📢 Latest Notice
-            </h2>
+            <div class="section-icon notice-section-icon">
+              📢
+            </div>
+
+            <div>
+
+              <span class="small-title">
+                ANNOUNCEMENT
+              </span>
+
+              <h2>
+                Latest Notice
+              </h2>
+
+              <p>
+                Important information and latest updates.
+              </p>
+
+            </div>
+
           </div>
 
         </div>
@@ -151,41 +267,72 @@
           id="noticeList"
           class="notice-list"
         >
+
           <div class="loading">
-            Loading notices...
+            <span class="spinner"></span>
+            Loading announcements...
           </div>
+
         </div>
 
       </section>
 
 
 
-      <!-- CONTACTS -->
+      <!-- CONTACT -->
 
-      <section class="content-card">
+      <section class="content-card contact-section">
 
         <div class="section-title">
 
-          <div>
-            <span class="small-title">
-              OFFICIAL SUPPORT
-            </span>
+          <div class="section-title-left">
 
-            <h2>
-              Official Contacts
-            </h2>
+            <div class="section-icon">
+              💬
+            </div>
+
+            <div>
+
+              <span class="small-title">
+                OFFICIAL CONTACT
+              </span>
+
+              <h2>
+                Contact Our Team
+              </h2>
+
+              <p>
+                Select one of our available official channels.
+              </p>
+
+            </div>
+
           </div>
 
         </div>
 
 
-        <div class="search-box">
+        <div class="search-wrap">
+
+          <div class="search-icon">
+            ⌕
+          </div>
 
           <input
             id="contactSearch"
             type="text"
-            placeholder="Search WhatsApp, Telegram..."
+            placeholder="Search WhatsApp, Telegram, support..."
+            autocomplete="off"
           >
+
+          <button
+            id="clearSearch"
+            class="clear-search"
+            type="button"
+            aria-label="Clear search"
+          >
+            ×
+          </button>
 
         </div>
 
@@ -196,7 +343,8 @@
         >
 
           <div class="loading">
-            Loading contacts...
+            <span class="spinner"></span>
+            Loading official contacts...
           </div>
 
         </div>
@@ -210,15 +358,71 @@
 </div>
 
 
-<footer>
 
-  <span id="footerText">
-    Please only use official contacts shown here.
-  </span>
+<!-- =========================
+     FOOTER
+========================= -->
 
-  <div id="lastUpdated"></div>
+<footer class="footer">
+
+  <div class="footer-inner">
+
+    <div>
+
+      <strong>
+        Official Support Center
+      </strong>
+
+      <p id="footerText">
+        Please only use official contacts shown on this page.
+      </p>
+
+    </div>
+
+    <div
+      id="lastUpdated"
+      class="footer-update"
+    ></div>
+
+  </div>
 
 </footer>
+
+
+
+<!-- =========================
+     IMAGE PREVIEW MODAL
+========================= -->
+
+<div
+  id="imageModal"
+  class="image-modal"
+  aria-hidden="true"
+>
+
+  <button
+    id="closeImageModal"
+    class="modal-close"
+    type="button"
+    aria-label="Close preview"
+  >
+    ×
+  </button>
+
+  <div class="modal-backdrop"></div>
+
+  <div class="modal-content">
+
+    <img
+      id="modalImage"
+      src=""
+      alt="Preview"
+    >
+
+  </div>
+
+</div>
+
 
 
 <script

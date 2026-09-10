@@ -2,12 +2,18 @@ import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
+
 import {
   getDatabase,
   ref,
   onValue
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
+
+
+/* =========================================
+   FIREBASE
+========================================= */
 
 const firebaseConfig = {
 
@@ -31,87 +37,240 @@ const firebaseConfig = {
 
   appId:
     "1:1036053746669:web:952df405b937cefe6d8de4"
-
 };
 
 
-const app = initializeApp(firebaseConfig);
+const app =
+  initializeApp(firebaseConfig);
 
-const db = getDatabase(app);
 
+const db =
+  getDatabase(app);
+
+
+
+/* =========================================
+   DOM
+========================================= */
 
 const contactList =
-  document.getElementById("contactList");
+  document.getElementById(
+    "contactList"
+  );
+
 
 const statusList =
-  document.getElementById("statusList");
+  document.getElementById(
+    "statusList"
+  );
+
 
 const noticeList =
-  document.getElementById("noticeList");
+  document.getElementById(
+    "noticeList"
+  );
+
 
 const searchInput =
-  document.getElementById("contactSearch");
+  document.getElementById(
+    "contactSearch"
+  );
 
+
+const clearSearch =
+  document.getElementById(
+    "clearSearch"
+  );
+
+
+const imageModal =
+  document.getElementById(
+    "imageModal"
+  );
+
+
+const modalImage =
+  document.getElementById(
+    "modalImage"
+  );
+
+
+const closeImageModal =
+  document.getElementById(
+    "closeImageModal"
+  );
+
+
+
+/* =========================================
+   STATE
+========================================= */
 
 let contacts = [];
 
-let currentFilter = "all";
+let currentFilter =
+  "all";
 
-let searchText = "";
+let searchText =
+  "";
 
 
-/* =========================
-   SECURITY
-========================= */
+
+/* =========================================
+   SAFE HTML
+========================================= */
 
 function safe(value = "") {
 
   return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
 }
 
 
-/* =========================
-   LINK
-========================= */
 
-function buildLink(contact) {
+/* =========================================
+   SAFE URL
+========================================= */
 
-  let type =
-    String(contact.type || "")
-      .toLowerCase();
+function safeUrl(value = "") {
 
-  let value =
-    String(contact.value || "")
-      .trim();
-
-  let custom =
-    String(contact.link || "")
+  const url =
+    String(value || "")
       .trim();
 
 
-  if (custom) {
-
-    if (
-      custom.startsWith("http://") ||
-      custom.startsWith("https://") ||
-      custom.startsWith("tg://")
-    ) {
-      return custom;
-    }
-
-    return "https://" + custom;
+  if (!url) {
+    return "";
   }
 
 
-  if (type === "whatsapp") {
+  try {
+
+    const parsed =
+      new URL(url);
+
+
+    if (
+      parsed.protocol ===
+        "http:" ||
+      parsed.protocol ===
+        "https:"
+    ) {
+
+      return parsed.href;
+    }
+
+  } catch (_) {
+  }
+
+
+  return "";
+}
+
+
+
+/* =========================================
+   BUILD CONTACT LINK
+========================================= */
+
+function buildLink(contact) {
+
+  const type =
+    String(
+      contact.type || ""
+    )
+      .toLowerCase()
+      .trim();
+
+
+  const value =
+    String(
+      contact.value || ""
+    )
+      .trim();
+
+
+  const custom =
+    String(
+      contact.link || ""
+    )
+      .trim();
+
+
+
+  /* CUSTOM LINK */
+
+  if (custom) {
+
+    try {
+
+      const withProtocol =
+        /^https?:\/\//i.test(custom)
+          ? custom
+          : "https://" + custom;
+
+
+      const parsed =
+        new URL(withProtocol);
+
+
+      if (
+        parsed.protocol === "http:" ||
+        parsed.protocol === "https:"
+      ) {
+
+        return parsed.href;
+      }
+
+    } catch (_) {
+    }
+
+  }
+
+
+
+  /* WHATSAPP */
+
+  if (
+    type === "whatsapp"
+  ) {
 
     const number =
-      value.replace(/\D/g, "");
+      value.replace(
+        /\D/g,
+        ""
+      );
+
+
+    if (!number) {
+      return "#";
+    }
+
 
     return (
       "https://wa.me/" +
@@ -120,21 +279,45 @@ function buildLink(contact) {
   }
 
 
-  if (type === "telegram") {
+
+  /* TELEGRAM */
+
+  if (
+    type === "telegram"
+  ) {
 
     const username =
       value
-        .replace("https://t.me/", "")
-        .replace("http://t.me/", "")
-        .replace("@", "")
+
+        .replace(
+          /^https?:\/\/t\.me\//i,
+          ""
+        )
+
+        .replace(
+          "@",
+          ""
+        )
+
         .trim();
+
+
+    if (!username) {
+      return "#";
+    }
+
 
     return (
       "https://t.me/" +
-      username
+      encodeURIComponent(
+        username
+      )
     );
   }
 
+
+
+  /* NORMAL URL */
 
   if (
     type === "website" ||
@@ -143,17 +326,29 @@ function buildLink(contact) {
     type === "other"
   ) {
 
-    if (
-      value.startsWith("http://") ||
-      value.startsWith("https://")
-    ) {
-      return value;
+    try {
+
+      const withProtocol =
+        /^https?:\/\//i.test(value)
+          ? value
+          : "https://" + value;
+
+
+      const parsed =
+        new URL(withProtocol);
+
+
+      if (
+        parsed.protocol === "http:" ||
+        parsed.protocol === "https:"
+      ) {
+
+        return parsed.href;
+      }
+
+    } catch (_) {
     }
 
-    return (
-      "https://" +
-      value
-    );
   }
 
 
@@ -161,505 +356,1214 @@ function buildLink(contact) {
 }
 
 
-/* =========================
-   ICON
-========================= */
 
-function icon(type) {
+/* =========================================
+   CONTACT ICON
+========================================= */
+
+function getContactIcon(type) {
 
   type =
     String(type || "")
       .toLowerCase();
 
 
-  if (type === "whatsapp")
-    return "💬";
+  switch (type) {
 
-  if (type === "telegram")
-    return "✈️";
+    case "whatsapp":
+      return "💬";
 
-  if (type === "facebook")
-    return "📘";
+    case "telegram":
+      return "✈️";
 
-  if (type === "instagram")
-    return "📷";
+    case "facebook":
+      return "f";
 
-  if (type === "website")
-    return "🌐";
+    case "instagram":
+      return "◎";
 
-  return "🔗";
+    case "website":
+      return "🌐";
+
+    default:
+      return "↗";
+
+  }
+
 }
 
 
-/* =========================
+
+/* =========================================
    STATUS
-========================= */
+========================================= */
 
 function statusText(status) {
 
-  if (status === "active")
-    return "● ACTIVE";
+  switch (status) {
 
-  if (status === "problem")
-    return "● PROBLEM";
+    case "active":
+      return "● ACTIVE";
 
-  return "● CLOSED";
+    case "problem":
+      return "● PROBLEM";
+
+    case "closed":
+      return "● CLOSED";
+
+    default:
+      return "● UNKNOWN";
+
+  }
+
 }
 
 
 function statusClass(status) {
 
-  if (status === "active")
-    return "status-active";
+  switch (status) {
 
-  if (status === "problem")
-    return "status-problem";
+    case "active":
+      return "status-active";
 
-  return "status-closed";
+    case "problem":
+      return "status-problem";
+
+    default:
+      return "status-closed";
+
+  }
+
 }
 
 
-/* =========================
-   CONTACT DISPLAY
-========================= */
 
-function renderContacts() {
+/* =========================================
+   COUNTERS
+========================================= */
 
-  let filtered =
-    contacts.filter(item => {
+function updateCounters() {
 
-      const matchesFilter =
+  document
+    .getElementById(
+      "countAll"
+    )
+    .textContent =
+      contacts.length;
+
+
+  document
+    .getElementById(
+      "countActive"
+    )
+    .textContent =
+      contacts.filter(
+        item =>
+          item.status ===
+          "active"
+      ).length;
+
+
+  document
+    .getElementById(
+      "countProblem"
+    )
+    .textContent =
+      contacts.filter(
+        item =>
+          item.status ===
+          "problem"
+      ).length;
+
+
+  document
+    .getElementById(
+      "countClosed"
+    )
+    .textContent =
+      contacts.filter(
+        item =>
+          item.status ===
+          "closed"
+      ).length;
+
+}
+
+
+
+/* =========================================
+   FILTER CONTACTS
+========================================= */
+
+function getFilteredContacts() {
+
+  return contacts.filter(
+    item => {
+
+      const filterMatch =
         currentFilter === "all" ||
-        item.status === currentFilter;
+        item.status ===
+          currentFilter;
 
 
-      const haystack =
-        (
-          (item.name || "") +
-          " " +
-          (item.value || "") +
-          " " +
-          (item.type || "")
-        ).toLowerCase();
+      const content =
+        [
+          item.name,
+          item.value,
+          item.type,
+          item.description
+        ]
+          .join(" ")
+          .toLowerCase();
 
 
-      const matchesSearch =
-        haystack.includes(
-          searchText.toLowerCase()
+      const searchMatch =
+        content.includes(
+          searchText
+            .toLowerCase()
         );
 
 
       return (
-        matchesFilter &&
-        matchesSearch
+        filterMatch &&
+        searchMatch
       );
-    });
+
+    }
+  );
+
+}
+
+
+
+/* =========================================
+   RENDER CONTACTS
+========================================= */
+
+function renderContacts() {
+
+  const filtered =
+    getFilteredContacts();
 
 
   /* RIGHT CONTACT LIST */
 
-  contactList.innerHTML = "";
+  contactList.innerHTML =
+    "";
 
 
-  if (!filtered.length) {
+  if (
+    !filtered.length
+  ) {
 
-    contactList.innerHTML = `
+    contactList.innerHTML =
+      `
       <div class="empty">
         No contact found.
       </div>
-    `;
+      `;
 
   } else {
 
-    filtered.forEach(item => {
+    filtered.forEach(
+      item => {
 
-      let iconHTML =
-        icon(item.type);
-
-
-      if (item.imageUrl) {
-
-        iconHTML = `
-          <img
-            src="${safe(item.imageUrl)}"
-            alt=""
-          >
-        `;
-      }
+        const link =
+          buildLink(item);
 
 
-      const isClosed =
-        item.status === "closed";
+        const isClosed =
+          item.status ===
+          "closed";
 
 
-      contactList.insertAdjacentHTML(
-        "beforeend",
-        `
+        let iconHTML =
+          getContactIcon(
+            item.type
+          );
 
-        <div class="contact-card">
 
-          <div class="contact-icon">
-            ${iconHTML}
-          </div>
+        const image =
+          safeUrl(
+            item.imageUrl
+          );
 
-          <div class="contact-content">
 
-            <h3>
-              ${safe(item.name || "Contact")}
-            </h3>
+        if (image) {
 
-            <div class="contact-value">
-              ${safe(item.value || "")}
-            </div>
-
-            <span
-              class="status-badge ${statusClass(item.status)}"
+          iconHTML =
+            `
+            <img
+              src="${safe(image)}"
+              alt="${safe(item.name || "Contact")}"
+              loading="lazy"
             >
-              ${statusText(item.status)}
-            </span>
+            `;
+        }
 
-            ${
-              item.description
-              ?
-              `
-                <div class="contact-description">
-                  ${safe(item.description)}
+
+        contactList
+          .insertAdjacentHTML(
+            "beforeend",
+            `
+
+            <article
+              class="contact-card"
+            >
+
+              <div
+                class="contact-icon"
+              >
+                ${iconHTML}
+              </div>
+
+
+              <div
+                class="contact-content"
+              >
+
+                <h3
+                  title="${safe(item.name || "Contact")}"
+                >
+                  ${safe(item.name || "Contact")}
+                </h3>
+
+
+                <div
+                  class="contact-value"
+                >
+                  ${safe(item.value || "")}
                 </div>
-              `
-              :
-              ""
-            }
 
-          </div>
 
-          <a
-            href="${safe(buildLink(item))}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="contact-open ${isClosed ? "closed" : ""}"
-          >
-            ${
-              isClosed
-              ? "UNAVAILABLE"
-              : "OPEN"
-            }
-          </a>
+                <span
+                  class="status-badge ${statusClass(item.status)}"
+                >
+                  ${statusText(item.status)}
+                </span>
 
-        </div>
 
-        `
-      );
+                ${
+                  item.description
 
-    });
+                    ? `
+                      <div
+                        class="contact-description"
+                      >
+                        ${safe(item.description)}
+                      </div>
+                    `
+
+                    : ""
+                }
+
+              </div>
+
+
+              <a
+                href="${safe(link)}"
+
+                class="contact-open ${
+                  isClosed
+                    ? "closed"
+                    : ""
+                }"
+
+                ${
+                  !isClosed &&
+                  link !== "#"
+
+                    ? `
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    `
+
+                    : ""
+                }
+              >
+
+                ${
+                  isClosed
+                    ? "UNAVAILABLE"
+
+                    : (
+                        item.type ===
+                          "whatsapp"
+
+                          ? "OPEN WHATSAPP"
+
+                          : item.type ===
+                              "telegram"
+
+                            ? "OPEN TELEGRAM"
+
+                            : "OPEN CONTACT"
+                      )
+                }
+
+              </a>
+
+            </article>
+
+            `
+          );
+
+      }
+    );
 
   }
 
 
+
   /* LEFT STATUS */
 
-  statusList.innerHTML = "";
+  statusList.innerHTML =
+    "";
 
 
-  if (!filtered.length) {
+  if (
+    !filtered.length
+  ) {
 
-    statusList.innerHTML = `
+    statusList.innerHTML =
+      `
       <div class="empty">
-        No status found.
+        No contact status found.
       </div>
-    `;
+      `;
 
     return;
   }
 
 
-  filtered.forEach(item => {
+  filtered.forEach(
+    item => {
 
-    statusList.insertAdjacentHTML(
-      "beforeend",
-      `
+      statusList
+        .insertAdjacentHTML(
+          "beforeend",
+          `
 
-      <div class="status-item">
+          <div
+            class="status-item"
+          >
 
-        <div class="status-top">
+            <div
+              class="status-top"
+            >
 
-          <div class="status-name">
-            ${safe(item.name || "Contact")}
+              <div
+                class="status-name"
+
+                title="${safe(item.name || "Contact")}"
+              >
+                ${safe(item.name || "Contact")}
+              </div>
+
+
+              <span
+                class="status-badge ${statusClass(item.status)}"
+              >
+                ${statusText(item.status)}
+              </span>
+
+            </div>
+
+
+            <div
+              class="status-value"
+            >
+              ${safe(item.value || "")}
+            </div>
+
           </div>
 
-          <span
-            class="status-badge ${statusClass(item.status)}"
-          >
-            ${statusText(item.status)}
-          </span>
+          `
+        );
 
-        </div>
-
-        <div class="status-value">
-          ${safe(item.value || "")}
-        </div>
-
-      </div>
-
-      `
-    );
-
-  });
+    }
+  );
 
 }
 
 
-/* FIREBASE CONTACTS */
+
+/* =========================================
+   FIREBASE CONTACTS
+========================================= */
 
 onValue(
-  ref(db, "contacts"),
+  ref(
+    db,
+    "contacts"
+  ),
+
   snapshot => {
 
     const data =
-      snapshot.val() || {};
+      snapshot.val() ||
+      {};
 
 
     contacts =
-      Object.entries(data)
-        .map(([id, value]) => ({
-          id,
-          ...value
-        }))
+      Object
+        .entries(data)
+
+        .map(
+          ([id, value]) => ({
+            id,
+            ...value
+          })
+        )
+
         .sort(
-          (a,b) =>
-            Number(a.sortOrder || 999) -
-            Number(b.sortOrder || 999)
+          (a, b) =>
+
+            Number(
+              a.sortOrder ||
+              999
+            )
+
+            -
+
+            Number(
+              b.sortOrder ||
+              999
+            )
         );
 
 
-    renderContacts();
-
-  }
-);
-
-
-/* SEARCH */
-
-searchInput.addEventListener(
-  "input",
-  () => {
-
-    searchText =
-      searchInput.value.trim();
+    updateCounters();
 
     renderContacts();
-  }
-);
 
+  },
 
-/* FILTER */
+  error => {
 
-document
-  .querySelectorAll(".filter-btn")
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        document
-          .querySelectorAll(".filter-btn")
-          .forEach(btn =>
-            btn.classList.remove("active")
-          );
-
-
-        button.classList.add("active");
-
-
-        currentFilter =
-          button.dataset.filter;
-
-
-        renderContacts();
-
-      }
+    console.error(
+      "Contacts error:",
+      error
     );
 
-  });
+
+    contactList.innerHTML =
+      `
+      <div class="empty">
+        Unable to load contacts.
+      </div>
+      `;
 
 
-/* =========================
-   NOTICES
-========================= */
+    statusList.innerHTML =
+      `
+      <div class="empty">
+        Unable to load contact status.
+      </div>
+      `;
+
+  }
+);
+
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+searchInput
+  .addEventListener(
+    "input",
+    () => {
+
+      searchText =
+        searchInput
+          .value
+          .trim();
+
+
+      if (searchText) {
+
+        clearSearch
+          .classList
+          .add("show");
+
+      } else {
+
+        clearSearch
+          .classList
+          .remove("show");
+
+      }
+
+
+      renderContacts();
+
+    }
+  );
+
+
+clearSearch
+  .addEventListener(
+    "click",
+    () => {
+
+      searchInput.value =
+        "";
+
+      searchText =
+        "";
+
+      clearSearch
+        .classList
+        .remove("show");
+
+      searchInput.focus();
+
+      renderContacts();
+
+    }
+  );
+
+
+
+/* =========================================
+   FILTER
+========================================= */
+
+document
+  .querySelectorAll(
+    ".filter-btn"
+  )
+
+  .forEach(
+    button => {
+
+      button
+        .addEventListener(
+          "click",
+          () => {
+
+            document
+              .querySelectorAll(
+                ".filter-btn"
+              )
+
+              .forEach(
+                btn =>
+                  btn
+                    .classList
+                    .remove(
+                      "active"
+                    )
+              );
+
+
+            button
+              .classList
+              .add(
+                "active"
+              );
+
+
+            currentFilter =
+              button.dataset
+                .filter;
+
+
+            renderContacts();
+
+          }
+        );
+
+    }
+  );
+
+
+
+/* =========================================
+   NOTICE
+========================================= */
 
 onValue(
-  ref(db, "notices"),
+  ref(
+    db,
+    "notices"
+  ),
+
   snapshot => {
 
     const data =
-      snapshot.val() || {};
+      snapshot.val() ||
+      {};
 
 
-    let notices =
-      Object.entries(data)
-        .map(([id, value]) => ({
-          id,
-          ...value
-        }))
+    const notices =
+      Object
+        .entries(data)
+
+        .map(
+          ([id, value]) => ({
+            id,
+            ...value
+          })
+        )
+
         .filter(
           item =>
-            item.active !== false
+            item.active !==
+            false
         )
-        .sort((a,b) => {
 
-          if (
-            a.pinned &&
-            !b.pinned
-          ) {
-            return -1;
+        .sort(
+          (a, b) => {
+
+            if (
+              a.pinned &&
+              !b.pinned
+            ) {
+              return -1;
+            }
+
+
+            if (
+              !a.pinned &&
+              b.pinned
+            ) {
+              return 1;
+            }
+
+
+            return (
+
+              Number(
+                b.updatedAt ||
+                b.createdAt ||
+                0
+              )
+
+              -
+
+              Number(
+                a.updatedAt ||
+                a.createdAt ||
+                0
+              )
+
+            );
+
           }
-
-          if (
-            !a.pinned &&
-            b.pinned
-          ) {
-            return 1;
-          }
-
-          return (
-            Number(b.createdAt || 0) -
-            Number(a.createdAt || 0)
-          );
-
-        });
+        );
 
 
-    noticeList.innerHTML = "";
+    noticeList.innerHTML =
+      "";
 
 
-    if (!notices.length) {
+    if (
+      !notices.length
+    ) {
 
-      noticeList.innerHTML = `
+      noticeList.innerHTML =
+        `
         <div class="empty">
-          No announcement currently.
+          No announcements at the moment.
         </div>
-      `;
+        `;
 
       return;
     }
 
 
-    notices.forEach(item => {
+    notices.forEach(
+      item => {
 
-      let imageHTML = "";
-
-
-      if (item.imageUrl) {
-
-        imageHTML = `
-          <img
-            class="notice-img"
-            src="${safe(item.imageUrl)}"
-            alt="Notice"
-          >
-        `;
-
-      }
+        const id =
+          safe(item.id);
 
 
-      const timestamp =
-        item.updatedAt ||
-        item.createdAt;
+        const image =
+          safeUrl(
+            item.imageUrl
+          );
 
 
-      let dateText = "";
+        let imageHTML =
+          "";
 
 
-      if (timestamp) {
+        if (image) {
 
-        dateText =
-          new Date(timestamp)
-            .toLocaleString();
+          imageHTML =
+            `
 
-      }
+            <div
+              class="notice-image-wrap"
+
+              data-preview-image="${safe(image)}"
+            >
+
+              <img
+                class="notice-img"
+
+                src="${safe(image)}"
+
+                alt="${safe(item.title || "Notice")}"
+
+                loading="lazy"
+              >
 
 
-      noticeList.insertAdjacentHTML(
-        "beforeend",
-        `
-
-        <article class="notice-card">
-
-          ${imageHTML}
-
-          <div class="notice-body">
-
-            <div class="notice-meta">
-
-              <span class="notice-tag">
-                NOTICE
+              <span
+                class="image-preview-badge"
+              >
+                ⛶ Preview
               </span>
-
-              ${
-                item.pinned
-                ?
-                `
-                  <span class="pinned-tag">
-                    📌 PINNED
-                  </span>
-                `
-                :
-                ""
-              }
 
             </div>
 
-            <h3>
-              ${safe(item.title || "Notice")}
-            </h3>
+            `;
 
-            <p>
-              ${safe(item.message || "")}
-            </p>
+        }
 
-            ${
-              dateText
-              ?
-              `
-                <div class="notice-date">
-                  Updated ${safe(dateText)}
+
+        const timestamp =
+          item.updatedAt ||
+          item.createdAt;
+
+
+        const dateText =
+          timestamp
+
+            ? new Date(
+                timestamp
+              )
+                .toLocaleString(
+                  undefined,
+                  {
+                    dateStyle:
+                      "medium",
+
+                    timeStyle:
+                      "short"
+                  }
+                )
+
+            : "";
+
+
+        const message =
+          String(
+            item.message || ""
+          );
+
+
+        const shouldCollapse =
+          message.length > 180 ||
+          message.split("\n").length > 4;
+
+
+        noticeList
+          .insertAdjacentHTML(
+            "beforeend",
+            `
+
+            <article
+              class="notice-card"
+            >
+
+              ${imageHTML}
+
+
+              <div
+                class="notice-body"
+              >
+
+                <div
+                  class="notice-meta"
+                >
+
+                  <span
+                    class="notice-tag"
+                  >
+                    NOTICE
+                  </span>
+
+
+                  ${
+                    item.pinned
+
+                      ? `
+                        <span
+                          class="pinned-tag"
+                        >
+                          📌 PINNED
+                        </span>
+                      `
+
+                      : ""
+                  }
+
                 </div>
-              `
-              :
-              ""
-            }
 
-          </div>
 
-        </article>
+                <h3>
+                  ${safe(item.title || "Notice")}
+                </h3>
 
-        `
-      );
 
-    });
+                <div
+                  id="message-${id}"
+
+                  class="notice-message ${
+                    shouldCollapse
+                      ? "collapsed"
+                      : ""
+                  }"
+                >
+                  ${safe(message)}
+                </div>
+
+
+                ${
+                  shouldCollapse
+
+                    ? `
+                      <button
+                        type="button"
+
+                        class="notice-expand visible"
+
+                        data-expand-target="message-${id}"
+                      >
+                        Read more ↓
+                      </button>
+                    `
+
+                    : ""
+                }
+
+
+                <div
+                  class="notice-footer"
+                >
+
+                  <div
+                    class="notice-date"
+                  >
+                    ${
+                      dateText
+
+                        ? "Updated " +
+                          safe(dateText)
+
+                        : ""
+                    }
+                  </div>
+
+                </div>
+
+              </div>
+
+            </article>
+
+            `
+          );
+
+      }
+    );
+
+
+    setupNoticeExpand();
+
+    setupImagePreview();
+
+  },
+
+  error => {
+
+    console.error(
+      "Notice error:",
+      error
+    );
+
+
+    noticeList.innerHTML =
+      `
+      <div class="empty">
+        Unable to load announcements.
+      </div>
+      `;
 
   }
 );
 
 
-/* =========================
+
+/* =========================================
+   NOTICE READ MORE
+========================================= */
+
+function setupNoticeExpand() {
+
+  document
+    .querySelectorAll(
+      ".notice-expand"
+    )
+
+    .forEach(
+      button => {
+
+        button
+          .addEventListener(
+            "click",
+            () => {
+
+              const id =
+                button.dataset
+                  .expandTarget;
+
+
+              const message =
+                document
+                  .getElementById(
+                    id
+                  );
+
+
+              if (!message) {
+                return;
+              }
+
+
+              const isCollapsed =
+                message
+                  .classList
+                  .contains(
+                    "collapsed"
+                  );
+
+
+              if (
+                isCollapsed
+              ) {
+
+                message
+                  .classList
+                  .remove(
+                    "collapsed"
+                  );
+
+
+                button.textContent =
+                  "Show less ↑";
+
+              } else {
+
+                message
+                  .classList
+                  .add(
+                    "collapsed"
+                  );
+
+
+                button.textContent =
+                  "Read more ↓";
+
+              }
+
+            }
+          );
+
+      }
+    );
+
+}
+
+
+
+/* =========================================
+   IMAGE PREVIEW
+========================================= */
+
+function setupImagePreview() {
+
+  document
+    .querySelectorAll(
+      "[data-preview-image]"
+    )
+
+    .forEach(
+      element => {
+
+        element
+          .addEventListener(
+            "click",
+            () => {
+
+              const image =
+                element.dataset
+                  .previewImage;
+
+
+              if (!image) {
+                return;
+              }
+
+
+              openPreview(
+                image
+              );
+
+            }
+          );
+
+      }
+    );
+
+}
+
+
+
+function openPreview(
+  imageUrl
+) {
+
+  modalImage.src =
+    imageUrl;
+
+
+  imageModal
+    .classList
+    .add(
+      "open"
+    );
+
+
+  imageModal
+    .setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+
+  document.body
+    .classList
+    .add(
+      "modal-open"
+    );
+
+}
+
+
+
+function closePreview() {
+
+  imageModal
+    .classList
+    .remove(
+      "open"
+    );
+
+
+  imageModal
+    .setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+
+  document.body
+    .classList
+    .remove(
+      "modal-open"
+    );
+
+
+  setTimeout(
+    () => {
+
+      modalImage.src =
+        "";
+
+    },
+    150
+  );
+
+}
+
+
+
+closeImageModal
+  .addEventListener(
+    "click",
+    closePreview
+  );
+
+
+imageModal
+  .querySelector(
+    ".modal-backdrop"
+  )
+
+  .addEventListener(
+    "click",
+    closePreview
+  );
+
+
+document
+  .addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key ===
+          "Escape" &&
+        imageModal
+          .classList
+          .contains(
+            "open"
+          )
+      ) {
+
+        closePreview();
+
+      }
+
+    }
+  );
+
+
+
+/* =========================================
    SETTINGS
-========================= */
+========================================= */
 
 onValue(
-  ref(db, "settings"),
+  ref(
+    db,
+    "settings"
+  ),
+
   snapshot => {
 
     const settings =
-      snapshot.val() || {};
+      snapshot.val() ||
+      {};
 
 
-    if (settings.siteName) {
+    if (
+      settings.siteName
+    ) {
 
       document
-        .getElementById("siteName")
+        .getElementById(
+          "siteName"
+        )
         .textContent =
-        settings.siteName;
+          settings.siteName;
+
 
       document.title =
         settings.siteName;
@@ -667,45 +1571,69 @@ onValue(
     }
 
 
-    if (settings.subtitle) {
+    if (
+      settings.subtitle
+    ) {
 
       document
-        .getElementById("siteSubtitle")
+        .getElementById(
+          "siteSubtitle"
+        )
         .textContent =
-        settings.subtitle;
+          settings.subtitle;
 
     }
 
 
-    if (settings.logoUrl) {
+    const logo =
+      safeUrl(
+        settings.logoUrl
+      );
+
+
+    if (logo) {
 
       document
-        .getElementById("siteLogo")
+        .getElementById(
+          "siteLogo"
+        )
         .src =
-        settings.logoUrl;
+          logo;
 
     }
 
 
-    if (settings.footerText) {
+    if (
+      settings.footerText
+    ) {
 
       document
-        .getElementById("footerText")
+        .getElementById(
+          "footerText"
+        )
         .textContent =
-        settings.footerText;
+          settings.footerText;
 
     }
 
 
-    if (settings.updatedAt) {
+    if (
+      settings.updatedAt
+    ) {
 
-      document
-        .getElementById("lastUpdated")
-        .textContent =
-        "Last settings update: " +
+      const update =
         new Date(
           settings.updatedAt
-        ).toLocaleString();
+        );
+
+
+      document
+        .getElementById(
+          "lastUpdated"
+        )
+        .textContent =
+          "Last update: " +
+          update.toLocaleString();
 
     }
 

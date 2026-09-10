@@ -142,24 +142,6 @@ input {
   white-space: normal;
 }
 
-
-.gradient-text {
-
-  background:
-    linear-gradient(
-      90deg,
-      #68a6ff,
-      #29d7ef
-    );
-
-  -webkit-background-clip: text;
-
-  background-clip: text;
-
-  color: transparent;
-}
-
-
 .brand p {
 
   max-width: 650px;

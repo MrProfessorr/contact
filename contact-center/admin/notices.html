@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>Manage Notices</title>
+
+<link
+  rel="stylesheet"
+  href="./admin.css"
+>
+
+</head>
+
+<body>
+
+
+<nav class="admin-nav">
+
+<div class="admin-nav-inner">
+
+<div class="admin-brand">
+
+<h1>Support Admin</h1>
+
+<p id="adminEmail">
+Loading...
+</p>
+
+</div>
+
+
+<div class="nav-links">
+
+<a href="./contacts.html">
+Contacts
+</a>
+
+<a
+  href="./notices.html"
+  class="active"
+>
+Notices
+</a>
+
+<a href="./settings.html">
+Settings
+</a>
+
+<a
+  href="../index.html"
+  target="_blank"
+>
+Customer
+</a>
+
+<a
+  href="javascript:void(0)"
+  id="logoutBtn"
+>
+Logout
+</a>
+
+</div>
+
+</div>
+
+</nav>
+
+
+
+<main class="admin-container">
+
+<div class="page-title">
+
+<div>
+
+<h2>
+Notices
+</h2>
+
+<p>
+Manage customer announcements.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="admin-grid">
+
+
+<section class="card">
+
+<h3 id="formTitle">
+Add Notice
+</h3>
+
+
+<form id="noticeForm">
+
+<input
+  id="editId"
+  type="hidden"
+>
+
+
+<div class="form-group">
+
+<label>
+Title
+</label>
+
+<input
+  id="title"
+  required
+  placeholder="IMPORTANT NOTICE"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Message
+</label>
+
+<textarea
+  id="message"
+  required
+  placeholder="Write notice..."
+></textarea>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Image URL
+</label>
+
+<input
+  id="imageUrl"
+  placeholder="https://..."
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Visibility
+</label>
+
+<select id="active">
+
+<option value="true">
+ACTIVE
+</option>
+
+<option value="false">
+HIDDEN
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Pinned
+</label>
+
+<select id="pinned">
+
+<option value="false">
+Normal
+</option>
+
+<option value="true">
+📌 PIN NOTICE
+</option>
+
+</select>
+
+</div>
+
+
+<button
+  type="submit"
+  class="btn btn-green full"
+>
+SAVE NOTICE
+</button>
+
+
+<button
+  id="cancelBtn"
+  type="button"
+  class="btn btn-dark full hidden"
+  style="margin-top:8px;"
+>
+CANCEL EDIT
+</button>
+
+</form>
+
+</section>
+
+
+
+<section class="card">
+
+<h3>
+Notice List
+</h3>
+
+<div
+  id="noticeList"
+  class="admin-list"
+>
+
+<div class="empty">
+Loading...
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+</main>
+
+
+<script type="module">
+
+import {
+
+  db,
+  requireAdmin,
+  setupLogout,
+  safe,
+
+  ref,
+  push,
+  set,
+  update,
+  remove,
+  onValue
+
+} from "./admin.js";
+
+
+requireAdmin();
+
+setupLogout();
+
+
+const form =
+  document
+    .getElementById(
+      "noticeForm"
+    );
+
+const list =
+  document
+    .getElementById(
+      "noticeList"
+    );
+
+const editId =
+  document
+    .getElementById(
+      "editId"
+    );
+
+const cancel =
+  document
+    .getElementById(
+      "cancelBtn"
+    );
+
+
+let cache = {};
+
+
+/* SAVE */
+
+form.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+
+    const data = {
+
+      title:
+        document
+          .getElementById(
+            "title"
+          )
+          .value
+          .trim(),
+
+      message:
+        document
+          .getElementById(
+            "message"
+          )
+          .value
+          .trim(),
+
+      imageUrl:
+        document
+          .getElementById(
+            "imageUrl"
+          )
+          .value
+          .trim(),
+
+      active:
+        document
+          .getElementById(
+            "active"
+          )
+          .value ===
+          "true",
+
+      pinned:
+        document
+          .getElementById(
+            "pinned"
+          )
+          .value ===
+          "true",
+
+      updatedAt:
+        Date.now()
+
+    };
+
+
+    if (editId.value) {
+
+      await update(
+
+        ref(
+          db,
+          "notices/" +
+          editId.value
+        ),
+
+        data
+      );
+
+    } else {
+
+      const newRef =
+        push(
+          ref(
+            db,
+            "notices"
+          )
+        );
+
+
+      await set(
+        newRef,
+        {
+          ...data,
+          createdAt:
+            Date.now()
+        }
+      );
+
+    }
+
+
+    resetForm();
+
+  }
+);
+
+
+/* RESET */
+
+function resetForm() {
+
+  form.reset();
+
+  editId.value =
+    "";
+
+  document
+    .getElementById(
+      "active"
+    )
+    .value =
+    "true";
+
+  document
+    .getElementById(
+      "pinned"
+    )
+    .value =
+    "false";
+
+  document
+    .getElementById(
+      "formTitle"
+    )
+    .textContent =
+    "Add Notice";
+
+  cancel
+    .classList
+    .add("hidden");
+}
+
+
+cancel.addEventListener(
+  "click",
+  resetForm
+);
+
+
+/* EDIT */
+
+window.editNotice =
+function(id) {
+
+  const item =
+    cache[id];
+
+  if (!item)
+    return;
+
+
+  editId.value =
+    id;
+
+  document
+    .getElementById("title")
+    .value =
+    item.title || "";
+
+  document
+    .getElementById("message")
+    .value =
+    item.message || "";
+
+  document
+    .getElementById("imageUrl")
+    .value =
+    item.imageUrl || "";
+
+  document
+    .getElementById("active")
+    .value =
+    String(
+      item.active !== false
+    );
+
+  document
+    .getElementById("pinned")
+    .value =
+    String(
+      item.pinned === true
+    );
+
+
+  document
+    .getElementById(
+      "formTitle"
+    )
+    .textContent =
+    "Edit Notice";
+
+
+  cancel
+    .classList
+    .remove("hidden");
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+};
+
+
+/* DELETE */
+
+window.deleteNotice =
+async function(id) {
+
+  if (
+    !confirm(
+      "Delete this notice?"
+    )
+  ) {
+    return;
+  }
+
+
+  await remove(
+    ref(
+      db,
+      "notices/" + id
+    )
+  );
+
+};
+
+
+/* LIST */
+
+onValue(
+  ref(
+    db,
+    "notices"
+  ),
+  snapshot => {
+
+    cache =
+      snapshot.val() || {};
+
+
+    const items =
+      Object.entries(cache)
+        .map(
+          ([id,value]) => ({
+            id,
+            ...value
+          })
+        )
+        .sort(
+          (a,b) =>
+            Number(
+              b.createdAt || 0
+            ) -
+            Number(
+              a.createdAt || 0
+            )
+        );
+
+
+    list.innerHTML = "";
+
+
+    if (!items.length) {
+
+      list.innerHTML = `
+        <div class="empty">
+          No notices.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    items.forEach(item => {
+
+      list.insertAdjacentHTML(
+        "beforeend",
+        `
+
+        <div class="admin-item">
+
+          <div class="item-top">
+
+            <div>
+
+              <h4>
+                ${
+                  item.pinned
+                  ? "📌 "
+                  : ""
+                }
+                ${safe(item.title)}
+              </h4>
+
+              <p>
+                ${
+                  item.active !== false
+                  ? "ACTIVE"
+                  : "HIDDEN"
+                }
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <p style="margin-top:10px;">
+            ${safe(item.message)}
+          </p>
+
+
+          ${
+            item.imageUrl
+            ?
+            `
+              <img
+                src="${safe(item.imageUrl)}"
+                class="preview"
+              >
+            `
+            :
+            ""
+          }
+
+
+          <div class="admin-actions">
+
+            <button
+              class="action-btn action-edit"
+              onclick="editNotice('${item.id}')"
+            >
+              EDIT
+            </button>
+
+            <button
+              class="action-btn action-delete"
+              onclick="deleteNotice('${item.id}')"
+            >
+              DELETE
+            </button>
+
+          </div>
+
+        </div>
+
+        `
+      );
+
+    });
+
+  }
+);
+
+</script>
+
+</body>
+</html>

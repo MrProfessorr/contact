@@ -85,13 +85,6 @@ const pageLoader =
     "pageLoader"
   );
 
-
-const loaderTitle =
-  document.getElementById(
-    "loaderTitle"
-  );
-
-
 const contactList =
   document.getElementById(
     "contactList"

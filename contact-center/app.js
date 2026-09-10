@@ -1520,40 +1520,21 @@ const message =
 
 
 
-                <div
-                  id="notice-message-${noticeId}"
-
-                  class="
-                    notice-message
-                    ${shouldCollapse ? "collapsed" : ""}
-                  "
-                >
-
-                  ${safe(message)}
-
-                </div>
+<div
+  id="notice-message-${noticeId}"
+  class="notice-message"
+>
+  ${safe(message)}
+</div>
 
 
-
-                ${
-                  shouldCollapse
-
-                    ? `
-                      <button
-                        class="notice-expand"
-
-                        type="button"
-
-                        data-target="notice-message-${noticeId}"
-                      >
-
-                        Read more ↓
-
-                      </button>
-                    `
-
-                    : ""
-                }
+<button
+  class="notice-expand"
+  type="button"
+  data-target="notice-message-${noticeId}"
+>
+  Expand ↓
+</button>
 
 
 
@@ -1631,6 +1612,24 @@ const message =
 
 function setupNoticeButtons() {
 
+  const COLLAPSED_HEIGHT_DESKTOP =
+    112;
+
+
+  const COLLAPSED_HEIGHT_MOBILE =
+    100;
+
+
+  const getCollapsedHeight =
+    () => {
+
+      return window.innerWidth <= 760
+        ? COLLAPSED_HEIGHT_MOBILE
+        : COLLAPSED_HEIGHT_DESKTOP;
+
+    };
+
+
   document
     .querySelectorAll(
       ".notice-expand"
@@ -1639,72 +1638,183 @@ function setupNoticeButtons() {
     .forEach(
       button => {
 
-        button
-          .addEventListener(
-            "click",
-            () => {
-
-              const targetId =
-                button.dataset
-                  .target;
+        const targetId =
+          button.dataset.target;
 
 
-              const target =
-                document
-                  .getElementById(
-                    targetId
-                  );
+        const target =
+          document.getElementById(
+            targetId
+          );
 
 
-              if (!target) {
-                return;
+        if (!target) {
+          return;
+        }
+
+
+        /*
+          Mula-mula biarkan caption terbuka supaya
+          browser boleh ukur tinggi sebenar.
+        */
+
+        target.classList.remove(
+          "collapsed",
+          "expanded"
+        );
+
+
+        button.classList.remove(
+          "show"
+        );
+
+
+        /*
+          Tunggu browser selesai render.
+        */
+
+        requestAnimationFrame(
+          () => {
+
+            requestAnimationFrame(
+              () => {
+
+                const collapsedHeight =
+                  getCollapsedHeight();
+
+
+                const actualHeight =
+                  target.scrollHeight;
+
+
+                /*
+                  Hanya collapse bila text benar-benar
+                  lebih tinggi daripada kawasan preview.
+                */
+
+                if (
+                  actualHeight >
+                  collapsedHeight + 4
+                ) {
+
+                  target
+                    .classList
+                    .add(
+                      "collapsed"
+                    );
+
+
+                  button
+                    .classList
+                    .add(
+                      "show"
+                    );
+
+
+                  button.textContent =
+                    "Expand ↓";
+
+                } else {
+
+                  /*
+                    Caption pendek:
+                    tunjuk semuanya dan button tak perlu.
+                  */
+
+                  target
+                    .classList
+                    .remove(
+                      "collapsed"
+                    );
+
+
+                  button
+                    .classList
+                    .remove(
+                      "show"
+                    );
+
+                }
+
               }
+            );
+
+          }
+        );
 
 
-              const collapsed =
-                target
-                  .classList
-                  .contains(
-                    "collapsed"
-                  );
+
+        /*
+          EXPAND / COLLAPSE
+        */
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const isCollapsed =
+              target
+                .classList
+                .contains(
+                  "collapsed"
+                );
 
 
-              if (
-                collapsed
-              ) {
+            if (isCollapsed) {
 
-                target
-                  .classList
-                  .remove(
-                    "collapsed"
-                  );
+              /*
+                OPEN FULL CAPTION
+              */
 
-
-                button.textContent =
-                  "Show less ↑";
-
-              } else {
-
-                target
-                  .classList
-                  .add(
-                    "collapsed"
-                  );
+              target
+                .classList
+                .remove(
+                  "collapsed"
+                );
 
 
-                button.textContent =
-                  "Read more ↓";
+              target
+                .classList
+                .add(
+                  "expanded"
+                );
 
-              }
+
+              button.textContent =
+                "Collapse ↑";
+
+            } else {
+
+              /*
+                COLLAPSE BACK
+              */
+
+              target
+                .classList
+                .remove(
+                  "expanded"
+                );
+
+
+              target
+                .classList
+                .add(
+                  "collapsed"
+                );
+
+
+              button.textContent =
+                "Expand ↓";
 
             }
-          );
+
+          }
+        );
 
       }
     );
 
 }
-
 
 
 /* =========================================================

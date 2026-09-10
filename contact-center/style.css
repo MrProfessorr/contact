@@ -1378,7 +1378,7 @@ input {
 
 
 .contact-card {
-
+ position: relative;
   min-width: 0;
 
   display: grid;
@@ -1439,38 +1439,26 @@ input {
 
 
 .contact-content {
-
+ padding-right: 75px;
   min-width: 0;
 }
 
 
 .contact-content h3 {
-
   max-width: 100%;
-
   margin-bottom: 4px;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
-
   white-space: nowrap;
-
-  font-size: 11px;
+  font-size: 14px;
 }
 
 
 .contact-value {
-
   margin-bottom: 6px;
-
-  color:
-    #aab7ca;
-
-  font-size: 9px;
-
+  color:#f8dd76;
+  font-size: 12px;
   overflow-wrap: anywhere;
-
   word-break: break-word;
 }
 
@@ -1486,12 +1474,18 @@ input {
 
 
 .status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
   display: inline-flex;
-  padding:4px 7px;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
   border-radius: 50px;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: .3px;
+  z-index: 2;
 }
 
 

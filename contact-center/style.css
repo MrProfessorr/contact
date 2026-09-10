@@ -709,24 +709,6 @@ input {
     24px auto 65px;
 }
 
-
-.customer-layout {
-
-  min-width: 0;
-
-  display: grid;
-
-  grid-template-columns:
-    minmax(260px, 300px)
-    minmax(0, 1fr);
-
-  gap: 20px;
-
-  align-items: start;
-}
-
-
-
 /* =========================================================
    CARDS
 ========================================================= */
@@ -790,22 +772,6 @@ input {
 /* =========================================================
    STATUS SIDEBAR
 ========================================================= */
-
-.status-panel {
-
-  position: sticky;
-
-  top: 101px;
-
-  max-height:
-    calc(100vh - 120px);
-
-  display: flex;
-
-  flex-direction: column;
-}
-
-
 .panel-heading {
 
   display: flex;
@@ -978,13 +944,10 @@ input {
 /* SCROLLABLE STATUS */
 
 .status-list {
-
+  flex: 1;
   min-height: 0;
-
   overflow-y: auto;
-
   overscroll-behavior: contain;
-
   padding: 12px;
 }
 
@@ -2384,31 +2347,27 @@ body.modal-open {
       15px auto 42px;
   }
 
-
-  .customer-layout {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 14px;
-  }
-
-
-  .status-panel {
-
-    position: static;
-
-    width: 100%;
-
-    max-height: none;
-  }
-
+.customer-layout {
+  min-width: 0;
+  display: grid;
+  grid-template-columns:minmax(260px, 300px)minmax(0, 1fr);
+  gap: 20px;
+  flex-direction: column;
+  align-items: start;
+}
+   
+.status-panel {
+  position: sticky;
+  top: 88px;
+  height: auto;
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
   .status-list {
-
     max-height: 280px;
-
     overflow-y: auto;
   }
 

@@ -1474,9 +1474,6 @@ input {
 
 
 .status-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1485,6 +1482,12 @@ input {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: .3px;
+}
+/* Hanya badge dalam Contact Our Team */
+.contact-card .status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
   z-index: 2;
 }
 

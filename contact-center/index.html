@@ -1,1 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
 
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#090d13"
+  >
+
+  <title>Official Support Center</title>
+
+  <link
+    rel="stylesheet"
+    href="./style.css"
+  >
+</head>
+
+<body>
+
+<header class="top-header">
+
+  <div class="header-inner">
+
+    <div class="brand">
+
+      <img
+        id="siteLogo"
+        src="./assets/logo.svg"
+        class="site-logo"
+        alt="Logo"
+      >
+
+      <div>
+        <h1 id="siteName">
+          Official Support Center
+        </h1>
+
+        <p id="siteSubtitle">
+          Official contacts and announcements
+        </p>
+      </div>
+
+    </div>
+
+    <div class="live-indicator">
+      <span class="live-dot"></span>
+      LIVE
+    </div>
+
+  </div>
+
+</header>
+
+
+<div class="page-container">
+
+  <div class="customer-layout">
+
+    <!-- LEFT STATUS -->
+
+    <aside class="status-panel">
+
+      <div class="panel-heading">
+
+        <h2>
+          Contact Status
+        </h2>
+
+        <p>
+          Check our latest official contact status.
+        </p>
+
+      </div>
+
+
+      <div class="status-filter">
+
+        <button
+          class="filter-btn active"
+          data-filter="all"
+        >
+          All
+        </button>
+
+        <button
+          class="filter-btn"
+          data-filter="active"
+        >
+          Active
+        </button>
+
+        <button
+          class="filter-btn"
+          data-filter="problem"
+        >
+          Problem
+        </button>
+
+        <button
+          class="filter-btn"
+          data-filter="closed"
+        >
+          Closed
+        </button>
+
+      </div>
+
+
+      <div id="statusList">
+
+        <div class="loading">
+          Loading...
+        </div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- RIGHT CONTENT -->
+
+    <main class="content-area">
+
+
+      <!-- NOTICE -->
+
+      <section class="content-card">
+
+        <div class="section-title">
+
+          <div>
+            <span class="small-title">
+              ANNOUNCEMENT
+            </span>
+
+            <h2>
+              📢 Latest Notice
+            </h2>
+          </div>
+
+        </div>
+
+
+        <div
+          id="noticeList"
+          class="notice-list"
+        >
+          <div class="loading">
+            Loading notices...
+          </div>
+        </div>
+
+      </section>
+
+
+
+      <!-- CONTACTS -->
+
+      <section class="content-card">
+
+        <div class="section-title">
+
+          <div>
+            <span class="small-title">
+              OFFICIAL SUPPORT
+            </span>
+
+            <h2>
+              Official Contacts
+            </h2>
+          </div>
+
+        </div>
+
+
+        <div class="search-box">
+
+          <input
+            id="contactSearch"
+            type="text"
+            placeholder="Search WhatsApp, Telegram..."
+          >
+
+        </div>
+
+
+        <div
+          id="contactList"
+          class="contact-list"
+        >
+
+          <div class="loading">
+            Loading contacts...
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+</div>
+
+
+<footer>
+
+  <span id="footerText">
+    Please only use official contacts shown here.
+  </span>
+
+  <div id="lastUpdated"></div>
+
+</footer>
+
+
+<script
+  type="module"
+  src="./app.js"
+></script>
+
+</body>
+</html>

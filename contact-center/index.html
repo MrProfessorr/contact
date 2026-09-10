@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
 
@@ -11,10 +10,10 @@
 
   <meta
     name="theme-color"
-    content="#07101f"
+    content="#060b14"
   >
 
-  <title>Contact Us</title>
+  <title>Official Support Center</title>
 
   <link
     rel="stylesheet"
@@ -22,15 +21,93 @@
   >
 </head>
 
-<body>
+<body class="page-loading">
+
+
+<!-- =====================================================
+     FULL PAGE LOADER
+===================================================== -->
+
+<div id="pageLoader" class="page-loader">
+
+  <div class="loader-glow loader-glow-one"></div>
+  <div class="loader-glow loader-glow-two"></div>
+
+  <div class="loader-content">
+
+    <!--
+      GAMBAR LOADING
+
+      Kau boleh tukar:
+      ./assets/loading.png
+
+      kepada gambar/logo sendiri.
+
+      Kalau file loading.png tak ada,
+      gambar akan auto hide.
+    -->
+
+    <div class="loader-logo-wrap">
+
+      <img
+        id="loaderLogo"
+        class="loader-logo"
+        src="./assets/loading.png"
+        alt="Loading"
+        onerror="this.parentElement.classList.add('no-image')"
+      >
+
+      <div class="loader-logo-fallback">
+        S
+      </div>
+
+    </div>
+
+
+    <h2 id="loaderTitle">
+      Contact Us
+    </h2>
+
+    <p>
+      Preparing official support information
+    </p>
+
+
+    <!-- 4 DOT LOADER -->
+
+    <div
+      class="four-dot-loader"
+      aria-label="Loading"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+
+    <div class="loader-status">
+      Loading...
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     BACKGROUND
+===================================================== -->
 
 <div class="ambient ambient-one"></div>
 <div class="ambient ambient-two"></div>
 
 
-<!-- =========================
+
+<!-- =====================================================
      HEADER
-========================= -->
+===================================================== -->
 
 <header class="top-header">
 
@@ -49,6 +126,7 @@
 
       </div>
 
+
       <div class="brand-text">
 
         <h1 id="siteName">
@@ -64,17 +142,11 @@
     </div>
 
 
-    <div class="header-right">
+    <div class="live-indicator">
 
-      <div class="live-indicator">
+      <span class="live-dot"></span>
 
-        <span class="live-dot"></span>
-
-        <span>
-          LIVE
-        </span>
-
-      </div>
+      LIVE
 
     </div>
 
@@ -83,9 +155,10 @@
 </header>
 
 
-<!-- =========================
+
+<!-- =====================================================
      HERO
-========================= -->
+===================================================== -->
 
 <section class="hero">
 
@@ -97,33 +170,37 @@
         OFFICIAL SUPPORT CENTER
       </span>
 
+
       <h2>
-        Stay connected with our
-        <span>official channels.</span>
+        Official contacts.
+        <span>Always updated.</span>
       </h2>
 
+
       <p>
-        Check active contacts, service status and the latest
-        announcements in one place.
+        Check our latest contact status, important notices
+        and official support channels.
       </p>
 
     </div>
 
 
-    <div class="hero-status">
+    <div class="hero-live-card">
 
-      <div class="hero-status-icon">
+      <div class="hero-live-icon">
         ✓
       </div>
 
       <div>
+
         <strong>
           Live Information
         </strong>
 
-        <small>
-          Updates automatically
-        </small>
+        <span>
+          Automatically updated
+        </span>
+
       </div>
 
     </div>
@@ -134,26 +211,27 @@
 
 
 
-<!-- =========================
-     PAGE
-========================= -->
+<!-- =====================================================
+     MAIN PAGE
+===================================================== -->
 
 <div class="page-container">
 
   <div class="customer-layout">
 
 
-    <!-- =====================
-         SIDEBAR
-    ====================== -->
+    <!-- =================================================
+         LEFT CONTACT STATUS
+    ================================================== -->
 
     <aside class="status-panel">
 
       <div class="panel-heading">
 
-        <div class="panel-icon">
+        <div class="panel-heading-icon">
           ◉
         </div>
+
 
         <div>
 
@@ -162,12 +240,13 @@
           </h2>
 
           <p>
-            Check availability before contacting us.
+            Check which official contacts are available.
           </p>
 
         </div>
 
       </div>
+
 
 
       <div class="status-filter">
@@ -177,34 +256,50 @@
           data-filter="all"
         >
           <span>All</span>
-          <strong id="countAll">0</strong>
+
+          <strong id="countAll">
+            0
+          </strong>
         </button>
+
 
         <button
           class="filter-btn"
           data-filter="active"
         >
           <span>Active</span>
-          <strong id="countActive">0</strong>
+
+          <strong id="countActive">
+            0
+          </strong>
         </button>
+
 
         <button
           class="filter-btn"
           data-filter="problem"
         >
           <span>Problem</span>
-          <strong id="countProblem">0</strong>
+
+          <strong id="countProblem">
+            0
+          </strong>
         </button>
+
 
         <button
           class="filter-btn"
           data-filter="closed"
         >
           <span>Closed</span>
-          <strong id="countClosed">0</strong>
+
+          <strong id="countClosed">
+            0
+          </strong>
         </button>
 
       </div>
+
 
 
       <div
@@ -212,9 +307,12 @@
         class="status-list"
       >
 
-        <div class="loading">
-          <span class="spinner"></span>
+        <div class="small-loading">
+
+          <span class="mini-spinner"></span>
+
           Loading contacts...
+
         </div>
 
       </div>
@@ -223,24 +321,27 @@
 
 
 
-    <!-- =====================
-         MAIN
-    ====================== -->
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================== -->
 
     <main class="content-area">
 
 
-      <!-- NOTICE -->
+      <!-- ===============================================
+           NOTICE
+      ================================================ -->
 
-      <section class="content-card notice-section">
+      <section class="content-card">
 
         <div class="section-title">
 
           <div class="section-title-left">
 
-            <div class="section-icon notice-section-icon">
+            <div class="section-icon notice-icon">
               📢
             </div>
+
 
             <div>
 
@@ -253,7 +354,7 @@
               </h2>
 
               <p>
-                Important information and latest updates.
+                Important information from our team.
               </p>
 
             </div>
@@ -263,14 +364,18 @@
         </div>
 
 
+
         <div
           id="noticeList"
           class="notice-list"
         >
 
-          <div class="loading">
-            <span class="spinner"></span>
+          <div class="small-loading">
+
+            <span class="mini-spinner"></span>
+
             Loading announcements...
+
           </div>
 
         </div>
@@ -279,9 +384,11 @@
 
 
 
-      <!-- CONTACT -->
+      <!-- ===============================================
+           CONTACT
+      ================================================ -->
 
-      <section class="content-card contact-section">
+      <section class="content-card">
 
         <div class="section-title">
 
@@ -291,10 +398,11 @@
               💬
             </div>
 
+
             <div>
 
               <span class="small-title">
-                OFFICIAL CONTACT
+                OFFICIAL SUPPORT
               </span>
 
               <h2>
@@ -302,7 +410,7 @@
               </h2>
 
               <p>
-                Select one of our available official channels.
+                Choose one of our official support channels.
               </p>
 
             </div>
@@ -312,24 +420,28 @@
         </div>
 
 
+
+        <!-- SEARCH -->
+
         <div class="search-wrap">
 
           <div class="search-icon">
             ⌕
           </div>
 
+
           <input
             id="contactSearch"
             type="text"
-            placeholder="Search WhatsApp, Telegram, support..."
+            placeholder="Search WhatsApp, Telegram..."
             autocomplete="off"
           >
+
 
           <button
             id="clearSearch"
             class="clear-search"
             type="button"
-            aria-label="Clear search"
           >
             ×
           </button>
@@ -337,14 +449,18 @@
         </div>
 
 
+
         <div
           id="contactList"
           class="contact-list"
         >
 
-          <div class="loading">
-            <span class="spinner"></span>
+          <div class="small-loading">
+
+            <span class="mini-spinner"></span>
+
             Loading official contacts...
+
           </div>
 
         </div>
@@ -359,9 +475,9 @@
 
 
 
-<!-- =========================
+<!-- =====================================================
      FOOTER
-========================= -->
+===================================================== -->
 
 <footer class="footer">
 
@@ -379,6 +495,7 @@
 
     </div>
 
+
     <div
       id="lastUpdated"
       class="footer-update"
@@ -390,9 +507,9 @@
 
 
 
-<!-- =========================
-     IMAGE PREVIEW MODAL
-========================= -->
+<!-- =====================================================
+     IMAGE PREVIEW
+===================================================== -->
 
 <div
   id="imageModal"
@@ -400,23 +517,27 @@
   aria-hidden="true"
 >
 
+  <div
+    id="modalBackdrop"
+    class="modal-backdrop"
+  ></div>
+
+
   <button
     id="closeImageModal"
     class="modal-close"
     type="button"
-    aria-label="Close preview"
   >
     ×
   </button>
 
-  <div class="modal-backdrop"></div>
 
   <div class="modal-content">
 
     <img
       id="modalImage"
       src=""
-      alt="Preview"
+      alt="Image Preview"
     >
 
   </div>

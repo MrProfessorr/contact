@@ -829,94 +829,51 @@ input {
 
 
 .filter-btn {
-
   min-width: 0;
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 5px;
-
-  padding:
-    8px 9px;
-
+  padding:8px 9px;
   cursor: pointer;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 9px;
-
-  color:
-    #a9b7ca;
-
-  background:
-    rgba(255,255,255,.022);
-
-  transition:
-    .18s ease;
+  border:1px solid var(--border);
+  border-radius: 6px;
+  color:#f8dd76;
+  background: linear-gradient(180deg, #525252 0%, #0A0A0A 100%);
+  transition:.18s ease;
 }
 
 
 .filter-btn span {
-
-  font-size: 9px;
-
+  font-size: 10px;
   font-weight: 700;
 }
 
 
 .filter-btn strong {
-
   min-width: 20px;
   height: 20px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
-  border-radius: 6px;
-
-  background:
-    rgba(255,255,255,.05);
-
-  font-size: 8px;
+  border-radius: 50%;
+  font-size: 10px;
 }
 
 
 .filter-btn:hover {
-
   border-color:
     var(--border-hover);
-
   transform:
     translateY(-1px);
 }
 
 
 .filter-btn.active {
-
-  color: white;
-
-  border-color:
-    rgba(65,145,255,.42);
-
-  background:
-    linear-gradient(
-      135deg,
-      #276ddd,
-      #1f51a9
-    );
-
-  box-shadow:
-    0 7px 20px rgba(37,100,209,.18);
+  border-color: #f9ff00;
+  background: linear-gradient(180deg, #000000 0%, #000000 100%) padding-box, linear-gradient(180deg, #F8DD76 0%, #FCDF79 50%, #BA8618 100%) border-box !important;
+  box-shadow: 0 7px 20px rgba(37,100,209,.18);
 }
-
-
 
 /* SCROLLABLE STATUS */
 
@@ -1093,18 +1050,11 @@ input {
 
 
 .small-title {
-
   display: block;
-
   margin-bottom: 3px;
-
-  color:
-    #69a1ff;
-
+  color:#f8dd76;
   font-size: 7px;
-
   font-weight: 900;
-
   letter-spacing: 1.6px;
 }
 

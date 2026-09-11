@@ -328,7 +328,32 @@ function safe(value = "") {
 
 }
 
+/* =========================================================
+   COPY CONTACT VALUE
+========================================================= */
 
+function copyButtonHtml(value = "") {
+
+  return `
+    <button
+      class="copy-contact-btn"
+      type="button"
+      data-copy-value="${safe(value)}"
+      aria-label="Copy contact number"
+      title="Copy"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6t.713.288T5 7v13h10q.425 0 .713.288T16 21t-.288.713T15 22zm4-6V4z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+  `;
+}
 
 /* =========================================================
    SAFE URL
@@ -971,11 +996,15 @@ if (!filtered.length) {
               </h3>
 
 
-              <div class="contact-value">
+              <div class="contact-value-row">
 
-                ${safe(item.value || "")}
+  <div class="contact-value">
+    ${safe(item.value || "")}
+  </div>
 
-              </div>
+  ${copyButtonHtml(item.value || "")}
+
+</div>
 
 
               <span
@@ -1074,11 +1103,15 @@ filtered.forEach(
           </div>
 
 
-          <div class="status-value">
+<div class="status-value-row">
 
-            ${safe(item.value || "")}
+  <div class="status-value">
+    ${safe(item.value || "")}
+  </div>
 
-          </div>
+  ${copyButtonHtml(item.value || "")}
+
+</div>
 
         </div>
 
@@ -1089,7 +1122,87 @@ filtered.forEach(
 );
 }
 
+/* =========================================================
+   COPY CONTACT
+========================================================= */
 
+document.addEventListener(
+  "click",
+  async event => {
+
+    const button =
+      event.target.closest(
+        ".copy-contact-btn"
+      );
+
+    if (!button) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const value =
+      button.dataset.copyValue || "";
+
+    if (!value) {
+      return;
+    }
+
+    try {
+
+      await navigator.clipboard.writeText(
+        value
+      );
+
+      button.classList.add(
+        "copied"
+      );
+
+      button.innerHTML = `
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"
+            fill="currentColor"
+          />
+        </svg>
+      `;
+
+      setTimeout(
+        () => {
+          button.classList.remove(
+            "copied"
+          );
+
+          button.innerHTML = `
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6t.713.288T5 7v13h10q.425 0 .713.288T16 21t-.288.713T15 22zm4-6V4z"
+                fill="currentColor"
+              />
+            </svg>
+          `;
+        },
+        1200
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Copy failed:",
+        error
+      );
+
+    }
+
+  }
+);
 
 /* =========================================================
    FIREBASE CONTACTS

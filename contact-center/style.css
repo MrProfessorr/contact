@@ -459,14 +459,14 @@ input {
 
 
 .header-inner {
-  width: calc(100% - 12px));
+  width: calc(100% - 12px);
   min-height: 64px;
   margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  max-withd:none;
+  max-width:none;
 }
 
 

@@ -98,12 +98,24 @@ input {
   background: #18150b;
   font-size: 8px;
   font-weight: 900;
+   color:#f8dd76;
   letter-spacing: 1.6px;
 }
-.support-dot {
-  color:#F8DD76;
-  box-shadow:0 0 12px rgba(40,228,154,.8);
-  animation:livePulse 1.7s infinite;
+.header-label-text {
+  display: inline-block;
+  animation: textLivePulse 1.7s ease-in-out infinite;
+}
+
+@keyframes textLivePulse {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 7px rgba(248, 221, 118, .8);
+  }
+
+  50% {
+    opacity: .45;
+    text-shadow: 0 0 2px rgba(248, 221, 118, .25);
+  }
 }
 
 .brand h1 {

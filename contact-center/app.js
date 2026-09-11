@@ -816,8 +816,14 @@ function getActiveContactResults() {
 
 function renderContacts() {
 
+  /* LEFT - ikut filter + search status */
   const filtered =
     getFilteredContacts();
+
+
+  /* RIGHT - ACTIVE sahaja */
+  const activeContacts =
+    getActiveContactResults();
 
 
   contactList.innerHTML =
@@ -833,29 +839,32 @@ function renderContacts() {
     NO RESULTS
   */
 
-  if (
-    !filtered.length
-  ) {
+/* RIGHT EMPTY */
 
-    contactList.innerHTML =
-      `
+if (!activeContacts.length) {
+
+  contactList.innerHTML =
+    `
       <div class="empty">
-        No contact found.
+        No active contact found.
       </div>
-      `;
+    `;
+
+}
 
 
-    statusList.innerHTML =
-      `
+/* LEFT EMPTY */
+
+if (!filtered.length) {
+
+  statusList.innerHTML =
+    `
       <div class="empty">
         No contact status found.
       </div>
-      `;
+    `;
 
-
-    return;
-
-  }
+}
 
 
 
@@ -863,7 +872,7 @@ function renderContacts() {
     CONTACT CARDS
   */
 
-  filtered.forEach(
+  activeContacts.forEach(
     item => {
 
       const link =
@@ -1026,55 +1035,58 @@ function renderContacts() {
           `
         );
 
+    }
+  );
+/* =========================================================
+   LEFT STATUS LIST
+   SEMUA STATUS IKUT FILTER + SEARCH
+========================================================= */
 
+filtered.forEach(
+  item => {
 
-      /*
-        SIDEBAR ITEM
-      */
+    statusList
+      .insertAdjacentHTML(
+        "beforeend",
+        `
 
-      statusList
-        .insertAdjacentHTML(
-          "beforeend",
-          `
+        <div class="status-item">
 
-          <div class="status-item">
+          <div class="status-top">
 
-            <div class="status-top">
-
-              <div
-                class="status-name"
-                title="${safe(item.name || "Contact")}"
-              >
-                ${safe(item.name || "Contact")}
-              </div>
-
-
-              <span
-                class="
-                  status-badge
-                  ${statusClass(item.status)}
-                "
-              >
-                ${statusText(item.status)}
-              </span>
-
+            <div
+              class="status-name"
+              title="${safe(item.name || "Contact")}"
+            >
+              ${safe(item.name || "Contact")}
             </div>
 
 
-            <div class="status-value">
-
-              ${safe(item.value || "")}
-
-            </div>
+            <span
+              class="
+                status-badge
+                ${statusClass(item.status)}
+              "
+            >
+              ${statusText(item.status)}
+            </span>
 
           </div>
 
-          `
-        );
 
-    }
-  );
+          <div class="status-value">
 
+            ${safe(item.value || "")}
+
+          </div>
+
+        </div>
+
+        `
+      );
+
+  }
+);
 }
 
 

@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Marquee - Admin</title>
+
+  <link
+    rel="stylesheet"
+    href="./admin.css"
+  >
+</head>
+
+<body>
+
+<nav class="admin-nav">
+
+  <div class="admin-nav-inner">
+
+    <div class="admin-brand">
+
+      <h1>
+        Support Admin
+      </h1>
+
+      <p id="adminEmail">
+        Admin
+      </p>
+
+    </div>
+
+
+    <div class="nav-links">
+
+      <a href="./contacts.html">
+        Contacts
+      </a>
+
+      <a href="./notices.html">
+        Notices
+      </a>
+
+      <a href="./floating.html">
+        Floating Image
+      </a>
+
+      <a
+        href="./marquee.html"
+        class="active"
+      >
+        Marquee
+      </a>
+
+      <button
+        id="logoutBtn"
+        class="btn btn-dark"
+        type="button"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+
+</nav>
+
+
+<main class="admin-container">
+
+  <div class="page-title">
+
+    <div>
+
+      <h2>
+        Marquee Settings
+      </h2>
+
+      <p>
+        Manage running text displayed on customer page.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="marquee-admin-layout">
+
+
+    <!-- SETTINGS -->
+
+    <section class="card">
+
+      <h3>
+        Marquee Settings
+      </h3>
+
+
+      <div class="form-group">
+
+        <label>
+          Status
+        </label>
+
+        <select id="marqueeEnabled">
+
+          <option value="true">
+            Active
+          </option>
+
+          <option value="false">
+            Inactive
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Running Text
+        </label>
+
+        <textarea
+          id="marqueeText"
+          placeholder="Enter running announcement..."
+        ></textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Position
+        </label>
+
+        <select id="marqueePosition">
+
+          <option value="top">
+            Above Page Container
+          </option>
+
+          <option value="bottom">
+            Below Page Container
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Direction
+        </label>
+
+        <select id="marqueeDirection">
+
+          <option value="right-to-left">
+            Right → Left
+          </option>
+
+          <option value="left-to-right">
+            Left → Right
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Running Speed
+        </label>
+
+        <input
+          id="marqueeSpeed"
+          type="number"
+          min="3"
+          max="60"
+          step="1"
+          value="15"
+        >
+
+        <div class="help-text">
+          Smaller number = faster.
+          Recommended 10 - 20 seconds.
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Text Size
+        </label>
+
+        <input
+          id="marqueeFontSize"
+          type="number"
+          min="8"
+          max="40"
+          value="13"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Text Color
+        </label>
+
+        <input
+          id="marqueeTextColor"
+          type="color"
+          value="#f8dd76"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Line Color
+        </label>
+
+        <input
+          id="marqueeLineColor"
+          type="color"
+          value="#f8dd76"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Background Color
+        </label>
+
+        <input
+          id="marqueeBackgroundColor"
+          type="color"
+          value="#181818"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Pause When Hover
+        </label>
+
+        <select id="marqueePauseHover">
+
+          <option value="true">
+            Yes
+          </option>
+
+          <option value="false">
+            No
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <button
+        id="saveMarqueeBtn"
+        class="btn btn-primary full"
+        type="button"
+      >
+        SAVE MARQUEE
+      </button>
+
+
+      <div
+        id="marqueeSaveMessage"
+        class="marquee-save-message"
+      ></div>
+
+    </section>
+
+
+    <!-- PREVIEW -->
+
+    <section class="card">
+
+      <h3>
+        Live Preview
+      </h3>
+
+
+      <div class="marquee-preview-page">
+
+        <div
+          id="marqueePreview"
+          class="
+            marquee-admin-preview
+            marquee-admin-rtl
+          "
+        >
+
+          <div
+            id="marqueePreviewTrack"
+            class="marquee-admin-preview-track"
+          >
+
+            <span
+              id="marqueePreviewTextOne"
+            >
+              Welcome to our Official Support Center
+            </span>
+
+            <span
+              id="marqueePreviewTextTwo"
+            >
+              Welcome to our Official Support Center
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="marquee-preview-content">
+          CUSTOMER PAGE PREVIEW
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<script type="module">
+
+import {
+  db,
+  ref,
+  set,
+  onValue,
+  requireAdmin,
+  setupLogout
+} from "./admin.js";
+
+
+requireAdmin();
+
+setupLogout();
+
+
+const enabledInput =
+  document.getElementById(
+    "marqueeEnabled"
+  );
+
+const textInput =
+  document.getElementById(
+    "marqueeText"
+  );
+
+const positionInput =
+  document.getElementById(
+    "marqueePosition"
+  );
+
+const directionInput =
+  document.getElementById(
+    "marqueeDirection"
+  );
+
+const speedInput =
+  document.getElementById(
+    "marqueeSpeed"
+  );
+
+const fontSizeInput =
+  document.getElementById(
+    "marqueeFontSize"
+  );
+
+const textColorInput =
+  document.getElementById(
+    "marqueeTextColor"
+  );
+
+const lineColorInput =
+  document.getElementById(
+    "marqueeLineColor"
+  );
+
+const backgroundInput =
+  document.getElementById(
+    "marqueeBackgroundColor"
+  );
+
+const pauseHoverInput =
+  document.getElementById(
+    "marqueePauseHover"
+  );
+
+const saveBtn =
+  document.getElementById(
+    "saveMarqueeBtn"
+  );
+
+const saveMessage =
+  document.getElementById(
+    "marqueeSaveMessage"
+  );
+
+const preview =
+  document.getElementById(
+    "marqueePreview"
+  );
+
+const previewTrack =
+  document.getElementById(
+    "marqueePreviewTrack"
+  );
+
+const previewTextOne =
+  document.getElementById(
+    "marqueePreviewTextOne"
+  );
+
+const previewTextTwo =
+  document.getElementById(
+    "marqueePreviewTextTwo"
+  );
+
+
+function boolValue(value) {
+
+  return (
+    value === true ||
+    value === "true"
+  );
+
+}
+
+
+function clampNumber(
+  value,
+  min,
+  max,
+  fallback
+) {
+
+  let number =
+    Number(value);
+
+  if (
+    !Number.isFinite(number)
+  ) {
+
+    number =
+      fallback;
+
+  }
+
+  return Math.max(
+    min,
+    Math.min(
+      max,
+      number
+    )
+  );
+
+}
+
+
+function getMarqueeData() {
+
+  return {
+
+    enabled:
+      boolValue(
+        enabledInput.value
+      ),
+
+    text:
+      textInput
+        .value
+        .trim(),
+
+    position:
+      positionInput.value,
+
+    direction:
+      directionInput.value,
+
+    speed:
+      clampNumber(
+        speedInput.value,
+        3,
+        60,
+        15
+      ),
+
+    font_size:
+      clampNumber(
+        fontSizeInput.value,
+        8,
+        40,
+        13
+      ),
+
+    text_color:
+      textColorInput.value,
+
+    line_color:
+      lineColorInput.value,
+
+    background_color:
+      backgroundInput.value,
+
+    pause_hover:
+      boolValue(
+        pauseHoverInput.value
+      ),
+
+    updatedAt:
+      Date.now()
+
+  };
+
+}
+
+
+function updatePreview() {
+
+  const data =
+    getMarqueeData();
+
+
+  const text =
+    data.text ||
+    "Welcome to our Official Support Center";
+
+
+  previewTextOne.textContent =
+    text;
+
+  previewTextTwo.textContent =
+    text;
+
+
+  preview.style.setProperty(
+    "--admin-marquee-speed",
+    `${data.speed}s`
+  );
+
+
+  preview.style.setProperty(
+    "--admin-marquee-font-size",
+    `${data.font_size}px`
+  );
+
+
+  preview.style.setProperty(
+    "--admin-marquee-text-color",
+    data.text_color
+  );
+
+
+  preview.style.setProperty(
+    "--admin-marquee-line-color",
+    data.line_color
+  );
+
+
+  preview.style.setProperty(
+    "--admin-marquee-background",
+    data.background_color
+  );
+
+
+  preview.classList.remove(
+    "marquee-admin-rtl",
+    "marquee-admin-ltr"
+  );
+
+
+  preview.classList.add(
+    data.direction ===
+    "left-to-right"
+
+      ? "marquee-admin-ltr"
+
+      : "marquee-admin-rtl"
+  );
+
+
+  preview.style.opacity =
+    data.enabled
+      ? "1"
+      : ".25";
+
+
+  previewTrack.style.animation =
+    "none";
+
+
+  void previewTrack.offsetWidth;
+
+
+  previewTrack.style.animation =
+    "";
+
+}
+
+
+[
+  enabledInput,
+  textInput,
+  positionInput,
+  directionInput,
+  speedInput,
+  fontSizeInput,
+  textColorInput,
+  lineColorInput,
+  backgroundInput,
+  pauseHoverInput
+
+].forEach(
+  element => {
+
+    element.addEventListener(
+      "input",
+      updatePreview
+    );
+
+    element.addEventListener(
+      "change",
+      updatePreview
+    );
+
+  }
+);
+
+
+onValue(
+
+  ref(
+    db,
+    "marquee"
+  ),
+
+  snapshot => {
+
+    const data =
+      snapshot.val();
+
+
+    if (!data) {
+
+      updatePreview();
+
+      return;
+
+    }
+
+
+    enabledInput.value =
+      String(
+        data.enabled ??
+        true
+      );
+
+
+    textInput.value =
+      data.text ||
+      "";
+
+
+    positionInput.value =
+      data.position ||
+      "top";
+
+
+    directionInput.value =
+      data.direction ||
+      "right-to-left";
+
+
+    speedInput.value =
+      data.speed ??
+      15;
+
+
+    fontSizeInput.value =
+      data.font_size ??
+      13;
+
+
+    textColorInput.value =
+      data.text_color ||
+      "#f8dd76";
+
+
+    lineColorInput.value =
+      data.line_color ||
+      "#f8dd76";
+
+
+    backgroundInput.value =
+      data.background_color ||
+      "#181818";
+
+
+    pauseHoverInput.value =
+      String(
+        data.pause_hover ??
+        true
+      );
+
+
+    updatePreview();
+
+  },
+
+  error => {
+
+    console.error(
+      "Marquee load error:",
+      error
+    );
+
+
+    saveMessage.textContent =
+      "Unable to load marquee settings.";
+
+
+    saveMessage.className =
+      "marquee-save-message error";
+
+  }
+
+);
+
+
+saveBtn.addEventListener(
+  "click",
+  async () => {
+
+    const data =
+      getMarqueeData();
+
+
+    if (
+      data.enabled &&
+      !data.text
+    ) {
+
+      saveMessage.textContent =
+        "Please enter marquee text.";
+
+
+      saveMessage.className =
+        "marquee-save-message error";
+
+
+      return;
+
+    }
+
+
+    saveBtn.disabled =
+      true;
+
+
+    saveBtn.textContent =
+      "SAVING...";
+
+
+    try {
+
+      await set(
+        ref(
+          db,
+          "marquee"
+        ),
+        data
+      );
+
+
+      saveMessage.textContent =
+        "Marquee saved successfully.";
+
+
+      saveMessage.className =
+        "marquee-save-message success";
+
+
+    } catch (error) {
+
+      console.error(
+        "Marquee save error:",
+        error
+      );
+
+
+      saveMessage.textContent =
+        "Failed to save marquee.";
+
+
+      saveMessage.className =
+        "marquee-save-message error";
+
+    }
+
+
+    saveBtn.disabled =
+      false;
+
+
+    saveBtn.textContent =
+      "SAVE MARQUEE";
+
+  }
+);
+
+
+updatePreview();
+
+</script>
+
+</body>
+</html>

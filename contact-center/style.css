@@ -1105,15 +1105,12 @@ input {
 
 
 .section-icon {
-  width: 40px;
-  height: 40px;
-  flex:0 0 40px;
+  flex:0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  border: 1px solid var(--border2);
-  background: #0a0a0a;
+  border: none;
+  background: transparent;
   font-size: 16px;
 }
 

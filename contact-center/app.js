@@ -3579,3 +3579,605 @@ window.addEventListener(
 
   }
 );
+/* =========================================================
+   CUSTOMER MARQUEE
+========================================================= */
+
+const marqueeTopMount =
+  document.getElementById(
+    "marqueeTopMount"
+  );
+
+
+const marqueeBottomMount =
+  document.getElementById(
+    "marqueeBottomMount"
+  );
+
+
+let siteMarquee =
+  null;
+
+
+let siteMarqueeTrack =
+  null;
+
+
+let marqueeTextOne =
+  null;
+
+
+let marqueeTextTwo =
+  null;
+
+
+
+/* =========================================================
+   CREATE ELEMENT
+========================================================= */
+
+function createSiteMarquee() {
+
+  if (siteMarquee) {
+    return;
+  }
+
+
+  siteMarquee =
+    document.createElement(
+      "div"
+    );
+
+
+  siteMarquee.className =
+    "site-marquee marquee-hidden";
+
+
+  siteMarqueeTrack =
+    document.createElement(
+      "div"
+    );
+
+
+  siteMarqueeTrack.className =
+    "site-marquee-track";
+
+
+  marqueeTextOne =
+    document.createElement(
+      "span"
+    );
+
+
+  marqueeTextOne.className =
+    "site-marquee-text";
+
+
+  marqueeTextTwo =
+    document.createElement(
+      "span"
+    );
+
+
+  marqueeTextTwo.className =
+    "site-marquee-text";
+
+
+  siteMarqueeTrack.appendChild(
+    marqueeTextOne
+  );
+
+
+  siteMarqueeTrack.appendChild(
+    marqueeTextTwo
+  );
+
+
+  siteMarquee.appendChild(
+    siteMarqueeTrack
+  );
+
+}
+
+
+
+/* =========================================================
+   BOOLEAN HELPER
+========================================================= */
+
+function marqueeBoolean(
+  value,
+  fallback = true
+) {
+
+  if (
+    value === true ||
+    value === "true" ||
+    value === 1 ||
+    value === "1"
+  ) {
+
+    return true;
+
+  }
+
+
+  if (
+    value === false ||
+    value === "false" ||
+    value === 0 ||
+    value === "0"
+  ) {
+
+    return false;
+
+  }
+
+
+  return fallback;
+}
+
+
+
+/* =========================================================
+   SAFE COLOR
+========================================================= */
+
+function marqueeColor(
+  value,
+  fallback
+) {
+
+  const color =
+    String(
+      value || ""
+    ).trim();
+
+
+  /*
+    Admin type=color akan simpan
+    format #RRGGBB.
+  */
+
+  if (
+    /^#[0-9a-f]{6}$/i.test(
+      color
+    )
+  ) {
+
+    return color;
+
+  }
+
+
+  return fallback;
+}
+
+
+
+/* =========================================================
+   RENDER MARQUEE
+========================================================= */
+
+function renderSiteMarquee(
+  settings
+) {
+
+  createSiteMarquee();
+
+
+  if (
+    !siteMarquee ||
+    !siteMarqueeTrack ||
+    !marqueeTextOne ||
+    !marqueeTextTwo
+  ) {
+
+    return;
+
+  }
+
+
+  /* =====================================================
+     ENABLE
+  ===================================================== */
+
+  const enabled =
+    marqueeBoolean(
+      settings?.enabled,
+      false
+    );
+
+
+  /* =====================================================
+     TEXT
+  ===================================================== */
+
+  const text =
+    String(
+      settings?.text ||
+      ""
+    )
+      .replace(
+        /\s+/g,
+        " "
+      )
+      .trim();
+
+
+  if (
+    !enabled ||
+    !text
+  ) {
+
+    siteMarquee
+      .classList
+      .add(
+        "marquee-hidden"
+      );
+
+
+    return;
+
+  }
+
+
+  /*
+    Duplicate text supaya movement
+    nampak continuous.
+  */
+
+  marqueeTextOne.textContent =
+    text;
+
+
+  marqueeTextTwo.textContent =
+    text;
+
+
+
+  /* =====================================================
+     POSITION
+  ===================================================== */
+
+  const position =
+    String(
+      settings?.position ||
+      "top"
+    )
+      .toLowerCase()
+      .trim();
+
+
+  if (
+    position === "bottom"
+  ) {
+
+    if (
+      marqueeBottomMount &&
+      siteMarquee.parentElement !==
+        marqueeBottomMount
+    ) {
+
+      marqueeBottomMount
+        .appendChild(
+          siteMarquee
+        );
+
+    }
+
+  } else {
+
+    if (
+      marqueeTopMount &&
+      siteMarquee.parentElement !==
+        marqueeTopMount
+    ) {
+
+      marqueeTopMount
+        .appendChild(
+          siteMarquee
+        );
+
+    }
+
+  }
+
+
+
+  /* =====================================================
+     DIRECTION
+  ===================================================== */
+
+  siteMarquee
+    .classList
+    .remove(
+      "marquee-direction-rtl",
+      "marquee-direction-ltr"
+    );
+
+
+  const direction =
+    String(
+      settings?.direction ||
+      "right-to-left"
+    )
+      .toLowerCase()
+      .trim();
+
+
+  if (
+    direction ===
+    "left-to-right"
+  ) {
+
+    siteMarquee
+      .classList
+      .add(
+        "marquee-direction-ltr"
+      );
+
+  } else {
+
+    siteMarquee
+      .classList
+      .add(
+        "marquee-direction-rtl"
+      );
+
+  }
+
+
+
+  /* =====================================================
+     SPEED
+  ===================================================== */
+
+  let speed =
+    Number(
+      settings?.speed ??
+      15
+    );
+
+
+  if (
+    !Number.isFinite(
+      speed
+    )
+  ) {
+
+    speed = 15;
+
+  }
+
+
+  speed =
+    Math.max(
+      3,
+      Math.min(
+        speed,
+        60
+      )
+    );
+
+
+  siteMarquee.style
+    .setProperty(
+      "--marquee-speed",
+      `${speed}s`
+    );
+
+
+
+  /* =====================================================
+     FONT SIZE
+  ===================================================== */
+
+  let fontSize =
+    Number(
+      settings?.font_size ??
+      13
+    );
+
+
+  if (
+    !Number.isFinite(
+      fontSize
+    )
+  ) {
+
+    fontSize = 13;
+
+  }
+
+
+  fontSize =
+    Math.max(
+      8,
+      Math.min(
+        fontSize,
+        40
+      )
+    );
+
+
+  siteMarquee.style
+    .setProperty(
+      "--marquee-font-size",
+      `${fontSize}px`
+    );
+
+
+
+  /* =====================================================
+     COLORS
+  ===================================================== */
+
+  const textColor =
+    marqueeColor(
+      settings?.text_color,
+      "#f8dd76"
+    );
+
+
+  const lineColor =
+    marqueeColor(
+      settings?.line_color,
+      "#f8dd76"
+    );
+
+
+  const backgroundColor =
+    marqueeColor(
+      settings?.background_color,
+      "#181818"
+    );
+
+
+  siteMarquee.style
+    .setProperty(
+      "--marquee-text-color",
+      textColor
+    );
+
+
+  siteMarquee.style
+    .setProperty(
+      "--marquee-line-color",
+      lineColor
+    );
+
+
+  siteMarquee.style
+    .setProperty(
+      "--marquee-bg-color",
+      backgroundColor
+    );
+
+
+
+  /* =====================================================
+     PAUSE HOVER
+  ===================================================== */
+
+  const pauseHover =
+    marqueeBoolean(
+      settings?.pause_hover,
+      true
+    );
+
+
+  siteMarquee
+    .classList
+    .toggle(
+      "marquee-pause-hover",
+      pauseHover
+    );
+
+
+
+  /* =====================================================
+     RESTART ANIMATION
+
+     Penting apabila admin ubah direction/speed.
+  ===================================================== */
+
+  siteMarqueeTrack.style.animation =
+    "none";
+
+
+  /*
+    Force reflow
+  */
+
+  void siteMarqueeTrack.offsetWidth;
+
+
+  siteMarqueeTrack.style.animation =
+    "";
+
+
+
+  /* =====================================================
+     SHOW
+  ===================================================== */
+
+  siteMarquee
+    .classList
+    .remove(
+      "marquee-hidden"
+    );
+
+}
+
+
+
+/* =========================================================
+   FIREBASE MARQUEE
+========================================================= */
+
+onValue(
+
+  ref(
+    db,
+    "marquee"
+  ),
+
+
+  snapshot => {
+
+    try {
+
+      const settings =
+        snapshot.val();
+
+
+      renderSiteMarquee(
+        settings
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Marquee render error:",
+        error
+      );
+
+
+      if (siteMarquee) {
+
+        siteMarquee
+          .classList
+          .add(
+            "marquee-hidden"
+          );
+
+      }
+
+    }
+
+  },
+
+
+  error => {
+
+    console.error(
+      "Marquee Firebase error:",
+      error
+    );
+
+
+    if (siteMarquee) {
+
+      siteMarquee
+        .classList
+        .add(
+          "marquee-hidden"
+        );
+
+    }
+
+  }
+
+);

@@ -629,13 +629,16 @@ input {
    CARDS
 ========================================================= */
 
-.status-panel, .content-card {
-  min-width: 0;
+.status-panel {
+  position: sticky;
+  top: 88px;
+  height: calc(100vh - 112px);
+  height: calc(100dvh - 112px);
+  max-height: calc(100vh - 112px);
+  max-height: calc(100dvh - 112px);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  background: linear-gradient(360deg, #1c1c1c 0%, #0A0A0A 100%);
-  box-shadow:var(--shadow);
 }
 
 
@@ -950,8 +953,10 @@ input {
   min-height: 0;
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   padding: 12px;
+  scrollbar-gutter: stable;
 }
 
 .status-list::-webkit-scrollbar {
@@ -2106,20 +2111,16 @@ body.modal-open {
 
 
   .status-panel {
-
     position: static;
-
     width: 100%;
-
+    height: auto;
     max-height: none;
   }
 
-
   .status-list {
-
     max-height: 280px;
-
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
 

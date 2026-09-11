@@ -3223,29 +3223,21 @@ body.notice-modal-open {
 .section-icon-phone {
   width: 32px;
   height: 32px;
-
   flex: 0 0 32px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* buang design kotak lama */
   padding: 0;
   border: none;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-
-  /* warna icon */
-  color: #ffe45c;
+  color: #f8dd76;
 }
 
 .section-icon-phone svg {
   display: block;
-
   width: 30px;
   height: 30px;
-
   fill: currentColor;
 }

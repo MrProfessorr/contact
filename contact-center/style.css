@@ -733,36 +733,21 @@ input {
 
 
 .panel-heading-icon {
-
-  width: 32px;
-  height: 32px;
-
-  flex:
-    0 0 32px;
-
+  flex:0;
   display: flex;
-
   align-items: center;
   justify-content: center;
-
-  border-radius: 9px;
-
-  color:
-    var(--cyan);
-
-  border:
-    1px solid rgba(40,217,239,.12);
-
-  background:
-    rgba(40,217,239,.07);
+  color:var(--border);
+  border:none;
+  background:transparent;
 }
 
 
 .panel-heading h2 {
-
   margin-bottom: 4px;
-
-  font-size: 14px;
+  font-size: 12px;
+  font-weight:600;
+  text-transform: uppercase;
 }
 
 
@@ -1123,8 +1108,8 @@ input {
 .small-title {
   display: block;
   margin-bottom: 3px;
-  color:#f8dd76;
-  font-size: 10px;
+  color:white;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 1.6px;
 }
@@ -3236,6 +3221,31 @@ body.notice-modal-open {
 }
 
 .section-icon-phone svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+  fill: currentColor;
+}
+/* =========================================================
+   CONTACT STATUS SVG ICON
+========================================================= */
+
+.panel-heading-icon-svg {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #f8dd76;
+}
+
+.panel-heading-icon-svg svg {
   display: block;
   width: 30px;
   height: 30px;

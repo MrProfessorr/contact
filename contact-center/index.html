@@ -122,10 +122,23 @@
       </div>
     </div>
 
-    <div class="live-indicator">
-      <span class="live-dot"></span>
-      LIVE
-    </div>
+<button
+  id="noticeCenterBtn"
+  class="live-indicator notice-center-btn"
+  type="button"
+  aria-label="Open notifications"
+>
+  <span class="live-dot"></span>
+
+  <span>LIVE</span>
+
+  <span
+    id="noticeUnreadBadge"
+    class="notice-unread-badge hidden"
+  >
+    0
+  </span>
+</button>
 
   </div>
 
@@ -246,64 +259,6 @@
     ================================================== -->
 
     <main class="content-area">
-
-
-      <!-- ===============================================
-           NOTICE
-      ================================================ -->
-
-      <section class="content-card">
-
-        <div class="section-title">
-
-          <div class="section-title-left">
-
-            <div class="section-icon notice-icon">
-              📢
-            </div>
-
-
-            <div>
-
-              <span class="small-title">
-                ANNOUNCEMENT
-              </span>
-
-              <h2>
-                Latest Notice
-              </h2>
-
-              <p>
-                Important information from our team.
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-
-        <div
-          id="noticeList"
-          class="notice-list"
-        >
-
-          <div class="small-loading">
-
-            <span class="mini-spinner"></span>
-
-            Loading announcements...
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-
       <!-- ===============================================
            CONTACT
       ================================================ -->
@@ -425,7 +380,78 @@
 </footer>
 
 
+<!-- =====================================================
+     NOTICE CENTER MODAL
+===================================================== -->
 
+<div
+  id="noticeCenterModal"
+  class="notice-center-modal"
+  aria-hidden="true"
+>
+
+  <div
+    id="noticeCenterBackdrop"
+    class="notice-center-backdrop"
+  ></div>
+
+
+  <div
+    class="notice-center-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="noticeCenterTitle"
+  >
+
+    <div class="notice-center-header">
+      <div>
+        <span class="small-title">
+          ANNOUNCEMENT
+        </span>
+        <h2 id="noticeCenterTitle">
+          Latest Notice
+        </h2>
+        <p>
+          Important information from our team.
+        </p>
+      </div>
+
+      <button
+        id="noticeCenterClose"
+        class="notice-center-close"
+        type="button"
+        aria-label="Close notifications"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M6 6L18 18M18 6L6 18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.3"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div class="notice-center-scroll">
+
+      <div
+        id="noticeList"
+        class="notice-list"
+      >
+        <div class="small-loading">
+          <span class="mini-spinner"></span>
+          Loading announcements...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- =====================================================
      IMAGE PREVIEW
 ===================================================== -->

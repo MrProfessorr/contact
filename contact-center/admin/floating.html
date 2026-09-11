@@ -9,7 +9,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Floating Image</title>
+  <title>Floating Image - Admin</title>
 
   <link
     rel="stylesheet"
@@ -17,28 +17,33 @@
   >
 </head>
 
+
 <body>
 
 
 <!-- =====================================================
-     ADMIN WRAPPER
+     NAV
 ===================================================== -->
 
-<div class="admin-layout">
+<nav class="admin-nav">
+
+  <div class="admin-nav-inner">
 
 
-  <!-- =================================================
-       SIDEBAR
-  ================================================== -->
+    <div class="admin-brand">
 
-  <aside class="admin-sidebar">
+      <h1>
+        Support Admin
+      </h1>
 
-    <div class="admin-sidebar-title">
-      ADMIN PANEL
+      <p id="adminEmail">
+        Admin
+      </p>
+
     </div>
 
 
-    <nav class="admin-nav">
+    <div class="nav-links">
 
       <a href="./index.html">
         Dashboard
@@ -59,440 +64,479 @@
         Floating Image
       </a>
 
-    </nav>
-
-  </aside>
-
-
-  <!-- =================================================
-       CONTENT
-  ================================================== -->
-
-  <main class="admin-content">
-
-
-    <div class="admin-page-header">
-
-      <div>
-
-        <h1>
-          Floating Image
-        </h1>
-
-        <p>
-          Manage floating promotional image
-          displayed on the customer page.
-        </p>
-
-      </div>
+      <button
+        id="logoutBtn"
+        class="btn btn-dark"
+        type="button"
+      >
+        Logout
+      </button>
 
     </div>
 
+  </div>
 
-    <!-- =================================================
-         FLOATING SETTINGS
-    ================================================== -->
-
-    <section class="admin-card">
+</nav>
 
 
-      <div class="admin-card-title">
 
-        <h2>
-          Floating Settings
-        </h2>
+<!-- =====================================================
+     PAGE
+===================================================== -->
 
-        <p>
-          Configure position, animation,
-          image size and visibility.
-        </p>
+<main class="admin-container">
+
+
+  <div class="page-title">
+
+    <div>
+
+      <h2>
+        Floating Image
+      </h2>
+
+      <p>
+        Manage floating image displayed
+        on customer page.
+      </p>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =================================================
+       GRID
+  ================================================== -->
+
+  <div class="floating-admin-layout">
+
+
+    <!-- ===============================================
+         SETTINGS
+    ================================================ -->
+
+    <section class="card">
+
+      <h3>
+        Floating Settings
+      </h3>
+
+
+      <!-- ENABLE -->
+
+      <div class="form-group">
+
+        <label>
+          Floating Status
+        </label>
+
+        <select id="floatingEnabled">
+
+          <option value="true">
+            Enabled
+          </option>
+
+          <option value="false">
+            Disabled
+          </option>
+
+        </select>
 
       </div>
 
 
-      <div class="floating-admin-grid">
 
+      <!-- IMAGE URL -->
 
-        <!-- ENABLE -->
+      <div class="form-group">
 
-        <div class="admin-field">
+        <label>
+          Image URL
+        </label>
 
-          <label>
-            Enable Floating Image
-          </label>
-
-          <select id="floatingEnabled">
-
-            <option value="true">
-              Enabled
-            </option>
-
-            <option value="false">
-              Disabled
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- IMAGE URL -->
-
-        <div class="admin-field">
-
-          <label>
-            Image URL
-          </label>
-
-          <input
-            id="floatingImageUrl"
-            type="url"
-            placeholder="https://..."
-          >
-
-        </div>
-
-
-        <!-- CLICK URL -->
-
-        <div class="admin-field">
-
-          <label>
-            Click URL
-          </label>
-
-          <input
-            id="floatingClickUrl"
-            type="url"
-            placeholder="https://wa.me/..."
-          >
-
-        </div>
-
-
-        <!-- POSITION -->
-
-        <div class="admin-field">
-
-          <label>
-            Position
-          </label>
-
-          <select id="floatingPosition">
-
-            <option value="left-top">
-              Left Top
-            </option>
-
-            <option value="left-center">
-              Left Center
-            </option>
-
-            <option value="left-bottom">
-              Left Bottom
-            </option>
-
-            <option value="right-top">
-              Right Top
-            </option>
-
-            <option
-              value="right-center"
-              selected
-            >
-              Right Center
-            </option>
-
-            <option value="right-bottom">
-              Right Bottom
-            </option>
-
-            <option value="center-top">
-              Center Top
-            </option>
-
-            <option value="center-bottom">
-              Center Bottom
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- ANIMATION -->
-
-        <div class="admin-field">
-
-          <label>
-            Animation
-          </label>
-
-          <select id="floatingAnimation">
-
-            <option value="none">
-              None
-            </option>
-
-            <option value="left-right">
-              Left ↔ Right
-            </option>
-
-            <option value="right-left">
-              Right ↔ Left
-            </option>
-
-            <option value="top-bottom">
-              Top ↕ Bottom
-            </option>
-
-            <option value="bottom-top">
-              Bottom ↕ Top
-            </option>
-
-            <option
-              value="soft"
-              selected
-            >
-              Soft Floating
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- WIDTH DESKTOP -->
-
-        <div class="admin-field">
-
-          <label>
-            Desktop Width (px)
-          </label>
-
-          <input
-            id="floatingWidth"
-            type="number"
-            min="50"
-            max="500"
-            value="140"
-          >
-
-        </div>
-
-
-        <!-- WIDTH MOBILE -->
-
-        <div class="admin-field">
-
-          <label>
-            Mobile Width (px)
-          </label>
-
-          <input
-            id="floatingMobileWidth"
-            type="number"
-            min="45"
-            max="300"
-            value="95"
-          >
-
-        </div>
-
-
-        <!-- DISTANCE -->
-
-        <div class="admin-field">
-
-          <label>
-            Movement Distance (px)
-          </label>
-
-          <input
-            id="floatingDistance"
-            type="number"
-            min="0"
-            max="150"
-            value="18"
-          >
-
-        </div>
-
-
-        <!-- SPEED -->
-
-        <div class="admin-field">
-
-          <label>
-            Animation Speed (seconds)
-          </label>
-
-          <input
-            id="floatingSpeed"
-            type="number"
-            min="1"
-            max="30"
-            step="0.5"
-            value="6"
-          >
-
-        </div>
-
-
-        <!-- OPACITY -->
-
-        <div class="admin-field">
-
-          <label>
-            Opacity (%)
-          </label>
-
-          <input
-            id="floatingOpacity"
-            type="number"
-            min="10"
-            max="100"
-            value="100"
-          >
-
-        </div>
-
-
-        <!-- CLOSE BUTTON -->
-
-        <div class="admin-field">
-
-          <label>
-            Close Button
-          </label>
-
-          <select id="floatingShowClose">
-
-            <option value="true">
-              Show
-            </option>
-
-            <option value="false">
-              Hide
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- CLOSE MODE -->
-
-        <div class="admin-field">
-
-          <label>
-            Close Behaviour
-          </label>
-
-          <select id="floatingCloseMode">
-
-            <option value="refresh">
-              Show Again After Refresh
-            </option>
-
-            <option
-              value="session"
-              selected
-            >
-              Hide For Session
-            </option>
-
-            <option value="24h">
-              Hide For 24 Hours
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- DESKTOP -->
-
-        <div class="admin-field">
-
-          <label>
-            Show On Desktop
-          </label>
-
-          <select id="floatingShowDesktop">
-
-            <option value="true">
-              Yes
-            </option>
-
-            <option value="false">
-              No
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- MOBILE -->
-
-        <div class="admin-field">
-
-          <label>
-            Show On Mobile
-          </label>
-
-          <select id="floatingShowMobile">
-
-            <option value="true">
-              Yes
-            </option>
-
-            <option value="false">
-              No
-            </option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-
-      <!-- SAVE BUTTON -->
-
-      <div class="floating-admin-actions">
-
-        <button
-          id="saveFloatingBtn"
-          type="button"
-          class="admin-primary-btn"
+        <input
+          id="floatingImageUrl"
+          type="url"
+          placeholder="https://..."
         >
-          Save Floating Image
-        </button>
+
+        <div class="help-text">
+          Paste image URL from Cloudinary
+          or another HTTPS image host.
+        </div>
 
       </div>
+
+
+
+      <!-- CLICK URL -->
+
+      <div class="form-group">
+
+        <label>
+          Click URL
+        </label>
+
+        <input
+          id="floatingClickUrl"
+          type="url"
+          placeholder="https://wa.me/... or https://..."
+        >
+
+        <div class="help-text">
+          Optional. Customer will open this
+          link when image is clicked.
+        </div>
+
+      </div>
+
+
+
+      <!-- POSITION -->
+
+      <div class="form-group">
+
+        <label>
+          Position
+        </label>
+
+        <select id="floatingPosition">
+
+          <option value="left-top">
+            Left Top
+          </option>
+
+          <option value="left-center">
+            Left Center
+          </option>
+
+          <option value="left-bottom">
+            Left Bottom
+          </option>
+
+          <option value="right-top">
+            Right Top
+          </option>
+
+          <option
+            value="right-center"
+            selected
+          >
+            Right Center
+          </option>
+
+          <option value="right-bottom">
+            Right Bottom
+          </option>
+
+          <option value="center-top">
+            Center Top
+          </option>
+
+          <option value="center-bottom">
+            Center Bottom
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <!-- ANIMATION -->
+
+      <div class="form-group">
+
+        <label>
+          Movement
+        </label>
+
+        <select id="floatingAnimation">
+
+          <option value="none">
+            No Movement
+          </option>
+
+          <option value="left-right">
+            Left → Right
+          </option>
+
+          <option value="right-left">
+            Right → Left
+          </option>
+
+          <option value="top-bottom">
+            Top → Bottom
+          </option>
+
+          <option value="bottom-top">
+            Bottom → Top
+          </option>
+
+          <option
+            value="soft"
+            selected
+          >
+            Soft Floating
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <!-- DESKTOP WIDTH -->
+
+      <div class="form-group">
+
+        <label>
+          Desktop Width
+        </label>
+
+        <input
+          id="floatingWidth"
+          type="number"
+          min="50"
+          max="500"
+          value="140"
+        >
+
+        <div class="help-text">
+          Size in pixels.
+        </div>
+
+      </div>
+
+
+
+      <!-- MOBILE WIDTH -->
+
+      <div class="form-group">
+
+        <label>
+          Mobile Width
+        </label>
+
+        <input
+          id="floatingMobileWidth"
+          type="number"
+          min="45"
+          max="300"
+          value="95"
+        >
+
+      </div>
+
+
+
+      <!-- DISTANCE -->
+
+      <div class="form-group">
+
+        <label>
+          Movement Distance
+        </label>
+
+        <input
+          id="floatingDistance"
+          type="number"
+          min="0"
+          max="150"
+          value="18"
+        >
+
+        <div class="help-text">
+          Recommended 10 - 25px.
+        </div>
+
+      </div>
+
+
+
+      <!-- SPEED -->
+
+      <div class="form-group">
+
+        <label>
+          Animation Speed
+        </label>
+
+        <input
+          id="floatingSpeed"
+          type="number"
+          min="1"
+          max="30"
+          step="0.5"
+          value="6"
+        >
+
+        <div class="help-text">
+          Seconds. Higher = slower.
+        </div>
+
+      </div>
+
+
+
+      <!-- OPACITY -->
+
+      <div class="form-group">
+
+        <label>
+          Opacity
+        </label>
+
+        <input
+          id="floatingOpacity"
+          type="number"
+          min="10"
+          max="100"
+          value="100"
+        >
+
+        <div class="help-text">
+          10 - 100%.
+        </div>
+
+      </div>
+
+
+
+      <!-- CLOSE BUTTON -->
+
+      <div class="form-group">
+
+        <label>
+          Close Button
+        </label>
+
+        <select id="floatingShowClose">
+
+          <option value="true">
+            Show X Button
+          </option>
+
+          <option value="false">
+            Hide X Button
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <!-- CLOSE BEHAVIOUR -->
+
+      <div class="form-group">
+
+        <label>
+          After Customer Closes
+        </label>
+
+        <select id="floatingCloseMode">
+
+          <option value="refresh">
+            Show Again After Refresh
+          </option>
+
+          <option
+            value="session"
+            selected
+          >
+            Hide For Current Session
+          </option>
+
+          <option value="24h">
+            Hide For 24 Hours
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <!-- DESKTOP -->
+
+      <div class="form-group">
+
+        <label>
+          Show On Desktop
+        </label>
+
+        <select id="floatingShowDesktop">
+
+          <option value="true">
+            Yes
+          </option>
+
+          <option value="false">
+            No
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <!-- MOBILE -->
+
+      <div class="form-group">
+
+        <label>
+          Show On Mobile
+        </label>
+
+        <select id="floatingShowMobile">
+
+          <option value="true">
+            Yes
+          </option>
+
+          <option value="false">
+            No
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <!-- SAVE -->
+
+      <button
+        id="saveFloatingBtn"
+        class="btn btn-primary full"
+        type="button"
+      >
+        SAVE FLOATING IMAGE
+      </button>
+
+
+      <div
+        id="floatingStatusMessage"
+        class="floating-save-message"
+      ></div>
 
     </section>
 
 
-    <!-- =================================================
-         PREVIEW
-    ================================================== -->
 
-    <section class="admin-card">
+    <!-- ===============================================
+         LIVE PREVIEW
+    ================================================ -->
 
-      <div class="admin-card-title">
+    <section class="card">
 
-        <h2>
-          Preview
-        </h2>
-
-        <p>
-          Preview floating image before saving.
-        </p>
-
-      </div>
+      <h3>
+        Live Preview
+      </h3>
 
 
       <div
@@ -500,17 +544,30 @@
         class="floating-preview-area"
       >
 
+
         <div
           id="floatingPreviewBox"
           class="floating-preview-box"
         >
 
+
           <button
             id="floatingPreviewClose"
-            type="button"
             class="floating-preview-close"
+            type="button"
           >
-            ×
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M6 6L18 18M18 6L6 18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.3"
+                stroke-linecap="round"
+              />
+            </svg>
           </button>
 
 
@@ -520,30 +577,814 @@
             alt="Floating Preview"
           >
 
+
+          <div
+            id="floatingNoPreview"
+            class="floating-no-preview"
+          >
+            Enter an image URL to preview.
+          </div>
+
+
         </div>
+
+      </div>
+
+
+      <div class="help-text floating-preview-help">
+
+        This preview follows the selected
+        position, movement, size and speed.
 
       </div>
 
     </section>
 
 
-    <!-- MESSAGE -->
+  </div>
 
-    <div
-      id="floatingMessage"
-      class="admin-message"
-    ></div>
+</main>
 
 
-  </main>
 
-</div>
+<!-- =====================================================
+     PAGE SCRIPT
+===================================================== -->
+
+<script type="module">
+
+import {
+  db,
+  ref,
+  set,
+  onValue,
+  requireAdmin,
+  setupLogout
+} from "./admin.js";
 
 
-<script
-  type="module"
-  src="./admin.js"
-></script>
+/* =====================================================
+   AUTH
+===================================================== */
+
+requireAdmin();
+
+setupLogout();
+
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const enabledInput =
+  document.getElementById(
+    "floatingEnabled"
+  );
+
+const imageUrlInput =
+  document.getElementById(
+    "floatingImageUrl"
+  );
+
+const clickUrlInput =
+  document.getElementById(
+    "floatingClickUrl"
+  );
+
+const positionInput =
+  document.getElementById(
+    "floatingPosition"
+  );
+
+const animationInput =
+  document.getElementById(
+    "floatingAnimation"
+  );
+
+const widthInput =
+  document.getElementById(
+    "floatingWidth"
+  );
+
+const mobileWidthInput =
+  document.getElementById(
+    "floatingMobileWidth"
+  );
+
+const distanceInput =
+  document.getElementById(
+    "floatingDistance"
+  );
+
+const speedInput =
+  document.getElementById(
+    "floatingSpeed"
+  );
+
+const opacityInput =
+  document.getElementById(
+    "floatingOpacity"
+  );
+
+const showCloseInput =
+  document.getElementById(
+    "floatingShowClose"
+  );
+
+const closeModeInput =
+  document.getElementById(
+    "floatingCloseMode"
+  );
+
+const showDesktopInput =
+  document.getElementById(
+    "floatingShowDesktop"
+  );
+
+const showMobileInput =
+  document.getElementById(
+    "floatingShowMobile"
+  );
+
+
+const saveBtn =
+  document.getElementById(
+    "saveFloatingBtn"
+  );
+
+
+const statusMessage =
+  document.getElementById(
+    "floatingStatusMessage"
+  );
+
+
+const previewArea =
+  document.getElementById(
+    "floatingPreviewArea"
+  );
+
+const previewBox =
+  document.getElementById(
+    "floatingPreviewBox"
+  );
+
+const previewImage =
+  document.getElementById(
+    "floatingPreviewImage"
+  );
+
+const previewClose =
+  document.getElementById(
+    "floatingPreviewClose"
+  );
+
+const noPreview =
+  document.getElementById(
+    "floatingNoPreview"
+  );
+
+
+
+/* =====================================================
+   BOOLEAN
+===================================================== */
+
+function boolValue(value) {
+
+  return (
+    value === true ||
+    value === "true"
+  );
+
+}
+
+
+
+/* =====================================================
+   NUMBER
+===================================================== */
+
+function clampNumber(
+  value,
+  min,
+  max,
+  fallback
+) {
+
+  let number =
+    Number(value);
+
+
+  if (
+    !Number.isFinite(number)
+  ) {
+
+    number =
+      fallback;
+
+  }
+
+
+  return Math.max(
+    min,
+    Math.min(
+      max,
+      number
+    )
+  );
+
+}
+
+
+
+/* =====================================================
+   READ FORM
+===================================================== */
+
+function getFormData() {
+
+  return {
+
+    enabled:
+      boolValue(
+        enabledInput.value
+      ),
+
+    image_url:
+      imageUrlInput
+        .value
+        .trim(),
+
+    click_url:
+      clickUrlInput
+        .value
+        .trim(),
+
+    position:
+      positionInput.value,
+
+    animation:
+      animationInput.value,
+
+    width:
+      clampNumber(
+        widthInput.value,
+        50,
+        500,
+        140
+      ),
+
+    mobile_width:
+      clampNumber(
+        mobileWidthInput.value,
+        45,
+        300,
+        95
+      ),
+
+    distance:
+      clampNumber(
+        distanceInput.value,
+        0,
+        150,
+        18
+      ),
+
+    speed:
+      clampNumber(
+        speedInput.value,
+        1,
+        30,
+        6
+      ),
+
+    opacity:
+      clampNumber(
+        opacityInput.value,
+        10,
+        100,
+        100
+      ),
+
+    show_close:
+      boolValue(
+        showCloseInput.value
+      ),
+
+    close_mode:
+      closeModeInput.value,
+
+    show_desktop:
+      boolValue(
+        showDesktopInput.value
+      ),
+
+    show_mobile:
+      boolValue(
+        showMobileInput.value
+      ),
+
+    updatedAt:
+      Date.now()
+
+  };
+
+}
+
+
+
+/* =====================================================
+   PREVIEW CLASSES
+===================================================== */
+
+const positionClasses = [
+
+  "preview-left-top",
+  "preview-left-center",
+  "preview-left-bottom",
+
+  "preview-right-top",
+  "preview-right-center",
+  "preview-right-bottom",
+
+  "preview-center-top",
+  "preview-center-bottom"
+
+];
+
+
+const animationClasses = [
+
+  "preview-anim-none",
+  "preview-anim-left-right",
+  "preview-anim-right-left",
+  "preview-anim-top-bottom",
+  "preview-anim-bottom-top",
+  "preview-anim-soft"
+
+];
+
+
+
+function clearPreviewClasses() {
+
+  positionClasses.forEach(
+    className => {
+
+      previewBox
+        .classList
+        .remove(
+          className
+        );
+
+    }
+  );
+
+
+  animationClasses.forEach(
+    className => {
+
+      previewBox
+        .classList
+        .remove(
+          className
+        );
+
+    }
+  );
+
+}
+
+
+
+/* =====================================================
+   UPDATE PREVIEW
+===================================================== */
+
+function updatePreview() {
+
+  const data =
+    getFormData();
+
+
+  clearPreviewClasses();
+
+
+  previewBox
+    .classList
+    .add(
+      `preview-${data.position}`
+    );
+
+
+  previewBox
+    .classList
+    .add(
+      `preview-anim-${data.animation}`
+    );
+
+
+  previewBox.style
+    .setProperty(
+      "--preview-width",
+      `${data.width}px`
+    );
+
+
+  previewBox.style
+    .setProperty(
+      "--preview-distance",
+      `${data.distance}px`
+    );
+
+
+  previewBox.style
+    .setProperty(
+      "--preview-speed",
+      `${data.speed}s`
+    );
+
+
+  previewBox.style.opacity =
+    data.opacity / 100;
+
+
+  previewClose.style.display =
+    data.show_close
+      ? "flex"
+      : "none";
+
+
+  const imageUrl =
+    data.image_url;
+
+
+  if (imageUrl) {
+
+    previewImage.src =
+      imageUrl;
+
+
+    previewImage.style.display =
+      "block";
+
+
+    noPreview.style.display =
+      "none";
+
+  } else {
+
+    previewImage.removeAttribute(
+      "src"
+    );
+
+
+    previewImage.style.display =
+      "none";
+
+
+    noPreview.style.display =
+      "flex";
+
+  }
+
+}
+
+
+
+/* =====================================================
+   PREVIEW IMAGE ERROR
+===================================================== */
+
+previewImage.addEventListener(
+  "error",
+  () => {
+
+    previewImage.style.display =
+      "none";
+
+
+    noPreview.textContent =
+      "Unable to load image.";
+
+
+    noPreview.style.display =
+      "flex";
+
+  }
+);
+
+
+
+previewImage.addEventListener(
+  "load",
+  () => {
+
+    noPreview.style.display =
+      "none";
+
+
+    previewImage.style.display =
+      "block";
+
+  }
+);
+
+
+
+/* =====================================================
+   FORM LIVE UPDATE
+===================================================== */
+
+[
+  enabledInput,
+  imageUrlInput,
+  clickUrlInput,
+  positionInput,
+  animationInput,
+  widthInput,
+  mobileWidthInput,
+  distanceInput,
+  speedInput,
+  opacityInput,
+  showCloseInput,
+  closeModeInput,
+  showDesktopInput,
+  showMobileInput
+
+].forEach(
+  element => {
+
+    element.addEventListener(
+      "input",
+      updatePreview
+    );
+
+
+    element.addEventListener(
+      "change",
+      updatePreview
+    );
+
+  }
+);
+
+
+
+/* =====================================================
+   LOAD FIREBASE
+===================================================== */
+
+onValue(
+
+  ref(
+    db,
+    "floating_image"
+  ),
+
+  snapshot => {
+
+    const data =
+      snapshot.val();
+
+
+    if (!data) {
+
+      updatePreview();
+
+      return;
+    }
+
+
+    enabledInput.value =
+      String(
+        data.enabled ??
+        true
+      );
+
+
+    imageUrlInput.value =
+      data.image_url ||
+      "";
+
+
+    clickUrlInput.value =
+      data.click_url ||
+      "";
+
+
+    positionInput.value =
+      data.position ||
+      "right-center";
+
+
+    animationInput.value =
+      data.animation ||
+      "soft";
+
+
+    widthInput.value =
+      data.width ??
+      140;
+
+
+    mobileWidthInput.value =
+      data.mobile_width ??
+      95;
+
+
+    distanceInput.value =
+      data.distance ??
+      18;
+
+
+    speedInput.value =
+      data.speed ??
+      6;
+
+
+    opacityInput.value =
+      data.opacity ??
+      100;
+
+
+    showCloseInput.value =
+      String(
+        data.show_close ??
+        true
+      );
+
+
+    closeModeInput.value =
+      data.close_mode ||
+      "session";
+
+
+    showDesktopInput.value =
+      String(
+        data.show_desktop ??
+        true
+      );
+
+
+    showMobileInput.value =
+      String(
+        data.show_mobile ??
+        true
+      );
+
+
+    updatePreview();
+
+  },
+
+  error => {
+
+    console.error(
+      "Floating settings load error:",
+      error
+    );
+
+
+    statusMessage.textContent =
+      "Unable to load floating settings.";
+
+
+    statusMessage.className =
+      "floating-save-message error";
+
+  }
+
+);
+
+
+
+/* =====================================================
+   SAVE
+===================================================== */
+
+saveBtn.addEventListener(
+  "click",
+  async () => {
+
+    const data =
+      getFormData();
+
+
+    if (
+      data.enabled &&
+      !data.image_url
+    ) {
+
+      statusMessage.textContent =
+        "Please enter an image URL.";
+
+
+      statusMessage.className =
+        "floating-save-message error";
+
+
+      return;
+    }
+
+
+    saveBtn.disabled =
+      true;
+
+
+    saveBtn.textContent =
+      "SAVING...";
+
+
+    try {
+
+      await set(
+        ref(
+          db,
+          "floating_image"
+        ),
+        data
+      );
+
+
+      statusMessage.textContent =
+        "Floating image saved successfully.";
+
+
+      statusMessage.className =
+        "floating-save-message success";
+
+
+    } catch (error) {
+
+      console.error(
+        "Floating save error:",
+        error
+      );
+
+
+      statusMessage.textContent =
+        "Failed to save floating image.";
+
+
+      statusMessage.className =
+        "floating-save-message error";
+
+    }
+
+
+    saveBtn.disabled =
+      false;
+
+
+    saveBtn.textContent =
+      "SAVE FLOATING IMAGE";
+
+  }
+);
+
+
+
+/* =====================================================
+   PREVIEW CLOSE
+
+   Preview sahaja.
+   Tidak save customer close status.
+===================================================== */
+
+previewClose.addEventListener(
+  "click",
+  () => {
+
+    previewBox.style
+      .visibility =
+      "hidden";
+
+
+    setTimeout(
+      () => {
+
+        previewBox.style
+          .visibility =
+          "visible";
+
+      },
+      700
+    );
+
+  }
+);
+
+
+
+/* FIRST PREVIEW */
+
+updatePreview();
+
+</script>
+
 
 </body>
 </html>

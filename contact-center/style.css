@@ -3174,26 +3174,26 @@ body.notice-modal-open {
 
 .contact-value-row,
 .status-value-row {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 7px;
-  min-width: 0;
+  gap: 6px;
+  max-width: 100%;
 }
 
 .contact-value-row .contact-value,
 .status-value-row .status-value {
   min-width: 0;
-  flex: 1;
+  flex: 0 1 auto;
 }
 
 
 /* COPY ICON */
 
 .copy-contact-btn {
-  width: 27px;
-  height: 27px;
+  width: 24px;
+  height: 24px;
 
-  flex: 0 0 27px;
+  flex: 0 0 24px;
 
   display: inline-flex;
   align-items: center;
@@ -3202,26 +3202,18 @@ body.notice-modal-open {
   padding: 0;
 
   border: 1px solid rgba(255, 222, 0, .45);
-  border-radius: 7px;
+  border-radius: 6px;
 
   background: rgba(255, 222, 0, .06);
 
   color: #ffe45c;
 
   cursor: pointer;
-
-  transition:
-    background .18s ease,
-    border-color .18s ease,
-    color .18s ease,
-    transform .18s ease;
 }
 
 .copy-contact-btn svg {
-  width: 15px;
-  height: 15px;
-
-  display: block;
+  width: 14px;
+  height: 14px;
 }
 
 

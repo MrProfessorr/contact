@@ -1659,34 +1659,22 @@ input {
 
 .status-active {
   color:var(--green);
-  background:rgba(40,228,154,.075);
-  border: 1px solid rgba(40,228,154,.10);
+  background:transparent;
+  border:none;
 }
 
 
 .status-problem {
-
-  color:
-    var(--yellow);
-
-  background:
-    rgba(255,195,79,.07);
-
-  border:
-    1px solid rgba(255,195,79,.10);
+  color:var(--yellow);
+  background:transparent;
+  border:none;
 }
 
 
 .status-closed {
-
-  color:
-    var(--red);
-
-  background:
-    rgba(255,99,116,.075);
-
-  border:
-    1px solid rgba(255,99,116,.10);
+  color:var(--red);
+  background:transparent;
+  border:none;
 }
 
 

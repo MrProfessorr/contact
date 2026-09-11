@@ -629,16 +629,27 @@ input {
    CARDS
 ========================================================= */
 
-.status-panel {
-  position: sticky;
-  top: 88px;
-  height: calc(100vh - 112px);
-  height: calc(100dvh - 112px);
-  max-height: calc(100vh - 112px);
-  max-height: calc(100dvh - 112px);
-  display: flex;
-  flex-direction: column;
+.status-panel,
+.content-card {
+  min-width: 0;
+
   overflow: hidden;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    var(--radius);
+
+  background:
+    linear-gradient(
+      360deg,
+      #1c1c1c 0%,
+      #0A0A0A 100%
+    );
+
+  box-shadow:
+    var(--shadow);
 }
 
 
@@ -679,11 +690,24 @@ input {
 
 .status-panel {
   position: sticky;
+
   top: 88px;
-  height: auto;
-  max-height: none;
+
+  height:
+    calc(100vh - 112px);
+
+  height:
+    calc(100dvh - 112px);
+
+  max-height:
+    calc(100vh - 112px);
+
+  max-height:
+    calc(100dvh - 112px);
+
   display: flex;
   flex-direction: column;
+
   overflow: hidden;
 }
 

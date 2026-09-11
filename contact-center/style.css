@@ -654,10 +654,15 @@ input {
 
 
 .content-card {
-
   position: relative;
-
+  height: calc(100vh - 112px);
+  height: calc(100dvh - 112px);
+  max-height: calc(100vh - 112px);
+  max-height: calc(100dvh - 112px);
   padding: 21px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 
@@ -1539,38 +1544,42 @@ input {
 ========================================================= */
 
 .contact-list {
-
   min-width: 0;
-
+  min-height: 0;
+  flex: 1;
   display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0,1fr));
-
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  align-content: start;
   gap: 11px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-right: 5px;
+  scrollbar-gutter: stable;
+}
+.contact-list::-webkit-scrollbar {
+  width: 5px;
 }
 
+.contact-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contact-list::-webkit-scrollbar-thumb {
+  background: rgba(112,143,185,.28);
+  border-radius: 999px;
+}
 
 .contact-card {
  position: relative;
   min-width: 0;
-
   display: grid;
-
-  grid-template-columns:
-    48px minmax(0,1fr);
-
+  grid-template-columns:48px minmax(0,1fr);
   align-items: center;
-
   gap: 11px;
-
   padding: 13px;
-
-  border:
-    1px solid var(--border);
-
+  border:1px solid var(--border);
   border-radius: 14px;
-
   background:
     linear-gradient(
       145deg,
@@ -2156,14 +2165,13 @@ body.modal-open {
   }
 
 
-  .content-card {
-
-    width: 100%;
-
-    padding: 14px;
-
-    border-radius: 17px;
-  }
+ .content-card {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  padding: 14px;
+  border-radius: 17px;
+}
 
 
   .section-title-left {
@@ -2223,9 +2231,16 @@ body.modal-open {
 
   /* CONTACT MOBILE */
 
-  .contact-list {
-    grid-template-columns: 1fr;
-  }
+.contact-list {
+  grid-template-columns: 1fr;
+
+  max-height: 520px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-right: 4px;
+}
 
 
   .contact-card {

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Floating Image</title>
+
+  <link
+    rel="stylesheet"
+    href="./admin.css"
+  >
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     ADMIN WRAPPER
+===================================================== -->
+
+<div class="admin-layout">
+
+
+  <!-- =================================================
+       SIDEBAR
+  ================================================== -->
+
+  <aside class="admin-sidebar">
+
+    <div class="admin-sidebar-title">
+      ADMIN PANEL
+    </div>
+
+
+    <nav class="admin-nav">
+
+      <a href="./index.html">
+        Dashboard
+      </a>
+
+      <a href="./contacts.html">
+        Contacts
+      </a>
+
+      <a href="./notices.html">
+        Notices
+      </a>
+
+      <a
+        href="./floating.html"
+        class="active"
+      >
+        Floating Image
+      </a>
+
+    </nav>
+
+  </aside>
+
+
+  <!-- =================================================
+       CONTENT
+  ================================================== -->
+
+  <main class="admin-content">
+
+
+    <div class="admin-page-header">
+
+      <div>
+
+        <h1>
+          Floating Image
+        </h1>
+
+        <p>
+          Manage floating promotional image
+          displayed on the customer page.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         FLOATING SETTINGS
+    ================================================== -->
+
+    <section class="admin-card">
+
+
+      <div class="admin-card-title">
+
+        <h2>
+          Floating Settings
+        </h2>
+
+        <p>
+          Configure position, animation,
+          image size and visibility.
+        </p>
+
+      </div>
+
+
+      <div class="floating-admin-grid">
+
+
+        <!-- ENABLE -->
+
+        <div class="admin-field">
+
+          <label>
+            Enable Floating Image
+          </label>
+
+          <select id="floatingEnabled">
+
+            <option value="true">
+              Enabled
+            </option>
+
+            <option value="false">
+              Disabled
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- IMAGE URL -->
+
+        <div class="admin-field">
+
+          <label>
+            Image URL
+          </label>
+
+          <input
+            id="floatingImageUrl"
+            type="url"
+            placeholder="https://..."
+          >
+
+        </div>
+
+
+        <!-- CLICK URL -->
+
+        <div class="admin-field">
+
+          <label>
+            Click URL
+          </label>
+
+          <input
+            id="floatingClickUrl"
+            type="url"
+            placeholder="https://wa.me/..."
+          >
+
+        </div>
+
+
+        <!-- POSITION -->
+
+        <div class="admin-field">
+
+          <label>
+            Position
+          </label>
+
+          <select id="floatingPosition">
+
+            <option value="left-top">
+              Left Top
+            </option>
+
+            <option value="left-center">
+              Left Center
+            </option>
+
+            <option value="left-bottom">
+              Left Bottom
+            </option>
+
+            <option value="right-top">
+              Right Top
+            </option>
+
+            <option
+              value="right-center"
+              selected
+            >
+              Right Center
+            </option>
+
+            <option value="right-bottom">
+              Right Bottom
+            </option>
+
+            <option value="center-top">
+              Center Top
+            </option>
+
+            <option value="center-bottom">
+              Center Bottom
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- ANIMATION -->
+
+        <div class="admin-field">
+
+          <label>
+            Animation
+          </label>
+
+          <select id="floatingAnimation">
+
+            <option value="none">
+              None
+            </option>
+
+            <option value="left-right">
+              Left ↔ Right
+            </option>
+
+            <option value="right-left">
+              Right ↔ Left
+            </option>
+
+            <option value="top-bottom">
+              Top ↕ Bottom
+            </option>
+
+            <option value="bottom-top">
+              Bottom ↕ Top
+            </option>
+
+            <option
+              value="soft"
+              selected
+            >
+              Soft Floating
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- WIDTH DESKTOP -->
+
+        <div class="admin-field">
+
+          <label>
+            Desktop Width (px)
+          </label>
+
+          <input
+            id="floatingWidth"
+            type="number"
+            min="50"
+            max="500"
+            value="140"
+          >
+
+        </div>
+
+
+        <!-- WIDTH MOBILE -->
+
+        <div class="admin-field">
+
+          <label>
+            Mobile Width (px)
+          </label>
+
+          <input
+            id="floatingMobileWidth"
+            type="number"
+            min="45"
+            max="300"
+            value="95"
+          >
+
+        </div>
+
+
+        <!-- DISTANCE -->
+
+        <div class="admin-field">
+
+          <label>
+            Movement Distance (px)
+          </label>
+
+          <input
+            id="floatingDistance"
+            type="number"
+            min="0"
+            max="150"
+            value="18"
+          >
+
+        </div>
+
+
+        <!-- SPEED -->
+
+        <div class="admin-field">
+
+          <label>
+            Animation Speed (seconds)
+          </label>
+
+          <input
+            id="floatingSpeed"
+            type="number"
+            min="1"
+            max="30"
+            step="0.5"
+            value="6"
+          >
+
+        </div>
+
+
+        <!-- OPACITY -->
+
+        <div class="admin-field">
+
+          <label>
+            Opacity (%)
+          </label>
+
+          <input
+            id="floatingOpacity"
+            type="number"
+            min="10"
+            max="100"
+            value="100"
+          >
+
+        </div>
+
+
+        <!-- CLOSE BUTTON -->
+
+        <div class="admin-field">
+
+          <label>
+            Close Button
+          </label>
+
+          <select id="floatingShowClose">
+
+            <option value="true">
+              Show
+            </option>
+
+            <option value="false">
+              Hide
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- CLOSE MODE -->
+
+        <div class="admin-field">
+
+          <label>
+            Close Behaviour
+          </label>
+
+          <select id="floatingCloseMode">
+
+            <option value="refresh">
+              Show Again After Refresh
+            </option>
+
+            <option
+              value="session"
+              selected
+            >
+              Hide For Session
+            </option>
+
+            <option value="24h">
+              Hide For 24 Hours
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- DESKTOP -->
+
+        <div class="admin-field">
+
+          <label>
+            Show On Desktop
+          </label>
+
+          <select id="floatingShowDesktop">
+
+            <option value="true">
+              Yes
+            </option>
+
+            <option value="false">
+              No
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- MOBILE -->
+
+        <div class="admin-field">
+
+          <label>
+            Show On Mobile
+          </label>
+
+          <select id="floatingShowMobile">
+
+            <option value="true">
+              Yes
+            </option>
+
+            <option value="false">
+              No
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- SAVE BUTTON -->
+
+      <div class="floating-admin-actions">
+
+        <button
+          id="saveFloatingBtn"
+          type="button"
+          class="admin-primary-btn"
+        >
+          Save Floating Image
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================
+         PREVIEW
+    ================================================== -->
+
+    <section class="admin-card">
+
+      <div class="admin-card-title">
+
+        <h2>
+          Preview
+        </h2>
+
+        <p>
+          Preview floating image before saving.
+        </p>
+
+      </div>
+
+
+      <div
+        id="floatingPreviewArea"
+        class="floating-preview-area"
+      >
+
+        <div
+          id="floatingPreviewBox"
+          class="floating-preview-box"
+        >
+
+          <button
+            id="floatingPreviewClose"
+            type="button"
+            class="floating-preview-close"
+          >
+            ×
+          </button>
+
+
+          <img
+            id="floatingPreviewImage"
+            src=""
+            alt="Floating Preview"
+          >
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- MESSAGE -->
+
+    <div
+      id="floatingMessage"
+      class="admin-message"
+    ></div>
+
+
+  </main>
+
+</div>
+
+
+<script
+  type="module"
+  src="./admin.js"
+></script>
+
+</body>
+</html>

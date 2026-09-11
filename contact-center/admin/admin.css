@@ -703,3 +703,784 @@ select:focus {
   }
 
 }
+/* =========================================================
+   FLOATING IMAGE ADMIN
+========================================================= */
+
+.floating-admin-layout {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    390px minmax(0,1fr);
+
+  gap:
+    18px;
+
+  align-items:
+    start;
+}
+
+
+/* SAVE MESSAGE */
+
+.floating-save-message {
+
+  display:
+    none;
+
+  margin-top:
+    12px;
+
+  padding:
+    10px 12px;
+
+  border-radius:
+    8px;
+
+  font-size:
+    11px;
+
+  line-height:
+    1.5;
+}
+
+
+.floating-save-message.success {
+
+  display:
+    block;
+
+  color:
+    #41e595;
+
+  background:
+    rgba(38,201,121,.12);
+
+  border:
+    1px solid
+    rgba(38,201,121,.22);
+}
+
+
+.floating-save-message.error {
+
+  display:
+    block;
+
+  color:
+    #ff7b88;
+
+  background:
+    rgba(220,67,82,.12);
+
+  border:
+    1px solid
+    rgba(220,67,82,.22);
+}
+
+
+
+/* =========================================================
+   PREVIEW AREA
+========================================================= */
+
+.floating-preview-area {
+
+  position:
+    relative;
+
+  width:
+    100%;
+
+  min-height:
+    540px;
+
+  overflow:
+    hidden;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:
+    14px;
+
+  background:
+
+    radial-gradient(
+      circle at center,
+      rgba(66,133,255,.08),
+      transparent 55%
+    ),
+
+    #090d13;
+}
+
+
+/* SMALL GUIDE */
+
+.floating-preview-area::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    50%;
+
+  top:
+    0;
+
+  bottom:
+    0;
+
+  width:
+    1px;
+
+  background:
+    rgba(255,255,255,.04);
+}
+
+
+.floating-preview-area::after {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  top:
+    50%;
+
+  left:
+    0;
+
+  right:
+    0;
+
+  height:
+    1px;
+
+  background:
+    rgba(255,255,255,.04);
+}
+
+
+
+/* =========================================================
+   PREVIEW BOX
+========================================================= */
+
+.floating-preview-box {
+
+  --preview-width:
+    140px;
+
+  --preview-distance:
+    18px;
+
+  --preview-speed:
+    6s;
+
+
+  position:
+    absolute;
+
+  z-index:
+    3;
+
+  width:
+    min(
+      var(--preview-width),
+      45%
+    );
+
+  transition:
+    opacity .2s ease;
+
+  will-change:
+    transform;
+}
+
+
+
+/* IMAGE */
+
+.floating-preview-box img {
+
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    auto;
+
+  object-fit:
+    contain;
+
+  filter:
+    drop-shadow(
+      0 12px 24px
+      rgba(0,0,0,.45)
+    );
+}
+
+
+
+/* NO IMAGE */
+
+.floating-no-preview {
+
+  width:
+    150px;
+
+  min-height:
+    100px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    12px;
+
+  color:
+    var(--muted);
+
+  border:
+    1px dashed
+    var(--line);
+
+  border-radius:
+    10px;
+
+  background:
+    var(--panel2);
+
+  text-align:
+    center;
+
+  font-size:
+    10px;
+
+  line-height:
+    1.5;
+}
+
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.floating-preview-close {
+
+  position:
+    absolute;
+
+  top:
+    -10px;
+
+  right:
+    -10px;
+
+  z-index:
+    10;
+
+  width:
+    27px;
+
+  height:
+    27px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    0;
+
+  cursor:
+    pointer;
+
+  color:
+    white;
+
+  border:
+    1px solid
+    rgba(255,255,255,.30);
+
+  border-radius:
+    50%;
+
+  background:
+    rgba(0,0,0,.82);
+
+  box-shadow:
+    0 5px 15px
+    rgba(0,0,0,.35);
+}
+
+
+.floating-preview-close svg {
+
+  width:
+    13px;
+
+  height:
+    13px;
+}
+
+
+
+/* =========================================================
+   PREVIEW POSITIONS
+========================================================= */
+
+
+/* LEFT */
+
+.preview-left-top {
+
+  left:
+    24px;
+
+  top:
+    35px;
+}
+
+
+.preview-left-center {
+
+  left:
+    24px;
+
+  top:
+    50%;
+}
+
+
+.preview-left-bottom {
+
+  left:
+    24px;
+
+  bottom:
+    35px;
+}
+
+
+/* RIGHT */
+
+.preview-right-top {
+
+  right:
+    24px;
+
+  top:
+    35px;
+}
+
+
+.preview-right-center {
+
+  right:
+    24px;
+
+  top:
+    50%;
+}
+
+
+.preview-right-bottom {
+
+  right:
+    24px;
+
+  bottom:
+    35px;
+}
+
+
+/* CENTER */
+
+.preview-center-top {
+
+  left:
+    50%;
+
+  top:
+    35px;
+}
+
+
+.preview-center-bottom {
+
+  left:
+    50%;
+
+  bottom:
+    35px;
+}
+
+
+
+/* =========================================================
+   IMPORTANT:
+   position translation uses wrapper logic through
+   individual animation keyframes below.
+========================================================= */
+
+
+/* =========================================================
+   NONE
+========================================================= */
+
+.preview-anim-none.preview-left-center,
+.preview-anim-none.preview-right-center {
+
+  transform:
+    translateY(-50%);
+}
+
+
+.preview-anim-none.preview-center-top,
+.preview-anim-none.preview-center-bottom {
+
+  transform:
+    translateX(-50%);
+}
+
+
+.preview-anim-none {
+
+  animation:
+    none;
+}
+
+
+
+/* =========================================================
+   LEFT RIGHT
+========================================================= */
+
+@keyframes adminMoveHorizontal {
+
+  0%,
+  100% {
+
+    transform:
+      translate3d(
+        calc(var(--preview-distance) * -1),
+        0,
+        0
+      );
+
+  }
+
+
+  50% {
+
+    transform:
+      translate3d(
+        var(--preview-distance),
+        0,
+        0
+      );
+
+  }
+
+}
+
+
+.preview-anim-left-right {
+
+  animation:
+    adminMoveHorizontal
+    var(--preview-speed)
+    ease-in-out
+    infinite;
+}
+
+
+
+/* =========================================================
+   RIGHT LEFT
+========================================================= */
+
+@keyframes adminMoveHorizontalReverse {
+
+  0%,
+  100% {
+
+    transform:
+      translate3d(
+        var(--preview-distance),
+        0,
+        0
+      );
+
+  }
+
+
+  50% {
+
+    transform:
+      translate3d(
+        calc(var(--preview-distance) * -1),
+        0,
+        0
+      );
+
+  }
+
+}
+
+
+.preview-anim-right-left {
+
+  animation:
+    adminMoveHorizontalReverse
+    var(--preview-speed)
+    ease-in-out
+    infinite;
+}
+
+
+
+/* =========================================================
+   TOP BOTTOM
+========================================================= */
+
+@keyframes adminMoveVertical {
+
+  0%,
+  100% {
+
+    transform:
+      translate3d(
+        0,
+        calc(var(--preview-distance) * -1),
+        0
+      );
+
+  }
+
+
+  50% {
+
+    transform:
+      translate3d(
+        0,
+        var(--preview-distance),
+        0
+      );
+
+  }
+
+}
+
+
+.preview-anim-top-bottom {
+
+  animation:
+    adminMoveVertical
+    var(--preview-speed)
+    ease-in-out
+    infinite;
+}
+
+
+
+/* =========================================================
+   BOTTOM TOP
+========================================================= */
+
+@keyframes adminMoveVerticalReverse {
+
+  0%,
+  100% {
+
+    transform:
+      translate3d(
+        0,
+        var(--preview-distance),
+        0
+      );
+
+  }
+
+
+  50% {
+
+    transform:
+      translate3d(
+        0,
+        calc(var(--preview-distance) * -1),
+        0
+      );
+
+  }
+
+}
+
+
+.preview-anim-bottom-top {
+
+  animation:
+    adminMoveVerticalReverse
+    var(--preview-speed)
+    ease-in-out
+    infinite;
+}
+
+
+
+/* =========================================================
+   SOFT
+========================================================= */
+
+@keyframes adminSoftFloat {
+
+  0%,
+  100% {
+
+    transform:
+      translate3d(
+        -4px,
+        -8px,
+        0
+      );
+
+  }
+
+
+  50% {
+
+    transform:
+      translate3d(
+        4px,
+        8px,
+        0
+      );
+
+  }
+
+}
+
+
+.preview-anim-soft {
+
+  animation:
+    adminSoftFloat
+    var(--preview-speed)
+    ease-in-out
+    infinite;
+}
+
+
+
+/* =========================================================
+   CENTER POSITION FIX
+========================================================= */
+
+.preview-center-top,
+.preview-center-bottom {
+
+  margin-left:
+    calc(
+      var(--preview-width) / -2
+    );
+}
+
+
+
+/* =========================================================
+   VERTICAL CENTER FIX
+========================================================= */
+
+.preview-left-center,
+.preview-right-center {
+
+  margin-top:
+    calc(
+      var(--preview-width) / -2
+    );
+}
+
+
+
+/* =========================================================
+   HELP
+========================================================= */
+
+.floating-preview-help {
+
+  margin-top:
+    12px;
+}
+
+
+
+/* =========================================================
+   MOBILE ADMIN
+========================================================= */
+
+@media(max-width:900px) {
+
+  .floating-admin-layout {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .floating-preview-area {
+
+    min-height:
+      400px;
+
+  }
+
+}
+
+
+@media(max-width:550px) {
+
+  .floating-preview-area {
+
+    min-height:
+      330px;
+
+  }
+
+
+  .floating-preview-box {
+
+    width:
+      min(
+        var(--preview-width),
+        42%
+      );
+
+  }
+
+}

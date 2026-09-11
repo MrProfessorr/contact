@@ -3190,24 +3190,14 @@ body.notice-modal-open {
 /* COPY ICON */
 
 .copy-contact-btn {
-  width: 24px;
-  height: 24px;
-
-  flex: 0 0 24px;
-
+  flex: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
-  border: 1px solid rgba(255, 222, 0, .45);
-  border-radius: 6px;
-
-  background: rgba(255, 222, 0, .06);
-
-  color: #ffe45c;
-
+  border: none;
+  background: transparent;
+  color: #f8dd76;
   cursor: pointer;
 }
 
@@ -3220,10 +3210,7 @@ body.notice-modal-open {
 /* HOVER */
 
 .copy-contact-btn:hover {
-  background: rgba(255, 222, 0, .14);
-  border-color: #ffe000;
-
-  transform: translateY(-1px);
+  color:var(--border2);
 }
 
 
@@ -3231,10 +3218,4 @@ body.notice-modal-open {
 
 .copy-contact-btn.copied {
   color: #00ed73;
-
-  border-color:
-    rgba(0, 237, 115, .55);
-
-  background:
-    rgba(0, 237, 115, .10);
 }

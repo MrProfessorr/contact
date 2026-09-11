@@ -609,12 +609,9 @@ input {
 ========================================================= */
 
 .page-container {
-
-  width:
-    min(1280px, calc(100% - 40px));
-
-  margin:
-    24px auto 65px;
+  width: calc(100% - 10px);
+  max-width: none;
+  margin: 24px auto 65px;
 }
 
 

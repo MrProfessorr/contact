@@ -95,7 +95,16 @@ const statusList =
   document.getElementById(
     "statusList"
   );
+const statusSearchInput =
+  document.getElementById(
+    "statusSearch"
+  );
 
+
+const clearStatusSearch =
+  document.getElementById(
+    "clearStatusSearch"
+  );
 
 const noticeList =
   document.getElementById(
@@ -171,7 +180,14 @@ let contacts = [];
 let currentFilter =
   "all";
 
+/* SEARCH CONTACT OUR TEAM */
+
 let searchText =
+  "";
+
+/* SEARCH CONTACT STATUS */
+
+let statusSearchText =
   "";
 
 let currentNoticeReadKeys =
@@ -706,6 +722,8 @@ function getFilteredContacts() {
   return contacts.filter(
     item => {
 
+      /* STATUS FILTER */
+
       const matchesFilter =
 
         currentFilter ===
@@ -717,24 +735,26 @@ function getFilteredContacts() {
         currentFilter;
 
 
+      /* STATUS SEARCH */
+
       const haystack =
         [
-
           item.name,
           item.value,
           item.type,
-          item.description
-
+          item.description,
+          item.status
         ]
 
-        .join(" ")
+          .join(" ")
 
-        .toLowerCase();
+          .toLowerCase();
 
 
       const matchesSearch =
         haystack.includes(
-          searchText.toLowerCase()
+          statusSearchText
+            .toLowerCase()
         );
 
 
@@ -745,11 +765,51 @@ function getFilteredContacts() {
 
     }
   );
-
 }
+/* =========================================================
+   ACTIVE CONTACTS FOR CONTACT OUR TEAM
+========================================================= */
+
+function getActiveContactResults() {
+
+  return contacts.filter(
+    item => {
+
+      /*
+        Contact Our Team
+        hanya ACTIVE.
+      */
+
+      if (
+        item.status !==
+        "active"
+      ) {
+
+        return false;
+
+      }
 
 
+      const haystack =
+        [
+          item.name,
+          item.value,
+          item.type,
+          item.description
+        ]
 
+          .join(" ")
+
+          .toLowerCase();
+
+
+      return haystack.includes(
+        searchText.toLowerCase()
+      );
+
+    }
+  );
+}
 /* =========================================================
    RENDER CONTACTS
 ========================================================= */

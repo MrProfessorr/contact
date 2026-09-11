@@ -2238,3 +2238,510 @@ body.modal-open {
   }
 
 }
+/* =========================================================
+   FLOATING PROMO IMAGE
+========================================================= */
+
+.floating-promo-position {
+  --floating-width: 140px;
+  --floating-mobile-width: 95px;
+  --floating-speed: 6s;
+  --floating-distance: 18px;
+  --floating-opacity: 1;
+
+  position: fixed;
+  z-index: 9990;
+
+  width: var(--floating-width);
+  max-width: 38vw;
+
+  opacity: var(--floating-opacity);
+
+  pointer-events: none;
+
+  transition:
+    opacity .3s ease,
+    visibility .3s ease;
+}
+
+
+/* HIDE */
+
+.floating-promo-position.floating-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+/* SHOW */
+
+.floating-promo-position.floating-show {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   MOTION WRAPPER
+========================================================= */
+
+.floating-promo-motion {
+  position: relative;
+  width: 100%;
+
+  will-change: transform;
+
+  transform:
+    translate3d(0, 0, 0);
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.floating-promo-link {
+  display: block;
+
+  width: 100%;
+
+  text-decoration: none;
+}
+
+
+.floating-promo-link.disabled {
+  pointer-events: none;
+}
+
+
+.floating-promo-link img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  object-fit: contain;
+
+  border: 0;
+
+  user-select: none;
+  -webkit-user-drag: none;
+
+  filter:
+    drop-shadow(
+      0 12px 25px
+      rgba(0,0,0,.38)
+    );
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.floating-promo-close {
+  position: absolute;
+
+  top: -10px;
+  right: -10px;
+
+  z-index: 10;
+
+  width: 27px;
+  height: 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  cursor: pointer;
+
+  color: #ffffff;
+
+  border:
+    1px solid
+    rgba(255,255,255,.30);
+
+  border-radius: 50%;
+
+  background:
+    rgba(0,0,0,.78);
+
+  backdrop-filter:
+    blur(8px);
+
+  -webkit-backdrop-filter:
+    blur(8px);
+
+  box-shadow:
+    0 4px 16px
+    rgba(0,0,0,.35);
+
+  transition:
+    transform .18s ease,
+    background .18s ease;
+}
+
+
+.floating-promo-close:hover {
+  transform:
+    scale(1.08);
+
+  background:
+    rgba(0,0,0,.95);
+}
+
+
+.floating-promo-close svg {
+  width: 14px;
+  height: 14px;
+}
+
+
+/* Hide close when admin OFF */
+
+.floating-promo-close.hide {
+  display: none;
+}
+
+
+/* =========================================================
+   POSITIONS
+========================================================= */
+
+
+/* LEFT TOP */
+
+.floating-pos-left-top {
+  left: 18px;
+  top: 100px;
+}
+
+
+/* LEFT CENTER */
+
+.floating-pos-left-center {
+  left: 18px;
+  top: 50%;
+
+  transform:
+    translateY(-50%);
+}
+
+
+/* LEFT BOTTOM */
+
+.floating-pos-left-bottom {
+  left: 18px;
+  bottom: 30px;
+}
+
+
+/* RIGHT TOP */
+
+.floating-pos-right-top {
+  right: 18px;
+  top: 100px;
+}
+
+
+/* RIGHT CENTER */
+
+.floating-pos-right-center {
+  right: 18px;
+  top: 50%;
+
+  transform:
+    translateY(-50%);
+}
+
+
+/* RIGHT BOTTOM */
+
+.floating-pos-right-bottom {
+  right: 18px;
+  bottom: 30px;
+}
+
+
+/* CENTER TOP */
+
+.floating-pos-center-top {
+  left: 50%;
+  top: 90px;
+
+  transform:
+    translateX(-50%);
+}
+
+
+/* CENTER BOTTOM */
+
+.floating-pos-center-bottom {
+  left: 50%;
+  bottom: 30px;
+
+  transform:
+    translateX(-50%);
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+
+/* NO ANIMATION */
+
+.floating-anim-none {
+  animation: none;
+}
+
+
+/* LEFT -> RIGHT -> LEFT */
+
+@keyframes floatingLeftRight {
+
+  0%,
+  100% {
+    transform:
+      translate3d(
+        calc(var(--floating-distance) * -1),
+        0,
+        0
+      );
+  }
+
+  50% {
+    transform:
+      translate3d(
+        var(--floating-distance),
+        0,
+        0
+      );
+  }
+}
+
+
+/* RIGHT -> LEFT -> RIGHT */
+
+@keyframes floatingRightLeft {
+
+  0%,
+  100% {
+    transform:
+      translate3d(
+        var(--floating-distance),
+        0,
+        0
+      );
+  }
+
+  50% {
+    transform:
+      translate3d(
+        calc(var(--floating-distance) * -1),
+        0,
+        0
+      );
+  }
+}
+
+
+/* TOP -> BOTTOM */
+
+@keyframes floatingTopBottom {
+
+  0%,
+  100% {
+    transform:
+      translate3d(
+        0,
+        calc(var(--floating-distance) * -1),
+        0
+      );
+  }
+
+  50% {
+    transform:
+      translate3d(
+        0,
+        var(--floating-distance),
+        0
+      );
+  }
+}
+
+
+/* BOTTOM -> TOP */
+
+@keyframes floatingBottomTop {
+
+  0%,
+  100% {
+    transform:
+      translate3d(
+        0,
+        var(--floating-distance),
+        0
+      );
+  }
+
+  50% {
+    transform:
+      translate3d(
+        0,
+        calc(var(--floating-distance) * -1),
+        0
+      );
+  }
+}
+
+
+/* VERY SOFT FLOAT */
+
+@keyframes floatingSoft {
+
+  0%,
+  100% {
+    transform:
+      translate3d(
+        -4px,
+        -8px,
+        0
+      );
+  }
+
+  50% {
+    transform:
+      translate3d(
+        4px,
+        8px,
+        0
+      );
+  }
+}
+
+
+.floating-anim-left-right {
+  animation:
+    floatingLeftRight
+    var(--floating-speed)
+    ease-in-out
+    infinite;
+}
+
+
+.floating-anim-right-left {
+  animation:
+    floatingRightLeft
+    var(--floating-speed)
+    ease-in-out
+    infinite;
+}
+
+
+.floating-anim-top-bottom {
+  animation:
+    floatingTopBottom
+    var(--floating-speed)
+    ease-in-out
+    infinite;
+}
+
+
+.floating-anim-bottom-top {
+  animation:
+    floatingBottomTop
+    var(--floating-speed)
+    ease-in-out
+    infinite;
+}
+
+
+.floating-anim-soft {
+  animation:
+    floatingSoft
+    var(--floating-speed)
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:760px) {
+
+  .floating-promo-position {
+    width:
+      var(--floating-mobile-width);
+
+    max-width:
+      32vw;
+  }
+
+
+  .floating-pos-left-top {
+    left: 10px;
+    top: 90px;
+  }
+
+
+  .floating-pos-left-center {
+    left: 10px;
+  }
+
+
+  .floating-pos-left-bottom {
+    left: 10px;
+    bottom: 20px;
+  }
+
+
+  .floating-pos-right-top {
+    right: 10px;
+    top: 90px;
+  }
+
+
+  .floating-pos-right-center {
+    right: 10px;
+  }
+
+
+  .floating-pos-right-bottom {
+    right: 10px;
+    bottom: 20px;
+  }
+
+
+  .floating-pos-center-top {
+    top: 85px;
+  }
+
+
+  .floating-pos-center-bottom {
+    bottom: 20px;
+  }
+
+
+  .floating-promo-close {
+    width: 24px;
+    height: 24px;
+
+    top: -8px;
+    right: -8px;
+  }
+
+
+  .floating-promo-close svg {
+    width: 12px;
+    height: 12px;
+  }
+
+}

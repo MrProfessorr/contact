@@ -101,7 +101,30 @@ const noticeList =
   document.getElementById(
     "noticeList"
   );
+const noticeCenterBtn =
+  document.getElementById(
+    "noticeCenterBtn"
+  );
 
+const noticeUnreadBadge =
+  document.getElementById(
+    "noticeUnreadBadge"
+  );
+
+const noticeCenterModal =
+  document.getElementById(
+    "noticeCenterModal"
+  );
+
+const noticeCenterBackdrop =
+  document.getElementById(
+    "noticeCenterBackdrop"
+  );
+
+const noticeCenterClose =
+  document.getElementById(
+    "noticeCenterClose"
+  );
 
 const searchInput =
   document.getElementById(
@@ -139,7 +162,6 @@ const modalBackdrop =
   );
 
 
-
 /* =========================================================
    STATE
 ========================================================= */
@@ -152,7 +174,8 @@ let currentFilter =
 let searchText =
   "";
 
-
+let currentNoticeReadKeys =
+  [];
 
 /* =========================================================
    PAGE LOADER
@@ -1203,7 +1226,158 @@ document
     }
   );
 
+/* =========================================================
+   NOTICE UNREAD SYSTEM
+========================================================= */
 
+const NOTICE_READ_STORAGE_KEY =
+  "support_notice_read_keys";
+
+
+function getStoredNoticeReadKeys() {
+
+  try {
+
+    const value =
+      JSON.parse(
+        localStorage.getItem(
+          NOTICE_READ_STORAGE_KEY
+        ) || "[]"
+      );
+
+    return Array.isArray(value)
+      ? value
+      : [];
+
+  } catch {
+
+    return [];
+
+  }
+}
+
+
+function saveNoticeReadKeys(keys) {
+
+  try {
+
+    const trimmed =
+      [...new Set(keys)]
+        .slice(-200);
+
+    localStorage.setItem(
+      NOTICE_READ_STORAGE_KEY,
+      JSON.stringify(trimmed)
+    );
+
+  } catch (error) {
+
+    console.warn(
+      "Unable to save notice read status:",
+      error
+    );
+
+  }
+}
+
+
+function getNoticeReadKey(notice) {
+
+  const id =
+    String(
+      notice?.id || ""
+    );
+
+  const version =
+    Number(
+      notice?.updatedAt ||
+      notice?.createdAt ||
+      0
+    );
+
+  return (
+    id +
+    ":" +
+    version
+  );
+}
+
+
+function updateNoticeUnreadBadge(notices) {
+
+  if (!noticeUnreadBadge) {
+    return;
+  }
+
+  const readKeys =
+    getStoredNoticeReadKeys();
+
+  currentNoticeReadKeys =
+    notices.map(
+      getNoticeReadKey
+    );
+
+  const unreadCount =
+    currentNoticeReadKeys
+      .filter(
+        key =>
+          !readKeys.includes(key)
+      )
+      .length;
+
+  if (unreadCount > 0) {
+
+    noticeUnreadBadge.textContent =
+      unreadCount > 99
+        ? "99+"
+        : String(unreadCount);
+
+    noticeUnreadBadge
+      .classList
+      .remove("hidden");
+
+  } else {
+
+    noticeUnreadBadge.textContent =
+      "0";
+
+    noticeUnreadBadge
+      .classList
+      .add("hidden");
+
+  }
+}
+
+
+function markCurrentNoticesRead() {
+
+  if (
+    !currentNoticeReadKeys.length
+  ) {
+    return;
+  }
+
+  const oldKeys =
+    getStoredNoticeReadKeys();
+
+  saveNoticeReadKeys(
+    [
+      ...oldKeys,
+      ...currentNoticeReadKeys
+    ]
+  );
+
+  if (noticeUnreadBadge) {
+
+    noticeUnreadBadge.textContent =
+      "0";
+
+    noticeUnreadBadge
+      .classList
+      .add("hidden");
+
+  }
+}
 
 /* =========================================================
    FIREBASE NOTICES
@@ -1241,7 +1415,19 @@ onValue(
             No announcements at the moment.
           </div>
         `;
+currentNoticeReadKeys =
+  [];
 
+if (noticeUnreadBadge) {
+
+  noticeUnreadBadge.textContent =
+    "0";
+
+  noticeUnreadBadge
+    .classList
+    .add("hidden");
+
+}
         markReady("notices");
 
         return;
@@ -1363,7 +1549,9 @@ onValue(
         }
       );
 
-
+updateNoticeUnreadBadge(
+  notices
+);
       /*
         CLEAR LOADING
       */
@@ -1383,7 +1571,19 @@ onValue(
             No active announcements.
           </div>
         `;
+currentNoticeReadKeys =
+  [];
 
+if (noticeUnreadBadge) {
+
+  noticeUnreadBadge.textContent =
+    "0";
+
+  noticeUnreadBadge
+    .classList
+    .add("hidden");
+
+}
         markReady("notices");
 
         return;
@@ -2103,22 +2303,131 @@ modalBackdrop
   );
 
 
-document
-  .addEventListener(
-    "keydown",
-    event => {
+document.addEventListener(
+  "keydown",
+  event => {
 
-      if (
-        event.key ===
-        "Escape"
-      ) {
+    if (
+      event.key !== "Escape"
+    ) {
+      return;
+    }
 
-        closePreview();
 
-      }
+    /* IMAGE PREVIEW */
+
+    if (
+      imageModal &&
+      imageModal
+        .classList
+        .contains("open")
+    ) {
+
+      closePreview();
 
     }
-  );
+
+
+    /* NOTICE MODAL */
+
+    if (
+      noticeCenterModal &&
+      noticeCenterModal
+        .classList
+        .contains("open")
+    ) {
+
+      closeNoticeCenter();
+
+    }
+
+  }
+);
+/* =========================================================
+   NOTICE CENTER MODAL
+========================================================= */
+
+function openNoticeCenter() {
+
+  if (!noticeCenterModal) {
+    return;
+  }
+
+  noticeCenterModal
+    .classList
+    .add("open");
+
+  noticeCenterModal
+    .setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+  document.body
+    .classList
+    .add(
+      "notice-modal-open"
+    );
+
+  markCurrentNoticesRead();
+}
+
+
+function closeNoticeCenter() {
+
+  if (!noticeCenterModal) {
+    return;
+  }
+
+  noticeCenterModal
+    .classList
+    .remove("open");
+
+  noticeCenterModal
+    .setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+  document.body
+    .classList
+    .remove(
+      "notice-modal-open"
+    );
+}
+
+
+if (noticeCenterBtn) {
+
+  noticeCenterBtn
+    .addEventListener(
+      "click",
+      openNoticeCenter
+    );
+
+}
+
+
+if (noticeCenterClose) {
+
+  noticeCenterClose
+    .addEventListener(
+      "click",
+      closeNoticeCenter
+    );
+
+}
+
+
+if (noticeCenterBackdrop) {
+
+  noticeCenterBackdrop
+    .addEventListener(
+      "click",
+      closeNoticeCenter
+    );
+
+}
 /* =========================================================
    FLOATING PROMO IMAGE
 ========================================================= */

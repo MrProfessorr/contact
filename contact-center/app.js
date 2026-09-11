@@ -2119,3 +2119,969 @@ document
 
     }
   );
+/* =========================================================
+   FLOATING PROMO IMAGE
+========================================================= */
+
+const floatingPromoPosition =
+  document.getElementById(
+    "floatingPromoPosition"
+  );
+
+const floatingPromoMotion =
+  document.getElementById(
+    "floatingPromoMotion"
+  );
+
+const floatingPromoImage =
+  document.getElementById(
+    "floatingPromoImage"
+  );
+
+const floatingPromoLink =
+  document.getElementById(
+    "floatingPromoLink"
+  );
+
+const floatingPromoClose =
+  document.getElementById(
+    "floatingPromoClose"
+  );
+
+
+let floatingCurrentSettings =
+  null;
+
+
+/* =========================================================
+   ALLOWED VALUES
+========================================================= */
+
+const FLOATING_POSITIONS = [
+  "left-top",
+  "left-center",
+  "left-bottom",
+
+  "right-top",
+  "right-center",
+  "right-bottom",
+
+  "center-top",
+  "center-bottom"
+];
+
+
+const FLOATING_ANIMATIONS = [
+  "none",
+  "left-right",
+  "right-left",
+  "top-bottom",
+  "bottom-top",
+  "soft"
+];
+
+
+/* =========================================================
+   BOOLEAN HELPER
+
+   Support:
+   true
+   false
+   "true"
+   "false"
+   1
+   0
+========================================================= */
+
+function floatingBoolean(
+  value,
+  defaultValue = true
+) {
+
+  if (
+    value === true ||
+    value === "true" ||
+    value === 1 ||
+    value === "1"
+  ) {
+    return true;
+  }
+
+
+  if (
+    value === false ||
+    value === "false" ||
+    value === 0 ||
+    value === "0"
+  ) {
+    return false;
+  }
+
+
+  return defaultValue;
+}
+
+
+/* =========================================================
+   HIDE FLOATING
+========================================================= */
+
+function hideFloatingPromo() {
+
+  if (!floatingPromoPosition) {
+    return;
+  }
+
+
+  floatingPromoPosition
+    .classList
+    .remove(
+      "floating-show"
+    );
+
+
+  floatingPromoPosition
+    .classList
+    .add(
+      "floating-hidden"
+    );
+
+
+  floatingPromoPosition
+    .setAttribute(
+      "aria-hidden",
+      "true"
+    );
+}
+
+
+/* =========================================================
+   CLEAR POSITION + ANIMATION CLASSES
+========================================================= */
+
+function clearFloatingClasses() {
+
+  if (
+    !floatingPromoPosition ||
+    !floatingPromoMotion
+  ) {
+    return;
+  }
+
+
+  FLOATING_POSITIONS.forEach(
+    position => {
+
+      floatingPromoPosition
+        .classList
+        .remove(
+          `floating-pos-${position}`
+        );
+
+    }
+  );
+
+
+  FLOATING_ANIMATIONS.forEach(
+    animation => {
+
+      floatingPromoMotion
+        .classList
+        .remove(
+          `floating-anim-${animation}`
+        );
+
+    }
+  );
+}
+
+
+/* =========================================================
+   CHECK CUSTOMER CLOSED
+========================================================= */
+
+function floatingWasClosed(
+  settings
+) {
+
+  const mode =
+    String(
+      settings?.close_mode ||
+      "session"
+    )
+      .toLowerCase()
+      .trim();
+
+
+  /* SESSION */
+
+  if (mode === "session") {
+
+    return (
+      sessionStorage.getItem(
+        "floating_promo_closed"
+      ) === "1"
+    );
+
+  }
+
+
+  /* 24 HOURS */
+
+  if (mode === "24h") {
+
+    const closedUntil =
+      Number(
+        localStorage.getItem(
+          "floating_promo_closed_until"
+        ) || 0
+      );
+
+
+    return (
+      Date.now() <
+      closedUntil
+    );
+
+  }
+
+
+  /*
+    REFRESH
+
+    Tidak simpan apa-apa.
+    Refresh = muncul semula.
+  */
+
+  return false;
+}
+
+
+/* =========================================================
+   DEVICE CHECK
+========================================================= */
+
+function floatingAllowedOnDevice(
+  settings
+) {
+
+  const isMobile =
+    window.innerWidth <= 760;
+
+
+  const showMobile =
+    floatingBoolean(
+      settings.show_mobile,
+      true
+    );
+
+
+  const showDesktop =
+    floatingBoolean(
+      settings.show_desktop,
+      true
+    );
+
+
+  if (
+    isMobile &&
+    !showMobile
+  ) {
+    return false;
+  }
+
+
+  if (
+    !isMobile &&
+    !showDesktop
+  ) {
+    return false;
+  }
+
+
+  return true;
+}
+
+
+/* =========================================================
+   RENDER FLOATING PROMO
+========================================================= */
+
+function renderFloatingPromo(
+  settings
+) {
+
+  floatingCurrentSettings =
+    settings || {};
+
+
+  if (
+    !floatingPromoPosition ||
+    !floatingPromoMotion ||
+    !floatingPromoImage ||
+    !floatingPromoLink ||
+    !floatingPromoClose
+  ) {
+
+    console.warn(
+      "Floating promo HTML not found."
+    );
+
+    return;
+  }
+
+
+  clearFloatingClasses();
+
+
+  /* =====================================================
+     ENABLE / DISABLE
+  ===================================================== */
+
+  const enabled =
+    floatingBoolean(
+      settings?.enabled,
+      false
+    );
+
+
+  if (!enabled) {
+
+    hideFloatingPromo();
+
+    return;
+  }
+
+
+  /* =====================================================
+     IMAGE URL
+  ===================================================== */
+
+  const imageUrl =
+    safeUrl(
+      settings?.image_url ||
+      settings?.imageUrl ||
+      ""
+    );
+
+
+  if (!imageUrl) {
+
+    hideFloatingPromo();
+
+    return;
+  }
+
+
+  /* =====================================================
+     DEVICE
+  ===================================================== */
+
+  if (
+    !floatingAllowedOnDevice(
+      settings
+    )
+  ) {
+
+    hideFloatingPromo();
+
+    return;
+  }
+
+
+  /* =====================================================
+     CUSTOMER ALREADY CLOSED
+  ===================================================== */
+
+  if (
+    floatingWasClosed(
+      settings
+    )
+  ) {
+
+    hideFloatingPromo();
+
+    return;
+  }
+
+
+  /* =====================================================
+     IMAGE
+  ===================================================== */
+
+  floatingPromoImage.src =
+    imageUrl;
+
+
+  floatingPromoImage.onerror =
+    () => {
+
+      console.warn(
+        "Floating image failed to load."
+      );
+
+      hideFloatingPromo();
+
+    };
+
+
+  /* =====================================================
+     CLICK URL
+  ===================================================== */
+
+  const clickUrl =
+    safeUrl(
+      settings?.click_url ||
+      settings?.clickUrl ||
+      ""
+    );
+
+
+  if (clickUrl) {
+
+    floatingPromoLink.href =
+      clickUrl;
+
+
+    floatingPromoLink
+      .classList
+      .remove(
+        "disabled"
+      );
+
+  } else {
+
+    floatingPromoLink.href =
+      "#";
+
+
+    floatingPromoLink
+      .classList
+      .add(
+        "disabled"
+      );
+
+  }
+
+
+  /* =====================================================
+     WIDTH DESKTOP
+  ===================================================== */
+
+  let width =
+    Number(
+      settings?.width ??
+      140
+    );
+
+
+  if (
+    !Number.isFinite(width)
+  ) {
+    width = 140;
+  }
+
+
+  width =
+    Math.max(
+      50,
+      Math.min(
+        width,
+        500
+      )
+    );
+
+
+  floatingPromoPosition
+    .style
+    .setProperty(
+      "--floating-width",
+      `${width}px`
+    );
+
+
+  /* =====================================================
+     WIDTH MOBILE
+  ===================================================== */
+
+  let mobileWidth =
+    Number(
+      settings?.mobile_width ??
+      95
+    );
+
+
+  if (
+    !Number.isFinite(
+      mobileWidth
+    )
+  ) {
+    mobileWidth = 95;
+  }
+
+
+  mobileWidth =
+    Math.max(
+      45,
+      Math.min(
+        mobileWidth,
+        300
+      )
+    );
+
+
+  floatingPromoPosition
+    .style
+    .setProperty(
+      "--floating-mobile-width",
+      `${mobileWidth}px`
+    );
+
+
+  /* =====================================================
+     SPEED
+  ===================================================== */
+
+  let speed =
+    Number(
+      settings?.speed ??
+      6
+    );
+
+
+  if (
+    !Number.isFinite(speed)
+  ) {
+    speed = 6;
+  }
+
+
+  speed =
+    Math.max(
+      1,
+      Math.min(
+        speed,
+        30
+      )
+    );
+
+
+  floatingPromoPosition
+    .style
+    .setProperty(
+      "--floating-speed",
+      `${speed}s`
+    );
+
+
+  /* =====================================================
+     MOVEMENT DISTANCE
+  ===================================================== */
+
+  let distance =
+    Number(
+      settings?.distance ??
+      18
+    );
+
+
+  if (
+    !Number.isFinite(
+      distance
+    )
+  ) {
+    distance = 18;
+  }
+
+
+  distance =
+    Math.max(
+      0,
+      Math.min(
+        distance,
+        150
+      )
+    );
+
+
+  floatingPromoPosition
+    .style
+    .setProperty(
+      "--floating-distance",
+      `${distance}px`
+    );
+
+
+  /* =====================================================
+     OPACITY
+
+     Firebase boleh simpan:
+     1
+     0.8
+     80
+     100
+  ===================================================== */
+
+  let opacity =
+    Number(
+      settings?.opacity ??
+      1
+    );
+
+
+  if (
+    !Number.isFinite(
+      opacity
+    )
+  ) {
+    opacity = 1;
+  }
+
+
+  /*
+    Kalau admin simpan 80,
+    convert kepada 0.8.
+  */
+
+  if (opacity > 1) {
+
+    opacity =
+      opacity / 100;
+
+  }
+
+
+  opacity =
+    Math.max(
+      0.1,
+      Math.min(
+        opacity,
+        1
+      )
+    );
+
+
+  floatingPromoPosition
+    .style
+    .setProperty(
+      "--floating-opacity",
+      opacity
+    );
+
+
+  /* =====================================================
+     POSITION
+  ===================================================== */
+
+  let position =
+    String(
+      settings?.position ||
+      "right-center"
+    )
+      .toLowerCase()
+      .trim();
+
+
+  if (
+    !FLOATING_POSITIONS
+      .includes(
+        position
+      )
+  ) {
+
+    position =
+      "right-center";
+
+  }
+
+
+  floatingPromoPosition
+    .classList
+    .add(
+      `floating-pos-${position}`
+    );
+
+
+  /* =====================================================
+     ANIMATION
+  ===================================================== */
+
+  let animation =
+    String(
+      settings?.animation ||
+      "soft"
+    )
+      .toLowerCase()
+      .trim();
+
+
+  if (
+    !FLOATING_ANIMATIONS
+      .includes(
+        animation
+      )
+  ) {
+
+    animation =
+      "soft";
+
+  }
+
+
+  floatingPromoMotion
+    .classList
+    .add(
+      `floating-anim-${animation}`
+    );
+
+
+  /* =====================================================
+     CLOSE BUTTON
+  ===================================================== */
+
+  const showClose =
+    floatingBoolean(
+      settings?.show_close,
+      true
+    );
+
+
+  floatingPromoClose
+    .classList
+    .toggle(
+      "hide",
+      !showClose
+    );
+
+
+  /* =====================================================
+     SHOW FLOATING
+  ===================================================== */
+
+  floatingPromoPosition
+    .classList
+    .remove(
+      "floating-hidden"
+    );
+
+
+  floatingPromoPosition
+    .classList
+    .add(
+      "floating-show"
+    );
+
+
+  floatingPromoPosition
+    .setAttribute(
+      "aria-hidden",
+      "false"
+    );
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+if (floatingPromoClose) {
+
+  floatingPromoClose
+    .addEventListener(
+      "click",
+      event => {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        const settings =
+          floatingCurrentSettings ||
+          {};
+
+
+        const mode =
+          String(
+            settings.close_mode ||
+            "session"
+          )
+            .toLowerCase()
+            .trim();
+
+
+        /* SESSION */
+
+        if (
+          mode === "session"
+        ) {
+
+          sessionStorage
+            .setItem(
+              "floating_promo_closed",
+              "1"
+            );
+
+        }
+
+
+        /* 24 HOURS */
+
+        if (
+          mode === "24h"
+        ) {
+
+          const oneDay =
+            24 *
+            60 *
+            60 *
+            1000;
+
+
+          localStorage
+            .setItem(
+              "floating_promo_closed_until",
+              String(
+                Date.now() +
+                oneDay
+              )
+            );
+
+        }
+
+
+        /*
+          REFRESH:
+          tidak save storage.
+        */
+
+
+        hideFloatingPromo();
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   DISABLE EMPTY LINK
+========================================================= */
+
+if (floatingPromoLink) {
+
+  floatingPromoLink
+    .addEventListener(
+      "click",
+      event => {
+
+        if (
+          floatingPromoLink
+            .classList
+            .contains(
+              "disabled"
+            )
+        ) {
+
+          event.preventDefault();
+
+        }
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   FIREBASE FLOATING IMAGE
+========================================================= */
+
+onValue(
+
+  ref(
+    db,
+    "floating_image"
+  ),
+
+
+  snapshot => {
+
+    try {
+
+      const settings =
+        snapshot.val();
+
+
+      renderFloatingPromo(
+        settings
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Floating promo render error:",
+        error
+      );
+
+
+      hideFloatingPromo();
+
+    }
+
+  },
+
+
+  error => {
+
+    console.error(
+      "Floating promo Firebase error:",
+      error
+    );
+
+
+    hideFloatingPromo();
+
+  }
+
+);
+
+
+/* =========================================================
+   RESPONSIVE UPDATE
+========================================================= */
+
+let floatingResizeTimer =
+  null;
+
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    clearTimeout(
+      floatingResizeTimer
+    );
+
+
+    floatingResizeTimer =
+      setTimeout(
+        () => {
+
+          if (
+            floatingCurrentSettings
+          ) {
+
+            renderFloatingPromo(
+              floatingCurrentSettings
+            );
+
+          }
+
+        },
+        120
+      );
+
+  }
+);

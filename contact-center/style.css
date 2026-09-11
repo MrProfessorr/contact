@@ -2137,9 +2137,11 @@ body.modal-open {
 ========================================================= */
 
 @media(max-width: 420px) {
-
   .brand p {
-    display: none;
+    display: block;
+    max-width: 180px;
+    font-size: 8px;
+    line-height: 1.4;
   }
 
 

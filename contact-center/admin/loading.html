@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Loading Settings
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="./admin.css"
+  >
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     ADMIN NAV
+===================================================== -->
+
+<header class="admin-nav">
+
+  <div class="admin-nav-inner">
+
+    <div class="admin-brand">
+
+      <h1>
+        Support Admin
+      </h1>
+
+      <p id="adminEmail">
+        Admin
+      </p>
+
+    </div>
+
+
+    <div class="nav-links">
+
+      <a href="./contacts.html">
+        Contacts
+      </a>
+
+      <a href="./notices.html">
+        Notices
+      </a>
+
+      <a href="./floating.html">
+        Floating
+      </a>
+
+      <a href="./marquee.html">
+        Marquee
+      </a>
+
+      <a
+        href="./loading.html"
+        class="active"
+      >
+        Loading
+      </a>
+
+      <button
+        id="logoutBtn"
+        class="btn btn-red"
+        type="button"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<main class="admin-container">
+
+
+  <div class="page-title">
+
+    <div>
+
+      <h2>
+        Loading Settings
+      </h2>
+
+      <p>
+        Setup customer page loader image, text,
+        colors and loading duration.
+      </p>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="loading-admin-layout">
+
+
+    <!-- =================================================
+         LEFT SETTINGS
+    ================================================== -->
+
+    <section class="card">
+
+      <h3>
+        Loader Setup
+      </h3>
+
+
+
+      <!-- ENABLE -->
+
+      <div class="loading-enable-row">
+
+        <span>
+          Enable Loading
+        </span>
+
+        <input
+          id="loadingEnabled"
+          type="checkbox"
+          checked
+        >
+
+      </div>
+
+
+
+      <!-- IMAGE URL -->
+
+      <div class="form-group">
+
+        <label for="loadingImageUrl">
+          Loading Image / GIF URL
+        </label>
+
+        <input
+          id="loadingImageUrl"
+          type="text"
+          placeholder="https://example.com/loading.gif"
+          autocomplete="off"
+        >
+
+        <div class="help-text">
+          Support GIF, PNG, JPG, WEBP and normal image URL.
+        </div>
+
+      </div>
+
+
+
+      <!-- TEXT -->
+
+      <div class="form-group">
+
+        <label for="loadingText">
+          Loading Text
+        </label>
+
+        <input
+          id="loadingText"
+          type="text"
+          value="LOADING..."
+          placeholder="LOADING..."
+        >
+
+      </div>
+
+
+
+      <!-- SIZE ROW -->
+
+      <div class="loading-input-row">
+
+
+        <div class="form-group">
+
+          <label for="loadingImageSize">
+            Image Size
+          </label>
+
+          <input
+            id="loadingImageSize"
+            type="number"
+            min="30"
+            max="500"
+            step="1"
+            value="120"
+          >
+
+          <div class="help-text">
+            px
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="loadingTextSize">
+            Text Size
+          </label>
+
+          <input
+            id="loadingTextSize"
+            type="number"
+            min="8"
+            max="80"
+            step="1"
+            value="13"
+          >
+
+          <div class="help-text">
+            px
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- COLOR ROW -->
+
+      <div class="loading-input-row">
+
+
+        <div class="form-group">
+
+          <label for="loadingTextColor">
+            Text Color
+          </label>
+
+          <input
+            id="loadingTextColor"
+            type="color"
+            value="#ffffff"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="loadingBackgroundColor">
+            Background Color
+          </label>
+
+          <input
+            id="loadingBackgroundColor"
+            type="color"
+            value="#0a0a0a"
+          >
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- DURATION -->
+
+      <div class="form-group">
+
+        <label for="loadingMinimumDuration">
+          Minimum Loading Duration
+        </label>
+
+        <input
+          id="loadingMinimumDuration"
+          type="number"
+          min="0"
+          max="10000"
+          step="100"
+          value="1500"
+        >
+
+        <div class="help-text">
+          Milliseconds. Example:
+          1000 = 1 second,
+          2000 = 2 seconds.
+        </div>
+
+      </div>
+
+
+
+      <!-- BUTTONS -->
+
+      <div class="loading-button-row">
+
+        <button
+          id="resetLoadingBtn"
+          class="btn btn-dark"
+          type="button"
+        >
+          Reset Default
+        </button>
+
+
+        <button
+          id="saveLoadingBtn"
+          class="btn btn-primary"
+          type="button"
+        >
+          Save Loading
+        </button>
+
+      </div>
+
+
+
+      <!-- SAVE MESSAGE -->
+
+      <div
+        id="loadingSaveMessage"
+        class="loading-save-message"
+      ></div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         RIGHT PREVIEW
+    ================================================== -->
+
+    <section class="card">
+
+      <h3>
+        Live Preview
+      </h3>
+
+
+      <div
+        id="loadingPreviewArea"
+        class="loading-preview-area"
+      >
+
+        <div class="loading-preview-content">
+
+
+          <img
+            id="loadingPreviewImage"
+            class="loading-preview-image"
+            src=""
+            alt="Loading Preview"
+          >
+
+
+          <div
+            id="loadingNoImage"
+            class="loading-no-image"
+          >
+            No loading image
+          </div>
+
+
+          <div
+            id="loadingPreviewText"
+            class="loading-preview-text"
+          >
+            LOADING...
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+      <div class="help-text">
+        Preview updates automatically before you save.
+      </div>
+
+    </section>
+
+
+  </div>
+
+</main>
+
+
+
+<!-- =====================================================
+     SCRIPT
+===================================================== -->
+
+<script type="module">
+
+import {
+  db,
+  ref,
+  set,
+  onValue,
+  requireAdmin,
+  setupLogout
+} from "./admin.js";
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+requireAdmin();
+
+setupLogout();
+
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const loadingEnabled =
+  document.getElementById(
+    "loadingEnabled"
+  );
+
+
+const loadingImageUrl =
+  document.getElementById(
+    "loadingImageUrl"
+  );
+
+
+const loadingText =
+  document.getElementById(
+    "loadingText"
+  );
+
+
+const loadingImageSize =
+  document.getElementById(
+    "loadingImageSize"
+  );
+
+
+const loadingTextSize =
+  document.getElementById(
+    "loadingTextSize"
+  );
+
+
+const loadingTextColor =
+  document.getElementById(
+    "loadingTextColor"
+  );
+
+
+const loadingBackgroundColor =
+  document.getElementById(
+    "loadingBackgroundColor"
+  );
+
+
+const loadingMinimumDuration =
+  document.getElementById(
+    "loadingMinimumDuration"
+  );
+
+
+const saveLoadingBtn =
+  document.getElementById(
+    "saveLoadingBtn"
+  );
+
+
+const resetLoadingBtn =
+  document.getElementById(
+    "resetLoadingBtn"
+  );
+
+
+const loadingSaveMessage =
+  document.getElementById(
+    "loadingSaveMessage"
+  );
+
+
+const loadingPreviewArea =
+  document.getElementById(
+    "loadingPreviewArea"
+  );
+
+
+const loadingPreviewImage =
+  document.getElementById(
+    "loadingPreviewImage"
+  );
+
+
+const loadingPreviewText =
+  document.getElementById(
+    "loadingPreviewText"
+  );
+
+
+const loadingNoImage =
+  document.getElementById(
+    "loadingNoImage"
+  );
+
+
+
+/* =========================================================
+   DEFAULT
+========================================================= */
+
+const DEFAULT_LOADING = {
+
+  enabled: true,
+
+  imageUrl:
+    "",
+
+  text:
+    "LOADING...",
+
+  imageSize:
+    120,
+
+  textSize:
+    13,
+
+  textColor:
+    "#ffffff",
+
+  backgroundColor:
+    "#0a0a0a",
+
+  minimumDuration:
+    1500
+
+};
+
+
+
+/* =========================================================
+   NUMBER LIMIT
+========================================================= */
+
+function limitNumber(
+  value,
+  min,
+  max,
+  fallback
+) {
+
+  const number =
+    Number(value);
+
+
+  if (
+    !Number.isFinite(number)
+  ) {
+
+    return fallback;
+
+  }
+
+
+  return Math.min(
+    max,
+    Math.max(
+      min,
+      number
+    )
+  );
+
+}
+
+
+
+/* =========================================================
+   GET CURRENT FORM DATA
+========================================================= */
+
+function getFormData() {
+
+  return {
+
+    enabled:
+      loadingEnabled.checked,
+
+
+    imageUrl:
+      loadingImageUrl.value
+        .trim(),
+
+
+    text:
+      loadingText.value
+        .trim() ||
+      "LOADING...",
+
+
+    imageSize:
+      limitNumber(
+        loadingImageSize.value,
+        30,
+        500,
+        120
+      ),
+
+
+    textSize:
+      limitNumber(
+        loadingTextSize.value,
+        8,
+        80,
+        13
+      ),
+
+
+    textColor:
+      loadingTextColor.value ||
+      "#ffffff",
+
+
+    backgroundColor:
+      loadingBackgroundColor.value ||
+      "#0a0a0a",
+
+
+    minimumDuration:
+      limitNumber(
+        loadingMinimumDuration.value,
+        0,
+        10000,
+        1500
+      )
+
+  };
+
+}
+
+
+
+/* =========================================================
+   APPLY FORM
+========================================================= */
+
+function applyForm(data = {}) {
+
+  const finalData = {
+
+    ...DEFAULT_LOADING,
+    ...data
+
+  };
+
+
+  loadingEnabled.checked =
+    finalData.enabled !== false;
+
+
+  loadingImageUrl.value =
+    finalData.imageUrl || "";
+
+
+  loadingText.value =
+    finalData.text ||
+    "LOADING...";
+
+
+  loadingImageSize.value =
+    finalData.imageSize || 120;
+
+
+  loadingTextSize.value =
+    finalData.textSize || 13;
+
+
+  loadingTextColor.value =
+    finalData.textColor ||
+    "#ffffff";
+
+
+  loadingBackgroundColor.value =
+    finalData.backgroundColor ||
+    "#0a0a0a";
+
+
+  loadingMinimumDuration.value =
+    finalData.minimumDuration ?? 1500;
+
+
+  updatePreview();
+
+}
+
+
+
+/* =========================================================
+   LIVE PREVIEW
+========================================================= */
+
+function updatePreview() {
+
+  const data =
+    getFormData();
+
+
+  loadingPreviewArea.style.background =
+    data.backgroundColor;
+
+
+  loadingPreviewText.textContent =
+    data.text;
+
+
+  loadingPreviewText.style.color =
+    data.textColor;
+
+
+  loadingPreviewText.style.fontSize =
+    `${data.textSize}px`;
+
+
+  loadingPreviewImage.style.width =
+    `${data.imageSize}px`;
+
+
+  loadingPreviewImage.style.height =
+    `${data.imageSize}px`;
+
+
+  if (
+    data.imageUrl
+  ) {
+
+    loadingPreviewImage.src =
+      data.imageUrl;
+
+
+    loadingPreviewImage.style.display =
+      "block";
+
+
+    loadingNoImage.classList.remove(
+      "show"
+    );
+
+  } else {
+
+    loadingPreviewImage.removeAttribute(
+      "src"
+    );
+
+
+    loadingPreviewImage.style.display =
+      "none";
+
+
+    loadingNoImage.classList.add(
+      "show"
+    );
+
+  }
+
+
+  if (
+    data.enabled
+  ) {
+
+    loadingPreviewArea.style.opacity =
+      "1";
+
+  } else {
+
+    loadingPreviewArea.style.opacity =
+      ".35";
+
+  }
+
+}
+
+
+
+/* =========================================================
+   IMAGE ERROR
+========================================================= */
+
+loadingPreviewImage.addEventListener(
+  "error",
+  () => {
+
+    loadingPreviewImage.style.display =
+      "none";
+
+
+    loadingNoImage.textContent =
+      "Image / GIF cannot be loaded";
+
+
+    loadingNoImage.classList.add(
+      "show"
+    );
+
+  }
+);
+
+
+loadingPreviewImage.addEventListener(
+  "load",
+  () => {
+
+    loadingNoImage.textContent =
+      "No loading image";
+
+
+    loadingNoImage.classList.remove(
+      "show"
+    );
+
+
+    loadingPreviewImage.style.display =
+      "block";
+
+  }
+);
+
+
+
+/* =========================================================
+   LIVE INPUT EVENTS
+========================================================= */
+
+[
+  loadingEnabled,
+  loadingImageUrl,
+  loadingText,
+  loadingImageSize,
+  loadingTextSize,
+  loadingTextColor,
+  loadingBackgroundColor,
+  loadingMinimumDuration
+]
+.forEach(
+  element => {
+
+    element.addEventListener(
+      "input",
+      updatePreview
+    );
+
+
+    element.addEventListener(
+      "change",
+      updatePreview
+    );
+
+  }
+);
+
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+let messageTimer =
+  null;
+
+
+function showMessage(
+  message,
+  type = "success"
+) {
+
+  if (messageTimer) {
+    clearTimeout(
+      messageTimer
+    );
+  }
+
+
+  loadingSaveMessage.textContent =
+    message;
+
+
+  loadingSaveMessage.className =
+    `loading-save-message ${type}`;
+
+
+  messageTimer =
+    setTimeout(
+      () => {
+
+        loadingSaveMessage.className =
+          "loading-save-message";
+
+
+        loadingSaveMessage.textContent =
+          "";
+
+      },
+      3500
+    );
+
+}
+
+
+
+/* =========================================================
+   LOAD FIREBASE SETTINGS
+========================================================= */
+
+onValue(
+  ref(
+    db,
+    "loading_settings"
+  ),
+
+  snapshot => {
+
+    const data =
+      snapshot.val();
+
+
+    if (!data) {
+
+      applyForm(
+        DEFAULT_LOADING
+      );
+
+      return;
+
+    }
+
+
+    applyForm(data);
+
+  },
+
+  error => {
+
+    console.error(
+      "Loading settings read error:",
+      error
+    );
+
+
+    showMessage(
+      "Failed to load loading settings.",
+      "error"
+    );
+
+  }
+);
+
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+saveLoadingBtn.addEventListener(
+  "click",
+  async () => {
+
+    const data =
+      getFormData();
+
+
+    saveLoadingBtn.disabled =
+      true;
+
+
+    saveLoadingBtn.textContent =
+      "Saving...";
+
+
+    try {
+
+      await set(
+        ref(
+          db,
+          "loading_settings"
+        ),
+        {
+
+          ...data,
+
+          updatedAt:
+            Date.now()
+
+        }
+      );
+
+
+      showMessage(
+        "Loading settings saved successfully.",
+        "success"
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Save loading settings error:",
+        error
+      );
+
+
+      showMessage(
+        "Failed to save loading settings.",
+        "error"
+      );
+
+
+    } finally {
+
+      saveLoadingBtn.disabled =
+        false;
+
+
+      saveLoadingBtn.textContent =
+        "Save Loading";
+
+    }
+
+  }
+);
+
+
+
+/* =========================================================
+   RESET DEFAULT
+========================================================= */
+
+resetLoadingBtn.addEventListener(
+  "click",
+  () => {
+
+    applyForm(
+      DEFAULT_LOADING
+    );
+
+
+    showMessage(
+      "Default values restored. Press Save Loading to save them.",
+      "success"
+    );
+
+  }
+);
+
+
+
+/* =========================================================
+   INITIAL PREVIEW
+========================================================= */
+
+applyForm(
+  DEFAULT_LOADING
+);
+
+</script>
+
+
+</body>
+</html>

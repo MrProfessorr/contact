@@ -1854,24 +1854,30 @@ transform:translateY(-1px);
 
 
 .modal-content img {
-
   display: block;
-
   width: auto;
   height: auto;
-
   max-width: 100%;
-
   max-height: 88vh;
-
   object-fit: contain;
-
   border-radius: 14px;
-
-  box-shadow:
-    0 30px 100px rgba(0,0,0,.65);
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+  transform-origin:center center;
+  transition:transform .12s ease-out;
+  cursor:zoom-in;
+  user-select:none;
+  -webkit-user-drag:none;
+  will-change:transform;
+}
+.modal-content img.zoomed {
+  cursor: grab;
 }
 
+.modal-content img.dragging {
+  cursor: grabbing;
+
+  transition: none;
+}
 
 .modal-close {
   position: fixed;

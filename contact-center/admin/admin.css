@@ -986,66 +986,39 @@ select:focus {
 ========================================================= */
 
 .floating-preview-close {
-
-  position:
-    absolute;
-
-  top:
-    -10px;
-
-  right:
-    -10px;
-
-  z-index:
-    10;
-
-  width:
-    27px;
-
-  height:
-    27px;
-
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  padding:
-    0;
-
-  cursor:
-    pointer;
-
-  color:
-    white;
-
-  border:
-    1px solid
-    rgba(255,255,255,.30);
-
-  border-radius:
-    50%;
-
-  background:
-    rgba(0,0,0,.82);
-
-  box-shadow:
-    0 5px 15px
-    rgba(0,0,0,.35);
+  position: absolute;
+  top: -10px;
+  right: -5px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  color: rgba(255,255,255,.45);
+  border:none;
+  border-radius: 4px;
+  background:transparent;
+  box-shadow: 0 4px 16px rgba(0,0,0,.35);
+  transition:transform .18s ease,background .18s ease;
 }
-
+.floating-promo-close:hover {
+  color: rgba(255,255,255,.85);
+  background:rgba(255,255,255,.12);
+}
+.floating-promo-close:active {
+  background:rgba(255,255,255,.18);
+}
 
 .floating-preview-close svg {
 
   width:
-    13px;
+    16px;
 
   height:
-    13px;
+    16px;
 }
 
 

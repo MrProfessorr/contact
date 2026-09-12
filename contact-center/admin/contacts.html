@@ -311,10 +311,10 @@
       </h3>
 
 
-      <div
-        id="contactList"
-        class="admin-list"
-      >
+<div
+  id="contactList"
+  class="admin-contact-preview-list"
+>
 
         <div class="empty">
           Loading...
@@ -691,122 +691,209 @@ onValue(
     }
 
 
-    items.forEach(item => {
+items.forEach(item => {
 
-      let statusClass =
-        "closed-status";
-
-
-      if (
-        item.status ===
-        "active"
-      ) {
-
-        statusClass =
-          "active-status";
-      }
+  const status =
+    String(
+      item.status || "closed"
+    )
+      .toLowerCase()
+      .trim();
 
 
-      if (
-        item.status ===
-        "problem"
-      ) {
-
-        statusClass =
-          "problem-status";
-      }
+  let buttonText =
+    "OPEN CONTACT";
 
 
-      list.insertAdjacentHTML(
-        "beforeend",
-        `
+  if (
+    item.type === "whatsapp"
+  ) {
 
-        <div class="admin-item">
+    buttonText =
+      "Contact Us";
 
-          <div class="item-top">
-
-            <div>
-
-              <h4>
-                ${safe(item.name)}
-              </h4>
-
-              <p>
-                ${safe(item.type)}
-                •
-                ${safe(item.value)}
-              </p>
-
-            </div>
-
-            <span
-              class="status ${statusClass}"
-            >
-              ${safe(
-                (
-                  item.status ||
-                  "closed"
-                ).toUpperCase()
-              )}
-            </span>
-
-          </div>
+  }
 
 
-          ${
-            item.description
-            ?
-            `
-              <p style="margin-top:8px;">
-                ${safe(item.description)}
-              </p>
-            `
-            :
-            ""
-          }
+  if (
+    item.type === "telegram"
+  ) {
+
+    buttonText =
+      "OPEN TELEGRAM";
+
+  }
 
 
-          ${
-            item.imageUrl
-            ?
-            `
-              <img
-                src="${safe(item.imageUrl)}"
-                class="preview"
-              >
-            `
-            :
-            ""
-          }
+  if (
+    status === "closed"
+  ) {
+
+    buttonText =
+      "UNAVAILABLE";
+
+  }
 
 
-          <div class="admin-actions">
+  let iconHtml =
+    "↗";
 
-            <button
-              class="action-btn action-edit"
-              onclick="editContact('${item.id}')"
-            >
-              EDIT
-            </button>
 
-            <button
-              class="action-btn action-delete"
-              onclick="deleteContact('${item.id}')"
-            >
-              DELETE
-            </button>
+  if (
+    item.type === "whatsapp"
+  ) {
 
-          </div>
+    iconHtml =
+      "💬";
+
+  }
+
+
+  if (
+    item.type === "telegram"
+  ) {
+
+    iconHtml =
+      "✈️";
+
+  }
+
+
+  if (
+    item.type === "facebook"
+  ) {
+
+    iconHtml =
+      "f";
+
+  }
+
+
+  if (
+    item.type === "instagram"
+  ) {
+
+    iconHtml =
+      "◎";
+
+  }
+
+
+  if (
+    item.type === "website"
+  ) {
+
+    iconHtml =
+      "🌐";
+
+  }
+
+
+  if (
+    item.imageUrl
+  ) {
+
+    iconHtml =
+      `
+        <img
+          src="${safe(item.imageUrl)}"
+          alt="${safe(item.name || "Contact")}"
+        >
+      `;
+
+  }
+
+
+  list.insertAdjacentHTML(
+    "beforeend",
+    `
+
+    <article class="admin-contact-preview-card">
+
+
+      <div class="admin-contact-preview-icon">
+
+        ${iconHtml}
+
+      </div>
+
+
+      <div class="admin-contact-preview-content">
+
+        <h3>
+          ${safe(item.name || "Contact")}
+        </h3>
+
+
+        <div class="admin-contact-preview-value">
+
+          ${safe(item.value || "")}
 
         </div>
 
-        `
-      );
 
-    });
+        ${
+          item.description
+            ? `
+                <div class="admin-contact-preview-description">
 
-  }
-);
+                  ${safe(item.description)}
+
+                </div>
+              `
+            : ""
+        }
+
+      </div>
+
+
+      <span
+        class="
+          admin-contact-preview-status
+          ${status}
+        "
+      >
+
+        ● ${safe(status.toUpperCase())}
+
+      </span>
+
+
+      <div class="admin-contact-preview-open">
+
+        ${buttonText}
+
+      </div>
+
+
+      <div class="admin-contact-preview-actions">
+
+        <button
+          type="button"
+          class="admin-contact-edit"
+          onclick="editContact('${item.id}')"
+        >
+          EDIT
+        </button>
+
+
+        <button
+          type="button"
+          class="admin-contact-delete"
+          onclick="deleteContact('${item.id}')"
+        >
+          DELETE
+        </button>
+
+      </div>
+
+
+    </article>
+
+    `
+  );
+
+});
 
 </script>
 

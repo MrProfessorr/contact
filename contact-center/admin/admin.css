@@ -3246,3 +3246,509 @@ input:checked
   }
 
 }
+/* =========================================================
+   FLOATING FORM NEW LAYOUT
+========================================================= */
+
+.floating-admin-layout {
+  grid-template-columns:
+    minmax(650px,720px)
+    minmax(0,1fr);
+}
+
+
+.floating-form-row {
+  display:
+    grid;
+
+  gap:
+    12px;
+}
+
+
+.floating-form-row-three {
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+}
+
+
+.floating-form-row-five {
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+}
+
+
+.floating-form-row
+.form-group {
+  min-width:
+    0;
+}
+
+
+/* =========================================================
+   FLOATING UPLOAD
+========================================================= */
+
+.floating-upload-section {
+  margin-top:
+    2px;
+
+  margin-bottom:
+    18px;
+}
+
+
+.floating-upload-btn {
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  gap:
+    7px;
+
+  padding:
+    7px 11px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    7px;
+
+  background:
+    var(--input);
+
+  color:
+    #ffffff;
+
+  cursor:
+    pointer;
+
+  font-size:
+    10px;
+
+  font-weight:
+    700;
+}
+
+
+.floating-upload-btn:hover {
+  border-color:
+    var(--blue);
+}
+
+
+.floating-upload-btn svg {
+  width:
+    14px;
+
+  height:
+    14px;
+}
+
+
+/* UPLOAD PREVIEW */
+
+.floating-upload-preview {
+  width:
+    100%;
+
+  margin-top:
+    9px;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    42px minmax(0,1fr) 28px;
+
+  align-items:
+    center;
+
+  gap:
+    10px;
+
+  padding:
+    7px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    8px;
+
+  background:
+    rgba(255,255,255,.018);
+}
+
+
+.floating-upload-preview img {
+  display:
+    block;
+
+  width:
+    42px;
+
+  height:
+    42px;
+
+  object-fit:
+    cover;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    8px;
+
+  background:
+    #0a0a0a;
+}
+
+
+.floating-upload-file-info {
+  min-width:
+    0;
+}
+
+
+.floating-upload-file-info strong {
+  display:
+    block;
+
+  overflow:
+    hidden;
+
+  white-space:
+    nowrap;
+
+  text-overflow:
+    ellipsis;
+
+  color:
+    #ffffff;
+
+  font-size:
+    10px;
+}
+
+
+.floating-upload-file-info span {
+  display:
+    block;
+
+  margin-top:
+    3px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    9px;
+}
+
+
+.floating-upload-remove {
+  width:
+    28px;
+
+  height:
+    28px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    0;
+
+  border:
+    none;
+
+  border-radius:
+    6px;
+
+  background:
+    transparent;
+
+  color:
+    var(--muted);
+
+  cursor:
+    pointer;
+}
+
+
+.floating-upload-remove:hover {
+  color:
+    #ff6573;
+
+  background:
+    rgba(255,101,115,.08);
+}
+
+
+.floating-upload-remove svg {
+  width:
+    14px;
+
+  height:
+    14px;
+}
+
+
+/* =========================================================
+   ACTIVE + SAVE
+========================================================= */
+
+.floating-form-actions {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    15px;
+
+  margin-top:
+    7px;
+}
+
+
+.floating-save-btn {
+  width:
+    auto;
+
+  min-width:
+    145px;
+}
+
+
+/* =========================================================
+   ACTIVE TOGGLE
+========================================================= */
+
+.floating-active-switch {
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  margin:
+    0;
+
+  cursor:
+    pointer;
+
+  user-select:
+    none;
+}
+
+
+.floating-active-switch input {
+  position:
+    absolute;
+
+  width:
+    1px;
+
+  height:
+    1px;
+
+  opacity:
+    0;
+
+  pointer-events:
+    none;
+}
+
+
+.floating-active-slider {
+  position:
+    relative;
+
+  width:
+    82px;
+
+  height:
+    20px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  border-radius:
+    999px;
+
+  background:
+    #666666;
+
+  transition:
+    .2s ease;
+}
+
+
+.floating-active-slider::before {
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    3px;
+
+  top:
+    50%;
+
+  width:
+    14px;
+
+  height:
+    14px;
+
+  border-radius:
+    50%;
+
+  background:
+    #ffffff;
+
+  transform:
+    translateY(-50%);
+
+  transition:
+    .2s ease;
+}
+
+
+.floating-active-text {
+  width:
+    100%;
+
+  padding-left:
+    21px;
+
+  padding-right:
+    5px;
+
+  overflow:
+    hidden;
+
+  white-space:
+    nowrap;
+
+  color:
+    #ffffff;
+
+  font-size:
+    9px;
+
+  font-weight:
+    700;
+
+  line-height:
+    20px;
+
+  text-align:
+    center;
+}
+
+
+/* ACTIVE */
+
+.floating-active-switch
+input:checked
++
+.floating-active-slider {
+  background:
+    #2677e8;
+}
+
+
+.floating-active-switch
+input:checked
++
+.floating-active-slider::before {
+  left:
+    calc(100% - 17px);
+}
+
+
+.floating-active-switch
+input:checked
++
+.floating-active-slider
+.floating-active-text {
+  padding-left:
+    5px;
+
+  padding-right:
+    21px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1250px) {
+
+  .floating-admin-layout {
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+
+@media(max-width:900px) {
+
+  .floating-form-row-five {
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+}
+
+
+@media(max-width:650px) {
+
+  .floating-form-row-three,
+  .floating-form-row-five {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .floating-form-actions {
+    flex-direction:
+      column;
+
+    align-items:
+      stretch;
+  }
+
+
+  .floating-save-btn {
+    width:
+      100%;
+  }
+
+}

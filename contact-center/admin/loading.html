@@ -492,7 +492,16 @@ const loadingBackgroundColor =
   document.getElementById(
     "loadingBackgroundColor"
   );
+const loadingBackgroundOpacity =
+  document.getElementById(
+    "loadingBackgroundOpacity"
+  );
 
+
+const loadingOpacityValue =
+  document.getElementById(
+    "loadingOpacityValue"
+  );
 
 const loadingMinimumDuration =
   document.getElementById(
@@ -566,11 +575,14 @@ const DEFAULT_LOADING = {
   textColor:
     "#ffffff",
 
-  backgroundColor:
-    "#0a0a0a",
+backgroundColor:
+  "#0a0a0a",
 
-  minimumDuration:
-    1500
+backgroundOpacity:
+  50,
+
+minimumDuration:
+  1500
 
 };
 
@@ -661,7 +673,13 @@ function getFormData() {
     backgroundColor:
       loadingBackgroundColor.value ||
       "#0a0a0a",
-
+backgroundOpacity:
+  limitNumber(
+    loadingBackgroundOpacity.value,
+    0,
+    100,
+    50
+  ),
 
     minimumDuration:
       limitNumber(
@@ -720,7 +738,8 @@ function applyForm(data = {}) {
   loadingBackgroundColor.value =
     finalData.backgroundColor ||
     "#0a0a0a";
-
+loadingBackgroundOpacity.value =
+  finalData.backgroundOpacity ?? 50;
 
   loadingMinimumDuration.value =
     finalData.minimumDuration ?? 1500;
@@ -730,7 +749,39 @@ function applyForm(data = {}) {
 
 }
 
+function hexToRgba(
+  hex,
+  opacity
+) {
 
+  let value =
+    String(hex)
+      .replace("#", "");
+
+  if (value.length === 3) {
+
+    value =
+      value
+        .split("")
+        .map(c => c + c)
+        .join("");
+
+  }
+
+  const number =
+    parseInt(value, 16);
+
+  const r =
+    (number >> 16) & 255;
+
+  const g =
+    (number >> 8) & 255;
+
+  const b =
+    number & 255;
+
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
 
 /* =========================================================
    LIVE PREVIEW
@@ -742,8 +793,15 @@ function updatePreview() {
     getFormData();
 
 
-  loadingPreviewArea.style.background =
-    data.backgroundColor;
+loadingPreviewArea.style.background =
+  hexToRgba(
+    data.backgroundColor,
+    data.backgroundOpacity / 100
+  );
+
+
+loadingOpacityValue.textContent =
+  data.backgroundOpacity;
 
 
   loadingPreviewText.textContent =
@@ -875,6 +933,7 @@ loadingPreviewImage.addEventListener(
   loadingTextSize,
   loadingTextColor,
   loadingBackgroundColor,
+  loadingBackgroundOpacity,
   loadingMinimumDuration
 ]
 .forEach(

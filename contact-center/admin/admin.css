@@ -156,8 +156,7 @@ a {
 
 .admin-nav-inner {
 
-  width:
-    min(1250px, calc(100% - 30px));
+  width:calc(100% - 20px));
 
   margin:
     auto;

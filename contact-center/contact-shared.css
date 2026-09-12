@@ -1,0 +1,459 @@
+/* =========================================================
+   SHARED CONTACT UI
+   CUSTOMER + ADMIN
+========================================================= */
+
+.contact-list {
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0,1fr));
+
+  align-content: start;
+
+  gap: 11px;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.contact-card {
+  position: relative;
+
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    48px minmax(0,1fr);
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 13px;
+
+  border:
+    1px solid #f8dd76;
+
+  border-radius:
+    14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.032),
+      rgba(255,255,255,.012)
+    );
+
+  transition:
+    .18s ease;
+}
+
+
+.contact-card:hover {
+  border-color:
+    #f9ff00;
+
+  background:
+    rgba(255,255,255,.20);
+}
+
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.contact-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border:
+    1px solid #f9ff00;
+
+  border-radius:
+    10px;
+
+  background:
+    #0a0a0a;
+
+  font-size:
+    20px;
+}
+
+
+.contact-icon img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit:
+    cover;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.contact-content {
+  min-width: 0;
+
+  padding-right:
+    75px;
+}
+
+
+.contact-content h3 {
+  max-width: 100%;
+
+  margin-bottom:
+    4px;
+
+  overflow:
+    hidden;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+
+  font-size:
+    14px;
+}
+
+
+.contact-value {
+  margin-bottom:
+    6px;
+
+  color:
+    #f8dd76;
+
+  font-size:
+    12px;
+
+  overflow-wrap:
+    anywhere;
+
+  word-break:
+    break-word;
+}
+
+
+.contact-description {
+  margin-top:
+    7px;
+
+  color:
+    #f8dd76;
+
+  font-size:
+    12px;
+
+  line-height:
+    1.5;
+
+  overflow-wrap:
+    anywhere;
+
+  word-break:
+    break-word;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    4px 8px;
+
+  border-radius:
+    50px;
+
+  font-size:
+    10px;
+
+  font-weight:
+    600;
+
+  letter-spacing:
+    .3px;
+}
+
+
+.contact-card
+.status-badge {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  z-index: 2;
+}
+
+
+.status-active {
+  color:
+    #00fb21;
+
+  background:
+    transparent;
+
+  border:
+    none;
+}
+
+
+.status-problem {
+  color:
+    #ffc34f;
+
+  background:
+    transparent;
+
+  border:
+    none;
+}
+
+
+.status-closed {
+  color:
+    #ff0000;
+
+  background:
+    transparent;
+
+  border:
+    none;
+}
+
+
+/* =========================================================
+   VALUE + COPY
+========================================================= */
+
+.contact-value-row {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    6px;
+
+  max-width:
+    100%;
+}
+
+
+.contact-value-row
+.contact-value {
+  min-width: 0;
+
+  flex:
+    0 1 auto;
+}
+
+
+.copy-contact-btn {
+  flex: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  background:
+    transparent;
+
+  color:
+    #f8dd76;
+
+  cursor:
+    pointer;
+}
+
+
+.copy-contact-btn svg {
+  width:
+    14px;
+
+  height:
+    14px;
+}
+
+
+.copy-contact-btn:hover {
+  color:
+    #f9ff00;
+}
+
+
+.copy-contact-btn.copied {
+  color:
+    #00ed73;
+}
+
+
+/* =========================================================
+   CONTACT BUTTON
+========================================================= */
+
+.contact-open {
+  grid-column:
+    1 / -1;
+
+  width: 100%;
+
+  margin-top:
+    1px;
+
+  padding:
+    9px 12px;
+
+  text-align:
+    center;
+
+  text-decoration:
+    none;
+
+  color:
+    #ffffff;
+
+  border-radius:
+    6px;
+
+  background-color:
+    #cd9f15;
+
+  box-shadow:
+    rgba(0,0,0,.10)
+    0 5px 14px 0;
+
+  font-size:
+    12px;
+
+  font-weight:
+    600;
+
+  letter-spacing:
+    .4px;
+
+  transition:
+    .18s ease;
+}
+
+
+.contact-open:hover {
+  filter:
+    brightness(1.12);
+
+  transform:
+    translateY(-1px);
+}
+
+
+.contact-open.closed {
+  pointer-events:
+    none;
+
+  color:
+    #68778d;
+
+  background:
+    rgba(255,255,255,.03);
+
+  box-shadow:
+    none;
+}
+
+
+/* =========================================================
+   ADMIN ONLY
+========================================================= */
+
+.admin-contact-actions {
+  grid-column:
+    1 / -1;
+
+  display: flex;
+
+  gap: 7px;
+
+  margin-top:
+    4px;
+}
+
+
+.admin-contact-actions button {
+  padding:
+    7px 11px;
+
+  border: none;
+
+  border-radius:
+    6px;
+
+  color:
+    #ffffff;
+
+  cursor:
+    pointer;
+
+  font-size:
+    10px;
+
+  font-weight:
+    700;
+}
+
+
+.admin-contact-edit {
+  background:
+    #2869d8;
+}
+
+
+.admin-contact-delete {
+  background:
+    #ba3947;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:760px) {
+
+  .contact-list {
+    grid-template-columns:
+      1fr;
+  }
+
+}

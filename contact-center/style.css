@@ -2487,7 +2487,7 @@ body.modal-open {
 .floating-promo-close {
   position: absolute;
   top: -10px;
-  right: -10px;
+  right: -5px;
   z-index: 10;
   width: 32px;
   height: 32px;

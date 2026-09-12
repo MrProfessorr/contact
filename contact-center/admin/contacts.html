@@ -16,7 +16,10 @@
   rel="stylesheet"
   href="./admin.css"
 >
-
+<link
+  rel="stylesheet"
+  href="../contact-shared.css"
+>
 </head>
 
 <body>
@@ -313,7 +316,7 @@
 
 <div
   id="contactList"
-  class="admin-contact-preview-list"
+  class="contact-list"
 >
 
         <div class="empty">
@@ -701,6 +704,30 @@ items.forEach(item => {
       .trim();
 
 
+  let statusClass =
+    "status-closed";
+
+
+  if (
+    status === "active"
+  ) {
+
+    statusClass =
+      "status-active";
+
+  }
+
+
+  if (
+    status === "problem"
+  ) {
+
+    statusClass =
+      "status-problem";
+
+  }
+
+
   let buttonText =
     "OPEN CONTACT";
 
@@ -797,7 +824,9 @@ items.forEach(item => {
       `
         <img
           src="${safe(item.imageUrl)}"
-          alt="${safe(item.name || "Contact")}"
+          alt="${safe(
+            item.name || "Contact"
+          )}"
         >
       `;
 
@@ -808,39 +837,75 @@ items.forEach(item => {
     "beforeend",
     `
 
-    <article class="admin-contact-preview-card">
+    <article class="contact-card">
 
 
-      <div class="admin-contact-preview-icon">
+      <div class="contact-icon">
 
         ${iconHtml}
 
       </div>
 
 
-      <div class="admin-contact-preview-content">
+      <div class="contact-content">
 
         <h3>
-          ${safe(item.name || "Contact")}
+          ${safe(
+            item.name ||
+            "Contact"
+          )}
         </h3>
 
 
-        <div class="admin-contact-preview-value">
+        <div class="contact-value-row">
 
-          ${safe(item.value || "")}
+          <div class="contact-value">
+
+            ${safe(
+              item.value ||
+              ""
+            )}
+
+          </div>
+
+
+          <button
+            type="button"
+            class="copy-contact-btn"
+            data-copy-value="${safe(
+              item.value || ""
+            )}"
+            aria-label="Copy contact"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6t.713.288T5 7v13h10q.425 0 .713.288T16 21t-.288.713T15 22zm4-6V4z"
+                fill="currentColor"
+              />
+            </svg>
+
+          </button>
 
         </div>
 
 
         ${
           item.description
-            ? `
-                <div class="admin-contact-preview-description">
 
-                  ${safe(item.description)}
+            ? `
+                <div class="contact-description">
+
+                  ${safe(
+                    item.description
+                  )}
 
                 </div>
               `
+
             : ""
         }
 
@@ -849,24 +914,33 @@ items.forEach(item => {
 
       <span
         class="
-          admin-contact-preview-status
-          ${status}
+          status-badge
+          ${statusClass}
         "
       >
 
-        ● ${safe(status.toUpperCase())}
+        ● ${safe(
+          status.toUpperCase()
+        )}
 
       </span>
 
 
-      <div class="admin-contact-preview-open">
+      <div
+        class="
+          contact-open
+          ${status === "closed"
+            ? "closed"
+            : ""}
+        "
+      >
 
         ${buttonText}
 
       </div>
 
 
-      <div class="admin-contact-preview-actions">
+      <div class="admin-contact-actions">
 
         <button
           type="button"

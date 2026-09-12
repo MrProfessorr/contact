@@ -1969,3 +1969,302 @@ input[type="color"] {
   }
 
 }
+/* =========================================================
+   CONTACT CUSTOMER-STYLE PREVIEW
+========================================================= */
+
+.admin-contact-preview-list {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 11px;
+}
+
+
+/* CARD */
+
+.admin-contact-preview-card {
+  position: relative;
+
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    48px minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 13px;
+
+  border:
+    1px solid #f8dd76;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.032),
+      rgba(255,255,255,.012)
+    );
+
+  transition:
+    .18s ease;
+}
+
+
+.admin-contact-preview-card:hover {
+  border-color:
+    #f9ff00;
+
+  background:
+    rgba(255,255,255,.08);
+}
+
+
+/* ICON */
+
+.admin-contact-preview-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border:
+    1px solid #f9ff00;
+
+  border-radius: 10px;
+
+  background:
+    #0a0a0a;
+
+  font-size: 20px;
+}
+
+
+.admin-contact-preview-icon img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* CONTENT */
+
+.admin-contact-preview-content {
+  min-width: 0;
+
+  padding-right: 75px;
+}
+
+
+.admin-contact-preview-content h3 {
+  max-width: 100%;
+
+  margin-bottom: 4px;
+
+  overflow: hidden;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+
+  font-size: 14px;
+}
+
+
+.admin-contact-preview-value {
+  margin-bottom: 6px;
+
+  color:
+    #f8dd76;
+
+  font-size:
+    12px;
+
+  overflow-wrap:
+    anywhere;
+
+  word-break:
+    break-word;
+}
+
+
+.admin-contact-preview-description {
+  margin-top: 7px;
+
+  color:
+    #f8dd76;
+
+  font-size:
+    12px;
+
+  line-height:
+    1.5;
+
+  overflow-wrap:
+    anywhere;
+
+  word-break:
+    break-word;
+}
+
+
+/* STATUS */
+
+.admin-contact-preview-status {
+  position: absolute;
+
+  top: 13px;
+  right: 13px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  letter-spacing: .3px;
+}
+
+
+.admin-contact-preview-status.active {
+  color:
+    #00fb21;
+}
+
+
+.admin-contact-preview-status.problem {
+  color:
+    #ffc34f;
+}
+
+
+.admin-contact-preview-status.closed {
+  color:
+    #ff6573;
+}
+
+
+/* CUSTOMER BUTTON PREVIEW */
+
+.admin-contact-preview-open {
+  grid-column:
+    1 / -1;
+
+  width: 100%;
+
+  margin-top: 2px;
+
+  padding:
+    10px 12px;
+
+  border-radius:
+    6px;
+
+  background:
+    #daa900;
+
+  color:
+    #ffffff;
+
+  font-size:
+    11px;
+
+  font-weight:
+    700;
+
+  text-align:
+    center;
+}
+
+
+/* ADMIN ACTIONS */
+
+.admin-contact-preview-actions {
+  grid-column:
+    1 / -1;
+
+  display: flex;
+
+  gap: 7px;
+
+  margin-top: 3px;
+}
+
+
+.admin-contact-preview-actions button {
+  padding:
+    7px 11px;
+
+  border: none;
+
+  border-radius:
+    6px;
+
+  color:
+    #ffffff;
+
+  cursor:
+    pointer;
+
+  font-size:
+    10px;
+
+  font-weight:
+    700;
+}
+
+
+.admin-contact-edit {
+  background:
+    #2869d8;
+}
+
+
+.admin-contact-delete {
+  background:
+    #ba3947;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1050px) {
+
+  .admin-contact-preview-list {
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+
+@media(max-width:550px) {
+
+  .admin-contact-preview-content {
+    padding-right:
+      60px;
+  }
+
+}

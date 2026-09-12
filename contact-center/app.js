@@ -61,8 +61,8 @@ const db =
    5 sec  = 5000
 ========================================================= */
 
-const LOADER_MIN_MS =
-  300;
+let loaderMinMs =
+  1500;
 
 
 const LOADER_MAX_MS =
@@ -84,7 +84,16 @@ const pageLoader =
   document.getElementById(
     "pageLoader"
   );
+const loaderImage =
+  document.getElementById(
+    "loaderImage"
+  );
 
+
+const loaderText =
+  document.getElementById(
+    "loaderText"
+  );
 const contactList =
   document.getElementById(
     "contactList"
@@ -274,11 +283,11 @@ function finishLoader() {
     loaderStartedAt;
 
 
-  const remaining =
-    Math.max(
-      0,
-      LOADER_MIN_MS - elapsed
-    );
+const remaining =
+  Math.max(
+    0,
+    loaderMinMs - elapsed
+  );
 
 
   setTimeout(
@@ -331,8 +340,149 @@ setTimeout(
   LOADER_MAX_MS
 );
 
+/* =========================================================
+   LOADING SETTINGS FROM FIREBASE
+========================================================= */
+
+function applyLoadingSettings(data = {}) {
+
+  if (!pageLoader) {
+    return;
+  }
 
 
+  /*
+    ENABLE / DISABLE
+  */
+
+  if (data.enabled === false) {
+
+    pageLoader.classList.add(
+      "hide"
+    );
+
+    document.body.classList.remove(
+      "page-loading"
+    );
+
+    return;
+  }
+
+
+  /*
+    IMAGE / GIF
+  */
+
+  if (
+    loaderImage &&
+    data.imageUrl
+  ) {
+
+    loaderImage.src =
+      data.imageUrl;
+  }
+
+
+  /*
+    TEXT
+  */
+
+  if (loaderText) {
+
+    loaderText.textContent =
+      data.text ||
+      "LOADING...";
+
+
+    loaderText.style.color =
+      data.textColor ||
+      "#ffffff";
+
+
+    loaderText.style.fontSize =
+      `${
+        Number(data.textSize) || 13
+      }px`;
+  }
+
+
+  /*
+    IMAGE SIZE
+  */
+
+  if (loaderImage) {
+
+    const imageSize =
+      Number(data.imageSize) || 120;
+
+
+    loaderImage.style.width =
+      `${imageSize}px`;
+
+
+    loaderImage.style.height =
+      `${imageSize}px`;
+  }
+
+
+  /*
+    BACKGROUND
+  */
+
+  pageLoader.style.background =
+    data.backgroundColor ||
+    "#0a0a0a";
+
+
+  /*
+    MINIMUM LOADING TIME
+  */
+
+  const duration =
+    Number(
+      data.minimumDuration
+    );
+
+
+  if (
+    Number.isFinite(duration) &&
+    duration >= 0
+  ) {
+
+    loaderMinMs =
+      Math.min(
+        duration,
+        LOADER_MAX_MS
+      );
+  }
+
+}
+onValue(
+  ref(
+    db,
+    "loading_settings"
+  ),
+
+  snapshot => {
+
+    const data =
+      snapshot.val() || {};
+
+    applyLoadingSettings(
+      data
+    );
+
+  },
+
+  error => {
+
+    console.error(
+      "Loading settings error:",
+      error
+    );
+
+  }
+);
 /* =========================================================
    SAFE TEXT
 ========================================================= */

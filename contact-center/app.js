@@ -448,12 +448,12 @@ function applyLoadingSettings(data = {}) {
       Number(data.imageSize) || 120;
 
 
-    loaderImage.style.width =
-      `${imageSize}px`;
+loaderImage.style.width =
+  `${imageSize}px`;
 
 
-    loaderImage.style.height =
-      `${imageSize}px`;
+loaderImage.style.height =
+  "auto";
   }
 
 

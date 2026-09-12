@@ -118,188 +118,285 @@
       </h3>
 
 
-      <form id="contactForm">
+ <form id="contactForm">
+
+  <input
+    type="hidden"
+    id="editId"
+  >
 
 
-        <input
-          type="hidden"
-          id="editId"
+  <!-- ROW 1 -->
+  <div class="contact-form-row">
+
+    <div class="form-group">
+      <label>Contact Name</label>
+
+      <input
+        id="name"
+        required
+        placeholder="PRIMARY WHATSAPP"
+      >
+    </div>
+
+
+    <div class="form-group">
+      <label>Type</label>
+
+      <select id="type">
+
+        <option value="whatsapp">
+          WhatsApp
+        </option>
+
+        <option value="telegram">
+          Telegram
+        </option>
+
+        <option value="website">
+          Website
+        </option>
+
+        <option value="facebook">
+          Facebook
+        </option>
+
+        <option value="instagram">
+          Instagram
+        </option>
+
+        <option value="other">
+          Other
+        </option>
+
+      </select>
+    </div>
+
+  </div>
+
+
+  <!-- ROW 2 -->
+  <div class="contact-form-row">
+
+    <div class="form-group">
+
+      <label>
+        Number / Username / URL
+      </label>
+
+      <input
+        id="value"
+        required
+        placeholder="+601162042105"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Custom Link
+      </label>
+
+      <input
+        id="link"
+        placeholder="Optional"
+      >
+
+      <div class="help-text">
+        WhatsApp dan Telegram tak perlu isi custom link.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ROW 3 -->
+  <div class="contact-form-row">
+
+    <div class="form-group">
+
+      <label>
+        Sort Order
+      </label>
+
+      <input
+        id="sortOrder"
+        type="number"
+        min="1"
+        value="1"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Status
+      </label>
+
+      <select id="status">
+
+        <option value="active">
+          🟢 ACTIVE
+        </option>
+
+        <option value="problem">
+          🟡 PROBLEM
+        </option>
+
+        <option value="closed">
+          🔴 CLOSED
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- DESCRIPTION -->
+  <div class="form-group">
+
+    <label>
+      Description
+    </label>
+
+    <textarea
+      id="description"
+      placeholder="Main official support..."
+    ></textarea>
+
+  </div>
+
+
+  <!-- CLOUDINARY URL -->
+  <input
+    type="hidden"
+    id="imageUrl"
+  >
+
+
+  <!-- IMAGE UPLOAD -->
+  <div class="contact-upload-section">
+
+    <label>
+      Contact Image
+    </label>
+
+
+    <input
+      type="file"
+      id="contactImageFile"
+      accept="image/png,image/jpeg,image/webp,image/gif"
+      hidden
+    >
+
+
+    <button
+      type="button"
+      id="uploadContactImageBtn"
+      class="contact-upload-btn"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="M12 16V4m0 0L7 9m5-5 5 5M5 15v4h14v-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+
+      Upload Image
+
+    </button>
+
+
+    <div
+      id="contactImagePreview"
+      class="contact-upload-preview hidden"
+    >
+
+      <img
+        id="contactImagePreviewImg"
+        src=""
+        alt="Contact image preview"
+      >
+
+
+      <div class="contact-upload-file-info">
+
+        <strong id="contactImageFileName">
+          image.png
+        </strong>
+
+        <span>
+          Ready
+        </span>
+
+      </div>
+
+
+      <button
+        type="button"
+        id="removeContactImageBtn"
+        class="contact-upload-remove"
+        aria-label="Remove image"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
         >
+          <path
+            d="M6 7h12M10 11v6M14 11v6M9 7l1-3h4l1 3M8 7l1 13h6l1-13"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+
+      </button>
+
+    </div>
+
+  </div>
 
 
-        <div class="form-group">
+  <!-- ACTIONS -->
+  <div class="contact-form-actions">
 
-          <label>
-            Contact Name
-          </label>
-
-          <input
-            id="name"
-            required
-            placeholder="PRIMARY WHATSAPP"
-          >
-
-        </div>
+    <button
+      type="button"
+      id="cancelBtn"
+      class="btn btn-dark hidden"
+    >
+      CANCEL EDIT
+    </button>
 
 
-        <div class="form-group">
+    <button
+      type="submit"
+      class="btn btn-green"
+    >
+      SAVE CONTACT
+    </button>
 
-          <label>
-            Type
-          </label>
+  </div>
 
-          <select id="type">
-
-            <option value="whatsapp">
-              WhatsApp
-            </option>
-
-            <option value="telegram">
-              Telegram
-            </option>
-
-            <option value="website">
-              Website
-            </option>
-
-            <option value="facebook">
-              Facebook
-            </option>
-
-            <option value="instagram">
-              Instagram
-            </option>
-
-            <option value="other">
-              Other
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Number / Username / URL
-          </label>
-
-          <input
-            id="value"
-            required
-            placeholder="+601162042105"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Custom Link
-          </label>
-
-          <input
-            id="link"
-            placeholder="Optional"
-          >
-
-          <div class="help-text">
-            WhatsApp dan Telegram tak perlu isi
-            custom link.
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Status
-          </label>
-
-          <select id="status">
-
-            <option value="active">
-              🟢 ACTIVE
-            </option>
-
-            <option value="problem">
-              🟡 PROBLEM
-            </option>
-
-            <option value="closed">
-              🔴 CLOSED
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Description
-          </label>
-
-          <textarea
-            id="description"
-            placeholder="Main official support..."
-          ></textarea>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Image URL
-          </label>
-
-          <input
-            id="imageUrl"
-            placeholder="https://..."
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Sort Order
-          </label>
-
-          <input
-            id="sortOrder"
-            type="number"
-            min="1"
-            value="1"
-          >
-
-        </div>
-
-
-        <button
-          type="submit"
-          class="btn btn-green full"
-        >
-          SAVE CONTACT
-        </button>
-
-
-        <button
-          type="button"
-          id="cancelBtn"
-          class="btn btn-dark full hidden"
-          style="margin-top:8px;"
-        >
-          CANCEL EDIT
-        </button>
-
-      </form>
+</form>
 
     </section>
 
@@ -376,12 +473,244 @@ const cancel =
   document.getElementById(
     "cancelBtn"
   );
+const contactImageFile =
+  document.getElementById(
+    "contactImageFile"
+  );
 
+const uploadContactImageBtn =
+  document.getElementById(
+    "uploadContactImageBtn"
+  );
+
+const contactImagePreview =
+  document.getElementById(
+    "contactImagePreview"
+  );
+
+const contactImagePreviewImg =
+  document.getElementById(
+    "contactImagePreviewImg"
+  );
+
+const contactImageFileName =
+  document.getElementById(
+    "contactImageFileName"
+  );
+
+const removeContactImageBtn =
+  document.getElementById(
+    "removeContactImageBtn"
+  );
+
+
+let contactPreviewObjectUrl =
+  "";
 
 let cache = {};
 
+/* =========================================================
+   CLOUDINARY
+========================================================= */
 
-/* SAVE */
+const CLOUDINARY_CLOUD_NAME =
+  "ISI_CLOUD_NAME_BRO";
+
+const CLOUDINARY_UPLOAD_PRESET =
+  "ISI_UNSIGNED_UPLOAD_PRESET_BRO";
+
+  async function uploadContactImage(
+  file
+) {
+
+  const formData =
+    new FormData();
+
+
+  formData.append(
+    "file",
+    file
+  );
+
+
+  formData.append(
+    "upload_preset",
+    CLOUDINARY_UPLOAD_PRESET
+  );
+
+
+  formData.append(
+    "folder",
+    "support-center/contacts"
+  );
+
+
+  const response =
+    await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method:
+          "POST",
+
+        body:
+          formData
+      }
+    );
+
+
+  const result =
+    await response.json();
+
+
+  if (
+    !response.ok ||
+    !result.secure_url
+  ) {
+
+    console.error(
+      "Cloudinary:",
+      result
+    );
+
+
+    throw new Error(
+      result?.error?.message ||
+      "Image upload failed."
+    );
+
+  }
+
+
+  return result.secure_url;
+}
+/* =========================================================
+   IMAGE PICKER
+========================================================= */
+
+uploadContactImageBtn
+  .addEventListener(
+    "click",
+    () => {
+
+      contactImageFile.click();
+
+    }
+  );
+
+
+contactImageFile
+  .addEventListener(
+    "change",
+    () => {
+
+      const file =
+        contactImageFile.files[0];
+
+
+      if (!file) {
+        return;
+      }
+
+
+      if (
+        !file.type.startsWith(
+          "image/"
+        )
+      ) {
+
+        alert(
+          "Please select an image."
+        );
+
+        contactImageFile.value =
+          "";
+
+        return;
+      }
+
+
+      if (
+        contactPreviewObjectUrl
+      ) {
+
+        URL.revokeObjectURL(
+          contactPreviewObjectUrl
+        );
+
+      }
+
+
+      contactPreviewObjectUrl =
+        URL.createObjectURL(
+          file
+        );
+
+
+      contactImagePreviewImg.src =
+        contactPreviewObjectUrl;
+
+
+      contactImageFileName.textContent =
+        file.name;
+
+
+      contactImagePreview
+        .classList
+        .remove("hidden");
+
+    }
+  );
+
+
+removeContactImageBtn
+  .addEventListener(
+    "click",
+    () => {
+
+      contactImageFile.value =
+        "";
+
+
+      document
+        .getElementById(
+          "imageUrl"
+        )
+        .value =
+        "";
+
+
+      contactImagePreviewImg.src =
+        "";
+
+
+      contactImageFileName.textContent =
+        "";
+
+
+      contactImagePreview
+        .classList
+        .add("hidden");
+
+
+      if (
+        contactPreviewObjectUrl
+      ) {
+
+        URL.revokeObjectURL(
+          contactPreviewObjectUrl
+        );
+
+
+        contactPreviewObjectUrl =
+          "";
+
+      }
+
+    }
+  );
+/* =========================================================
+   SAVE
+========================================================= */
 
 form.addEventListener(
   "submit",
@@ -390,70 +719,131 @@ form.addEventListener(
     event.preventDefault();
 
 
-    const data = {
+    const submitBtn =
+      form.querySelector(
+        'button[type="submit"]'
+      );
 
-      name:
-        document
-          .getElementById("name")
-          .value
-          .trim(),
 
-      type:
-        document
-          .getElementById("type")
-          .value,
+    const oldText =
+      submitBtn.textContent;
 
-      value:
-        document
-          .getElementById("value")
-          .value
-          .trim(),
 
-      link:
-        document
-          .getElementById("link")
-          .value
-          .trim(),
+    submitBtn.disabled =
+      true;
 
-      status:
-        document
-          .getElementById("status")
-          .value,
 
-      description:
-        document
-          .getElementById(
-            "description"
-          )
-          .value
-          .trim(),
+    try {
 
-      imageUrl:
+      let imageUrl =
         document
           .getElementById(
             "imageUrl"
           )
           .value
-          .trim(),
+          .trim();
 
-      sortOrder:
-        Number(
+
+      const selectedFile =
+        contactImageFile.files[0];
+
+
+      if (selectedFile) {
+
+        submitBtn.textContent =
+          "UPLOADING IMAGE...";
+
+
+        imageUrl =
+          await uploadContactImage(
+            selectedFile
+          );
+
+
+        document
+          .getElementById(
+            "imageUrl"
+          )
+          .value =
+          imageUrl;
+
+      }
+
+
+      submitBtn.textContent =
+        "SAVING...";
+
+
+      const data = {
+
+        name:
           document
             .getElementById(
-              "sortOrder"
+              "name"
             )
-            .value || 999
-        ),
+            .value
+            .trim(),
 
-      updatedAt:
-        Date.now()
+        type:
+          document
+            .getElementById(
+              "type"
+            )
+            .value,
 
-    };
+        value:
+          document
+            .getElementById(
+              "value"
+            )
+            .value
+            .trim(),
+
+        link:
+          document
+            .getElementById(
+              "link"
+            )
+            .value
+            .trim(),
+
+        status:
+          document
+            .getElementById(
+              "status"
+            )
+            .value,
+
+        description:
+          document
+            .getElementById(
+              "description"
+            )
+            .value
+            .trim(),
+
+        imageUrl:
+          imageUrl,
+
+        sortOrder:
+          Number(
+            document
+              .getElementById(
+                "sortOrder"
+              )
+              .value ||
+            999
+          ),
+
+        updatedAt:
+          Date.now()
+
+      };
 
 
-    try {
-
-      if (editId.value) {
+      if (
+        editId.value
+      ) {
 
         await update(
 
@@ -464,6 +854,7 @@ form.addEventListener(
           ),
 
           data
+
         );
 
       } else {
@@ -481,6 +872,7 @@ form.addEventListener(
           newRef,
           {
             ...data,
+
             createdAt:
               Date.now()
           }
@@ -494,12 +886,25 @@ form.addEventListener(
 
     } catch (error) {
 
-      console.error(error);
+      console.error(
+        error
+      );
+
 
       alert(
         "Failed: " +
         error.message
       );
+
+
+    } finally {
+
+      submitBtn.disabled =
+        false;
+
+
+      submitBtn.textContent =
+        oldText;
 
     }
 
@@ -539,7 +944,46 @@ function resetForm() {
   cancel
     .classList
     .add("hidden");
+
+  contactImageFile.value =
+  "";
+
+
+document
+  .getElementById(
+    "imageUrl"
+  )
+  .value =
+  "";
+
+
+contactImagePreviewImg.src =
+  "";
+
+
+contactImageFileName.textContent =
+  "";
+
+
+contactImagePreview
+  .classList
+  .add("hidden");
+
+
+if (
+  contactPreviewObjectUrl
+) {
+
+  URL.revokeObjectURL(
+    contactPreviewObjectUrl
+  );
+
+
+  contactPreviewObjectUrl =
+    "";
+
 }
+
 
 
 cancel.addEventListener(
@@ -597,6 +1041,41 @@ function(id) {
     .getElementById("imageUrl")
     .value =
     item.imageUrl || "";
+  contactImageFile.value =
+  "";
+
+
+if (
+  item.imageUrl
+) {
+
+  contactImagePreviewImg.src =
+    item.imageUrl;
+
+
+  contactImageFileName.textContent =
+    "Current image";
+
+
+  contactImagePreview
+    .classList
+    .remove("hidden");
+
+} else {
+
+  contactImagePreviewImg.src =
+    "";
+
+
+  contactImageFileName.textContent =
+    "";
+
+
+  contactImagePreview
+    .classList
+    .add("hidden");
+
+}
 
   document
     .getElementById("sortOrder")

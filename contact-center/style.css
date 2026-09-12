@@ -1890,7 +1890,6 @@ transform:translateY(-1px);
   cursor: pointer;
   color: white;
   border:none;
-  border-radius: 50%;
   background:transparent;
   backdrop-filter:blur(10px);
   font-size: 22px;

@@ -243,12 +243,8 @@ a {
 /* PAGE */
 
 .admin-container {
-
-  width:
-    min(1250px, calc(100% - 30px));
-
-  margin:
-    25px auto;
+  width:calc(100% - 20px);
+  margin:24px auto;
 }
 
 .page-title {
@@ -291,7 +287,7 @@ a {
     grid;
 
   grid-template-columns:
-    380px 1fr;
+    450px 1fr;
 
   gap:
     18px;

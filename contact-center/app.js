@@ -343,7 +343,39 @@ setTimeout(
 /* =========================================================
    LOADING SETTINGS FROM FIREBASE
 ========================================================= */
+function hexToRgba(
+  hex,
+  opacity
+) {
 
+  let value =
+    String(hex)
+      .replace("#", "");
+
+  if (value.length === 3) {
+
+    value =
+      value
+        .split("")
+        .map(c => c + c)
+        .join("");
+
+  }
+
+  const number =
+    parseInt(value, 16);
+
+  const r =
+    (number >> 16) & 255;
+
+  const g =
+    (number >> 8) & 255;
+
+  const b =
+    number & 255;
+
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
 function applyLoadingSettings(data = {}) {
 
   if (!pageLoader) {
@@ -429,9 +461,28 @@ function applyLoadingSettings(data = {}) {
     BACKGROUND
   */
 
-  pageLoader.style.background =
-    data.backgroundColor ||
-    "#0a0a0a";
+const backgroundColor =
+  data.backgroundColor ||
+  "#0a0a0a";
+
+
+const backgroundOpacity =
+  Math.min(
+    100,
+    Math.max(
+      0,
+      Number(
+        data.backgroundOpacity ?? 50
+      )
+    )
+  ) / 100;
+
+
+pageLoader.style.background =
+  hexToRgba(
+    backgroundColor,
+    backgroundOpacity
+  );
 
 
   /*

@@ -1187,7 +1187,7 @@ if (!filtered.length) {
       ) {
 
         buttonText =
-          "OPEN WHATSAPP";
+          "Contact Us";
 
       }
 

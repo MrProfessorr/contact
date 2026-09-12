@@ -1670,3 +1670,305 @@ input[type="color"] {
   }
 
 }
+/* =========================================================
+   LOADING ADMIN
+========================================================= */
+
+.loading-admin-layout {
+  display: grid;
+
+  grid-template-columns:
+    390px minmax(0, 1fr);
+
+  gap: 18px;
+
+  align-items: start;
+}
+
+
+/* =========================================================
+   COLOR INPUT
+========================================================= */
+
+.loading-admin-layout
+input[type="color"] {
+  height: 44px;
+
+  padding: 4px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   SAVE MESSAGE
+========================================================= */
+
+.loading-save-message {
+  display: none;
+
+  margin-top: 12px;
+
+  padding: 10px 12px;
+
+  border-radius: 8px;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+
+.loading-save-message.success {
+  display: block;
+
+  color: #2ddd89;
+
+  background:
+    rgba(45,221,137,.10);
+
+  border:
+    1px solid rgba(45,221,137,.20);
+}
+
+
+.loading-save-message.error {
+  display: block;
+
+  color: #ff6573;
+
+  background:
+    rgba(255,101,115,.10);
+
+  border:
+    1px solid rgba(255,101,115,.20);
+}
+
+
+/* =========================================================
+   LOADER PREVIEW
+========================================================= */
+
+.loading-preview-area {
+  position: relative;
+
+  width: 100%;
+  min-height: 520px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border:
+    1px solid var(--line);
+
+  border-radius: 14px;
+
+  background:
+    #0a0a0a;
+}
+
+
+/* =========================================================
+   PREVIEW CONTENT
+========================================================= */
+
+.loading-preview-content {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   PREVIEW IMAGE / GIF
+========================================================= */
+
+.loading-preview-image {
+  display: block;
+
+  width: 120px;
+  height: 120px;
+
+  object-fit: contain;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+}
+
+
+/* =========================================================
+   PREVIEW TEXT
+========================================================= */
+
+.loading-preview-text {
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  line-height: 1.4;
+
+  letter-spacing: 1.5px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   NO IMAGE
+========================================================= */
+
+.loading-no-image {
+  display: none;
+
+  width: 120px;
+  height: 120px;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 12px;
+
+  color: var(--muted);
+
+  border:
+    1px dashed var(--line);
+
+  border-radius: 10px;
+
+  background:
+    var(--panel2);
+
+  text-align: center;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+
+.loading-no-image.show {
+  display: flex;
+}
+
+
+/* =========================================================
+   ENABLE ROW
+========================================================= */
+
+.loading-enable-row {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 12px;
+
+  margin-bottom: 14px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius: 10px;
+
+  background:
+    var(--panel2);
+}
+
+
+.loading-enable-row span {
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+.loading-enable-row input {
+  width: auto;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   INPUT ROW
+========================================================= */
+
+.loading-input-row {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0,1fr));
+
+  gap: 10px;
+}
+
+
+/* =========================================================
+   BUTTON ROW
+========================================================= */
+
+.loading-button-row {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 8px;
+
+  margin-top: 16px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:900px) {
+
+  .loading-admin-layout {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .loading-preview-area {
+    min-height: 400px;
+  }
+
+}
+
+
+@media(max-width:550px) {
+
+  .loading-input-row {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .loading-button-row {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .loading-preview-area {
+    min-height: 330px;
+  }
+
+}

@@ -1882,32 +1882,43 @@ transform:translateY(-1px);
 .modal-close {
   position: fixed;
   z-index: 3;
+
   top: 17px;
   right: 19px;
+
   width: 32px;
   height: 32px;
-  font-weight: 600;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 0;
   margin: 0;
+
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.45);
+
   border: none;
   outline: none;
+
+  border-radius: 6px;
+
   background: transparent;
-  box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  appearance: none;
-  -webkit-appearance: none;
-  line-height: 0;
-  transition: color 0.2s, background-color 0.2s;
+
+  color: rgba(255,255,255,.45);
+
+  transition:
+    color .2s ease,
+    background-color .2s ease,
+    transform .2s ease;
 }
 .modal-close:hover {
-  color:rgba(255, 255, 255, 0.85);
-  background:rgba(255, 255, 255, 0.12);
+  color: rgba(255,255,255,.85);
+
+  background-color:
+    rgba(255,255,255,.12);
+
+  transform: scale(1.05);
 }
 @keyframes modalIn {
 

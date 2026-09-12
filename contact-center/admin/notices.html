@@ -1,33 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Manage Notices</title>
-
-<link
-  rel="stylesheet"
-  href="./admin.css"
->
-
+<link rel="stylesheet" href="./admin.css">
+<link rel="stylesheet" href="../notice-shared.css">
 </head>
 
 <body>
 
-
 <nav class="admin-nav">
-
 <div class="admin-nav-inner">
-
 <div class="admin-brand">
-
 <h1>Support Admin</h1>
 
 <p id="adminEmail">
@@ -234,7 +219,7 @@ Notice List
 
 <div
   id="noticeList"
-  class="admin-list"
+  class="notice-list"
 >
 
 <div class="empty">
@@ -580,70 +565,175 @@ onValue(
     }
 
 
-    items.forEach(item => {
+items.forEach(item => {
 
-      list.insertAdjacentHTML(
-        "beforeend",
-        `
+  const timestamp =
+    Number(
+      item.updatedAt ||
+      item.createdAt ||
+      0
+    );
 
-        <div class="admin-item">
 
-          <div class="item-top">
+  let dateText =
+    "";
 
-            <div>
 
-              <h4>
-                ${
-                  item.pinned
-                  ? "📌 "
-                  : ""
-                }
-                ${safe(item.title)}
-              </h4>
+  if (timestamp > 0) {
 
-              <p>
-                ${
-                  item.active !== false
-                  ? "ACTIVE"
-                  : "HIDDEN"
-                }
-              </p>
+    try {
 
-            </div>
+      dateText =
+        new Date(timestamp)
+          .toLocaleString(
+            undefined,
+            {
+              dateStyle:
+                "medium",
+
+              timeStyle:
+                "short"
+            }
+          );
+
+    } catch {
+
+      dateText =
+        new Date(
+          timestamp
+        )
+          .toLocaleString();
+
+    }
+
+  }
+
+
+  let imageHtml =
+    "";
+
+
+  if (item.imageUrl) {
+
+    imageHtml =
+      `
+        <div class="notice-image-wrap">
+
+          <img
+            class="notice-img"
+            src="${safe(item.imageUrl)}"
+            alt="${safe(item.title || "Notice")}"
+            loading="lazy"
+          >
+
+          <div class="preview-button">
+            ⛶ Preview
+          </div>
+
+        </div>
+      `;
+
+  }
+
+
+  list.insertAdjacentHTML(
+    "beforeend",
+    `
+
+    <article class="notice-card">
+
+      ${imageHtml}
+
+
+      <div class="notice-body">
+
+
+        <div class="notice-meta">
+
+          <span class="notice-tag">
+            NOTICE
+          </span>
+
+
+          ${
+            item.pinned === true
+
+              ? `
+                  <span class="pinned-tag">
+                    📌 PINNED
+                  </span>
+                `
+
+              : ""
+          }
+
+
+          ${
+            item.active !== false
+
+              ? `
+                  <span class="admin-notice-active">
+                    ● ACTIVE
+                  </span>
+                `
+
+              : `
+                  <span class="admin-notice-hidden">
+                    ● HIDDEN
+                  </span>
+                `
+          }
+
+        </div>
+
+
+        <h3>
+          ${safe(
+            item.title ||
+            "Notice"
+          )}
+        </h3>
+
+
+        <div class="notice-message">
+
+          ${
+            item.message
+              ? safe(item.message)
+              : "No caption."
+          }
+
+        </div>
+
+
+        <div class="notice-footer">
+
+          <div class="notice-date">
+
+            ${
+              dateText
+                ? "Updated " +
+                  safe(dateText)
+                : ""
+            }
 
           </div>
 
 
-          <p style="margin-top:10px;">
-            ${safe(item.message)}
-          </p>
-
-
-          ${
-            item.imageUrl
-            ?
-            `
-              <img
-                src="${safe(item.imageUrl)}"
-                class="preview"
-              >
-            `
-            :
-            ""
-          }
-
-
-          <div class="admin-actions">
+          <div class="admin-notice-actions">
 
             <button
-              class="action-btn action-edit"
+              type="button"
+              class="admin-notice-edit"
               onclick="editNotice('${item.id}')"
             >
               EDIT
             </button>
 
+
             <button
-              class="action-btn action-delete"
+              type="button"
+              class="admin-notice-delete"
               onclick="deleteNotice('${item.id}')"
             >
               DELETE
@@ -653,10 +743,15 @@ onValue(
 
         </div>
 
-        `
-      );
 
-    });
+      </div>
+
+    </article>
+
+    `
+  );
+
+});
 
   }
 );

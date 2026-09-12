@@ -106,211 +106,257 @@ Customer
 
     <!-- SETTINGS -->
 
-    <section class="card">
+<!-- SETTINGS -->
 
-      <h3>
-        Marquee Settings
-      </h3>
+<section class="card">
 
+  <h3>
+    Marquee Settings
+  </h3>
 
-      <div class="form-group">
 
-        <label>
-          Status
-        </label>
+  <!-- POSITION + DIRECTION -->
+  <div class="marquee-form-row">
 
-        <select id="marqueeEnabled">
+    <div class="form-group">
 
-          <option value="true">
-            Active
-          </option>
+      <label>
+        Position
+      </label>
 
-          <option value="false">
-            Inactive
-          </option>
+      <select id="marqueePosition">
 
-        </select>
+        <option value="top">
+          Above Page Container
+        </option>
 
-      </div>
+        <option value="bottom">
+          Below Page Container
+        </option>
 
+      </select>
 
-      <div class="form-group">
+    </div>
 
-        <label>
-          Running Text
-        </label>
 
-        <textarea
-          id="marqueeText"
-          placeholder="Enter running announcement..."
-        ></textarea>
+    <div class="form-group">
 
-      </div>
+      <label>
+        Direction
+      </label>
 
+      <select id="marqueeDirection">
 
-      <div class="form-group">
+        <option value="right-to-left">
+          Right → Left
+        </option>
 
-        <label>
-          Position
-        </label>
+        <option value="left-to-right">
+          Left → Right
+        </option>
 
-        <select id="marqueePosition">
+      </select>
 
-          <option value="top">
-            Above Page Container
-          </option>
+    </div>
 
-          <option value="bottom">
-            Below Page Container
-          </option>
+  </div>
 
-        </select>
 
-      </div>
+  <!-- RUNNING TEXT -->
+  <div class="form-group">
 
+    <label>
+      Running Text
+    </label>
 
-      <div class="form-group">
+    <textarea
+      id="marqueeText"
+      placeholder="Enter running announcement..."
+    ></textarea>
 
-        <label>
-          Direction
-        </label>
+  </div>
 
-        <select id="marqueeDirection">
 
-          <option value="right-to-left">
-            Right → Left
-          </option>
+  <!-- SPEED + SIZE + PAUSE -->
+  <div class="marquee-form-row marquee-form-row-three">
 
-          <option value="left-to-right">
-            Left → Right
-          </option>
+    <div class="form-group">
 
-        </select>
+      <label>
+        Running Speed
+      </label>
 
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Running Speed
-        </label>
-
-        <input
-          id="marqueeSpeed"
-          type="number"
-          min="3"
-          max="60"
-          step="1"
-          value="15"
-        >
-
-        <div class="help-text">
-          Smaller number = faster.
-          Recommended 10 - 20 seconds.
-        </div>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Text Size
-        </label>
-
-        <input
-          id="marqueeFontSize"
-          type="number"
-          min="8"
-          max="40"
-          value="13"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Text Color
-        </label>
-
-        <input
-          id="marqueeTextColor"
-          type="color"
-          value="#f8dd76"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Line Color
-        </label>
-
-        <input
-          id="marqueeLineColor"
-          type="color"
-          value="#f8dd76"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Background Color
-        </label>
-
-        <input
-          id="marqueeBackgroundColor"
-          type="color"
-          value="#181818"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Pause When Hover
-        </label>
-
-        <select id="marqueePauseHover">
-
-          <option value="true">
-            Yes
-          </option>
-
-          <option value="false">
-            No
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <button
-        id="saveMarqueeBtn"
-        class="btn btn-primary full"
-        type="button"
+      <input
+        id="marqueeSpeed"
+        type="number"
+        min="3"
+        max="60"
+        step="1"
+        value="15"
       >
-        SAVE MARQUEE
-      </button>
+
+      <div class="help-text">
+        Smaller number = faster.
+      </div>
+
+    </div>
 
 
-      <div
-        id="marqueeSaveMessage"
-        class="marquee-save-message"
-      ></div>
+    <div class="form-group">
 
-    </section>
+      <label>
+        Text Size
+      </label>
+
+      <input
+        id="marqueeFontSize"
+        type="number"
+        min="8"
+        max="40"
+        value="13"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Pause When Hover
+      </label>
+
+      <select id="marqueePauseHover">
+
+        <option value="true">
+          Yes
+        </option>
+
+        <option value="false">
+          No
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- COLORS -->
+  <div class="marquee-form-row marquee-form-row-three">
+
+    <div class="form-group">
+
+      <label>
+        Text Color
+      </label>
+
+      <input
+        id="marqueeTextColor"
+        type="color"
+        value="#f8dd76"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Line Color
+      </label>
+
+      <input
+        id="marqueeLineColor"
+        type="color"
+        value="#f8dd76"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Background Color
+      </label>
+
+      <input
+        id="marqueeBackgroundColor"
+        type="color"
+        value="#181818"
+      >
+
+    </div>
+
+  </div>
+
+
+  <!-- ACTIVE + SAVE -->
+  <div class="marquee-form-actions">
+
+
+    <label class="marquee-active-switch">
+
+      <input
+        id="marqueeEnabled"
+        type="checkbox"
+        checked
+      >
+
+      <span class="marquee-active-slider">
+
+        <span
+          id="marqueeActiveText"
+          class="marquee-active-text"
+        >
+          Active
+        </span>
+
+      </span>
+
+    </label>
+
+
+    <button
+      id="saveMarqueeBtn"
+      class="btn btn-primary marquee-save-btn"
+      type="button"
+    >
+      SAVE MARQUEE
+    </button>
+
+  </div>
+
+
+  <div
+    id="marqueeSaveMessage"
+    class="marquee-save-message"
+  ></div>
+
+</section>
+
+Yang dibuang dari HTML lama hanyalah Status dropdown lama:
+
+<div class="form-group">
+
+  <label>
+    Status
+  </label>
+
+  <select id="marqueeEnabled">
+
+    <option value="true">
+      Active
+    </option>
+
+    <option value="false">
+      Inactive
+    </option>
+
+  </select>
+
+</div>
 
 
     <!-- PREVIEW -->
@@ -388,7 +434,10 @@ const enabledInput =
   document.getElementById(
     "marqueeEnabled"
   );
-
+const marqueeActiveText =
+  document.getElementById(
+    "marqueeActiveText"
+  );
 const textInput =
   document.getElementById(
     "marqueeText"
@@ -464,7 +513,26 @@ const previewTextTwo =
     "marqueePreviewTextTwo"
   );
 
+function updateMarqueeActiveText() {
 
+  marqueeActiveText.textContent =
+    enabledInput.checked
+      ? "Active"
+      : "Inactive";
+
+}
+
+
+enabledInput.addEventListener(
+  "change",
+  () => {
+
+    updateMarqueeActiveText();
+
+    updatePreview();
+
+  }
+);
 function boolValue(value) {
 
   return (
@@ -509,10 +577,8 @@ function getMarqueeData() {
 
   return {
 
-    enabled:
-      boolValue(
-        enabledInput.value
-      ),
+enabled:
+  enabledInput.checked,
 
     text:
       textInput
@@ -647,7 +713,6 @@ function updatePreview() {
 
 
 [
-  enabledInput,
   textInput,
   positionInput,
   directionInput,
@@ -688,20 +753,25 @@ onValue(
       snapshot.val();
 
 
-    if (!data) {
+if (!data) {
 
-      updatePreview();
+  enabledInput.checked =
+    true;
 
-      return;
+  updateMarqueeActiveText();
 
-    }
+  updatePreview();
+
+  return;
+
+}
 
 
-    enabledInput.value =
-      String(
-        data.enabled ??
-        true
-      );
+enabledInput.checked =
+  data.enabled !== false;
+
+
+updateMarqueeActiveText();
 
 
     textInput.value =
@@ -856,6 +926,8 @@ saveBtn.addEventListener(
   }
 );
 
+
+updateMarqueeActiveText();
 
 updatePreview();
 

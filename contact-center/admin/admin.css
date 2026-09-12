@@ -2324,3 +2324,120 @@ input[type="color"] {
   background:
     rgba(255,101,115,.08);
 }
+/* =========================================================
+   NOTICE ADMIN FIXED HEIGHT + INTERNAL SCROLL
+========================================================= */
+
+.notice-admin-list-card {
+  height:
+    calc(100vh - 140px);
+
+  height:
+    calc(100dvh - 140px);
+
+  max-height:
+    calc(100vh - 140px);
+
+  max-height:
+    calc(100dvh - 140px);
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  overflow:
+    hidden;
+}
+
+
+.notice-admin-list-card > h3 {
+  flex-shrink:
+    0;
+}
+
+
+/* SCROLL AREA */
+
+.notice-admin-scroll {
+  min-height:
+    0;
+
+  flex:
+    1;
+
+  overflow-y:
+    auto;
+
+  overflow-x:
+    hidden;
+
+  padding-right:
+    5px;
+
+  overscroll-behavior:
+    contain;
+
+  scrollbar-gutter:
+    stable;
+}
+
+
+/* SCROLLBAR */
+
+.notice-admin-scroll::-webkit-scrollbar {
+  width:
+    6px;
+}
+
+
+.notice-admin-scroll::-webkit-scrollbar-track {
+  background:
+    transparent;
+}
+
+
+.notice-admin-scroll::-webkit-scrollbar-thumb {
+  background:
+    rgba(143,155,172,.30);
+
+  border-radius:
+    999px;
+}
+
+
+.notice-admin-scroll::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(143,155,172,.50);
+}
+
+
+/* LEFT FORM STAY IN PLACE */
+
+@media(min-width:901px) {
+
+  .admin-grid > .card:first-child {
+    position:
+      sticky;
+
+    top:
+      88px;
+  }
+
+}
+
+
+/* MOBILE */
+
+@media(max-width:900px) {
+
+  .notice-admin-list-card {
+    height:
+      650px;
+
+    max-height:
+      650px;
+  }
+
+}

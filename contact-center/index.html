@@ -18,75 +18,34 @@
 
 
 <!-- =====================================================
-     FULL PAGE LOADER
+     DYNAMIC PAGE LOADER
 ===================================================== -->
 
-<div id="pageLoader" class="page-loader">
+<div
+  id="pageLoader"
+  class="page-loader"
+  aria-hidden="false"
+>
 
-  <div class="loader-glow loader-glow-one"></div>
-  <div class="loader-glow loader-glow-two"></div>
+  <div class="loader-simple-content">
 
-  <div class="loader-content">
-
-    <!--
-      GAMBAR LOADING
-
-      Kau boleh tukar:
-      ./assets/loading.png
-
-      kepada gambar/logo sendiri.
-
-      Kalau file loading.png tak ada,
-      gambar akan auto hide.
-    -->
-
-    <div class="loader-logo-wrap">
-
-      <img
-        id="loaderLogo"
-        class="loader-logo"
-        src="./assets/loading.png"
-        alt="Loading"
-        onerror="this.parentElement.classList.add('no-image')"
-      >
-
-      <div class="loader-logo-fallback">
-        S
-      </div>
-
-    </div>
-
-
-<h2>
-  Contact Us
-</h2>
-
-    <p>
-      Preparing official support information
-    </p>
-
-
-    <!-- 4 DOT LOADER -->
+    <img
+      id="loaderImage"
+      class="loader-simple-image"
+      src="./assets/loading.gif"
+      alt="Loading"
+    >
 
     <div
-      class="four-dot-loader"
-      aria-label="Loading"
+      id="loaderText"
+      class="loader-simple-text"
     >
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-
-
-    <div class="loader-status">
-      Please while fetching...
+      LOADING...
     </div>
 
   </div>
 
 </div>
-
 
 
 <!-- =====================================================

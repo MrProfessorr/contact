@@ -1670,7 +1670,7 @@ input[type="color"] {
   display: grid;
 
   grid-template-columns:
-    390px minmax(0, 1fr);
+    450px minmax(0, 1fr);
 
   gap: 18px;
 

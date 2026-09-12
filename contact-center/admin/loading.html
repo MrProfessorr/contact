@@ -123,246 +123,317 @@ Customer
          LEFT SETTINGS
     ================================================== -->
 
-    <section class="card">
+<section class="card loading-settings-card">
 
-      <h3>
-        Loader Setup
-      </h3>
-
-
-
-      <!-- ENABLE -->
-
-      <div class="loading-enable-row">
-
-        <span>
-          Enable Loading
-        </span>
-
-        <input
-          id="loadingEnabled"
-          type="checkbox"
-          checked
-        >
-
-      </div>
+  <h3>
+    Loader Setup
+  </h3>
 
 
+  <!-- LOADING TEXT -->
+  <div class="form-group">
 
-      <!-- IMAGE URL -->
+    <label for="loadingText">
+      Loading Text
+    </label>
 
-      <div class="form-group">
+    <input
+      id="loadingText"
+      type="text"
+      value="LOADING..."
+      placeholder="LOADING..."
+    >
 
-        <label for="loadingImageUrl">
-          Loading Image / GIF URL
-        </label>
-
-        <input
-          id="loadingImageUrl"
-          type="text"
-          placeholder="https://example.com/loading.gif"
-          autocomplete="off"
-        >
-
-        <div class="help-text">
-          Support GIF, PNG, JPG, WEBP and normal image URL.
-        </div>
-
-      </div>
-
-
-
-      <!-- TEXT -->
-
-      <div class="form-group">
-
-        <label for="loadingText">
-          Loading Text
-        </label>
-
-        <input
-          id="loadingText"
-          type="text"
-          value="LOADING..."
-          placeholder="LOADING..."
-        >
-
-      </div>
-
-
-
-      <!-- SIZE ROW -->
-
-      <div class="loading-input-row">
-
-
-        <div class="form-group">
-
-          <label for="loadingImageSize">
-            Image Size
-          </label>
-
-          <input
-            id="loadingImageSize"
-            type="number"
-            min="30"
-            max="500"
-            step="1"
-            value="120"
-          >
-
-          <div class="help-text">
-            px
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="loadingTextSize">
-            Text Size
-          </label>
-
-          <input
-            id="loadingTextSize"
-            type="number"
-            min="8"
-            max="80"
-            step="1"
-            value="13"
-          >
-
-          <div class="help-text">
-            px
-          </div>
-
-        </div>
-
-
-      </div>
-
-
-
-      <!-- COLOR ROW -->
-
-      <div class="loading-input-row">
-
-
-        <div class="form-group">
-
-          <label for="loadingTextColor">
-            Text Color
-          </label>
-
-          <input
-            id="loadingTextColor"
-            type="color"
-            value="#ffffff"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="loadingBackgroundColor">
-            Background Color
-          </label>
-
-          <input
-            id="loadingBackgroundColor"
-            type="color"
-            value="#0a0a0a"
-          >
-
-        </div>
-<div class="form-group">
-
-  <label for="loadingBackgroundOpacity">
-    Background Opacity
-  </label>
-
-  <input
-    id="loadingBackgroundOpacity"
-    type="range"
-    min="0"
-    max="100"
-    step="5"
-    value="50"
-  >
-
-  <div class="help-text">
-    <span id="loadingOpacityValue">50</span>%
   </div>
 
-</div>
+
+  <!-- SIZE + DURATION -->
+  <div class="loading-form-row loading-form-row-three">
+
+    <div class="form-group">
+
+      <label for="loadingTextSize">
+        Text Size
+      </label>
+
+      <input
+        id="loadingTextSize"
+        type="number"
+        min="8"
+        max="80"
+        step="1"
+        value="13"
+      >
+
+      <div class="help-text">
+        px
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="loadingImageSize">
+        Image Size
+      </label>
+
+      <input
+        id="loadingImageSize"
+        type="number"
+        min="30"
+        max="500"
+        step="1"
+        value="120"
+      >
+
+      <div class="help-text">
+        px
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="loadingMinimumDuration">
+        Minimum Loading Duration
+      </label>
+
+      <input
+        id="loadingMinimumDuration"
+        type="number"
+        min="0"
+        max="10000"
+        step="100"
+        value="1500"
+      >
+
+      <div class="help-text">
+        Milliseconds
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- COLORS + OPACITY -->
+  <div class="loading-form-row loading-form-row-three">
+
+    <div class="form-group">
+
+      <label for="loadingTextColor">
+        Text Color
+      </label>
+
+      <input
+        id="loadingTextColor"
+        type="color"
+        value="#ffffff"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="loadingBackgroundColor">
+        Background Color
+      </label>
+
+      <input
+        id="loadingBackgroundColor"
+        type="color"
+        value="#0a0a0a"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="loadingBackgroundOpacity">
+        Opacity
+      </label>
+
+      <input
+        id="loadingBackgroundOpacity"
+        type="range"
+        min="0"
+        max="100"
+        step="5"
+        value="50"
+      >
+
+      <div class="help-text">
+        <span id="loadingOpacityValue">
+          50
+        </span>%
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- IMAGE URL HIDDEN -->
+  <input
+    id="loadingImageUrl"
+    type="hidden"
+  >
+
+
+  <!-- UPLOAD IMAGE -->
+  <div class="loading-upload-section">
+
+    <label>
+      Loading Image / GIF
+    </label>
+
+
+    <input
+      id="loadingImageFile"
+      type="file"
+      accept="image/png,image/jpeg,image/webp,image/gif"
+      hidden
+    >
+
+
+    <button
+      id="uploadLoadingImageBtn"
+      type="button"
+      class="loading-upload-btn"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="M12 16V4m0 0L7 9m5-5 5 5M5 15v4h14v-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+
+      Upload Image
+
+    </button>
+
+
+    <div
+      id="loadingUploadPreview"
+      class="loading-upload-preview hidden"
+    >
+
+      <img
+        id="loadingUploadPreviewImg"
+        src=""
+        alt="Loading upload preview"
+      >
+
+
+      <div class="loading-upload-file-info">
+
+        <strong id="loadingUploadFileName">
+          image.gif
+        </strong>
+
+        <span>
+          Ready
+        </span>
 
       </div>
 
 
+      <button
+        id="removeLoadingImageBtn"
+        type="button"
+        class="loading-upload-remove"
+        aria-label="Remove image"
+      >
 
-      <!-- DURATION -->
-
-      <div class="form-group">
-
-        <label for="loadingMinimumDuration">
-          Minimum Loading Duration
-        </label>
-
-        <input
-          id="loadingMinimumDuration"
-          type="number"
-          min="0"
-          max="10000"
-          step="100"
-          value="1500"
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
         >
+          <path
+            d="M6 7h12M10 11v6M14 11v6M9 7l1-3h4l1 3M8 7l1 13h6l1-13"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
 
-        <div class="help-text">
-          Milliseconds. Example:
-          1000 = 1 second,
-          2000 = 2 seconds.
-        </div>
+      </button>
 
-      </div>
+    </div>
+
+  </div>
 
 
+  <!-- ACTIVE + RESET + SAVE -->
+  <div class="loading-form-actions">
 
-      <!-- BUTTONS -->
 
-      <div class="loading-button-row">
+    <label class="loading-active-switch">
 
-        <button
-          id="resetLoadingBtn"
-          class="btn btn-dark"
-          type="button"
+      <input
+        id="loadingEnabled"
+        type="checkbox"
+        checked
+      >
+
+      <span class="loading-active-slider">
+
+        <span
+          id="loadingActiveText"
+          class="loading-active-text"
         >
-          Reset Default
-        </button>
+          Active
+        </span>
+
+      </span>
+
+    </label>
 
 
-        <button
-          id="saveLoadingBtn"
-          class="btn btn-primary"
-          type="button"
-        >
-          Save Loading
-        </button>
+    <div class="loading-action-buttons">
 
-      </div>
-
-
-
-      <!-- SAVE MESSAGE -->
-
-      <div
-        id="loadingSaveMessage"
-        class="loading-save-message"
-      ></div>
+      <button
+        id="resetLoadingBtn"
+        class="btn btn-dark"
+        type="button"
+      >
+        RESET
+      </button>
 
 
-    </section>
+      <button
+        id="saveLoadingBtn"
+        class="btn btn-primary"
+        type="button"
+      >
+        SAVE LOADING
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="loadingSaveMessage"
+    class="loading-save-message"
+  ></div>
+
+</section>
 
 
 
@@ -467,7 +538,50 @@ const loadingImageUrl =
   document.getElementById(
     "loadingImageUrl"
   );
+const loadingActiveText =
+  document.getElementById(
+    "loadingActiveText"
+  );
 
+
+const loadingImageFile =
+  document.getElementById(
+    "loadingImageFile"
+  );
+
+
+const uploadLoadingImageBtn =
+  document.getElementById(
+    "uploadLoadingImageBtn"
+  );
+
+
+const loadingUploadPreview =
+  document.getElementById(
+    "loadingUploadPreview"
+  );
+
+
+const loadingUploadPreviewImg =
+  document.getElementById(
+    "loadingUploadPreviewImg"
+  );
+
+
+const loadingUploadFileName =
+  document.getElementById(
+    "loadingUploadFileName"
+  );
+
+
+const removeLoadingImageBtn =
+  document.getElementById(
+    "removeLoadingImageBtn"
+  );
+
+
+let loadingPreviewObjectUrl =
+  "";
 
 const loadingText =
   document.getElementById(
@@ -556,7 +670,233 @@ const loadingNoImage =
   );
 
 
+/* =========================================================
+   CLOUDINARY
+========================================================= */
 
+const CLOUDINARY_CLOUD_NAME =
+  "dqctvbenv";
+
+
+const CLOUDINARY_UPLOAD_PRESET =
+  "support_center";
+
+
+async function uploadLoadingImage(
+  file
+) {
+
+  const formData =
+    new FormData();
+
+
+  formData.append(
+    "file",
+    file
+  );
+
+
+  formData.append(
+    "upload_preset",
+    CLOUDINARY_UPLOAD_PRESET
+  );
+
+
+  formData.append(
+    "folder",
+    "support-center/loading"
+  );
+
+
+  const response =
+    await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method:
+          "POST",
+
+        body:
+          formData
+      }
+    );
+
+
+  const result =
+    await response.json();
+
+
+  if (
+    !response.ok ||
+    !result.secure_url
+  ) {
+
+    console.error(
+      "Cloudinary:",
+      result
+    );
+
+
+    throw new Error(
+      result?.error?.message ||
+      "Image upload failed."
+    );
+
+  }
+
+
+  return result.secure_url;
+}
+
+/* =========================================================
+   ACTIVE TOGGLE
+========================================================= */
+
+function updateLoadingActiveText() {
+
+  loadingActiveText.textContent =
+    loadingEnabled.checked
+      ? "Active"
+      : "Inactive";
+
+}
+
+
+loadingEnabled.addEventListener(
+  "change",
+  () => {
+
+    updateLoadingActiveText();
+
+    updatePreview();
+
+  }
+);
+
+
+/* =========================================================
+   IMAGE PICKER
+========================================================= */
+
+uploadLoadingImageBtn.addEventListener(
+  "click",
+  () => {
+
+    loadingImageFile.click();
+
+  }
+);
+
+
+loadingImageFile.addEventListener(
+  "change",
+  () => {
+
+    const file =
+      loadingImageFile.files[0];
+
+
+    if (!file) {
+      return;
+    }
+
+
+    if (
+      !file.type.startsWith(
+        "image/"
+      )
+    ) {
+
+      alert(
+        "Please select an image or GIF."
+      );
+
+      loadingImageFile.value =
+        "";
+
+      return;
+    }
+
+
+    if (
+      loadingPreviewObjectUrl
+    ) {
+
+      URL.revokeObjectURL(
+        loadingPreviewObjectUrl
+      );
+
+    }
+
+
+    loadingPreviewObjectUrl =
+      URL.createObjectURL(
+        file
+      );
+
+
+    loadingUploadPreviewImg.src =
+      loadingPreviewObjectUrl;
+
+
+    loadingUploadFileName.textContent =
+      file.name;
+
+
+    loadingUploadPreview
+      .classList
+      .remove("hidden");
+
+
+    updatePreview();
+
+  }
+);
+
+
+removeLoadingImageBtn.addEventListener(
+  "click",
+  () => {
+
+    loadingImageFile.value =
+      "";
+
+
+    loadingImageUrl.value =
+      "";
+
+
+    loadingUploadPreviewImg.src =
+      "";
+
+
+    loadingUploadFileName.textContent =
+      "";
+
+
+    loadingUploadPreview
+      .classList
+      .add("hidden");
+
+
+    if (
+      loadingPreviewObjectUrl
+    ) {
+
+      URL.revokeObjectURL(
+        loadingPreviewObjectUrl
+      );
+
+
+      loadingPreviewObjectUrl =
+        "";
+
+    }
+
+
+    updatePreview();
+
+  }
+);
 /* =========================================================
    DEFAULT
 ========================================================= */
@@ -716,12 +1056,46 @@ function applyForm(data = {}) {
 
   loadingEnabled.checked =
     finalData.enabled !== false;
-
+updateLoadingActiveText();
 
   loadingImageUrl.value =
     finalData.imageUrl || "";
 
+loadingImageFile.value =
+  "";
 
+
+if (
+  finalData.imageUrl
+) {
+
+  loadingUploadPreviewImg.src =
+    finalData.imageUrl;
+
+
+  loadingUploadFileName.textContent =
+    "Current loading image";
+
+
+  loadingUploadPreview
+    .classList
+    .remove("hidden");
+
+} else {
+
+  loadingUploadPreviewImg.src =
+    "";
+
+
+  loadingUploadFileName.textContent =
+    "";
+
+
+  loadingUploadPreview
+    .classList
+    .add("hidden");
+
+}
   loadingText.value =
     finalData.text ||
     "LOADING...";
@@ -826,14 +1200,16 @@ loadingPreviewImage.style.width =
 
 loadingPreviewImage.style.height =
   "auto";
+const previewImageUrl =
+  loadingPreviewObjectUrl ||
+  data.imageUrl;
 
+if (
+  previewImageUrl
+) {
 
-  if (
-    data.imageUrl
-  ) {
-
-    loadingPreviewImage.src =
-      data.imageUrl;
+  loadingPreviewImage.src =
+    previewImageUrl;
 
 
     loadingPreviewImage.style.display =
@@ -930,8 +1306,6 @@ loadingPreviewImage.addEventListener(
 ========================================================= */
 
 [
-  loadingEnabled,
-  loadingImageUrl,
   loadingText,
   loadingImageSize,
   loadingTextSize,
@@ -1063,40 +1437,113 @@ saveLoadingBtn.addEventListener(
   "click",
   async () => {
 
-    const data =
-      getFormData();
+    const oldText =
+      saveLoadingBtn.textContent;
 
 
     saveLoadingBtn.disabled =
       true;
 
 
-    saveLoadingBtn.textContent =
-      "Saving...";
-
-
     try {
 
+      let imageUrl =
+        loadingImageUrl
+          .value
+          .trim();
+
+
+      const selectedFile =
+        loadingImageFile
+          .files[0];
+
+
+      if (selectedFile) {
+
+        saveLoadingBtn.textContent =
+          "UPLOADING IMAGE...";
+
+
+        imageUrl =
+          await uploadLoadingImage(
+            selectedFile
+          );
+
+
+        loadingImageUrl.value =
+          imageUrl;
+
+      }
+
+
+      const data =
+        getFormData();
+
+
+      saveLoadingBtn.textContent =
+        "SAVING...";
+
+
       await set(
+
         ref(
           db,
           "loading_settings"
         ),
+
         {
 
           ...data,
+
+          imageUrl:
+            imageUrl,
 
           updatedAt:
             Date.now()
 
         }
+
       );
+
+
+      if (selectedFile) {
+
+        loadingImageFile.value =
+          "";
+
+
+        if (
+          loadingPreviewObjectUrl
+        ) {
+
+          URL.revokeObjectURL(
+            loadingPreviewObjectUrl
+          );
+
+
+          loadingPreviewObjectUrl =
+            "";
+
+        }
+
+
+        loadingUploadPreviewImg.src =
+          imageUrl;
+
+
+        loadingUploadFileName.textContent =
+          "Current loading image";
+
+      }
 
 
       showMessage(
         "Loading settings saved successfully.",
         "success"
       );
+
+
+      updatePreview();
 
 
     } catch (error) {
@@ -1108,6 +1555,7 @@ saveLoadingBtn.addEventListener(
 
 
       showMessage(
+        error.message ||
         "Failed to save loading settings.",
         "error"
       );
@@ -1120,7 +1568,7 @@ saveLoadingBtn.addEventListener(
 
 
       saveLoadingBtn.textContent =
-        "Save Loading";
+        oldText;
 
     }
 
@@ -1140,7 +1588,23 @@ resetLoadingBtn.addEventListener(
     applyForm(
       DEFAULT_LOADING
     );
+loadingImageFile.value =
+  "";
 
+
+if (
+  loadingPreviewObjectUrl
+) {
+
+  URL.revokeObjectURL(
+    loadingPreviewObjectUrl
+  );
+
+
+  loadingPreviewObjectUrl =
+    "";
+
+}
 
     showMessage(
       "Default values restored. Press Save Loading to save them.",

@@ -157,7 +157,27 @@ const modalImage =
   document.getElementById(
     "modalImage"
   );
+/* =========================================================
+   IMAGE ZOOM STATE
+========================================================= */
 
+let imageZoom =
+  1;
+
+let imageTranslateX =
+  0;
+
+let imageTranslateY =
+  0;
+
+let imageDragging =
+  false;
+
+let imageDragStartX =
+  0;
+
+let imageDragStartY =
+  0;
 
 const closeImageModal =
   document.getElementById(
@@ -170,7 +190,27 @@ const modalBackdrop =
     "modalBackdrop"
   );
 
+function updateModalImageTransform() {
 
+  if (!modalImage) {
+    return;
+  }
+
+  modalImage.style.transform =
+    `translate3d(
+      ${imageTranslateX}px,
+      ${imageTranslateY}px,
+      0
+    )
+    scale(${imageZoom})`;
+
+
+  modalImage.classList.toggle(
+    "zoomed",
+    imageZoom > 1
+  );
+
+}
 /* =========================================================
    STATE
 ========================================================= */
@@ -2409,8 +2449,26 @@ function setupImagePreview() {
 
 function openPreview(url) {
 
+  /* RESET ZOOM SETIAP KALI BUKA GAMBAR */
+
+  imageZoom =
+    1;
+
+  imageTranslateX =
+    0;
+
+  imageTranslateY =
+    0;
+
+  imageDragging =
+    false;
+
+
   modalImage.src =
     url;
+
+
+  updateModalImageTransform();
 
 
   imageModal
@@ -2436,7 +2494,6 @@ function openPreview(url) {
 }
 
 
-
 function closePreview() {
 
   imageModal
@@ -2459,7 +2516,19 @@ function closePreview() {
       "modal-open"
     );
 
+imageZoom =
+  1;
 
+imageTranslateX =
+  0;
+
+imageTranslateY =
+  0;
+
+imageDragging =
+  false;
+
+updateModalImageTransform();
   setTimeout(
     () => {
 
@@ -2472,7 +2541,196 @@ function closePreview() {
 
 }
 
+/* =========================================================
+   IMAGE WHEEL ZOOM
+========================================================= */
 
+if (modalImage) {
+
+  modalImage.addEventListener(
+    "wheel",
+    event => {
+
+      event.preventDefault();
+
+      const zoomStep =
+        0.18;
+
+
+      /* SCROLL UP = ZOOM IN */
+
+      if (
+        event.deltaY < 0
+      ) {
+
+        imageZoom +=
+          zoomStep;
+
+      }
+
+
+      /* SCROLL DOWN = ZOOM OUT */
+
+      else {
+
+        imageZoom -=
+          zoomStep;
+
+      }
+
+
+      /* LIMIT 1x - 5x */
+
+      imageZoom =
+        Math.max(
+          1,
+          Math.min(
+            imageZoom,
+            5
+          )
+        );
+
+
+      /* RESET POSITION AT 1x */
+
+      if (
+        imageZoom === 1
+      ) {
+
+        imageTranslateX =
+          0;
+
+        imageTranslateY =
+          0;
+
+      }
+
+
+      updateModalImageTransform();
+
+    },
+    {
+      passive: false
+    }
+  );
+
+}
+/* =========================================================
+   IMAGE DRAG / PAN
+========================================================= */
+
+if (modalImage) {
+
+  modalImage.addEventListener(
+    "mousedown",
+    event => {
+
+      if (
+        imageZoom <= 1
+      ) {
+        return;
+      }
+
+
+      imageDragging =
+        true;
+
+
+      imageDragStartX =
+        event.clientX -
+        imageTranslateX;
+
+
+      imageDragStartY =
+        event.clientY -
+        imageTranslateY;
+
+
+      modalImage
+        .classList
+        .add(
+          "dragging"
+        );
+
+
+      event.preventDefault();
+
+    }
+  );
+
+
+  window.addEventListener(
+    "mousemove",
+    event => {
+
+      if (
+        !imageDragging
+      ) {
+        return;
+      }
+
+
+      imageTranslateX =
+        event.clientX -
+        imageDragStartX;
+
+
+      imageTranslateY =
+        event.clientY -
+        imageDragStartY;
+
+
+      updateModalImageTransform();
+
+    }
+  );
+
+
+  window.addEventListener(
+    "mouseup",
+    () => {
+
+      imageDragging =
+        false;
+
+
+      modalImage
+        .classList
+        .remove(
+          "dragging"
+        );
+
+    }
+  );
+
+}
+
+/* =========================================================
+   DOUBLE CLICK RESET
+========================================================= */
+
+if (modalImage) {
+
+  modalImage.addEventListener(
+    "dblclick",
+    () => {
+
+      imageZoom =
+        1;
+
+      imageTranslateX =
+        0;
+
+      imageTranslateY =
+        0;
+
+
+      updateModalImageTransform();
+
+    }
+  );
+
+}
 
 closeImageModal
   .addEventListener(

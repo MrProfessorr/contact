@@ -96,114 +96,216 @@ Add Notice
 
 <form id="noticeForm">
 
-<input
-  id="editId"
-  type="hidden"
->
+  <input
+    id="editId"
+    type="hidden"
+  >
 
 
-<div class="form-group">
+  <!-- TITLE + PINNED -->
+  <div class="notice-form-row">
 
-<label>
-Title
-</label>
+    <div class="form-group">
 
-<input
-  id="title"
-  required
-  placeholder="IMPORTANT NOTICE"
->
+      <label>
+        Title
+      </label>
 
-</div>
+      <input
+        id="title"
+        required
+        placeholder="IMPORTANT NOTICE"
+      >
 
-
-<div class="form-group">
-
-<label>
-Message
-</label>
-
-<textarea
-  id="message"
-  required
-  placeholder="Write notice..."
-></textarea>
-
-</div>
+    </div>
 
 
-<div class="form-group">
+    <div class="form-group">
 
-<label>
-Image URL
-</label>
+      <label>
+        Pinned
+      </label>
 
-<input
-  id="imageUrl"
-  placeholder="https://..."
->
+      <select id="pinned">
 
-</div>
+        <option value="false">
+          Normal
+        </option>
 
+        <option value="true">
+          📌 PIN NOTICE
+        </option>
 
-<div class="form-group">
+      </select>
 
-<label>
-Visibility
-</label>
+    </div>
 
-<select id="active">
-
-<option value="true">
-ACTIVE
-</option>
-
-<option value="false">
-HIDDEN
-</option>
-
-</select>
-
-</div>
+  </div>
 
 
-<div class="form-group">
+  <!-- MESSAGE -->
+  <div class="form-group">
 
-<label>
-Pinned
-</label>
+    <label>
+      Message
+    </label>
 
-<select id="pinned">
+    <textarea
+      id="message"
+      required
+      placeholder="Write notice..."
+    ></textarea>
 
-<option value="false">
-Normal
-</option>
-
-<option value="true">
-📌 PIN NOTICE
-</option>
-
-</select>
-
-</div>
+  </div>
 
 
-<button
-  type="submit"
-  class="btn btn-green full"
->
-SAVE NOTICE
-</button>
+  <!-- CLOUDINARY URL - HIDDEN -->
+  <input
+    id="imageUrl"
+    type="hidden"
+  >
 
 
-<button
-  id="cancelBtn"
-  type="button"
-  class="btn btn-dark full hidden"
-  style="margin-top:8px;"
->
-CANCEL EDIT
-</button>
+  <!-- UPLOAD IMAGE -->
+  <div class="notice-upload-section">
+
+    <label>
+      Notice Image
+    </label>
+
+
+    <input
+      id="noticeImageFile"
+      type="file"
+      accept="image/png,image/jpeg,image/webp,image/gif"
+      hidden
+    >
+
+
+    <button
+      id="uploadNoticeImageBtn"
+      type="button"
+      class="notice-upload-btn"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="M12 16V4m0 0L7 9m5-5 5 5M5 15v4h14v-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+
+      Upload Image
+
+    </button>
+
+
+    <!-- SMALL IMAGE PREVIEW -->
+    <div
+      id="noticeImagePreview"
+      class="notice-upload-preview hidden"
+    >
+
+      <img
+        id="noticeImagePreviewImg"
+        src=""
+        alt="Notice image preview"
+      >
+
+
+      <div class="notice-upload-file-info">
+
+        <strong id="noticeImageFileName">
+          image.webp
+        </strong>
+
+        <span>
+          Ready
+        </span>
+
+      </div>
+
+
+      <button
+        id="removeNoticeImageBtn"
+        type="button"
+        class="notice-upload-remove"
+        aria-label="Remove image"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M6 7h12M10 11v6M14 11v6M9 7l1-3h4l1 3M8 7l1 13h6l1-13"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ACTIVE + SAVE -->
+  <div class="notice-form-actions">
+
+
+    <label class="notice-active-switch">
+
+      <input
+        id="active"
+        type="checkbox"
+        checked
+      >
+
+      <span class="notice-active-slider"></span>
+
+      <span
+        id="noticeActiveText"
+        class="notice-active-text"
+      >
+        Active Notice
+      </span>
+
+    </label>
+
+
+    <div class="notice-save-actions">
+
+      <button
+        id="cancelBtn"
+        type="button"
+        class="btn btn-dark hidden"
+      >
+        CANCEL EDIT
+      </button>
+
+
+      <button
+        type="submit"
+        class="btn btn-green"
+      >
+        SAVE NOTICE
+      </button>
+
+    </div>
+
+  </div>
 
 </form>
 
@@ -288,11 +390,275 @@ const cancel =
       "cancelBtn"
     );
 
+const noticeActiveInput =
+  document.getElementById(
+    "active"
+  );
 
+const noticeActiveText =
+  document.getElementById(
+    "noticeActiveText"
+  );
+
+
+const noticeImageFile =
+  document.getElementById(
+    "noticeImageFile"
+  );
+
+const uploadNoticeImageBtn =
+  document.getElementById(
+    "uploadNoticeImageBtn"
+  );
+
+const noticeImagePreview =
+  document.getElementById(
+    "noticeImagePreview"
+  );
+
+const noticeImagePreviewImg =
+  document.getElementById(
+    "noticeImagePreviewImg"
+  );
+
+const noticeImageFileName =
+  document.getElementById(
+    "noticeImageFileName"
+  );
+
+const removeNoticeImageBtn =
+  document.getElementById(
+    "removeNoticeImageBtn"
+  );
+
+
+let noticePreviewObjectUrl =
+  "";
 let cache = {};
+/* =========================================================
+   CLOUDINARY
+========================================================= */
+
+const CLOUDINARY_CLOUD_NAME =
+  "dqctvbenv";
+
+const CLOUDINARY_UPLOAD_PRESET =
+  "support_center";
 
 
-/* SAVE */
+async function uploadNoticeImage(
+  file
+) {
+
+  const formData =
+    new FormData();
+
+
+  formData.append(
+    "file",
+    file
+  );
+
+
+  formData.append(
+    "upload_preset",
+    CLOUDINARY_UPLOAD_PRESET
+  );
+
+
+  formData.append(
+    "folder",
+    "support-center/notices"
+  );
+
+
+  const response =
+    await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method:
+          "POST",
+
+        body:
+          formData
+      }
+    );
+
+
+  const result =
+    await response.json();
+
+
+  if (
+    !response.ok ||
+    !result.secure_url
+  ) {
+
+    console.error(
+      "Cloudinary:",
+      result
+    );
+
+
+    throw new Error(
+      result?.error?.message ||
+      "Image upload failed."
+    );
+
+  }
+
+
+  return result.secure_url;
+}
+/* =========================================================
+   ACTIVE TOGGLE
+========================================================= */
+
+function updateNoticeActiveText() {
+
+  noticeActiveText.textContent =
+    noticeActiveInput.checked
+      ? "Active Notice"
+      : "Inactive Notice";
+
+}
+
+
+noticeActiveInput
+  .addEventListener(
+    "change",
+    updateNoticeActiveText
+  );
+
+
+/* =========================================================
+   IMAGE PICKER
+========================================================= */
+
+uploadNoticeImageBtn
+  .addEventListener(
+    "click",
+    () => {
+
+      noticeImageFile.click();
+
+    }
+  );
+
+
+noticeImageFile
+  .addEventListener(
+    "change",
+    () => {
+
+      const file =
+        noticeImageFile.files[0];
+
+
+      if (!file) {
+        return;
+      }
+
+
+      if (
+        !file.type.startsWith(
+          "image/"
+        )
+      ) {
+
+        alert(
+          "Please select an image."
+        );
+
+        noticeImageFile.value =
+          "";
+
+        return;
+      }
+
+
+      if (
+        noticePreviewObjectUrl
+      ) {
+
+        URL.revokeObjectURL(
+          noticePreviewObjectUrl
+        );
+
+      }
+
+
+      noticePreviewObjectUrl =
+        URL.createObjectURL(
+          file
+        );
+
+
+      noticeImagePreviewImg.src =
+        noticePreviewObjectUrl;
+
+
+      noticeImageFileName.textContent =
+        file.name;
+
+
+      noticeImagePreview
+        .classList
+        .remove("hidden");
+
+    }
+  );
+
+
+removeNoticeImageBtn
+  .addEventListener(
+    "click",
+    () => {
+
+      noticeImageFile.value =
+        "";
+
+
+      document
+        .getElementById(
+          "imageUrl"
+        )
+        .value =
+        "";
+
+
+      noticeImagePreviewImg.src =
+        "";
+
+
+      noticeImageFileName.textContent =
+        "";
+
+
+      noticeImagePreview
+        .classList
+        .add("hidden");
+
+
+      if (
+        noticePreviewObjectUrl
+      ) {
+
+        URL.revokeObjectURL(
+          noticePreviewObjectUrl
+        );
+
+
+        noticePreviewObjectUrl =
+          "";
+
+      }
+
+    }
+  );
+/* =========================================================
+   SAVE
+========================================================= */
 
 form.addEventListener(
   "submit",
@@ -301,91 +667,166 @@ form.addEventListener(
     event.preventDefault();
 
 
-    const data = {
+    const submitBtn =
+      form.querySelector(
+        'button[type="submit"]'
+      );
 
-      title:
-        document
-          .getElementById(
-            "title"
-          )
-          .value
-          .trim(),
 
-      message:
-        document
-          .getElementById(
-            "message"
-          )
-          .value
-          .trim(),
+    const oldText =
+      submitBtn.textContent;
 
-      imageUrl:
+
+    submitBtn.disabled =
+      true;
+
+
+    try {
+
+      let imageUrl =
         document
           .getElementById(
             "imageUrl"
           )
           .value
-          .trim(),
+          .trim();
 
-      active:
+
+      const selectedFile =
+        noticeImageFile.files[0];
+
+
+      if (selectedFile) {
+
+        submitBtn.textContent =
+          "UPLOADING IMAGE...";
+
+
+        imageUrl =
+          await uploadNoticeImage(
+            selectedFile
+          );
+
+
         document
           .getElementById(
-            "active"
+            "imageUrl"
           )
-          .value ===
-          "true",
+          .value =
+          imageUrl;
 
-      pinned:
-        document
-          .getElementById(
-            "pinned"
-          )
-          .value ===
-          "true",
-
-      updatedAt:
-        Date.now()
-
-    };
+      }
 
 
-    if (editId.value) {
+      submitBtn.textContent =
+        "SAVING...";
 
-      await update(
 
-        ref(
-          db,
-          "notices/" +
-          editId.value
-        ),
+      const data = {
 
-        data
-      );
+        title:
+          document
+            .getElementById(
+              "title"
+            )
+            .value
+            .trim(),
 
-    } else {
+        message:
+          document
+            .getElementById(
+              "message"
+            )
+            .value
+            .trim(),
 
-      const newRef =
-        push(
+        imageUrl:
+          imageUrl,
+
+        active:
+          noticeActiveInput
+            .checked,
+
+        pinned:
+          document
+            .getElementById(
+              "pinned"
+            )
+            .value ===
+            "true",
+
+        updatedAt:
+          Date.now()
+
+      };
+
+
+      if (
+        editId.value
+      ) {
+
+        await update(
+
           ref(
             db,
-            "notices"
-          )
+            "notices/" +
+            editId.value
+          ),
+
+          data
+
         );
 
+      } else {
 
-      await set(
-        newRef,
-        {
-          ...data,
-          createdAt:
-            Date.now()
-        }
+        const newRef =
+          push(
+            ref(
+              db,
+              "notices"
+            )
+          );
+
+
+        await set(
+          newRef,
+          {
+            ...data,
+
+            createdAt:
+              Date.now()
+          }
+        );
+
+      }
+
+
+      resetForm();
+
+
+    } catch (error) {
+
+      console.error(
+        error
       );
 
+
+      alert(
+        "Failed: " +
+        error.message
+      );
+
+
+    } finally {
+
+      submitBtn.disabled =
+        false;
+
+
+      submitBtn.textContent =
+        oldText;
+
     }
-
-
-    resetForm();
 
   }
 );
@@ -397,15 +838,17 @@ function resetForm() {
 
   form.reset();
 
+
   editId.value =
     "";
 
-  document
-    .getElementById(
-      "active"
-    )
-    .value =
-    "true";
+
+  noticeActiveInput.checked =
+    true;
+
+
+  updateNoticeActiveText();
+
 
   document
     .getElementById(
@@ -414,6 +857,47 @@ function resetForm() {
     .value =
     "false";
 
+
+  document
+    .getElementById(
+      "imageUrl"
+    )
+    .value =
+    "";
+
+
+  noticeImageFile.value =
+    "";
+
+
+  noticeImagePreviewImg.src =
+    "";
+
+
+  noticeImageFileName.textContent =
+    "";
+
+
+  noticeImagePreview
+    .classList
+    .add("hidden");
+
+
+  if (
+    noticePreviewObjectUrl
+  ) {
+
+    URL.revokeObjectURL(
+      noticePreviewObjectUrl
+    );
+
+
+    noticePreviewObjectUrl =
+      "";
+
+  }
+
+
   document
     .getElementById(
       "formTitle"
@@ -421,9 +905,11 @@ function resetForm() {
     .textContent =
     "Add Notice";
 
+
   cancel
     .classList
     .add("hidden");
+
 }
 
 
@@ -462,13 +948,46 @@ function(id) {
     .getElementById("imageUrl")
     .value =
     item.imageUrl || "";
+noticeImageFile.value =
+  "";
 
-  document
-    .getElementById("active")
-    .value =
-    String(
-      item.active !== false
-    );
+
+if (
+  item.imageUrl
+) {
+
+  noticeImagePreviewImg.src =
+    item.imageUrl;
+
+
+  noticeImageFileName.textContent =
+    "Current image";
+
+
+  noticeImagePreview
+    .classList
+    .remove("hidden");
+
+} else {
+
+  noticeImagePreviewImg.src =
+    "";
+
+
+  noticeImageFileName.textContent =
+    "";
+
+
+  noticeImagePreview
+    .classList
+    .add("hidden");
+
+}
+noticeActiveInput.checked =
+  item.active !== false;
+
+
+updateNoticeActiveText();
 
   document
     .getElementById("pinned")

@@ -2958,3 +2958,294 @@ input:checked
   }
 
 }
+/* =========================================================
+   MARQUEE FORM NEW LAYOUT
+========================================================= */
+
+.marquee-form-row {
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0,1fr));
+
+  gap:
+    14px;
+}
+
+
+.marquee-form-row-three {
+  grid-template-columns:
+    repeat(3, minmax(0,1fr));
+}
+
+
+.marquee-form-row
+.form-group {
+  min-width:
+    0;
+}
+
+
+#marqueeText {
+  min-height:
+    125px;
+}
+
+
+/* COLOR INPUT */
+
+.marquee-form-row
+input[type="color"] {
+  width:
+    100%;
+
+  height:
+    44px;
+
+  padding:
+    4px;
+
+  cursor:
+    pointer;
+}
+
+
+/* =========================================================
+   MARQUEE ACTIONS
+========================================================= */
+
+.marquee-form-actions {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    15px;
+
+  margin-top:
+    6px;
+}
+
+
+.marquee-save-btn {
+  width:
+    auto;
+
+  min-width:
+    130px;
+}
+
+
+/* =========================================================
+   MARQUEE ACTIVE SWITCH
+   TEXT INSIDE TOGGLE
+========================================================= */
+
+.marquee-active-switch {
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  margin:
+    0;
+
+  cursor:
+    pointer;
+
+  user-select:
+    none;
+}
+
+
+.marquee-active-switch input {
+  position:
+    absolute;
+
+  width:
+    1px;
+
+  height:
+    1px;
+
+  opacity:
+    0;
+
+  pointer-events:
+    none;
+}
+
+
+.marquee-active-slider {
+  position:
+    relative;
+
+  width:
+    82px;
+
+  height:
+    20px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  border-radius:
+    999px;
+
+  background:
+    #666666;
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(255,255,255,.08);
+
+  transition:
+    .2s ease;
+}
+
+
+/* WHITE DOT */
+
+.marquee-active-slider::before {
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    3px;
+
+  top:
+    50%;
+
+  width:
+    14px;
+
+  height:
+    14px;
+
+  border-radius:
+    50%;
+
+  background:
+    #ffffff;
+
+  transform:
+    translateY(-50%);
+
+  box-shadow:
+    0 1px 3px
+    rgba(0,0,0,.45);
+
+  transition:
+    .2s ease;
+}
+
+
+/* TEXT */
+
+.marquee-active-text {
+  width:
+    100%;
+
+  padding-left:
+    21px;
+
+  padding-right:
+    5px;
+
+  overflow:
+    hidden;
+
+  white-space:
+    nowrap;
+
+  color:
+    #ffffff;
+
+  font-size:
+    9px;
+
+  font-weight:
+    700;
+
+  line-height:
+    20px;
+
+  text-align:
+    center;
+}
+
+
+/* ACTIVE */
+
+.marquee-active-switch
+input:checked
++
+.marquee-active-slider {
+  background:
+    #2677e8;
+}
+
+
+.marquee-active-switch
+input:checked
++
+.marquee-active-slider::before {
+  left:
+    calc(100% - 17px);
+}
+
+
+.marquee-active-switch
+input:checked
++
+.marquee-active-slider
+.marquee-active-text {
+  padding-left:
+    5px;
+
+  padding-right:
+    21px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:700px) {
+
+  .marquee-form-row,
+  .marquee-form-row-three {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .marquee-form-actions {
+    align-items:
+      stretch;
+
+    flex-direction:
+      column;
+  }
+
+
+  .marquee-save-btn {
+    width:
+      100%;
+  }
+
+}

@@ -1564,7 +1564,7 @@ input[type="color"] {
 
   overflow: hidden;
 
-  padding: 9px 0;
+  padding: 2px 0;
 
   color:
     var(--admin-marquee-text-color);

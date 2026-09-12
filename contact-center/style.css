@@ -3328,19 +3328,11 @@ body.notice-modal-open {
 
 .site-marquee-text {
   flex-shrink: 0;
-
   padding-right: 80px;
-
-  color:
-    var(--marquee-text-color);
-
-  font-size:
-    var(--marquee-font-size);
-
-  font-weight: 700;
-
+  color:var(--marquee-text-color);
+  font-size:var(--marquee-font-size);
+  font-weight: 500;
   line-height: 1.4;
-
   white-space: nowrap;
 }
 

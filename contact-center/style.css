@@ -1912,12 +1912,15 @@ transform:translateY(-1px);
     background-color .2s ease,
     transform .2s ease;
 }
+.modal-close svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  pointer-events: none;
+}
 .modal-close:hover {
   color: rgba(255,255,255,.85);
-
-  background-color:
-    rgba(255,255,255,.12);
-
+  background-color:rgba(255,255,255,.12);
   transform: scale(1.05);
 }
 @keyframes modalIn {

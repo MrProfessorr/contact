@@ -3454,3 +3454,23 @@ body.notice-modal-open {
   }
 
 }
+/* =========================================================
+   CLOSE / CLEAR SVG ICONS
+========================================================= */
+
+.modal-close svg,
+.notice-center-close svg,
+.floating-promo-close svg,
+.clear-search svg,
+.status-clear-search svg {
+  display: block;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+.clear-search svg,
+.status-clear-search svg {
+  width: 13px;
+  height: 13px;
+}

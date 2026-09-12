@@ -1762,15 +1762,10 @@ transform:translateY(-1px);
 
 
 .mini-spinner {
-
   width: 12px;
   height: 12px;
-
-  border:
-    2px solid rgba(255,255,255,.1);
-
-  border-top-color:
-    var(--blue);
+  border:2px solid rgba(255,255,255,.1);
+  border-top-color:var(--border);
 
   border-radius: 50%;
 

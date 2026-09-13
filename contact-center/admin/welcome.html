@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Welcome Popup
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="./admin.css"
+  >
+
+</head>
+
+
+<body>
+
+<header class="admin-nav">
+
+  <div class="admin-nav-inner">
+
+    <div class="admin-brand">
+
+      <h1>
+        Support Admin
+      </h1>
+
+      <p>
+        Welcome Popup
+      </p>
+
+    </div>
+
+
+    <div class="nav-links">
+
+      <a href="./contacts.html">
+        Contacts
+      </a>
+
+      <a href="./notices.html">
+        Notices
+      </a>
+
+      <a href="./marquee.html">
+        Marquee
+      </a>
+
+      <a href="./floating.html">
+        Floating Image
+      </a>
+
+      <a href="./loading.html">
+        Loading
+      </a>
+
+      <a
+        href="./welcome.html"
+        class="active"
+      >
+        Welcome
+      </a>
+
+      <a href="./skin.html">
+        Skin Config
+      </a>
+
+      <a
+        href="../index.html"
+        target="_blank"
+      >
+        Customer
+      </a>
+
+      <a
+        href="#"
+        id="logoutBtn"
+      >
+        Logout
+      </a>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<main class="admin-container">
+
+  <div class="page-title">
+
+    <div>
+
+      <h2>
+        Welcome Popup
+      </h2>
+
+      <p>
+        Manage welcome image, design and popup behaviour.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="welcome-admin-layout">
+
+
+    <!-- SETTINGS -->
+
+    <section class="card">
+
+      <h3>
+        Welcome Settings
+      </h3>
+
+
+      <!-- IMAGE URL HIDDEN -->
+
+      <input
+        id="welcomeImageUrl"
+        type="hidden"
+      >
+
+
+      <!-- UPLOAD -->
+
+      <div class="form-group">
+
+        <label>
+          Popup Image
+        </label>
+
+
+        <div class="welcome-upload-section">
+
+          <input
+            id="welcomeImageFile"
+            type="file"
+            accept="image/*"
+            hidden
+          >
+
+
+          <button
+            id="welcomeUploadBtn"
+            class="btn btn-dark full"
+            type="button"
+          >
+            Upload Image
+          </button>
+
+
+          <div
+            id="welcomeUploadStatus"
+            class="help-text"
+          >
+            JPG, PNG, WEBP or GIF
+          </div>
+
+
+          <div
+            id="welcomeImagePreview"
+            class="welcome-image-preview hidden"
+          >
+
+            <img
+              id="welcomeImagePreviewImg"
+              src=""
+              alt="Welcome Preview"
+            >
+
+
+            <button
+              id="welcomeRemoveImage"
+              type="button"
+              class="btn btn-red full"
+            >
+              Remove Image
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- SIZE -->
+
+      <div class="welcome-form-row">
+
+        <div class="form-group">
+
+          <label>
+            Desktop Width
+          </label>
+
+          <input
+            id="welcomeDesktopWidth"
+            type="number"
+            min="250"
+            max="1000"
+            value="520"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Mobile Width
+          </label>
+
+          <input
+            id="welcomeMobileWidth"
+            type="number"
+            min="220"
+            max="600"
+            value="340"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- BORDER -->
+
+      <div class="welcome-form-row">
+
+        <div class="form-group">
+
+          <label>
+            Border Color
+          </label>
+
+          <input
+            id="welcomeBorderColor"
+            type="color"
+            value="#d6a917"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Border Width
+          </label>
+
+          <input
+            id="welcomeBorderWidth"
+            type="number"
+            min="0"
+            max="15"
+            value="2"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- BACKGROUND -->
+
+      <div class="welcome-form-row">
+
+        <div class="form-group">
+
+          <label>
+            Popup Background
+          </label>
+
+          <input
+            id="welcomeBackgroundColor"
+            type="color"
+            value="#111111"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Backdrop Color
+          </label>
+
+          <input
+            id="welcomeBackdropColor"
+            type="color"
+            value="#000000"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Backdrop Opacity (%)
+        </label>
+
+        <input
+          id="welcomeBackdropOpacity"
+          type="number"
+          min="0"
+          max="100"
+          value="78"
+        >
+
+      </div>
+
+
+      <!-- OK -->
+
+      <div class="form-group">
+
+        <label>
+          OK Button Text
+        </label>
+
+        <input
+          id="welcomeOkText"
+          value="OK"
+          maxlength="30"
+        >
+
+      </div>
+
+
+      <div class="welcome-form-row">
+
+        <div class="form-group">
+
+          <label>
+            OK Button Color
+          </label>
+
+          <input
+            id="welcomeOkColor"
+            type="color"
+            value="#d6a917"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            OK Text Color
+          </label>
+
+          <input
+            id="welcomeOkTextColor"
+            type="color"
+            value="#ffffff"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- X -->
+
+      <div class="welcome-form-row">
+
+        <div class="form-group">
+
+          <label>
+            X Background
+          </label>
+
+          <input
+            id="welcomeCloseColor"
+            type="color"
+            value="#0a0a0a"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            X Icon Color
+          </label>
+
+          <input
+            id="welcomeCloseIconColor"
+            type="color"
+            value="#ffd51b"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- BEHAVIOUR -->
+
+      <div class="welcome-form-row">
+
+        <div class="form-group">
+
+          <label>
+            Animation
+          </label>
+
+          <select id="welcomeAnimation">
+
+            <option value="zoom">
+              Zoom
+            </option>
+
+            <option value="fade">
+              Fade
+            </option>
+
+            <option value="slide-down">
+              Slide Down
+            </option>
+
+            <option value="slide-up">
+              Slide Up
+            </option>
+
+            <option value="none">
+              None
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Open Delay (ms)
+          </label>
+
+          <input
+            id="welcomeDelay"
+            type="number"
+            min="0"
+            max="10000"
+            value="300"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Show Again
+        </label>
+
+        <select id="welcomeShowMode">
+
+          <option value="refresh">
+            Every Refresh
+          </option>
+
+          <option value="session">
+            Once Per Session
+          </option>
+
+          <option value="day">
+            Once Per Day
+          </option>
+
+          <option value="24h">
+            Once Per 24 Hours
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- CLOSE METHODS -->
+
+      <div class="welcome-check-grid">
+
+        <label class="welcome-check">
+
+          <input
+            id="welcomeCloseX"
+            type="checkbox"
+            checked
+          >
+
+          <span>
+            X Button
+          </span>
+
+        </label>
+
+
+        <label class="welcome-check">
+
+          <input
+            id="welcomeCloseOk"
+            type="checkbox"
+            checked
+          >
+
+          <span>
+            OK Button
+          </span>
+
+        </label>
+
+
+        <label class="welcome-check">
+
+          <input
+            id="welcomeCloseEsc"
+            type="checkbox"
+            checked
+          >
+
+          <span>
+            ESC Keyboard
+          </span>
+
+        </label>
+
+
+        <label class="welcome-check">
+
+          <input
+            id="welcomeCloseOutside"
+            type="checkbox"
+            checked
+          >
+
+          <span>
+            Click Outside
+          </span>
+
+        </label>
+
+      </div>
+
+
+      <!-- ACTIVE + SAVE -->
+
+      <div class="welcome-actions">
+
+        <label class="welcome-active-toggle">
+
+          <input
+            id="welcomeEnabled"
+            type="checkbox"
+            checked
+          >
+
+          <span>
+            Active
+          </span>
+
+        </label>
+
+
+        <button
+          id="saveWelcomeBtn"
+          class="btn btn-primary"
+          type="button"
+        >
+          SAVE WELCOME
+        </button>
+
+      </div>
+
+
+      <div
+        id="welcomeSaveMessage"
+        class="welcome-save-message"
+      ></div>
+
+    </section>
+
+
+    <!-- PREVIEW -->
+
+    <section class="card">
+
+      <h3>
+        Live Preview
+      </h3>
+
+
+      <div
+        id="welcomeAdminPreview"
+        class="welcome-admin-preview"
+      >
+
+        <div
+          id="welcomePreviewModal"
+          class="welcome-preview-modal"
+        >
+
+          <button
+            id="welcomePreviewClose"
+            class="welcome-preview-close"
+            type="button"
+          >
+            ×
+          </button>
+
+
+          <div
+            id="welcomePreviewEmpty"
+            class="welcome-preview-empty"
+          >
+            Upload an image to preview
+          </div>
+
+
+          <img
+            id="welcomePreviewImage"
+            class="welcome-preview-image hidden"
+            src=""
+            alt=""
+          >
+
+
+          <button
+            id="welcomePreviewOk"
+            class="welcome-preview-ok"
+            type="button"
+          >
+            OK
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+  </div>
+
+</main>
+
+
+<script type="module">
+
+import {
+
+  db,
+  ref,
+  set,
+  onValue,
+  requireAdmin,
+  setupLogout
+
+} from "./admin.js";
+
+
+requireAdmin();
+setupLogout();
+
+
+
+/* =========================================================
+   CLOUDINARY
+========================================================= */
+
+const CLOUDINARY_CLOUD_NAME =
+  "dqctvbenv";
+
+const CLOUDINARY_UPLOAD_PRESET =
+  "support_center";
+
+
+async function uploadWelcomeImage(
+  file
+) {
+
+  const formData =
+    new FormData();
+
+
+  formData.append(
+    "file",
+    file
+  );
+
+
+  formData.append(
+    "upload_preset",
+    CLOUDINARY_UPLOAD_PRESET
+  );
+
+
+  formData.append(
+    "folder",
+    "support-center/welcome"
+  );
+
+
+  const response =
+    await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method:
+          "POST",
+
+        body:
+          formData
+      }
+    );
+
+
+  const result =
+    await response.json();
+
+
+  if (
+    !response.ok ||
+    !result.secure_url
+  ) {
+
+    throw new Error(
+      result?.error?.message ||
+      "Upload failed."
+    );
+
+  }
+
+
+  return result.secure_url;
+
+}
+
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const $ =
+  id =>
+    document.getElementById(id);
+
+
+const enabled =
+  $("welcomeEnabled");
+
+const imageUrl =
+  $("welcomeImageUrl");
+
+const imageFile =
+  $("welcomeImageFile");
+
+const uploadBtn =
+  $("welcomeUploadBtn");
+
+const uploadStatus =
+  $("welcomeUploadStatus");
+
+const imagePreview =
+  $("welcomeImagePreview");
+
+const imagePreviewImg =
+  $("welcomeImagePreviewImg");
+
+const removeImage =
+  $("welcomeRemoveImage");
+
+
+const desktopWidth =
+  $("welcomeDesktopWidth");
+
+const mobileWidth =
+  $("welcomeMobileWidth");
+
+const borderColor =
+  $("welcomeBorderColor");
+
+const borderWidth =
+  $("welcomeBorderWidth");
+
+const backgroundColor =
+  $("welcomeBackgroundColor");
+
+const backdropColor =
+  $("welcomeBackdropColor");
+
+const backdropOpacity =
+  $("welcomeBackdropOpacity");
+
+const okText =
+  $("welcomeOkText");
+
+const okColor =
+  $("welcomeOkColor");
+
+const okTextColor =
+  $("welcomeOkTextColor");
+
+const closeColor =
+  $("welcomeCloseColor");
+
+const closeIconColor =
+  $("welcomeCloseIconColor");
+
+const animation =
+  $("welcomeAnimation");
+
+const delay =
+  $("welcomeDelay");
+
+const showMode =
+  $("welcomeShowMode");
+
+const closeX =
+  $("welcomeCloseX");
+
+const closeOk =
+  $("welcomeCloseOk");
+
+const closeEsc =
+  $("welcomeCloseEsc");
+
+const closeOutside =
+  $("welcomeCloseOutside");
+
+const saveBtn =
+  $("saveWelcomeBtn");
+
+const saveMessage =
+  $("welcomeSaveMessage");
+
+
+const preview =
+  $("welcomeAdminPreview");
+
+const previewModal =
+  $("welcomePreviewModal");
+
+const previewClose =
+  $("welcomePreviewClose");
+
+const previewImage =
+  $("welcomePreviewImage");
+
+const previewEmpty =
+  $("welcomePreviewEmpty");
+
+const previewOk =
+  $("welcomePreviewOk");
+
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function updatePreview() {
+
+  preview.style.background =
+    hexToRgba(
+      backdropColor.value,
+      Number(
+        backdropOpacity.value || 78
+      ) / 100
+    );
+
+
+  previewModal.style.width =
+    `${Number(desktopWidth.value) || 520}px`;
+
+
+  previewModal.style.border =
+    `${Number(borderWidth.value) || 0}px solid ${borderColor.value}`;
+
+
+  previewModal.style.background =
+    backgroundColor.value;
+
+
+  previewOk.textContent =
+    okText.value.trim() ||
+    "OK";
+
+
+  previewOk.style.background =
+    okColor.value;
+
+
+  previewOk.style.color =
+    okTextColor.value;
+
+
+  previewClose.style.background =
+    closeColor.value;
+
+
+  previewClose.style.color =
+    closeIconColor.value;
+
+
+  previewClose.style.display =
+    closeX.checked
+      ? "flex"
+      : "none";
+
+
+  previewOk.style.display =
+    closeOk.checked
+      ? "block"
+      : "none";
+
+
+  if (imageUrl.value) {
+
+    previewImage.src =
+      imageUrl.value;
+
+    previewImage.classList.remove(
+      "hidden"
+    );
+
+    previewEmpty.classList.add(
+      "hidden"
+    );
+
+  } else {
+
+    previewImage.classList.add(
+      "hidden"
+    );
+
+    previewEmpty.classList.remove(
+      "hidden"
+    );
+
+  }
+
+}
+
+
+
+function hexToRgba(
+  hex,
+  opacity
+) {
+
+  let value =
+    String(hex || "#000000")
+      .replace("#", "");
+
+
+  if (value.length === 3) {
+
+    value =
+      value
+        .split("")
+        .map(
+          char =>
+            char + char
+        )
+        .join("");
+
+  }
+
+
+  const number =
+    parseInt(
+      value,
+      16
+    );
+
+
+  const r =
+    (number >> 16) & 255;
+
+  const g =
+    (number >> 8) & 255;
+
+  const b =
+    number & 255;
+
+
+  return `rgba(${r},${g},${b},${opacity})`;
+
+}
+
+
+
+/* =========================================================
+   UPLOAD
+========================================================= */
+
+uploadBtn.addEventListener(
+  "click",
+  () => {
+
+    imageFile.click();
+
+  }
+);
+
+
+imageFile.addEventListener(
+  "change",
+  async () => {
+
+    const file =
+      imageFile.files?.[0];
+
+
+    if (!file) {
+      return;
+    }
+
+
+    try {
+
+      uploadBtn.disabled =
+        true;
+
+      uploadBtn.textContent =
+        "UPLOADING...";
+
+      uploadStatus.textContent =
+        "Uploading image...";
+
+
+      const url =
+        await uploadWelcomeImage(
+          file
+        );
+
+
+      imageUrl.value =
+        url;
+
+
+      imagePreviewImg.src =
+        url;
+
+
+      imagePreview.classList.remove(
+        "hidden"
+      );
+
+
+      uploadStatus.textContent =
+        "Image uploaded successfully.";
+
+
+      updatePreview();
+
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      uploadStatus.textContent =
+        error.message ||
+        "Upload failed.";
+
+
+    } finally {
+
+      uploadBtn.disabled =
+        false;
+
+      uploadBtn.textContent =
+        "Upload Image";
+
+      imageFile.value =
+        "";
+
+    }
+
+  }
+);
+
+
+removeImage.addEventListener(
+  "click",
+  () => {
+
+    imageUrl.value =
+      "";
+
+    imagePreviewImg.src =
+      "";
+
+    imagePreview.classList.add(
+      "hidden"
+    );
+
+
+    updatePreview();
+
+  }
+);
+
+
+
+/* =========================================================
+   LIVE PREVIEW EVENTS
+========================================================= */
+
+[
+  enabled,
+  desktopWidth,
+  mobileWidth,
+  borderColor,
+  borderWidth,
+  backgroundColor,
+  backdropColor,
+  backdropOpacity,
+  okText,
+  okColor,
+  okTextColor,
+  closeColor,
+  closeIconColor,
+  animation,
+  delay,
+  showMode,
+  closeX,
+  closeOk,
+  closeEsc,
+  closeOutside
+
+].forEach(
+  element => {
+
+    element.addEventListener(
+      "input",
+      updatePreview
+    );
+
+    element.addEventListener(
+      "change",
+      updatePreview
+    );
+
+  }
+);
+
+
+
+/* =========================================================
+   FIREBASE LOAD
+========================================================= */
+
+onValue(
+
+  ref(
+    db,
+    "welcome_popup"
+  ),
+
+  snapshot => {
+
+    const data =
+      snapshot.val() || {};
+
+
+    enabled.checked =
+      data.enabled !== false;
+
+
+    imageUrl.value =
+      data.imageUrl || "";
+
+
+    desktopWidth.value =
+      Number(
+        data.desktopWidth
+      ) || 520;
+
+
+    mobileWidth.value =
+      Number(
+        data.mobileWidth
+      ) || 340;
+
+
+    borderColor.value =
+      data.borderColor ||
+      "#d6a917";
+
+
+    borderWidth.value =
+      Number(
+        data.borderWidth
+      ) ?? 2;
+
+
+    backgroundColor.value =
+      data.backgroundColor ||
+      "#111111";
+
+
+    backdropColor.value =
+      data.backdropColor ||
+      "#000000";
+
+
+    backdropOpacity.value =
+      Number(
+        data.backdropOpacity
+      ) || 78;
+
+
+    okText.value =
+      data.okText ||
+      "OK";
+
+
+    okColor.value =
+      data.okColor ||
+      "#d6a917";
+
+
+    okTextColor.value =
+      data.okTextColor ||
+      "#ffffff";
+
+
+    closeColor.value =
+      data.closeColor ||
+      "#0a0a0a";
+
+
+    closeIconColor.value =
+      data.closeIconColor ||
+      "#ffd51b";
+
+
+    animation.value =
+      data.animation ||
+      "zoom";
+
+
+    delay.value =
+      Number(
+        data.delay
+      ) || 300;
+
+
+    showMode.value =
+      data.showMode ||
+      "refresh";
+
+
+    closeX.checked =
+      data.closeX !== false;
+
+
+    closeOk.checked =
+      data.closeOk !== false;
+
+
+    closeEsc.checked =
+      data.closeEsc !== false;
+
+
+    closeOutside.checked =
+      data.closeOutside !== false;
+
+
+    if (imageUrl.value) {
+
+      imagePreviewImg.src =
+        imageUrl.value;
+
+      imagePreview.classList.remove(
+        "hidden"
+      );
+
+    } else {
+
+      imagePreview.classList.add(
+        "hidden"
+      );
+
+    }
+
+
+    updatePreview();
+
+  }
+
+);
+
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+saveBtn.addEventListener(
+  "click",
+  async () => {
+
+    saveMessage.className =
+      "welcome-save-message";
+
+
+    /*
+      Safety:
+      jangan sampai semua cara close OFF.
+    */
+
+    if (
+      !closeX.checked &&
+      !closeOk.checked &&
+      !closeEsc.checked &&
+      !closeOutside.checked
+    ) {
+
+      closeX.checked =
+        true;
+
+    }
+
+
+    const data = {
+
+      enabled:
+        enabled.checked,
+
+      imageUrl:
+        imageUrl.value.trim(),
+
+      desktopWidth:
+        Number(
+          desktopWidth.value
+        ) || 520,
+
+      mobileWidth:
+        Number(
+          mobileWidth.value
+        ) || 340,
+
+      borderColor:
+        borderColor.value,
+
+      borderWidth:
+        Math.max(
+          0,
+          Number(
+            borderWidth.value
+          ) || 0
+        ),
+
+      backgroundColor:
+        backgroundColor.value,
+
+      backdropColor:
+        backdropColor.value,
+
+      backdropOpacity:
+        Math.max(
+          0,
+          Math.min(
+            100,
+            Number(
+              backdropOpacity.value
+            ) || 0
+          )
+        ),
+
+      okText:
+        okText.value.trim() ||
+        "OK",
+
+      okColor:
+        okColor.value,
+
+      okTextColor:
+        okTextColor.value,
+
+      closeColor:
+        closeColor.value,
+
+      closeIconColor:
+        closeIconColor.value,
+
+      animation:
+        animation.value,
+
+      delay:
+        Math.max(
+          0,
+          Number(
+            delay.value
+          ) || 0
+        ),
+
+      showMode:
+        showMode.value,
+
+      closeX:
+        closeX.checked,
+
+      closeOk:
+        closeOk.checked,
+
+      closeEsc:
+        closeEsc.checked,
+
+      closeOutside:
+        closeOutside.checked,
+
+      updatedAt:
+        Date.now()
+
+    };
+
+
+    try {
+
+      saveBtn.disabled =
+        true;
+
+      saveBtn.textContent =
+        "SAVING...";
+
+
+      await set(
+        ref(
+          db,
+          "welcome_popup"
+        ),
+        data
+      );
+
+
+      saveMessage.textContent =
+        "Welcome settings saved.";
+
+      saveMessage.className =
+        "welcome-save-message success";
+
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      saveMessage.textContent =
+        "Failed to save settings.";
+
+      saveMessage.className =
+        "welcome-save-message error";
+
+
+    } finally {
+
+      saveBtn.disabled =
+        false;
+
+      saveBtn.textContent =
+        "SAVE WELCOME";
+
+    }
+
+  }
+);
+
+
+updatePreview();
+
+</script>
+
+</body>
+</html>

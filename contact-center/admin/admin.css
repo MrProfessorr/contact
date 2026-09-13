@@ -4857,28 +4857,14 @@ input[type="color"] {
 
 .welcome-option-slider {
   position: relative;
-
   height: 20px;
-
   display: flex;
   align-items: center;
-
   justify-content: flex-end;
-
-  padding:
-    0 5px 0 21px;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:
-    999px;
-
-  background:
-    #161d27;
-
-  transition:
-    .2s ease;
+  padding:0 5px 0 21px;
+  border-radius:999px;
+  background:#666666;
+  transition:.2s ease;
 }
 
 
@@ -4896,7 +4882,7 @@ input[type="color"] {
   border-radius: 50%;
 
   background:
-    #647184;
+    #ffffff;
 
   transform:
     translateY(-50%);
@@ -4910,17 +4896,9 @@ input[type="color"] {
 input:checked
 +
 .welcome-option-slider {
-  justify-content:
-    flex-start;
-
-  padding:
-    0 21px 0 5px;
-
-  border-color:
-    rgba(38,201,121,.55);
-
-  background:
-    rgba(38,201,121,.12);
+  justify-content:flex-start;
+  padding:0 21px 0 5px;
+  background:#2677e8;
 }
 
 
@@ -4931,8 +4909,7 @@ input:checked
   left:
     calc(100% - 17px);
 
-  background:
-    var(--green);
+  background:#ffffff;
 
   box-shadow:
     0 0 5px

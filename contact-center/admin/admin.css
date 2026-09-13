@@ -4862,15 +4862,19 @@ input[type="color"] {
   min-height: 34px;
 
   display: flex;
+
   align-items: center;
 
+  justify-content: flex-end;
+
   padding:
-    5px 38px 5px 11px;
+    5px 11px 5px 38px;
 
   border:
     1px solid var(--line);
 
-  border-radius: 999px;
+  border-radius:
+    999px;
 
   background:
     #161d27;
@@ -4905,6 +4909,12 @@ input[type="color"] {
 input:checked
 +
 .welcome-option-slider {
+  justify-content:
+    flex-start;
+
+  padding:
+    5px 38px 5px 11px;
+
   border-color:
     rgba(38,201,121,.55);
 
@@ -5146,8 +5156,10 @@ input:checked
 
   align-items: center;
 
+  justify-content: flex-end;
+
   padding:
-    0 34px 0 10px;
+    0 10px 0 34px;
 
   border-radius:
     999px;
@@ -5184,6 +5196,12 @@ input:checked
 input:checked
 +
 .welcome-active-slider {
+  justify-content:
+    flex-start;
+
+  padding:
+    0 34px 0 10px;
+
   background:
     #2374df;
 }

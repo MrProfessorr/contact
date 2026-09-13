@@ -4715,3 +4715,57 @@ input:checked
   }
 
 }
+/* =========================================================
+   SKIN COLOR ROW
+========================================================= */
+
+.skin-color-row {
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0,1fr));
+
+  gap:
+    12px;
+}
+
+
+.skin-color-row
+.form-group {
+  min-width:
+    0;
+
+  margin-bottom:
+    14px;
+}
+
+
+/* COLOR INPUT FULL WIDTH */
+
+.skin-color-row
+input[type="color"] {
+  width:
+    100%;
+
+  height:
+    44px;
+
+  padding:
+    4px;
+
+  cursor:
+    pointer;
+}
+
+
+/* MOBILE */
+
+@media(max-width:650px) {
+
+  .skin-color-row {
+    grid-template-columns:
+      1fr;
+  }
+
+}

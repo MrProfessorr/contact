@@ -2,11 +2,16 @@ import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-
 import {
   getDatabase,
   ref,
-  onValue
+  onValue,
+  set,
+  update,
+  push,
+  onDisconnect,
+  serverTimestamp,
+  increment
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
@@ -89,6 +94,9 @@ const firebaseReady = {
     false,
 
   marquee:
+    false,
+
+  blocked:
     false
 
 };
@@ -1539,26 +1547,30 @@ if (!filtered.length) {
             </div>
 
 
-            <a
-              href="${safe(link)}"
+<a
+  href="${safe(link)}"
 
-              class="
-                contact-open
-                ${isClosed ? "closed" : ""}
-              "
+  class="
+    contact-open
+    ${isClosed ? "closed" : ""}
+  "
 
-              ${
-                !isClosed &&
-                link !== "#"
+  data-contact-id="${safe(item.id || "")}"
+  data-contact-name="${safe(item.name || "")}"
+  data-contact-type="${safe(item.type || "")}"
 
-                  ? `
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  `
+  ${
+    !isClosed &&
+    link !== "#"
 
-                  : ""
-              }
-            >
+      ? `
+          target="_blank"
+          rel="noopener noreferrer"
+        `
+
+      : ""
+  }
+>
 
               ${buttonText}
 
@@ -5937,4 +5949,831 @@ onValue(
 
   }
 
+);
+/* =========================================================
+   VISITOR ANALYTICS
+========================================================= */
+
+const VISITOR_ID_KEY =
+  "support_center_visitor_id";
+
+const SESSION_ID_KEY =
+  "support_center_session_id";
+
+
+function createTrackingId(prefix = "V") {
+
+  if (
+    window.crypto &&
+    typeof window.crypto.randomUUID === "function"
+  ) {
+
+    return (
+      prefix +
+      "-" +
+      window.crypto
+        .randomUUID()
+        .replaceAll("-", "")
+        .slice(0, 12)
+        .toUpperCase()
+    );
+
+  }
+
+  return (
+    prefix +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2, 14)
+      .toUpperCase()
+  );
+
+}
+
+
+function getVisitorId() {
+
+  let id =
+    localStorage.getItem(
+      VISITOR_ID_KEY
+    );
+
+  if (!id) {
+
+    id =
+      createTrackingId("V");
+
+    localStorage.setItem(
+      VISITOR_ID_KEY,
+      id
+    );
+
+  }
+
+  return id;
+
+}
+
+
+function getSessionId() {
+
+  let id =
+    sessionStorage.getItem(
+      SESSION_ID_KEY
+    );
+
+  if (!id) {
+
+    id =
+      createTrackingId("S");
+
+    sessionStorage.setItem(
+      SESSION_ID_KEY,
+      id
+    );
+
+  }
+
+  return id;
+
+}
+
+
+const visitorId =
+  getVisitorId();
+
+const visitorSessionId =
+  getSessionId();
+
+
+/* =========================================================
+   LOCAL DATE KEY
+========================================================= */
+
+function getTrackingDateKey() {
+
+  const now =
+    new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(
+      now.getMonth() + 1
+    ).padStart(2, "0");
+
+  const day =
+    String(
+      now.getDate()
+    ).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================================================
+   TRAFFIC SOURCE
+========================================================= */
+
+function normalizeTrafficSource(
+  value = ""
+) {
+
+  const text =
+    String(value)
+      .trim()
+      .toLowerCase();
+
+  if (!text) {
+    return "Direct";
+  }
+
+  if (
+    text.includes("facebook") ||
+    text === "fb"
+  ) {
+    return "Facebook";
+  }
+
+  if (
+    text.includes("tiktok")
+  ) {
+    return "TikTok";
+  }
+
+  if (
+    text.includes("instagram")
+  ) {
+    return "Instagram";
+  }
+
+  if (
+    text.includes("telegram")
+  ) {
+    return "Telegram";
+  }
+
+  if (
+    text.includes("whatsapp") ||
+    text === "wa"
+  ) {
+    return "WhatsApp";
+  }
+
+  if (
+    text.includes("google")
+  ) {
+    return "Google";
+  }
+
+  return (
+    text.charAt(0).toUpperCase() +
+    text.slice(1)
+  );
+
+}
+
+
+function getTrafficInfo() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const utmSource =
+    params.get("utm_source") || "";
+
+  const utmMedium =
+    params.get("utm_medium") || "";
+
+  const utmCampaign =
+    params.get("utm_campaign") || "";
+
+  let source =
+    "";
+
+  let referrer =
+    document.referrer || "";
+
+  if (utmSource) {
+
+    source =
+      normalizeTrafficSource(
+        utmSource
+      );
+
+  } else if (referrer) {
+
+    try {
+
+      const hostname =
+        new URL(
+          referrer
+        ).hostname;
+
+      source =
+        normalizeTrafficSource(
+          hostname
+        );
+
+    } catch (error) {
+
+      source =
+        "Referral";
+
+    }
+
+  } else {
+
+    source =
+      "Direct";
+
+  }
+
+  return {
+    source,
+    medium:
+      utmMedium || "",
+    campaign:
+      utmCampaign || "",
+    referrer
+  };
+
+}
+
+
+/* =========================================================
+   DEVICE / BROWSER
+========================================================= */
+
+function detectDeviceType() {
+
+  const ua =
+    navigator.userAgent
+      .toLowerCase();
+
+  if (
+    /ipad|tablet/.test(ua)
+  ) {
+    return "Tablet";
+  }
+
+  if (
+    /android|iphone|mobile/.test(ua)
+  ) {
+    return "Mobile";
+  }
+
+  return "Desktop";
+
+}
+
+
+function detectBrowser() {
+
+  const ua =
+    navigator.userAgent;
+
+  if (
+    ua.includes("Edg/")
+  ) {
+    return "Edge";
+  }
+
+  if (
+    ua.includes("OPR/")
+  ) {
+    return "Opera";
+  }
+
+  if (
+    ua.includes("Chrome/")
+  ) {
+    return "Chrome";
+  }
+
+  if (
+    ua.includes("Firefox/")
+  ) {
+    return "Firefox";
+  }
+
+  if (
+    ua.includes("Safari/")
+  ) {
+    return "Safari";
+  }
+
+  return "Other";
+
+}
+
+
+/* =========================================================
+   BLOCK SCREEN
+========================================================= */
+
+let visitorBlocked =
+  false;
+
+
+function showBlockedScreen() {
+
+  if (
+    document.getElementById(
+      "visitorBlockedScreen"
+    )
+  ) {
+    return;
+  }
+
+  visitorBlocked =
+    true;
+
+  const screen =
+    document.createElement(
+      "div"
+    );
+
+  screen.id =
+    "visitorBlockedScreen";
+
+  screen.innerHTML = `
+    <div style="
+      width:min(420px,calc(100% - 32px));
+      padding:30px 22px;
+      border:1px solid #343d4d;
+      border-radius:18px;
+      background:#111720;
+      color:#ffffff;
+      text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+    ">
+      <div style="
+        font-size:42px;
+        margin-bottom:12px;
+      ">
+        ⛔
+      </div>
+
+      <h2 style="
+        margin:0 0 8px;
+        font-size:22px;
+      ">
+        Access Denied
+      </h2>
+
+      <p style="
+        margin:0;
+        color:#9ba7b8;
+        font-size:13px;
+        line-height:1.6;
+      ">
+        Your access to this page has been restricted.
+      </p>
+
+      <div style="
+        margin-top:15px;
+        color:#667286;
+        font-size:10px;
+      ">
+        Visitor ID: ${visitorId}
+      </div>
+    </div>
+  `;
+
+  Object.assign(
+    screen.style,
+    {
+      position:
+        "fixed",
+
+      inset:
+        "0",
+
+      zIndex:
+        "99999999",
+
+      display:
+        "flex",
+
+      alignItems:
+        "center",
+
+      justifyContent:
+        "center",
+
+      background:
+        "#090d13",
+
+      padding:
+        "20px"
+    }
+  );
+
+  document.body.appendChild(
+    screen
+  );
+
+  document.documentElement
+    .style
+    .overflow =
+      "hidden";
+
+}
+
+
+function removeBlockedScreen() {
+
+  visitorBlocked =
+    false;
+
+  document
+    .getElementById(
+      "visitorBlockedScreen"
+    )
+    ?.remove();
+
+  document.documentElement
+    .style
+    .overflow =
+      "";
+
+}
+
+
+/* =========================================================
+   BLOCK CHECK
+========================================================= */
+
+onValue(
+
+  ref(
+    db,
+    `blocked_visitors/${visitorId}`
+  ),
+
+  snapshot => {
+
+    const data =
+      snapshot.val();
+
+    if (
+      data &&
+      data.blocked === true
+    ) {
+
+      showBlockedScreen();
+
+    } else {
+
+      removeBlockedScreen();
+
+    }
+
+    markReady(
+      "blocked"
+    );
+
+  },
+
+  error => {
+
+    console.error(
+      "Blocked visitor check error:",
+      error
+    );
+
+    markReady(
+      "blocked"
+    );
+
+  }
+
+);
+
+
+/* =========================================================
+   VISITOR TRACKING
+========================================================= */
+
+async function startVisitorTracking() {
+
+  try {
+
+    const traffic =
+      getTrafficInfo();
+
+    const dateKey =
+      getTrackingDateKey();
+
+    const visitorRef =
+      ref(
+        db,
+        `analytics/visitors/${visitorId}`
+      );
+
+    const presenceRef =
+      ref(
+        db,
+        `analytics/presence/${visitorId}/${visitorSessionId}`
+      );
+
+
+    /* VISITOR PROFILE */
+
+    await update(
+      visitorRef,
+      {
+        visitorId,
+
+        lastSeen:
+          serverTimestamp(),
+
+        currentPage:
+          window.location.pathname,
+
+        pageTitle:
+          document.title || "",
+
+        source:
+          traffic.source,
+
+        medium:
+          traffic.medium,
+
+        campaign:
+          traffic.campaign,
+
+        referrer:
+          traffic.referrer,
+
+        device:
+          detectDeviceType(),
+
+        browser:
+          detectBrowser(),
+
+        language:
+          navigator.language || "",
+
+        screen:
+          `${window.screen.width}x${window.screen.height}`,
+
+        pageViews:
+          increment(1)
+      }
+    );
+
+
+    /* FIRST SEEN */
+
+    const firstSeenKey =
+      `support_first_seen_${visitorId}`;
+
+    if (
+      !localStorage.getItem(
+        firstSeenKey
+      )
+    ) {
+
+      await update(
+        visitorRef,
+        {
+          firstSeen:
+            serverTimestamp()
+        }
+      );
+
+      localStorage.setItem(
+        firstSeenKey,
+        "1"
+      );
+
+    }
+
+
+    /* DAILY UNIQUE VISITOR */
+
+    await set(
+
+      ref(
+        db,
+        `analytics/daily/${dateKey}/visitors/${visitorId}`
+      ),
+
+      true
+
+    );
+
+
+    /* DAILY PAGE VIEW */
+
+    await update(
+
+      ref(
+        db,
+        `analytics/daily/${dateKey}`
+      ),
+
+      {
+        pageViews:
+          increment(1),
+
+        lastUpdated:
+          serverTimestamp()
+      }
+
+    );
+
+
+    /* ONLINE PRESENCE */
+
+    await set(
+      presenceRef,
+      {
+        online:
+          true,
+
+        page:
+          window.location.pathname,
+
+        connectedAt:
+          serverTimestamp(),
+
+        lastSeen:
+          serverTimestamp()
+      }
+    );
+
+
+    await onDisconnect(
+      presenceRef
+    ).set(
+      {
+        online:
+          false,
+
+        page:
+          window.location.pathname,
+
+        lastSeen:
+          serverTimestamp()
+      }
+    );
+
+
+    /* KEEP LAST SEEN UPDATED */
+
+    setInterval(
+      () => {
+
+        update(
+          visitorRef,
+          {
+            lastSeen:
+              serverTimestamp(),
+
+            currentPage:
+              window.location.pathname
+          }
+        ).catch(() => {});
+
+      },
+      30000
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Visitor tracking error:",
+      error
+    );
+
+  }
+
+}
+
+
+startVisitorTracking();
+
+
+/* =========================================================
+   TRACK CONTACT LINK CLICK
+========================================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const link =
+      event.target.closest(
+        ".contact-open"
+      );
+
+    if (!link) {
+      return;
+    }
+
+    if (
+      visitorBlocked
+    ) {
+      event.preventDefault();
+      return;
+    }
+
+    const destination =
+      link.getAttribute(
+        "href"
+      ) || "";
+
+    if (
+      !destination ||
+      destination === "#"
+    ) {
+      return;
+    }
+
+    const traffic =
+      getTrafficInfo();
+
+    const dateKey =
+      getTrackingDateKey();
+
+    const clickRef =
+      push(
+        ref(
+          db,
+          "analytics/clicks"
+        )
+      );
+
+    set(
+      clickRef,
+      {
+        visitorId,
+
+        sessionId:
+          visitorSessionId,
+
+        contactId:
+          link.dataset.contactId || "",
+
+        contactName:
+          link.dataset.contactName || "",
+
+        contactType:
+          link.dataset.contactType || "",
+
+        destination,
+
+        source:
+          traffic.source,
+
+        medium:
+          traffic.medium,
+
+        campaign:
+          traffic.campaign,
+
+        page:
+          window.location.pathname,
+
+        timestamp:
+          serverTimestamp()
+      }
+    ).catch(
+      error => {
+
+        console.error(
+          "Click tracking error:",
+          error
+        );
+
+      }
+    );
+
+
+    update(
+
+      ref(
+        db,
+        `analytics/daily/${dateKey}`
+      ),
+
+      {
+        linkClicks:
+          increment(1),
+
+        lastUpdated:
+          serverTimestamp()
+      }
+
+    ).catch(() => {});
+
+  }
 );

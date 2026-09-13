@@ -627,7 +627,22 @@ function applySkinSettings(
 
 
     return;
+root.style.setProperty(
+  "--skin-header-text",
+  "#f8dd76"
+);
 
+
+root.style.setProperty(
+  "--skin-body-text",
+  "#ffffff"
+);
+
+
+root.style.setProperty(
+  "--skin-footer-text",
+  "#ffffff"
+);
   }
 
 
@@ -653,7 +668,12 @@ function applySkinSettings(
     "#0a0a0a"
   );
 
-
+root.style.setProperty(
+  "--skin-header-text",
+  header.textColor ||
+  "#f8dd76"
+);
+  
   root.style.setProperty(
     "--skin-header-image",
     skinCssImage(
@@ -670,7 +690,11 @@ function applySkinSettings(
     body.color ||
     "#0a0a0a"
   );
-
+root.style.setProperty(
+  "--skin-body-text",
+  body.textColor ||
+  "#ffffff"
+);
 
   root.style.setProperty(
     "--skin-body-image",
@@ -689,7 +713,11 @@ function applySkinSettings(
     "#0a0a0a"
   );
 
-
+root.style.setProperty(
+  "--skin-footer-text",
+  footer.textColor ||
+  "#ffffff"
+);
   root.style.setProperty(
     "--skin-footer-image",
     skinCssImage(

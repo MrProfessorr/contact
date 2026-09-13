@@ -2835,3 +2835,334 @@ body.notice-modal-open {
   color:
     var(--skin-header-text);
 }
+/* =========================================================
+   WELCOME POPUP
+========================================================= */
+
+.welcome-popup {
+  position: fixed;
+  inset: 0;
+
+  z-index: 900000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity .25s ease,
+    visibility .25s ease;
+}
+
+
+.welcome-popup.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+
+.welcome-popup-backdrop {
+  position: absolute;
+  inset: 0;
+
+  background:
+    rgba(0,0,0,.78);
+}
+
+
+.welcome-popup-dialog {
+  --welcome-width:
+    520px;
+
+  --welcome-mobile-width:
+    340px;
+
+  --welcome-border-color:
+    #d6a917;
+
+  --welcome-border-width:
+    2px;
+
+  --welcome-background:
+    #111111;
+
+  --welcome-ok-bg:
+    #d6a917;
+
+  --welcome-ok-text:
+    #ffffff;
+
+  --welcome-close-bg:
+    #0a0a0a;
+
+  --welcome-close-icon:
+    #ffd51b;
+
+
+  position: relative;
+
+  z-index: 2;
+
+  width:
+    min(
+      var(--welcome-width),
+      calc(100vw - 36px)
+    );
+
+  max-height:
+    calc(100dvh - 36px);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border:
+    var(--welcome-border-width)
+    solid
+    var(--welcome-border-color);
+
+  border-radius:
+    14px;
+
+  background:
+    var(--welcome-background);
+
+  box-shadow:
+    0 25px 90px
+    rgba(0,0,0,.78);
+
+  transform:
+    scale(.92);
+
+  opacity:
+    0;
+
+  transition:
+    transform .28s ease,
+    opacity .28s ease;
+}
+
+
+.welcome-popup.open
+.welcome-popup-dialog {
+  transform:
+    scale(1);
+
+  opacity:
+    1;
+}
+
+
+/* IMAGE */
+
+.welcome-popup-image-wrap {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+
+.welcome-popup-image {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  max-height:
+    calc(100dvh - 100px);
+
+  object-fit:
+    contain;
+}
+
+
+/* CLOSE X */
+
+.welcome-popup-close {
+  position: absolute;
+
+  top: 9px;
+  right: 9px;
+
+  z-index: 5;
+
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border:
+    1px solid
+    rgba(255,255,255,.18);
+
+  border-radius:
+    50%;
+
+  background:
+    var(--welcome-close-bg);
+
+  color:
+    var(--welcome-close-icon);
+
+  cursor:
+    pointer;
+
+  box-shadow:
+    0 5px 15px
+    rgba(0,0,0,.35);
+}
+
+
+.welcome-popup-close svg {
+  display: block;
+
+  width: 16px;
+  height: 16px;
+
+  pointer-events:
+    none;
+}
+
+
+/* OK BUTTON */
+
+.welcome-popup-ok {
+  flex-shrink: 0;
+
+  width: 100%;
+  min-height: 45px;
+
+  padding:
+    10px 15px;
+
+  border: 0;
+
+  border-top:
+    1px solid
+    rgba(255,255,255,.12);
+
+  background:
+    var(--welcome-ok-bg);
+
+  color:
+    var(--welcome-ok-text);
+
+  cursor:
+    pointer;
+
+  font-size:
+    12px;
+
+  font-weight:
+    900;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* LOCK PAGE */
+
+body.welcome-popup-open {
+  overflow:
+    hidden;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+.welcome-popup.animation-fade
+.welcome-popup-dialog {
+  transform:
+    none;
+}
+
+
+.welcome-popup.animation-slide-down
+.welcome-popup-dialog {
+  transform:
+    translateY(-45px);
+}
+
+
+.welcome-popup.animation-slide-down.open
+.welcome-popup-dialog {
+  transform:
+    translateY(0);
+}
+
+
+.welcome-popup.animation-slide-up
+.welcome-popup-dialog {
+  transform:
+    translateY(45px);
+}
+
+
+.welcome-popup.animation-slide-up.open
+.welcome-popup-dialog {
+  transform:
+    translateY(0);
+}
+
+
+.welcome-popup.animation-none
+.welcome-popup-dialog {
+  transition:
+    none;
+
+  transform:
+    none;
+}
+
+
+/* MOBILE */
+
+@media(max-width:760px) {
+
+  .welcome-popup {
+    padding:
+      12px;
+  }
+
+
+  .welcome-popup-dialog {
+    width:
+      min(
+        var(--welcome-mobile-width),
+        calc(100vw - 24px)
+      );
+
+    max-height:
+      calc(100dvh - 24px);
+  }
+
+
+  .welcome-popup-image {
+    max-height:
+      calc(100dvh - 85px);
+  }
+
+
+  .welcome-popup-close {
+    top: 7px;
+    right: 7px;
+
+    width: 30px;
+    height: 30px;
+  }
+
+}

@@ -592,7 +592,7 @@ function applySkinSettings(
 
     root.style.setProperty(
       "--skin-header-color",
-      "#0a0a0a"
+      "#352c0e"
     );
 
 
@@ -665,7 +665,7 @@ root.style.setProperty(
   root.style.setProperty(
     "--skin-header-color",
     header.color ||
-    "#0a0a0a"
+    "#352c0e"
   );
 
 root.style.setProperty(

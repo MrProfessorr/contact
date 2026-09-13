@@ -4924,3 +4924,1017 @@ onValue(
   }
 
 );
+/* =========================================================
+   CUSTOMER WELCOME POPUP
+========================================================= */
+
+const welcomePopup =
+  document.getElementById(
+    "welcomePopup"
+  );
+
+
+const welcomePopupBackdrop =
+  document.getElementById(
+    "welcomePopupBackdrop"
+  );
+
+
+const welcomePopupDialog =
+  document.getElementById(
+    "welcomePopupDialog"
+  );
+
+
+const welcomePopupImage =
+  document.getElementById(
+    "welcomePopupImage"
+  );
+
+
+const welcomePopupClose =
+  document.getElementById(
+    "welcomePopupClose"
+  );
+
+
+const welcomePopupOk =
+  document.getElementById(
+    "welcomePopupOk"
+  );
+
+
+let welcomeSettings =
+  null;
+
+
+let welcomeTimer =
+  null;
+
+
+let welcomeOpened =
+  false;
+
+
+
+/* =========================================================
+   HEX TO RGBA
+========================================================= */
+
+function welcomeHexToRgba(
+  hex,
+  opacity
+) {
+
+  let value =
+    String(
+      hex ||
+      "#000000"
+    )
+      .replace(
+        "#",
+        ""
+      );
+
+
+  if (
+    value.length === 3
+  ) {
+
+    value =
+      value
+        .split("")
+        .map(
+          char =>
+            char + char
+        )
+        .join("");
+
+  }
+
+
+  const number =
+    parseInt(
+      value,
+      16
+    );
+
+
+  const r =
+    (number >> 16) & 255;
+
+  const g =
+    (number >> 8) & 255;
+
+  const b =
+    number & 255;
+
+
+  return `rgba(${r},${g},${b},${opacity})`;
+
+}
+
+
+
+/* =========================================================
+   STORAGE KEY
+========================================================= */
+
+function welcomeStorageKey(
+  settings
+) {
+
+  /*
+    updatedAt berubah setiap kali admin SAVE.
+    Jadi kalau admin tukar popup,
+    customer boleh nampak version baru.
+  */
+
+  const version =
+    Number(
+      settings?.updatedAt ||
+      0
+    );
+
+
+  return (
+    "welcome_popup_closed_" +
+    version
+  );
+
+}
+
+
+
+/* =========================================================
+   SHOULD SHOW
+========================================================= */
+
+function canShowWelcome(
+  settings
+) {
+
+  if (
+    !settings ||
+    settings.enabled === false
+  ) {
+
+    return false;
+
+  }
+
+
+  if (
+    !settings.imageUrl
+  ) {
+
+    return false;
+
+  }
+
+
+  const mode =
+    String(
+      settings.showMode ||
+      "refresh"
+    )
+      .toLowerCase();
+
+
+  const key =
+    welcomeStorageKey(
+      settings
+    );
+
+
+  /* EVERY REFRESH */
+
+  if (
+    mode === "refresh"
+  ) {
+
+    return true;
+
+  }
+
+
+  /* SESSION */
+
+  if (
+    mode === "session"
+  ) {
+
+    return (
+      sessionStorage.getItem(
+        key
+      ) !== "1"
+    );
+
+  }
+
+
+  /* ONCE PER DAY */
+
+  if (
+    mode === "day"
+  ) {
+
+    const today =
+      new Date()
+        .toISOString()
+        .slice(
+          0,
+          10
+        );
+
+
+    return (
+      localStorage.getItem(
+        key
+      ) !==
+      today
+    );
+
+  }
+
+
+  /* 24 HOURS */
+
+  if (
+    mode === "24h"
+  ) {
+
+    const until =
+      Number(
+        localStorage.getItem(
+          key
+        ) || 0
+      );
+
+
+    return (
+      Date.now() >=
+      until
+    );
+
+  }
+
+
+  return true;
+
+}
+
+
+
+/* =========================================================
+   SAVE CLOSED STATUS
+========================================================= */
+
+function saveWelcomeClosed(
+  settings
+) {
+
+  const mode =
+    String(
+      settings?.showMode ||
+      "refresh"
+    )
+      .toLowerCase();
+
+
+  const key =
+    welcomeStorageKey(
+      settings
+    );
+
+
+  if (
+    mode === "session"
+  ) {
+
+    sessionStorage.setItem(
+      key,
+      "1"
+    );
+
+  }
+
+
+  if (
+    mode === "day"
+  ) {
+
+    const today =
+      new Date()
+        .toISOString()
+        .slice(
+          0,
+          10
+        );
+
+
+    localStorage.setItem(
+      key,
+      today
+    );
+
+  }
+
+
+  if (
+    mode === "24h"
+  ) {
+
+    const oneDay =
+      24 *
+      60 *
+      60 *
+      1000;
+
+
+    localStorage.setItem(
+      key,
+      String(
+        Date.now() +
+        oneDay
+      )
+    );
+
+  }
+
+}
+
+
+
+/* =========================================================
+   APPLY DESIGN
+========================================================= */
+
+function applyWelcomeSettings(
+  settings
+) {
+
+  if (
+    !welcomePopup ||
+    !welcomePopupDialog ||
+    !welcomePopupImage ||
+    !welcomePopupClose ||
+    !welcomePopupOk ||
+    !welcomePopupBackdrop
+  ) {
+
+    return false;
+
+  }
+
+
+  const desktopWidth =
+    Math.max(
+      250,
+      Math.min(
+        1000,
+        Number(
+          settings.desktopWidth
+        ) || 520
+      )
+    );
+
+
+  const mobileWidth =
+    Math.max(
+      220,
+      Math.min(
+        600,
+        Number(
+          settings.mobileWidth
+        ) || 340
+      )
+    );
+
+
+  const borderWidth =
+    Math.max(
+      0,
+      Math.min(
+        15,
+        Number(
+          settings.borderWidth
+        ) || 0
+      )
+    );
+
+
+  welcomePopupDialog
+    .style
+    .setProperty(
+      "--welcome-width",
+      `${desktopWidth}px`
+    );
+
+
+  welcomePopupDialog
+    .style
+    .setProperty(
+      "--welcome-mobile-width",
+      `${mobileWidth}px`
+    );
+
+
+  welcomePopupDialog
+    .style
+    .setProperty(
+      "--welcome-border-color",
+      settings.borderColor ||
+      "#d6a917"
+    );
+
+
+  welcomePopupDialog
+    .style
+    .setProperty(
+      "--welcome-border-width",
+      `${borderWidth}px`
+    );
+
+
+  welcomePopupDialog
+    .style
+    .setProperty(
+      "--welcome-background",
+      settings.backgroundColor ||
+      "#111111"
+    );
+
+
+  welcomePopupDialog
+    .style
+    .setProperty(
+      "--welcome-ok-bg",
+      settings.okColor ||
+      "#d6a917"
+    );
+
+
+  welcomePopupDialog
+    .style
+    .setProperty(
+      "--welcome-ok-text",
+      settings.okTextColor ||
+      "#ffffff"
+    );
+
+
+  welcomePopupDialog
+    .style
+    .setProperty(
+      "--welcome-close-bg",
+      settings.closeColor ||
+      "#0a0a0a"
+    );
+
+
+  welcomePopupDialog
+    .style
+    .setProperty(
+      "--welcome-close-icon",
+      settings.closeIconColor ||
+      "#ffd51b"
+    );
+
+
+  const backdropOpacity =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Number(
+          settings.backdropOpacity
+        ) || 0
+      )
+    ) / 100;
+
+
+  welcomePopupBackdrop.style.background =
+    welcomeHexToRgba(
+      settings.backdropColor ||
+      "#000000",
+      backdropOpacity
+    );
+
+
+  welcomePopupOk.textContent =
+    String(
+      settings.okText ||
+      "OK"
+    );
+
+
+  welcomePopupClose.style.display =
+    settings.closeX === false
+      ? "none"
+      : "flex";
+
+
+  welcomePopupOk.style.display =
+    settings.closeOk === false
+      ? "none"
+      : "block";
+
+
+  welcomePopup
+    .classList
+    .remove(
+      "animation-fade",
+      "animation-slide-down",
+      "animation-slide-up",
+      "animation-none"
+    );
+
+
+  const animation =
+    String(
+      settings.animation ||
+      "zoom"
+    );
+
+
+  if (
+    animation === "fade"
+  ) {
+
+    welcomePopup.classList.add(
+      "animation-fade"
+    );
+
+  }
+
+
+  if (
+    animation ===
+    "slide-down"
+  ) {
+
+    welcomePopup.classList.add(
+      "animation-slide-down"
+    );
+
+  }
+
+
+  if (
+    animation ===
+    "slide-up"
+  ) {
+
+    welcomePopup.classList.add(
+      "animation-slide-up"
+    );
+
+  }
+
+
+  if (
+    animation === "none"
+  ) {
+
+    welcomePopup.classList.add(
+      "animation-none"
+    );
+
+  }
+
+
+  return true;
+
+}
+
+
+
+/* =========================================================
+   OPEN
+========================================================= */
+
+function openWelcomePopup() {
+
+  if (
+    welcomeOpened ||
+    !welcomeSettings
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    !canShowWelcome(
+      welcomeSettings
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    !applyWelcomeSettings(
+      welcomeSettings
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const imageUrl =
+    safeUrl(
+      welcomeSettings.imageUrl
+    );
+
+
+  if (!imageUrl) {
+
+    return;
+
+  }
+
+
+  /*
+    Preload dahulu supaya popup
+    tidak muncul kosong.
+  */
+
+  const preload =
+    new Image();
+
+
+  preload.onload =
+    () => {
+
+      welcomePopupImage.src =
+        imageUrl;
+
+
+      welcomeOpened =
+        true;
+
+
+      welcomePopup.classList.add(
+        "open"
+      );
+
+
+      welcomePopup.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+
+      document.body.classList.add(
+        "welcome-popup-open"
+      );
+
+    };
+
+
+  preload.onerror =
+    () => {
+
+      console.warn(
+        "Welcome image failed to load."
+      );
+
+    };
+
+
+  preload.src =
+    imageUrl;
+
+}
+
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+function closeWelcomePopup() {
+
+  if (
+    !welcomePopup ||
+    !welcomePopup.classList.contains(
+      "open"
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  saveWelcomeClosed(
+    welcomeSettings
+  );
+
+
+  welcomePopup.classList.remove(
+    "open"
+  );
+
+
+  welcomePopup.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+
+  document.body.classList.remove(
+    "welcome-popup-open"
+  );
+
+
+  welcomeOpened =
+    false;
+
+}
+
+
+
+/* =========================================================
+   WAIT FOR PAGE LOADER
+========================================================= */
+
+function scheduleWelcomePopup() {
+
+  clearTimeout(
+    welcomeTimer
+  );
+
+
+  if (
+    !welcomeSettings ||
+    !canShowWelcome(
+      welcomeSettings
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const waitUntilReady =
+    () => {
+
+      /*
+        Jangan buka ketika
+        customer loader masih aktif.
+      */
+
+      if (
+        document.body.classList.contains(
+          "page-loading"
+        )
+      ) {
+
+        welcomeTimer =
+          setTimeout(
+            waitUntilReady,
+            100
+          );
+
+
+        return;
+
+      }
+
+
+      const delay =
+        Math.max(
+          0,
+          Math.min(
+            10000,
+            Number(
+              welcomeSettings.delay
+            ) || 0
+          )
+        );
+
+
+      welcomeTimer =
+        setTimeout(
+          openWelcomePopup,
+          delay
+        );
+
+    };
+
+
+  waitUntilReady();
+
+}
+
+
+
+/* =========================================================
+   CLOSE EVENTS
+========================================================= */
+
+if (
+  welcomePopupClose
+) {
+
+  welcomePopupClose.addEventListener(
+    "click",
+    () => {
+
+      if (
+        welcomeSettings?.closeX !== false
+      ) {
+
+        closeWelcomePopup();
+
+      }
+
+    }
+  );
+
+}
+
+
+if (
+  welcomePopupOk
+) {
+
+  welcomePopupOk.addEventListener(
+    "click",
+    () => {
+
+      if (
+        welcomeSettings?.closeOk !== false
+      ) {
+
+        closeWelcomePopup();
+
+      }
+
+    }
+  );
+
+}
+
+
+if (
+  welcomePopupBackdrop
+) {
+
+  welcomePopupBackdrop.addEventListener(
+    "click",
+    () => {
+
+      if (
+        welcomeSettings
+          ?.closeOutside !== false
+      ) {
+
+        closeWelcomePopup();
+
+      }
+
+    }
+  );
+
+}
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key !== "Escape"
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      welcomeSettings
+        ?.closeEsc !== false
+    ) {
+
+      closeWelcomePopup();
+
+    }
+
+  }
+);
+
+
+
+/* =========================================================
+   FIREBASE WELCOME
+========================================================= */
+
+onValue(
+
+  ref(
+    db,
+    "welcome_popup"
+  ),
+
+  snapshot => {
+
+    welcomeSettings =
+      snapshot.val() ||
+      null;
+
+
+    if (
+      !welcomeSettings ||
+      welcomeSettings.enabled === false
+    ) {
+
+      if (
+        welcomePopup
+      ) {
+
+        welcomePopup.classList.remove(
+          "open"
+        );
+
+
+        welcomePopup.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+      }
+
+
+      document.body.classList.remove(
+        "welcome-popup-open"
+      );
+
+
+      return;
+
+    }
+
+
+    /*
+      Kalau admin update setting
+      ketika customer page sedang buka.
+    */
+
+    if (
+      welcomePopup
+        ?.classList
+        .contains(
+          "open"
+        )
+    ) {
+
+      applyWelcomeSettings(
+        welcomeSettings
+      );
+
+
+      const imageUrl =
+        safeUrl(
+          welcomeSettings.imageUrl
+        );
+
+
+      if (imageUrl) {
+
+        welcomePopupImage.src =
+          imageUrl;
+
+      }
+
+
+      return;
+
+    }
+
+
+    scheduleWelcomePopup();
+
+  },
+
+
+  error => {
+
+    console.error(
+      "Welcome popup Firebase error:",
+      error
+    );
+
+  }
+
+);

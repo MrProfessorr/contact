@@ -114,7 +114,26 @@ body.page-loading {
   overflow: hidden;
 }
 
+/* =========================================================
+   PAGE BOOT ANTI FLICKER
+========================================================= */
 
+body.page-loading
+> *:not(#pageLoader) {
+  visibility:
+    hidden;
+}
+
+
+/*
+  Loader mesti tetap kelihatan
+*/
+
+body.page-loading
+#pageLoader {
+  visibility:
+    visible;
+}
 button,
 input {
   font: inherit;

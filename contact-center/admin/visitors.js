@@ -1658,8 +1658,14 @@ function renderVisitors() {
 
 function renderSources() {
 
+  if (!sourceList) {
+    return;
+  }
+
+
   const sourceTotals =
     {};
+
 
   Object
     .values(
@@ -1671,6 +1677,7 @@ function renderSources() {
         const source =
           visitor.source ||
           "Direct";
+
 
         sourceTotals[
           source
@@ -1697,8 +1704,17 @@ function renderSources() {
       );
 
 
+  const totalVisitors =
+    list.reduce(
+      (sum, [, total]) =>
+        sum + total,
+      0
+    );
+
+
   if (
-    !list.length
+    !list.length ||
+    !totalVisitors
   ) {
 
     sourceList.innerHTML = `
@@ -1715,19 +1731,61 @@ function renderSources() {
   sourceList.innerHTML =
     list
       .map(
-        ([source, total]) => `
-          <div class="visitor-source-row">
+        ([source, total]) => {
 
-            <span>
-              ${safe(source)}
-            </span>
+          const percentage =
+            (
+              total /
+              totalVisitors
+            ) * 100;
 
-            <strong>
-              ${total}
-            </strong>
 
-          </div>
-        `
+          const percentageText =
+            percentage >= 10
+
+              ? percentage.toFixed(0)
+
+              : percentage.toFixed(1);
+
+
+          return `
+            <div class="visitor-chart-source-item">
+
+              <div class="visitor-chart-source-top">
+
+                <div class="visitor-chart-source-name">
+
+                  <span>
+                    ${safe(source)}
+                  </span>
+
+                  <small>
+                    ${total} visitor${total === 1 ? "" : "s"}
+                  </small>
+
+                </div>
+
+
+                <strong>
+                  ${percentageText}%
+                </strong>
+
+              </div>
+
+
+              <div class="visitor-chart-source-track">
+
+                <div
+                  class="visitor-chart-source-fill"
+                  style="width:${Math.min(100, percentage)}%"
+                ></div>
+
+              </div>
+
+            </div>
+          `;
+
+        }
       )
       .join("");
 

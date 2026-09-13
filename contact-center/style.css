@@ -57,6 +57,14 @@
 
 --skin-footer-image:
   none;
+--skin-header-text:
+  #f8dd76;
+
+--skin-body-text:
+  #ffffff;
+
+--skin-footer-text:
+  #ffffff;
 }
 
 
@@ -72,7 +80,8 @@ body {
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
-  color:var(--text);
+  color:
+  var(--skin-body-text);
   font-family:
     Inter,
     system-ui,
@@ -1322,7 +1331,8 @@ body.modal-open {
     1px solid
     rgba(255,255,255,.045);
 
-
+color:
+  var(--skin-footer-text);
   background-color:
     var(--skin-footer-color);
 
@@ -2792,4 +2802,17 @@ body.notice-modal-open {
 .status-clear-search svg {
   width: 13px;
   height: 13px;
+}
+.footer,
+.footer strong,
+.footer p,
+.footer-update {
+  color:
+    var(--skin-footer-text);
+}
+.top-header .header-label,
+.top-header .header-label-text,
+.top-header .brand p {
+  color:
+    var(--skin-header-text);
 }

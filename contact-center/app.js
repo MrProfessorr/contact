@@ -409,18 +409,13 @@ function applyLoadingSettings(data = {}) {
     ENABLE / DISABLE
   */
 
-  if (data.enabled === false) {
+if (
+  data.enabled === false
+) {
 
-    pageLoader.classList.add(
-      "hide"
-    );
+  return;
 
-    document.body.classList.remove(
-      "page-loading"
-    );
-
-    return;
-  }
+}
 
 
   /*

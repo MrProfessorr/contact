@@ -4882,18 +4882,20 @@ input[type="color"] {
   content: "";
 
   position: absolute;
-  right: 6px;
+
+  left: 6px;
 
   width: 20px;
   height: 20px;
 
   border-radius: 50%;
 
-  background:
-    #647184;
+  background: #647184;
 
   transition:
-    .2s ease;
+    left .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
 }
 
 
@@ -4913,6 +4915,9 @@ input:checked
 input:checked
 +
 .welcome-option-slider::after {
+  left:
+    calc(100% - 26px);
+
   background:
     var(--green);
 
@@ -5158,18 +5163,18 @@ input:checked
 
   position: absolute;
 
-  right: 5px;
+  left: 5px;
 
   width: 20px;
   height: 20px;
 
   border-radius: 50%;
 
-  background:
-    #798598;
+  background: #798598;
 
   transition:
-    .2s ease;
+    left .2s ease,
+    background .2s ease;
 }
 
 
@@ -5186,6 +5191,9 @@ input:checked
 input:checked
 +
 .welcome-active-slider::after {
+  left:
+    calc(100% - 25px);
+
   background:
     #ffffff;
 }

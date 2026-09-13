@@ -163,9 +163,25 @@ Background Color
 <button
   id="uploadHeaderImageBtn"
   type="button"
-  class="skin-upload-btn"
+  class="loading-upload-btn"
 >
-  Upload Header Image
+
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      d="M12 16V4m0 0L7 9m5-5 5 5M5 15v4h14v-4"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+
+  Upload Image
+
 </button>
 
 
@@ -179,7 +195,7 @@ Background Color
 
 <div
   id="headerUploadPreview"
-  class="skin-upload-preview hidden"
+  class="loading-upload-preview hidden"
 >
 
 <img
@@ -188,7 +204,7 @@ Background Color
   alt="Header background"
 >
 
-<div class="skin-upload-info">
+<div class="loading-upload-file-info">
 
 <strong id="headerUploadFileName">
 Header image
@@ -204,9 +220,24 @@ Ready
 <button
   id="removeHeaderImageBtn"
   type="button"
-  class="skin-upload-remove"
+  class="loading-upload-remove"
+  aria-label="Remove image"
 >
-×
+
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      d="M6 7h12M10 11v6M14 11v6M9 7l1-3h4l1 3M8 7l1 13h6l1-13"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+
 </button>
 
 </div>
@@ -251,7 +282,7 @@ Background Color
 <button
   id="uploadBodyImageBtn"
   type="button"
-  class="skin-upload-btn"
+  class="loading-upload-btn"
 >
   Upload Body Image
 </button>
@@ -267,7 +298,7 @@ Background Color
 
 <div
   id="bodyUploadPreview"
-  class="skin-upload-preview hidden"
+  class="loading-upload-preview hidden"
 >
 
 <img
@@ -276,7 +307,7 @@ Background Color
   alt="Body background"
 >
 
-<div class="skin-upload-info">
+<div class="loading-upload-file-info">
 
 <strong id="bodyUploadFileName">
 Body image
@@ -292,7 +323,7 @@ Ready
 <button
   id="removeBodyImageBtn"
   type="button"
-  class="skin-upload-remove"
+  class="loading-upload-remove"
 >
 ×
 </button>
@@ -334,12 +365,12 @@ Background Color
 >
 
 
-<div class="skin-upload-section">
+<div class="loading-upload-section">
 
 <button
   id="uploadFooterImageBtn"
   type="button"
-  class="skin-upload-btn"
+  class="loading-upload-btn"
 >
   Upload Footer Image
 </button>
@@ -355,7 +386,7 @@ Background Color
 
 <div
   id="footerUploadPreview"
-  class="skin-upload-preview hidden"
+  class="loading-upload-preview hidden"
 >
 
 <img
@@ -364,7 +395,7 @@ Background Color
   alt="Footer background"
 >
 
-<div class="skin-upload-info">
+<div class="loading-upload-file-info">
 
 <strong id="footerUploadFileName">
 Footer image
@@ -380,7 +411,7 @@ Ready
 <button
   id="removeFooterImageBtn"
   type="button"
-  class="skin-upload-remove"
+  class="loading-upload-remove"
 >
 ×
 </button>

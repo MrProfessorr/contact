@@ -150,7 +150,20 @@ Background Color
 >
 
 </div>
+  
+<div class="form-group">
 
+<label>
+Text Color
+</label>
+
+<input
+  id="skinHeaderTextColor"
+  type="color"
+  value="#f8dd76"
+>
+
+</div>
 
 <input
   id="skinHeaderImageUrl"
@@ -269,7 +282,19 @@ Background Color
 >
 
 </div>
+<div class="form-group">
 
+<label>
+Text Color
+</label>
+
+<input
+  id="skinBodyTextColor"
+  type="color"
+  value="#ffffff"
+>
+
+</div>
 
 <input
   id="skinBodyImageUrl"
@@ -388,7 +413,19 @@ Background Color
 >
 
 </div>
+<div class="form-group">
 
+<label>
+Text Color
+</label>
+
+<input
+  id="skinFooterTextColor"
+  type="color"
+  value="#ffffff"
+>
+
+</div>
 
 <input
   id="skinFooterImageUrl"
@@ -513,13 +550,26 @@ Active
 </label>
 
 
-<button
-  id="saveSkinBtn"
-  type="button"
-  class="btn btn-primary skin-save-btn"
->
-SAVE SKIN
-</button>
+<div class="skin-action-buttons">
+
+  <button
+    id="resetSkinBtn"
+    type="button"
+    class="btn btn-dark"
+  >
+    RESET DEFAULT
+  </button>
+
+
+  <button
+    id="saveSkinBtn"
+    type="button"
+    class="btn btn-primary skin-save-btn"
+  >
+    SAVE SKIN
+  </button>
+
+</div>
 
 
 </div>
@@ -725,7 +775,22 @@ const footerColor =
   document.getElementById(
     "skinFooterColor"
   );
+const headerTextColor =
+  document.getElementById(
+    "skinHeaderTextColor"
+  );
 
+
+const bodyTextColor =
+  document.getElementById(
+    "skinBodyTextColor"
+  );
+
+
+const footerTextColor =
+  document.getElementById(
+    "skinFooterTextColor"
+  );
 
 const headerImageUrl =
   document.getElementById(
@@ -763,7 +828,10 @@ const saveSkinBtn =
   document.getElementById(
     "saveSkinBtn"
   );
-
+const resetSkinBtn =
+  document.getElementById(
+    "resetSkinBtn"
+  );
 const saveMessage =
   document.getElementById(
     "skinSaveMessage"
@@ -841,7 +909,10 @@ function updatePreview() {
 
   previewHeader.style.backgroundColor =
     headerColor.value;
-
+  
+previewHeader.style.color =
+  headerTextColor.value;
+  
   previewHeader.style.backgroundImage =
     backgroundImage(
       headerImage
@@ -851,6 +922,9 @@ function updatePreview() {
   previewBody.style.backgroundColor =
     bodyColor.value;
 
+  previewBody.style.color =
+  bodyTextColor.value;
+  
   previewBody.style.backgroundImage =
     backgroundImage(
       bodyImage
@@ -859,6 +933,9 @@ function updatePreview() {
 
   previewFooter.style.backgroundColor =
     footerColor.value;
+
+  previewFooter.style.color =
+  footerTextColor.value;
 
   previewFooter.style.backgroundImage =
     backgroundImage(
@@ -1107,7 +1184,11 @@ setupUpload(
 [
   headerColor,
   bodyColor,
-  footerColor
+  footerColor,
+
+  headerTextColor,
+  bodyTextColor,
+  footerTextColor
 
 ].forEach(
   element => {
@@ -1164,16 +1245,25 @@ onValue(
       data.header?.color ||
       "#0a0a0a";
 
+    headerTextColor.value =
+  data.header?.textColor ||
+  "#f8dd76";
 
     bodyColor.value =
       data.body?.color ||
       "#0a0a0a";
-
+    
+bodyTextColor.value =
+  data.body?.textColor ||
+  "#ffffff";
 
     footerColor.value =
       data.footer?.color ||
       "#0a0a0a";
 
+    footerTextColor.value =
+  data.footer?.textColor ||
+  "#ffffff";
 
     headerImageUrl.value =
       data.header?.imageUrl ||
@@ -1371,37 +1461,46 @@ saveSkinBtn.addEventListener(
           skinEnabled.checked,
 
 
-        header: {
+header: {
 
-          color:
-            headerColor.value,
+  color:
+    headerColor.value,
 
-          imageUrl:
-            finalHeaderImage
+  textColor:
+    headerTextColor.value,
 
-        },
+  imageUrl:
+    finalHeaderImage
 
-
-        body: {
-
-          color:
-            bodyColor.value,
-
-          imageUrl:
-            finalBodyImage
-
-        },
+},
 
 
-        footer: {
+body: {
 
-          color:
-            footerColor.value,
+  color:
+    bodyColor.value,
 
-          imageUrl:
-            finalFooterImage
+  textColor:
+    bodyTextColor.value,
 
-        },
+  imageUrl:
+    finalBodyImage
+
+},
+
+
+footer: {
+
+  color:
+    footerColor.value,
+
+  textColor:
+    footerTextColor.value,
+
+  imageUrl:
+    finalFooterImage
+
+},
 
 
         updatedAt:
@@ -1470,7 +1569,239 @@ saveSkinBtn.addEventListener(
   }
 );
 
+/* =====================================================
+   RESET DEFAULT
+===================================================== */
 
+const DEFAULT_SKIN = {
+
+  enabled:
+    true,
+
+
+  header: {
+
+    color:
+      "#0a0a0a",
+
+    textColor:
+      "#f8dd76",
+
+    imageUrl:
+      ""
+
+  },
+
+
+  body: {
+
+    color:
+      "#0a0a0a",
+
+    textColor:
+      "#ffffff",
+
+    imageUrl:
+      ""
+
+  },
+
+
+  footer: {
+
+    color:
+      "#0a0a0a",
+
+    textColor:
+      "#ffffff",
+
+    imageUrl:
+      ""
+
+  }
+
+};
+
+
+resetSkinBtn.addEventListener(
+  "click",
+  async () => {
+
+    const confirmed =
+      confirm(
+        "Reset skin to default?"
+      );
+
+
+    if (!confirmed) {
+      return;
+    }
+
+
+    skinEnabled.checked =
+      true;
+
+
+    /* HEADER */
+
+    headerColor.value =
+      DEFAULT_SKIN.header.color;
+
+    headerTextColor.value =
+      DEFAULT_SKIN.header.textColor;
+
+    headerImageUrl.value =
+      "";
+
+
+    /* BODY */
+
+    bodyColor.value =
+      DEFAULT_SKIN.body.color;
+
+    bodyTextColor.value =
+      DEFAULT_SKIN.body.textColor;
+
+    bodyImageUrl.value =
+      "";
+
+
+    /* FOOTER */
+
+    footerColor.value =
+      DEFAULT_SKIN.footer.color;
+
+    footerTextColor.value =
+      DEFAULT_SKIN.footer.textColor;
+
+    footerImageUrl.value =
+      "";
+
+
+    /* CLEAR FILE INPUT */
+
+    headerFile.value =
+      "";
+
+    bodyFile.value =
+      "";
+
+    footerFile.value =
+      "";
+
+
+    /* CLEAR LOCAL PREVIEW URL */
+
+    if (headerObjectUrl) {
+
+      URL.revokeObjectURL(
+        headerObjectUrl
+      );
+
+    }
+
+
+    if (bodyObjectUrl) {
+
+      URL.revokeObjectURL(
+        bodyObjectUrl
+      );
+
+    }
+
+
+    if (footerObjectUrl) {
+
+      URL.revokeObjectURL(
+        footerObjectUrl
+      );
+
+    }
+
+
+    headerObjectUrl =
+      "";
+
+    bodyObjectUrl =
+      "";
+
+    footerObjectUrl =
+      "";
+
+
+    /* HIDE IMAGE PREVIEW */
+
+    showSavedImage(
+      "headerUploadPreview",
+      "headerUploadPreviewImg",
+      "headerUploadFileName",
+      "",
+      ""
+    );
+
+
+    showSavedImage(
+      "bodyUploadPreview",
+      "bodyUploadPreviewImg",
+      "bodyUploadFileName",
+      "",
+      ""
+    );
+
+
+    showSavedImage(
+      "footerUploadPreview",
+      "footerUploadPreviewImg",
+      "footerUploadFileName",
+      "",
+      ""
+    );
+
+
+    updateActiveText();
+
+    updatePreview();
+
+
+    try {
+
+      await set(
+        ref(
+          db,
+          "skin_settings"
+        ),
+        DEFAULT_SKIN
+      );
+
+
+      saveMessage.textContent =
+        "Skin reset to default.";
+
+
+      saveMessage.className =
+        "skin-save-message success";
+
+
+    } catch (error) {
+
+      console.error(
+        "Reset skin error:",
+        error
+      );
+
+
+      saveMessage.textContent =
+        "Failed to reset skin.";
+
+
+      saveMessage.className =
+        "skin-save-message error";
+
+    }
+
+  }
+);
+  
 updateActiveText();
 
 updatePreview();

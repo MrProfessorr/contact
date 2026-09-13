@@ -1751,34 +1751,35 @@ function renderSources() {
           return `
             <div class="visitor-chart-source-item">
 
-              <div class="visitor-chart-source-top">
-
-                <div class="visitor-chart-source-name">
-
-                  <span>
-                    ${safe(source)}
-                  </span>
-
-                  <small>
-                    ${total} visitor${total === 1 ? "" : "s"}
-                  </small>
-
-                </div>
-
+              <div class="visitor-chart-source-name">
 
                 <strong>
-                  ${percentageText}%
+                  ${safe(source)}
                 </strong>
+
+                <span>
+                  ${total}
+                  visitor${total === 1 ? "" : "s"}
+                </span>
 
               </div>
 
 
-              <div class="visitor-chart-source-track">
+              <div class="visitor-chart-source-bar-row">
 
-                <div
-                  class="visitor-chart-source-fill"
-                  style="width:${Math.min(100, percentage)}%"
-                ></div>
+                <div class="visitor-chart-source-track">
+
+                  <div
+                    class="visitor-chart-source-fill"
+                    style="width:${Math.min(100, percentage)}%"
+                  ></div>
+
+                </div>
+
+
+                <strong class="visitor-chart-source-percent">
+                  ${percentageText}%
+                </strong>
 
               </div>
 
@@ -1790,7 +1791,6 @@ function renderSources() {
       .join("");
 
 }
-
 
 /* =========================================================
    CLICKS

@@ -59,7 +59,30 @@ const searchInput =
   document.getElementById(
     "visitorSearch"
   );
+const detailModal =
+  document.getElementById(
+    "visitorDetailModal"
+  );
 
+const detailBackdrop =
+  document.getElementById(
+    "visitorDetailBackdrop"
+  );
+
+const detailClose =
+  document.getElementById(
+    "visitorDetailClose"
+  );
+
+const detailTitle =
+  document.getElementById(
+    "visitorDetailTitle"
+  );
+
+const detailContent =
+  document.getElementById(
+    "visitorDetailContent"
+  );
 
 /* =========================================================
    STATE
@@ -280,7 +303,521 @@ function isBlocked(
 
 }
 
+/* =========================================================
+   VISITOR DETAIL
+========================================================= */
 
+function getVisitorClicks(
+  visitorId
+) {
+
+  return Object
+    .entries(
+      clicks
+    )
+
+    .map(
+      ([id, value]) => ({
+        id,
+        ...value
+      })
+    )
+
+    .filter(
+      item =>
+        item.visitorId ===
+        visitorId
+    )
+
+    .sort(
+      (a, b) =>
+        Number(
+          b.timestamp || 0
+        )
+        -
+        Number(
+          a.timestamp || 0
+        )
+    )
+
+    .slice(
+      0,
+      20
+    );
+
+}
+
+
+function closeVisitorDetail() {
+
+  if (!detailModal) {
+    return;
+  }
+
+  detailModal.classList.add(
+    "hidden"
+  );
+
+  document.body.classList.remove(
+    "visitor-detail-open"
+  );
+
+}
+
+
+function openVisitorDetail(
+  visitorId
+) {
+
+  const visitor =
+    visitors[
+      visitorId
+    ];
+
+  if (!visitor) {
+    return;
+  }
+
+
+  const online =
+    visitorIsOnline(
+      visitorId
+    );
+
+  const blocked =
+    isBlocked(
+      visitorId
+    );
+
+  const visitorClicks =
+    getVisitorClicks(
+      visitorId
+    );
+
+
+  detailTitle.textContent =
+    visitorId;
+
+
+  const activityHtml =
+    visitorClicks.length
+
+      ? visitorClicks
+          .map(
+            item => `
+              <div class="visitor-detail-activity-item">
+
+                <div class="visitor-detail-activity-icon">
+                  ↗
+                </div>
+
+                <div class="visitor-detail-activity-main">
+
+                  <strong>
+                    ${safe(
+                      item.contactName ||
+                      item.contactType ||
+                      "Link"
+                    )}
+                  </strong>
+
+                  <span>
+                    ${safe(
+                      item.destination ||
+                      ""
+                    )}
+                  </span>
+
+                </div>
+
+                <time>
+                  ${safe(
+                    formatTime(
+                      item.timestamp
+                    )
+                  )}
+                </time>
+
+              </div>
+            `
+          )
+          .join("")
+
+      : `
+          <div class="visitor-detail-no-activity">
+            No link clicks from this visitor yet.
+          </div>
+        `;
+
+
+  detailContent.innerHTML = `
+
+    <div class="visitor-detail-status-row">
+
+      <span
+        class="
+          visitor-status
+          ${
+            blocked
+
+              ? "visitor-status-blocked"
+
+              : online
+
+                ? "visitor-status-online"
+
+                : "visitor-status-offline"
+          }
+        "
+      >
+
+        ${
+          blocked
+
+            ? "BLOCKED"
+
+            : online
+
+              ? "● ONLINE"
+
+              : "OFFLINE"
+        }
+
+      </span>
+
+
+      <span class="visitor-detail-id">
+        ${safe(visitorId)}
+      </span>
+
+    </div>
+
+
+    <div class="visitor-detail-section">
+
+      <h4>
+        Visitor Information
+      </h4>
+
+
+      <div class="visitor-detail-grid">
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            Source
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.source ||
+              "Direct"
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            Device
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.device ||
+              "-"
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            Browser
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.browser ||
+              "-"
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            Screen
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.screen ||
+              "-"
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            Language
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.language ||
+              "-"
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            Page Views
+          </span>
+
+          <strong>
+            ${Number(
+              visitor.pageViews ||
+              0
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            Current Page
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.currentPage ||
+              "/"
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            Page Title
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.pageTitle ||
+              "-"
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            First Seen
+          </span>
+
+          <strong>
+            ${safe(
+              formatTime(
+                visitor.firstSeen
+              )
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            Last Seen
+          </span>
+
+          <strong>
+            ${safe(
+              timeAgo(
+                visitor.lastSeen
+              )
+            )}
+          </strong>
+
+          <small>
+            ${safe(
+              formatTime(
+                visitor.lastSeen
+              )
+            )}
+          </small>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="visitor-detail-section">
+
+      <h4>
+        Traffic Information
+      </h4>
+
+
+      <div class="visitor-detail-grid">
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            UTM Source
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.source ||
+              "Direct"
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            UTM Medium
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.medium ||
+              "-"
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field">
+
+          <span>
+            Campaign
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.campaign ||
+              "-"
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="visitor-detail-field visitor-detail-wide">
+
+          <span>
+            Referrer
+          </span>
+
+          <strong>
+            ${safe(
+              visitor.referrer ||
+              "Direct / No referrer"
+            )}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="visitor-detail-section">
+
+      <div class="visitor-detail-section-head">
+
+        <h4>
+          Recent Link Clicks
+        </h4>
+
+        <span>
+          ${visitorClicks.length} clicks
+        </span>
+
+      </div>
+
+
+      <div class="visitor-detail-activity">
+
+        ${activityHtml}
+
+      </div>
+
+    </div>
+
+
+    <div class="visitor-detail-footer">
+
+      ${
+        blocked
+
+          ? `
+              <button
+                type="button"
+                class="visitor-detail-action visitor-detail-unblock"
+                data-unblock-id="${safe(visitorId)}"
+              >
+                UNBLOCK VISITOR
+              </button>
+            `
+
+          : `
+              <button
+                type="button"
+                class="visitor-detail-action visitor-detail-block"
+                data-block-id="${safe(visitorId)}"
+              >
+                BLOCK VISITOR
+              </button>
+            `
+      }
+
+    </div>
+  `;
+
+
+  detailModal.classList.remove(
+    "hidden"
+  );
+
+  document.body.classList.add(
+    "visitor-detail-open"
+  );
+
+}
 /* =========================================================
    STATS
 ========================================================= */
@@ -493,33 +1030,46 @@ function renderVisitors() {
               </td>
 
 
-              <td>
+<td>
 
-                ${
-                  blocked
+  <div class="visitor-action-group">
 
-                  ? `
-                      <button
-                        type="button"
-                        class="visitor-action-btn visitor-unblock-btn"
-                        data-unblock-id="${safe(visitor.id)}"
-                      >
-                        UNBLOCK
-                      </button>
-                    `
+    <button
+      type="button"
+      class="visitor-action-btn visitor-view-btn"
+      data-view-id="${safe(visitor.id)}"
+    >
+      VIEW
+    </button>
 
-                  : `
-                      <button
-                        type="button"
-                        class="visitor-action-btn visitor-block-btn"
-                        data-block-id="${safe(visitor.id)}"
-                      >
-                        BLOCK
-                      </button>
-                    `
-                }
 
-              </td>
+    ${
+      blocked
+
+      ? `
+          <button
+            type="button"
+            class="visitor-action-btn visitor-unblock-btn"
+            data-unblock-id="${safe(visitor.id)}"
+          >
+            UNBLOCK
+          </button>
+        `
+
+      : `
+          <button
+            type="button"
+            class="visitor-action-btn visitor-block-btn"
+            data-block-id="${safe(visitor.id)}"
+          >
+            BLOCK
+          </button>
+        `
+    }
+
+  </div>
+
+</td>
 
             </tr>
           `;
@@ -803,6 +1353,32 @@ onValue(
 
     renderVisitors();
 
+
+    if (
+      detailModal &&
+      !detailModal.classList.contains(
+        "hidden"
+      )
+    ) {
+
+      const currentId =
+        detailTitle
+          ?.textContent
+          ?.trim();
+
+      if (
+        currentId &&
+        visitors[currentId]
+      ) {
+
+        openVisitorDetail(
+          currentId
+        );
+
+      }
+
+    }
+
   }
 
 );
@@ -872,6 +1448,11 @@ document.addEventListener(
   "click",
   async event => {
 
+    const viewButton =
+      event.target.closest(
+        "[data-view-id]"
+      );
+
     const blockButton =
       event.target.closest(
         "[data-block-id]"
@@ -881,6 +1462,24 @@ document.addEventListener(
       event.target.closest(
         "[data-unblock-id]"
       );
+
+
+    if (viewButton) {
+
+      const id =
+        viewButton.dataset.viewId;
+
+      if (id) {
+
+        openVisitorDetail(
+          id
+        );
+
+      }
+
+      return;
+
+    }
 
 
     if (blockButton) {
@@ -982,7 +1581,48 @@ document.addEventListener(
 
   }
 );
+/* =========================================================
+   VISITOR DETAIL CLOSE
+========================================================= */
 
+if (detailClose) {
+
+  detailClose.addEventListener(
+    "click",
+    closeVisitorDetail
+  );
+
+}
+
+
+if (detailBackdrop) {
+
+  detailBackdrop.addEventListener(
+    "click",
+    closeVisitorDetail
+  );
+
+}
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key === "Escape" &&
+      detailModal &&
+      !detailModal.classList.contains(
+        "hidden"
+      )
+    ) {
+
+      closeVisitorDetail();
+
+    }
+
+  }
+);
 
 /* REFRESH RELATIVE TIMES */
 

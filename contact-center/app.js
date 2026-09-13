@@ -4857,45 +4857,45 @@ onValue(
   ),
 
 
-snapshot => {
+  snapshot => {
 
-  try {
+    try {
 
-    const settings =
-      snapshot.val();
-
-
-    renderSiteMarquee(
-      settings
-    );
+      const settings =
+        snapshot.val();
 
 
-  } catch (error) {
-
-    console.error(
-      "Marquee render error:",
-      error
-    );
+      renderSiteMarquee(
+        settings
+      );
 
 
-    if (siteMarquee) {
+    } catch (error) {
 
-      siteMarquee
-        .classList
-        .add(
-          "marquee-hidden"
-        );
+      console.error(
+        "Marquee render error:",
+        error
+      );
+
+
+      if (siteMarquee) {
+
+        siteMarquee
+          .classList
+          .add(
+            "marquee-hidden"
+          );
+
+      }
 
     }
 
-  }
 
+    markReady(
+      "marquee"
+    );
 
-  markReady(
-    "marquee"
-  );
-
-},
+  },
 
 
   error => {
@@ -4913,13 +4913,14 @@ snapshot => {
         .add(
           "marquee-hidden"
         );
-      markReady(
-  "marquee"
-);
 
     }
 
+
+    markReady(
+      "marquee"
+    );
+
   }
-  
 
 );

@@ -505,13 +505,62 @@
 </div>
 
 
-<!-- LIVE PREVIEW -->
 
-<div class="welcome-inline-preview">
+<!-- =====================================================
+     ACTIVE + SAVE
+===================================================== -->
 
-  <div class="welcome-inline-preview-title">
+<div class="welcome-form-actions">
+
+  <label class="welcome-active-switch">
+
+    <input
+      id="welcomeEnabled"
+      type="checkbox"
+      checked
+    >
+
+    <span class="welcome-active-slider">
+
+      <span
+        id="welcomeActiveText"
+        class="welcome-active-text"
+      >
+        Active
+      </span>
+
+    </span>
+
+  </label>
+
+
+  <button
+    id="saveWelcomeBtn"
+    class="btn btn-green welcome-save-btn"
+    type="button"
+  >
+    SAVE WELCOME
+  </button>
+
+</div>
+
+
+<div
+  id="welcomeSaveMessage"
+  class="welcome-save-message"
+></div>
+
+    </section>
+
+    <!-- =====================================================
+     LIVE PREVIEW
+===================================================== -->
+
+<section class="card welcome-preview-card">
+
+  <h3>
     Live Preview
-  </div>
+  </h3>
 
 
   <div
@@ -561,55 +610,7 @@
 
   </div>
 
-</div>
-
-
-
-<!-- =====================================================
-     ACTIVE + SAVE
-===================================================== -->
-
-<div class="welcome-form-actions">
-
-  <label class="welcome-active-switch">
-
-    <input
-      id="welcomeEnabled"
-      type="checkbox"
-      checked
-    >
-
-    <span class="welcome-active-slider">
-
-      <span
-        id="welcomeActiveText"
-        class="welcome-active-text"
-      >
-        Active
-      </span>
-
-    </span>
-
-  </label>
-
-
-  <button
-    id="saveWelcomeBtn"
-    class="btn btn-green welcome-save-btn"
-    type="button"
-  >
-    SAVE WELCOME
-  </button>
-
-</div>
-
-
-<div
-  id="welcomeSaveMessage"
-  class="welcome-save-message"
-></div>
-
-    </section>
+</section>
 
   </div>
 

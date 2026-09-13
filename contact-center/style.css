@@ -38,6 +38,25 @@
     0 20px 60px rgba(0, 0, 0, .30);
 
   --radius: 12px;
+  /* DYNAMIC SKIN */
+
+--skin-header-color:
+  #0a0a0a;
+
+--skin-header-image:
+  none;
+
+--skin-body-color:
+  #0a0a0a;
+
+--skin-body-image:
+  none;
+
+--skin-footer-color:
+  #0a0a0a;
+
+--skin-footer-image:
+  none;
 }
 
 
@@ -62,7 +81,23 @@ body {
     "Segoe UI",
     Arial,
     sans-serif;
-  background: #0A0A0A;
+  background-color:
+  var(--skin-body-color);
+
+background-image:
+  var(--skin-body-image);
+
+background-size:
+  cover;
+
+background-position:
+  center;
+
+background-repeat:
+  no-repeat;
+
+background-attachment:
+  fixed;
 }
 
 
@@ -258,7 +293,20 @@ input {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: linear-gradient(185deg, #525252 0%, #0A0A0A 100%);
+  background-color:
+  var(--skin-header-color);
+
+background-image:
+  var(--skin-header-image);
+
+background-size:
+  cover;
+
+background-position:
+  center;
+
+background-repeat:
+  no-repeat;
   border-bottom:
     1px solid rgba(255,255,255,.055);
   backdrop-filter:
@@ -1269,8 +1317,31 @@ body.modal-open {
 ========================================================= */
 
 .footer {
-  border-top:1px solid rgba(255,255,255,.045);
-  background:#0A0A0A;
+
+  border-top:
+    1px solid
+    rgba(255,255,255,.045);
+
+
+  background-color:
+    var(--skin-footer-color);
+
+
+  background-image:
+    var(--skin-footer-image);
+
+
+  background-size:
+    cover;
+
+
+  background-position:
+    center;
+
+
+  background-repeat:
+    no-repeat;
+
 }
 
 .footer-inner {

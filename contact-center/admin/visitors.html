@@ -223,16 +223,47 @@
         </div>
 
 
-        <div class="visitor-chart-wrap">
-          <canvas id="visitorTrafficChart"></canvas>
-        </div>
+<div class="visitor-chart-wrap">
+  <canvas id="visitorTrafficChart"></canvas>
+</div>
 
 
-        <div class="visitor-chart-note">
-          Unique Visitors = customer unik ·
-          Page Views = jumlah page dibuka ·
-          Link Clicks = link/contact yang ditekan
-        </div>
+<!-- TRAFFIC SOURCES INSIDE CHART -->
+
+<div class="visitor-chart-sources">
+
+  <div class="visitor-chart-source-head">
+
+    <span>
+      Traffic Sources
+    </span>
+
+    <small>
+      Visitor percentage by source
+    </small>
+
+  </div>
+
+
+  <div
+    id="visitorSourceList"
+    class="visitor-source-list visitor-chart-source-list"
+  >
+
+    <div class="visitor-empty">
+      No traffic yet.
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="visitor-chart-note">
+  Unique Visitors = customer unik ·
+  Page Views = jumlah page dibuka ·
+  Link Clicks = link/contact yang ditekan
+</div>
 
       </div>
 
@@ -361,27 +392,6 @@
     <!-- RIGHT -->
 
     <div class="visitor-side-column">
-
-
-      <section class="card">
-
-        <h3>
-          Traffic Sources
-        </h3>
-
-        <div
-          id="visitorSourceList"
-          class="visitor-source-list"
-        >
-
-          <div class="visitor-empty">
-            No traffic yet.
-          </div>
-
-        </div>
-
-      </section>
-
 
       <section class="card">
 

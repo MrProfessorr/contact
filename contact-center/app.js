@@ -72,8 +72,25 @@ const loaderStartedAt =
   Date.now();
 
 const firebaseReady = {
-  contacts: false,
-  notices: false
+
+  contacts:
+    false,
+
+  notices:
+    false,
+
+  loading:
+    false,
+
+  skin:
+    false,
+
+  floating:
+    false,
+
+  marquee:
+    false
+
 };
 
 /* =========================================================
@@ -253,8 +270,13 @@ function markReady(section) {
 
 
 const allReady =
-  firebaseReady.contacts &&
-  firebaseReady.notices;
+  Object
+    .values(
+      firebaseReady
+    )
+    .every(
+      Boolean
+    );
 
 
   if (allReady) {
@@ -514,25 +536,36 @@ onValue(
     "loading_settings"
   ),
 
-  snapshot => {
+snapshot => {
 
-    const data =
-      snapshot.val() || {};
+  const data =
+    snapshot.val() || {};
 
-    applyLoadingSettings(
-      data
-    );
 
-  },
+  applyLoadingSettings(
+    data
+  );
 
-  error => {
 
-    console.error(
-      "Loading settings error:",
-      error
-    );
+  markReady(
+    "loading"
+  );
 
-  }
+},
+
+error => {
+
+  console.error(
+    "Loading settings error:",
+    error
+  );
+
+
+  markReady(
+    "loading"
+  );
+
+}
 );
 /* =========================================================
    CUSTOMER SKIN SETTINGS
@@ -738,26 +771,36 @@ onValue(
     "skin_settings"
   ),
 
-  snapshot => {
+snapshot => {
 
-    const data =
-      snapshot.val() || {};
+  const data =
+    snapshot.val() || {};
 
 
-    applySkinSettings(
-      data
-    );
+  applySkinSettings(
+    data
+  );
 
-  },
 
-  error => {
+  markReady(
+    "skin"
+  );
 
-    console.error(
-      "Skin settings error:",
-      error
-    );
+},
 
-  }
+error => {
+
+  console.error(
+    "Skin settings error:",
+    error
+  );
+
+
+  markReady(
+    "skin"
+  );
+
+}
 
 );
 /* =========================================================
@@ -4184,38 +4227,23 @@ onValue(
   ),
 
 
-  snapshot => {
+snapshot => {
 
-    try {
+  try {
 
-      const settings =
-        snapshot.val();
-
-
-      renderFloatingPromo(
-        settings
-      );
+    const settings =
+      snapshot.val();
 
 
-    } catch (error) {
-
-      console.error(
-        "Floating promo render error:",
-        error
-      );
+    renderFloatingPromo(
+      settings
+    );
 
 
-      hideFloatingPromo();
-
-    }
-
-  },
-
-
-  error => {
+  } catch (error) {
 
     console.error(
-      "Floating promo Firebase error:",
+      "Floating promo render error:",
       error
     );
 
@@ -4223,6 +4251,31 @@ onValue(
     hideFloatingPromo();
 
   }
+
+
+  markReady(
+    "floating"
+  );
+
+},
+
+
+error => {
+
+  console.error(
+    "Floating promo Firebase error:",
+    error
+  );
+
+
+  hideFloatingPromo();
+
+
+  markReady(
+    "floating"
+  );
+
+}
 
 );
 
@@ -4809,40 +4862,45 @@ onValue(
   ),
 
 
-  snapshot => {
+snapshot => {
 
-    try {
+  try {
 
-      const settings =
-        snapshot.val();
-
-
-      renderSiteMarquee(
-        settings
-      );
+    const settings =
+      snapshot.val();
 
 
-    } catch (error) {
-
-      console.error(
-        "Marquee render error:",
-        error
-      );
+    renderSiteMarquee(
+      settings
+    );
 
 
-      if (siteMarquee) {
+  } catch (error) {
 
-        siteMarquee
-          .classList
-          .add(
-            "marquee-hidden"
-          );
+    console.error(
+      "Marquee render error:",
+      error
+    );
 
-      }
+
+    if (siteMarquee) {
+
+      siteMarquee
+        .classList
+        .add(
+          "marquee-hidden"
+        );
 
     }
 
-  },
+  }
+
+
+  markReady(
+    "marquee"
+  );
+
+},
 
 
   error => {
@@ -4860,9 +4918,13 @@ onValue(
         .add(
           "marquee-hidden"
         );
+      markReady(
+  "marquee"
+);
 
     }
 
   }
+  
 
 );

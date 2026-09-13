@@ -5576,7 +5576,7 @@ input:checked
     collapse;
 
   min-width:
-    800px;
+    900px;
 }
 
 
@@ -7003,4 +7003,20 @@ body.visitor-detail-open {
     height:260px;
   }
 
+}
+.visitor-joined-date {
+  display:
+    inline-block;
+
+  white-space:
+    nowrap;
+
+  color:
+    #cdd5df;
+
+  font-size:
+    9px;
+
+  font-variant-numeric:
+    tabular-nums;
 }

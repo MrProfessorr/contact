@@ -535,6 +535,204 @@ onValue(
   }
 );
 /* =========================================================
+   CUSTOMER SKIN SETTINGS
+========================================================= */
+
+function skinCssImage(
+  url
+) {
+
+  const value =
+    String(
+      url || ""
+    )
+      .trim();
+
+
+  if (!value) {
+    return "none";
+  }
+
+
+  const escaped =
+    value
+      .replace(
+        /\\/g,
+        "\\\\"
+      )
+      .replace(
+        /"/g,
+        '\\"'
+      );
+
+
+  return `url("${escaped}")`;
+
+}
+
+
+
+function applySkinSettings(
+  data = {}
+) {
+
+  const root =
+    document
+      .documentElement;
+
+
+  /*
+    Kalau Skin OFF,
+    balik kepada default.
+  */
+
+  if (
+    data.enabled === false
+  ) {
+
+    root.style.setProperty(
+      "--skin-header-color",
+      "#0a0a0a"
+    );
+
+
+    root.style.setProperty(
+      "--skin-header-image",
+      "none"
+    );
+
+
+    root.style.setProperty(
+      "--skin-body-color",
+      "#0a0a0a"
+    );
+
+
+    root.style.setProperty(
+      "--skin-body-image",
+      "none"
+    );
+
+
+    root.style.setProperty(
+      "--skin-footer-color",
+      "#0a0a0a"
+    );
+
+
+    root.style.setProperty(
+      "--skin-footer-image",
+      "none"
+    );
+
+
+    return;
+
+  }
+
+
+
+  const header =
+    data.header || {};
+
+
+  const body =
+    data.body || {};
+
+
+  const footer =
+    data.footer || {};
+
+
+
+  /* HEADER */
+
+  root.style.setProperty(
+    "--skin-header-color",
+    header.color ||
+    "#0a0a0a"
+  );
+
+
+  root.style.setProperty(
+    "--skin-header-image",
+    skinCssImage(
+      header.imageUrl
+    )
+  );
+
+
+
+  /* BODY */
+
+  root.style.setProperty(
+    "--skin-body-color",
+    body.color ||
+    "#0a0a0a"
+  );
+
+
+  root.style.setProperty(
+    "--skin-body-image",
+    skinCssImage(
+      body.imageUrl
+    )
+  );
+
+
+
+  /* FOOTER */
+
+  root.style.setProperty(
+    "--skin-footer-color",
+    footer.color ||
+    "#0a0a0a"
+  );
+
+
+  root.style.setProperty(
+    "--skin-footer-image",
+    skinCssImage(
+      footer.imageUrl
+    )
+  );
+
+}
+
+
+
+/* FIREBASE SKIN */
+
+onValue(
+
+  ref(
+    db,
+    "skin_settings"
+  ),
+
+  snapshot => {
+
+    const data =
+      snapshot.val() || {};
+
+
+    applySkinSettings(
+      data
+    );
+
+  },
+
+  error => {
+
+    console.error(
+      "Skin settings error:",
+      error
+    );
+
+  }
+
+);
+/* =========================================================
    SAFE TEXT
 ========================================================= */
 

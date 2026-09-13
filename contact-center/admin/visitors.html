@@ -116,7 +116,132 @@
 
   </div>
 
+  <!-- =========================================================
+       VISITOR TRAFFIC ANALYTICS
+  ========================================================= -->
 
+  <section class="visitor-chart-card">
+
+    <button
+      id="visitorChartToggle"
+      class="visitor-chart-toggle"
+      type="button"
+      aria-expanded="false"
+    >
+
+      <span class="visitor-chart-arrow">
+        ›
+      </span>
+
+      <span class="visitor-chart-toggle-title">
+        Visitor Traffic Analytics
+      </span>
+
+      <small id="visitorChartRangeLabel">
+        Last 7 days
+      </small>
+
+    </button>
+
+
+    <div
+      id="visitorChartPanel"
+      class="visitor-chart-panel hidden"
+    >
+
+      <div class="visitor-chart-panel-inner">
+
+        <div class="visitor-chart-head">
+
+          <div>
+
+            <h3>
+              Visitor Traffic
+            </h3>
+
+            <p id="visitorChartDateRange">
+              Last 7 days
+            </p>
+
+          </div>
+
+
+          <div class="visitor-chart-range">
+
+            <button
+              type="button"
+              class="visitor-range-btn active"
+              data-chart-days="7"
+            >
+              7D
+            </button>
+
+            <button
+              type="button"
+              class="visitor-range-btn"
+              data-chart-days="14"
+            >
+              14D
+            </button>
+
+            <button
+              type="button"
+              class="visitor-range-btn"
+              data-chart-days="30"
+            >
+              30D
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="visitor-chart-summary">
+
+          <div class="visitor-chart-summary-card">
+            <span>Total Visitors</span>
+            <strong id="chartTotalVisitors">0</strong>
+          </div>
+
+          <div class="visitor-chart-summary-card">
+            <span>Page Views</span>
+            <strong id="chartTotalViews">0</strong>
+          </div>
+
+          <div class="visitor-chart-summary-card">
+            <span>Link Clicks</span>
+            <strong id="chartTotalClicks">0</strong>
+          </div>
+
+          <div class="visitor-chart-summary-card">
+            <span>Peak Day</span>
+            <strong id="chartPeakValue">0</strong>
+            <small id="chartPeakDay">-</small>
+          </div>
+
+        </div>
+
+
+        <div class="visitor-chart-wrap">
+          <canvas id="visitorTrafficChart"></canvas>
+        </div>
+
+
+        <div class="visitor-chart-note">
+          Unique Visitors = customer unik ·
+          Page Views = jumlah page dibuka ·
+          Link Clicks = link/contact yang ditekan
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- STATS -->
   <!-- STATS -->
 
   <section class="visitor-stats-grid">
@@ -380,8 +505,12 @@
 
 
 <script
-  type="module"
-  src="./visitors.js"
+  src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
+></script>
+
+<script 
+  type="module" 
+  src="./visitors.js" 
 ></script>
 
 </body>

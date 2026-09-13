@@ -4777,8 +4777,7 @@ input[type="color"] {
   display: grid;
 
   grid-template-columns:
-    minmax(0, 1.45fr)
-    minmax(380px, .75fr);
+    450px minmax(0, 1fr);
 
   gap: 18px;
 

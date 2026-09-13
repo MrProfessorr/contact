@@ -7084,7 +7084,7 @@ body.visitor-detail-open {
     grid;
 
   grid-template-columns:
-    repeat(3,minmax(0,1fr));
+    repeat(6,minmax(0,1fr));
 
   gap:
     10px;

@@ -4774,14 +4774,16 @@ input[type="color"] {
 ========================================================= */
 
 .welcome-admin-layout {
-  display: block;
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.45fr)
+    minmax(380px, .75fr);
+
+  gap: 18px;
+
+  align-items: start;
 }
-
-
-.welcome-admin-layout > .card {
-  width: 100%;
-}
-
 
 /* GRID */
 
@@ -5262,6 +5264,11 @@ input:checked
 /* RESPONSIVE */
 
 @media(max-width:1050px) {
+
+  .welcome-admin-layout {
+  grid-template-columns:
+    1fr;
+}
 
   .welcome-grid-4 {
     grid-template-columns:

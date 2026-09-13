@@ -83,7 +83,59 @@ const detailContent =
   document.getElementById(
     "visitorDetailContent"
   );
+/* =========================================================
+   CHART DOM
+========================================================= */
 
+const chartToggle =
+  document.getElementById(
+    "visitorChartToggle"
+  );
+
+const chartPanel =
+  document.getElementById(
+    "visitorChartPanel"
+  );
+
+const chartRangeLabel =
+  document.getElementById(
+    "visitorChartRangeLabel"
+  );
+
+const chartDateRange =
+  document.getElementById(
+    "visitorChartDateRange"
+  );
+
+const chartCanvas =
+  document.getElementById(
+    "visitorTrafficChart"
+  );
+
+const chartTotalVisitors =
+  document.getElementById(
+    "chartTotalVisitors"
+  );
+
+const chartTotalViews =
+  document.getElementById(
+    "chartTotalViews"
+  );
+
+const chartTotalClicks =
+  document.getElementById(
+    "chartTotalClicks"
+  );
+
+const chartPeakValue =
+  document.getElementById(
+    "chartPeakValue"
+  );
+
+const chartPeakDay =
+  document.getElementById(
+    "chartPeakDay"
+  );
 /* =========================================================
    STATE
 ========================================================= */
@@ -103,7 +155,14 @@ let blockedVisitors =
 let searchText =
   "";
 
+let dailyAnalytics =
+  {};
 
+let visitorTrafficChart =
+  null;
+
+let selectedChartDays =
+  7;
 /* =========================================================
    HELPERS
 ========================================================= */
@@ -819,6 +878,460 @@ function openVisitorDetail(
 
 }
 /* =========================================================
+   VISITOR TRAFFIC CHART
+========================================================= */
+
+function getChartDateKey(
+  date
+) {
+
+  const year =
+    date.getFullYear();
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
+function getChartDateLabel(
+  date
+) {
+
+  return date.toLocaleDateString(
+    [],
+    {
+      day:
+        "2-digit",
+
+      month:
+        "short"
+    }
+  );
+
+}
+
+
+function getChartRows(
+  days
+) {
+
+  const rows =
+    [];
+
+
+  for (
+    let index = days - 1;
+    index >= 0;
+    index--
+  ) {
+
+    const date =
+      new Date();
+
+    date.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    date.setDate(
+      date.getDate() -
+      index
+    );
+
+
+    const key =
+      getChartDateKey(
+        date
+      );
+
+
+    const data =
+      dailyAnalytics[
+        key
+      ] || {};
+
+
+    rows.push(
+      {
+        key,
+
+        date,
+
+        label:
+          getChartDateLabel(
+            date
+          ),
+
+        visitors:
+          Object.keys(
+            data.visitors || {}
+          ).length,
+
+        pageViews:
+          Number(
+            data.pageViews || 0
+          ),
+
+        linkClicks:
+          Number(
+            data.linkClicks || 0
+          )
+      }
+    );
+
+  }
+
+
+  return rows;
+
+}
+
+
+function renderVisitorTrafficChart() {
+
+  if (
+    !chartCanvas ||
+    typeof window.Chart ===
+      "undefined"
+  ) {
+    return;
+  }
+
+
+  const rows =
+    getChartRows(
+      selectedChartDays
+    );
+
+
+  const visitorData =
+    rows.map(
+      item =>
+        item.visitors
+    );
+
+  const pageViewData =
+    rows.map(
+      item =>
+        item.pageViews
+    );
+
+  const clickData =
+    rows.map(
+      item =>
+        item.linkClicks
+    );
+
+
+  const totalVisitors =
+    visitorData.reduce(
+      (total, value) =>
+        total + value,
+      0
+    );
+
+
+  const totalViews =
+    pageViewData.reduce(
+      (total, value) =>
+        total + value,
+      0
+    );
+
+
+  const totalClicks =
+    clickData.reduce(
+      (total, value) =>
+        total + value,
+      0
+    );
+
+
+  let peak =
+    rows[0] || null;
+
+
+  rows.forEach(
+    row => {
+
+      if (
+        !peak ||
+        row.visitors >
+          peak.visitors
+      ) {
+
+        peak =
+          row;
+
+      }
+
+    }
+  );
+
+
+  chartTotalVisitors.textContent =
+    totalVisitors;
+
+  chartTotalViews.textContent =
+    totalViews;
+
+  chartTotalClicks.textContent =
+    totalClicks;
+
+
+  chartPeakValue.textContent =
+    peak
+      ? peak.visitors
+      : 0;
+
+
+  chartPeakDay.textContent =
+    peak
+      ? peak.label
+      : "-";
+
+
+  chartRangeLabel.textContent =
+    `Last ${selectedChartDays} days`;
+
+
+  if (
+    rows.length
+  ) {
+
+    chartDateRange.textContent =
+      `${rows[0].label} – ${
+        rows[
+          rows.length - 1
+        ].label
+      }`;
+
+  }
+
+
+  if (
+    visitorTrafficChart
+  ) {
+
+    visitorTrafficChart.destroy();
+
+  }
+
+
+  visitorTrafficChart =
+    new window.Chart(
+      chartCanvas,
+      {
+
+        type:
+          "line",
+
+        data: {
+
+          labels:
+            rows.map(
+              item =>
+                item.label
+            ),
+
+          datasets: [
+
+            {
+              label:
+                "Unique Visitors",
+
+              data:
+                visitorData,
+
+              borderColor:
+                "#4285ff",
+
+              backgroundColor:
+                "rgba(66,133,255,.12)",
+
+              borderWidth:
+                2,
+
+              pointRadius:
+                3,
+
+              tension:
+                .35,
+
+              fill:
+                true
+            },
+
+            {
+              label:
+                "Page Views",
+
+              data:
+                pageViewData,
+
+              borderColor:
+                "#26c979",
+
+              backgroundColor:
+                "rgba(38,201,121,.06)",
+
+              borderWidth:
+                2,
+
+              pointRadius:
+                3,
+
+              tension:
+                .35,
+
+              fill:
+                false
+            },
+
+            {
+              label:
+                "Link Clicks",
+
+              data:
+                clickData,
+
+              borderColor:
+                "#d69116",
+
+              backgroundColor:
+                "rgba(214,145,22,.06)",
+
+              borderWidth:
+                2,
+
+              pointRadius:
+                3,
+
+              tension:
+                .35,
+
+              fill:
+                false
+            }
+
+          ]
+
+        },
+
+
+        options: {
+
+          responsive:
+            true,
+
+          maintainAspectRatio:
+            false,
+
+          interaction: {
+            mode:
+              "index",
+
+            intersect:
+              false
+          },
+
+          plugins: {
+
+            legend: {
+
+              position:
+                "top",
+
+              align:
+                "end",
+
+              labels: {
+                color:
+                  "#9ba7b8",
+
+                usePointStyle:
+                  true,
+
+                boxWidth:
+                  7,
+
+                font: {
+                  size:
+                    9
+                }
+              }
+
+            }
+
+          },
+
+          scales: {
+
+            x: {
+
+              grid: {
+                display:
+                  false
+              },
+
+              ticks: {
+                color:
+                  "#778396",
+
+                font: {
+                  size:
+                    9
+                }
+              }
+
+            },
+
+            y: {
+
+              beginAtZero:
+                true,
+
+              ticks: {
+                precision:
+                  0,
+
+                color:
+                  "#778396",
+
+                font: {
+                  size:
+                    9
+                }
+              },
+
+              grid: {
+                color:
+                  "rgba(255,255,255,.045)"
+              }
+
+            }
+
+          }
+
+        }
+
+      }
+    );
+
+}
+/* =========================================================
    STATS
 ========================================================= */
 
@@ -1422,7 +1935,151 @@ onValue(
 
 );
 
+/* =========================================================
+   DAILY ANALYTICS FOR CHART
+========================================================= */
 
+onValue(
+
+  ref(
+    db,
+    "analytics/daily"
+  ),
+
+  snapshot => {
+
+    dailyAnalytics =
+      snapshot.val() || {};
+
+    renderVisitorTrafficChart();
+
+  },
+
+  error => {
+
+    console.error(
+      "Daily analytics chart error:",
+      error
+    );
+
+  }
+
+);
+
+/* =========================================================
+   CHART SHOW / HIDE
+========================================================= */
+
+if (
+  chartToggle &&
+  chartPanel
+) {
+
+  chartToggle.addEventListener(
+    "click",
+    () => {
+
+      const opening =
+        chartPanel.classList.contains(
+          "hidden"
+        );
+
+
+      chartPanel.classList.toggle(
+        "hidden"
+      );
+
+
+      chartToggle.classList.toggle(
+        "open",
+        opening
+      );
+
+
+      chartToggle.setAttribute(
+        "aria-expanded",
+        opening
+          ? "true"
+          : "false"
+      );
+
+
+      if (opening) {
+
+        setTimeout(
+          () => {
+
+            renderVisitorTrafficChart();
+
+          },
+          50
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   CHART RANGE
+========================================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        "[data-chart-days]"
+      );
+
+    if (!button) {
+      return;
+    }
+
+
+    const days =
+      Number(
+        button.dataset.chartDays
+      );
+
+
+    if (
+      ![7,14,30].includes(
+        days
+      )
+    ) {
+      return;
+    }
+
+
+    selectedChartDays =
+      days;
+
+
+    document
+      .querySelectorAll(
+        "[data-chart-days]"
+      )
+      .forEach(
+        item => {
+
+          item.classList.toggle(
+            "active",
+            item === button
+          );
+
+        }
+      );
+
+
+    renderVisitorTrafficChart();
+
+  }
+);
 /* =========================================================
    SEARCH
 ========================================================= */

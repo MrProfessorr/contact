@@ -125,543 +125,491 @@
         Welcome Settings
       </h3>
 
+<!-- =====================================================
+     WELCOME FORM GRID
+===================================================== -->
 
-      <!-- IMAGE URL HIDDEN -->
 
-      <input
-        id="welcomeImageUrl"
-        type="hidden"
+<!-- ROW 1 -->
+
+<div class="welcome-grid welcome-grid-4">
+
+  <div class="form-group">
+    <label>Desktop Width</label>
+
+    <input
+      id="welcomeDesktopWidth"
+      type="number"
+      min="250"
+      max="1000"
+      value="520"
+    >
+  </div>
+
+
+  <div class="form-group">
+    <label>Mobile Width</label>
+
+    <input
+      id="welcomeMobileWidth"
+      type="number"
+      min="220"
+      max="600"
+      value="340"
+    >
+  </div>
+
+
+  <div class="form-group">
+    <label>Animation</label>
+
+    <select id="welcomeAnimation">
+      <option value="zoom">Zoom</option>
+      <option value="fade">Fade</option>
+      <option value="slide-down">Slide Down</option>
+      <option value="slide-up">Slide Up</option>
+      <option value="none">None</option>
+    </select>
+  </div>
+
+
+  <div class="form-group">
+    <label>Open Delay (ms)</label>
+
+    <input
+      id="welcomeDelay"
+      type="number"
+      min="0"
+      max="10000"
+      value="300"
+    >
+  </div>
+
+</div>
+
+
+<!-- ROW 2 -->
+
+<div class="welcome-grid welcome-grid-3">
+
+  <div class="form-group">
+    <label>Popup Background</label>
+
+    <input
+      id="welcomeBackgroundColor"
+      type="color"
+      value="#111111"
+    >
+  </div>
+
+
+  <div class="form-group">
+    <label>X Background</label>
+
+    <input
+      id="welcomeCloseColor"
+      type="color"
+      value="#0a0a0a"
+    >
+  </div>
+
+
+  <div class="form-group">
+    <label>X Icon Color</label>
+
+    <input
+      id="welcomeCloseIconColor"
+      type="color"
+      value="#ffd51b"
+    >
+  </div>
+
+</div>
+
+
+<!-- ROW 3 -->
+
+<div class="welcome-grid welcome-grid-3">
+
+  <div class="form-group">
+    <label>Border Color</label>
+
+    <input
+      id="welcomeBorderColor"
+      type="color"
+      value="#d6a917"
+    >
+  </div>
+
+
+  <div class="form-group">
+    <label>OK Button Color</label>
+
+    <input
+      id="welcomeOkColor"
+      type="color"
+      value="#d6a917"
+    >
+  </div>
+
+
+  <div class="form-group">
+    <label>OK Text Color</label>
+
+    <input
+      id="welcomeOkTextColor"
+      type="color"
+      value="#ffffff"
+    >
+  </div>
+
+</div>
+
+
+<!-- ROW 4 -->
+
+<div class="welcome-grid welcome-grid-3">
+
+  <div class="form-group">
+    <label>Border Width</label>
+
+    <input
+      id="welcomeBorderWidth"
+      type="number"
+      min="0"
+      max="15"
+      value="2"
+    >
+  </div>
+
+
+  <div class="form-group">
+    <label>Backdrop Color</label>
+
+    <input
+      id="welcomeBackdropColor"
+      type="color"
+      value="#000000"
+    >
+  </div>
+
+
+  <div class="form-group">
+    <label>Backdrop Opacity (%)</label>
+
+    <input
+      id="welcomeBackdropOpacity"
+      type="number"
+      min="0"
+      max="100"
+      value="78"
+    >
+  </div>
+
+</div>
+
+
+<!-- ROW 5 -->
+
+<div class="welcome-grid welcome-grid-2">
+
+  <div class="form-group">
+    <label>OK Button Text</label>
+
+    <input
+      id="welcomeOkText"
+      type="text"
+      maxlength="30"
+      value="OK"
+    >
+  </div>
+
+
+  <div class="form-group">
+    <label>Show Again</label>
+
+    <select id="welcomeShowMode">
+      <option value="refresh">Every Refresh</option>
+      <option value="session">Once Per Session</option>
+      <option value="day">Once Per Day</option>
+      <option value="24h">Once Per 24 Hours</option>
+    </select>
+  </div>
+
+</div>
+
+
+<!-- CLOSE METHODS -->
+
+<div class="welcome-switch-grid">
+
+  <label class="welcome-option-switch">
+
+    <input
+      id="welcomeCloseX"
+      type="checkbox"
+      checked
+    >
+
+    <span class="welcome-option-slider">
+      <span class="welcome-option-text">
+        X Button
+      </span>
+    </span>
+
+  </label>
+
+
+  <label class="welcome-option-switch">
+
+    <input
+      id="welcomeCloseOk"
+      type="checkbox"
+      checked
+    >
+
+    <span class="welcome-option-slider">
+      <span class="welcome-option-text">
+        OK Button
+      </span>
+    </span>
+
+  </label>
+
+
+  <label class="welcome-option-switch">
+
+    <input
+      id="welcomeCloseEsc"
+      type="checkbox"
+      checked
+    >
+
+    <span class="welcome-option-slider">
+      <span class="welcome-option-text">
+        ESC Keyboard
+      </span>
+    </span>
+
+  </label>
+
+
+  <label class="welcome-option-switch">
+
+    <input
+      id="welcomeCloseOutside"
+      type="checkbox"
+      checked
+    >
+
+    <span class="welcome-option-slider">
+      <span class="welcome-option-text">
+        Click Outside
+      </span>
+    </span>
+
+  </label>
+
+</div>
+
+
+<!-- UPLOAD -->
+
+<div class="form-group welcome-upload-group">
+
+  <label>
+    Popup Image
+  </label>
+
+
+  <input
+    id="welcomeImageUrl"
+    type="hidden"
+  >
+
+
+  <div class="loading-upload-section">
+
+
+    <button
+      id="welcomeUploadBtn"
+      type="button"
+      class="loading-upload-btn"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="M12 16V4m0 0L7 9m5-5 5 5M5 15v4h14v-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+
+      Upload Image
+
+    </button>
+
+
+    <input
+      id="welcomeImageFile"
+      type="file"
+      accept="image/png,image/jpeg,image/webp,image/gif"
+      hidden
+    >
+
+
+    <div
+      id="welcomeImagePreview"
+      class="loading-upload-preview hidden"
+    >
+
+      <img
+        id="welcomeImagePreviewImg"
+        src=""
+        alt="Welcome popup image"
       >
 
 
-      <!-- UPLOAD -->
+      <div class="loading-upload-file-info">
 
-      <div class="form-group">
+        <strong id="welcomeImageFileName">
+          Welcome image
+        </strong>
 
-        <label>
-          Popup Image
-        </label>
-
-
-        <div class="welcome-upload-section">
-
-          <input
-            id="welcomeImageFile"
-            type="file"
-            accept="image/*"
-            hidden
-          >
-
-
-          <button
-            id="welcomeUploadBtn"
-            class="btn btn-dark full"
-            type="button"
-          >
-            Upload Image
-          </button>
-
-
-          <div
-            id="welcomeUploadStatus"
-            class="help-text"
-          >
-            JPG, PNG, WEBP or GIF
-          </div>
-
-
-          <div
-            id="welcomeImagePreview"
-            class="welcome-image-preview hidden"
-          >
-
-            <img
-              id="welcomeImagePreviewImg"
-              src=""
-              alt="Welcome Preview"
-            >
-
-
-            <button
-              id="welcomeRemoveImage"
-              type="button"
-              class="btn btn-red full"
-            >
-              Remove Image
-            </button>
-
-          </div>
-
-        </div>
+        <span id="welcomeUploadStatus">
+          Ready
+        </span>
 
       </div>
 
 
-      <!-- SIZE -->
+      <button
+        id="welcomeRemoveImage"
+        type="button"
+        class="loading-upload-remove"
+        aria-label="Remove image"
+      >
+        ×
+      </button>
 
-      <div class="welcome-form-row">
+    </div>
 
-        <div class="form-group">
+  </div>
 
-          <label>
-            Desktop Width
-          </label>
+</div>
 
-          <input
-            id="welcomeDesktopWidth"
-            type="number"
-            min="250"
-            max="1000"
-            value="520"
-          >
 
-        </div>
+<!-- LIVE PREVIEW -->
 
+<div class="welcome-inline-preview">
 
-        <div class="form-group">
+  <div class="welcome-inline-preview-title">
+    Live Preview
+  </div>
 
-          <label>
-            Mobile Width
-          </label>
 
-          <input
-            id="welcomeMobileWidth"
-            type="number"
-            min="220"
-            max="600"
-            value="340"
-          >
+  <div
+    id="welcomeAdminPreview"
+    class="welcome-admin-preview"
+  >
 
-        </div>
+    <div
+      id="welcomePreviewModal"
+      class="welcome-preview-modal"
+    >
 
-      </div>
-
-
-      <!-- BORDER -->
-
-      <div class="welcome-form-row">
-
-        <div class="form-group">
-
-          <label>
-            Border Color
-          </label>
-
-          <input
-            id="welcomeBorderColor"
-            type="color"
-            value="#d6a917"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Border Width
-          </label>
-
-          <input
-            id="welcomeBorderWidth"
-            type="number"
-            min="0"
-            max="15"
-            value="2"
-          >
-
-        </div>
-
-      </div>
-
-
-      <!-- BACKGROUND -->
-
-      <div class="welcome-form-row">
-
-        <div class="form-group">
-
-          <label>
-            Popup Background
-          </label>
-
-          <input
-            id="welcomeBackgroundColor"
-            type="color"
-            value="#111111"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Backdrop Color
-          </label>
-
-          <input
-            id="welcomeBackdropColor"
-            type="color"
-            value="#000000"
-          >
-
-        </div>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Backdrop Opacity (%)
-        </label>
-
-        <input
-          id="welcomeBackdropOpacity"
-          type="number"
-          min="0"
-          max="100"
-          value="78"
-        >
-
-      </div>
-
-
-      <!-- OK -->
-
-      <div class="form-group">
-
-        <label>
-          OK Button Text
-        </label>
-
-        <input
-          id="welcomeOkText"
-          value="OK"
-          maxlength="30"
-        >
-
-      </div>
-
-
-      <div class="welcome-form-row">
-
-        <div class="form-group">
-
-          <label>
-            OK Button Color
-          </label>
-
-          <input
-            id="welcomeOkColor"
-            type="color"
-            value="#d6a917"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            OK Text Color
-          </label>
-
-          <input
-            id="welcomeOkTextColor"
-            type="color"
-            value="#ffffff"
-          >
-
-        </div>
-
-      </div>
-
-
-      <!-- X -->
-
-      <div class="welcome-form-row">
-
-        <div class="form-group">
-
-          <label>
-            X Background
-          </label>
-
-          <input
-            id="welcomeCloseColor"
-            type="color"
-            value="#0a0a0a"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            X Icon Color
-          </label>
-
-          <input
-            id="welcomeCloseIconColor"
-            type="color"
-            value="#ffd51b"
-          >
-
-        </div>
-
-      </div>
-
-
-      <!-- BEHAVIOUR -->
-
-      <div class="welcome-form-row">
-
-        <div class="form-group">
-
-          <label>
-            Animation
-          </label>
-
-          <select id="welcomeAnimation">
-
-            <option value="zoom">
-              Zoom
-            </option>
-
-            <option value="fade">
-              Fade
-            </option>
-
-            <option value="slide-down">
-              Slide Down
-            </option>
-
-            <option value="slide-up">
-              Slide Up
-            </option>
-
-            <option value="none">
-              None
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Open Delay (ms)
-          </label>
-
-          <input
-            id="welcomeDelay"
-            type="number"
-            min="0"
-            max="10000"
-            value="300"
-          >
-
-        </div>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Show Again
-        </label>
-
-        <select id="welcomeShowMode">
-
-          <option value="refresh">
-            Every Refresh
-          </option>
-
-          <option value="session">
-            Once Per Session
-          </option>
-
-          <option value="day">
-            Once Per Day
-          </option>
-
-          <option value="24h">
-            Once Per 24 Hours
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <!-- CLOSE METHODS -->
-
-      <div class="welcome-check-grid">
-
-        <label class="welcome-check">
-
-          <input
-            id="welcomeCloseX"
-            type="checkbox"
-            checked
-          >
-
-          <span>
-            X Button
-          </span>
-
-        </label>
-
-
-        <label class="welcome-check">
-
-          <input
-            id="welcomeCloseOk"
-            type="checkbox"
-            checked
-          >
-
-          <span>
-            OK Button
-          </span>
-
-        </label>
-
-
-        <label class="welcome-check">
-
-          <input
-            id="welcomeCloseEsc"
-            type="checkbox"
-            checked
-          >
-
-          <span>
-            ESC Keyboard
-          </span>
-
-        </label>
-
-
-        <label class="welcome-check">
-
-          <input
-            id="welcomeCloseOutside"
-            type="checkbox"
-            checked
-          >
-
-          <span>
-            Click Outside
-          </span>
-
-        </label>
-
-      </div>
-
-
-      <!-- ACTIVE + SAVE -->
-
-      <div class="welcome-actions">
-
-        <label class="welcome-active-toggle">
-
-          <input
-            id="welcomeEnabled"
-            type="checkbox"
-            checked
-          >
-
-          <span>
-            Active
-          </span>
-
-        </label>
-
-
-        <button
-          id="saveWelcomeBtn"
-          class="btn btn-primary"
-          type="button"
-        >
-          SAVE WELCOME
-        </button>
-
-      </div>
+      <button
+        id="welcomePreviewClose"
+        class="welcome-preview-close"
+        type="button"
+      >
+        ×
+      </button>
 
 
       <div
-        id="welcomeSaveMessage"
-        class="welcome-save-message"
-      ></div>
-
-    </section>
-
-
-    <!-- PREVIEW -->
-
-    <section class="card">
-
-      <h3>
-        Live Preview
-      </h3>
+        id="welcomePreviewEmpty"
+        class="welcome-preview-empty"
+      >
+        Upload an image to preview
+      </div>
 
 
-      <div
-        id="welcomeAdminPreview"
-        class="welcome-admin-preview"
+      <img
+        id="welcomePreviewImage"
+        class="welcome-preview-image hidden"
+        src=""
+        alt=""
       >
 
-        <div
-          id="welcomePreviewModal"
-          class="welcome-preview-modal"
-        >
 
-          <button
-            id="welcomePreviewClose"
-            class="welcome-preview-close"
-            type="button"
-          >
-            ×
-          </button>
+      <button
+        id="welcomePreviewOk"
+        class="welcome-preview-ok"
+        type="button"
+      >
+        OK
+      </button>
 
+    </div>
 
-          <div
-            id="welcomePreviewEmpty"
-            class="welcome-preview-empty"
-          >
-            Upload an image to preview
-          </div>
+  </div>
+
+</div>
 
 
-          <img
-            id="welcomePreviewImage"
-            class="welcome-preview-image hidden"
-            src=""
-            alt=""
-          >
+
+<!-- =====================================================
+     ACTIVE + SAVE
+===================================================== -->
+
+<div class="welcome-form-actions">
+
+  <label class="welcome-active-switch">
+
+    <input
+      id="welcomeEnabled"
+      type="checkbox"
+      checked
+    >
+
+    <span class="welcome-active-slider">
+
+      <span
+        id="welcomeActiveText"
+        class="welcome-active-text"
+      >
+        Active
+      </span>
+
+    </span>
+
+  </label>
 
 
-          <button
-            id="welcomePreviewOk"
-            class="welcome-preview-ok"
-            type="button"
-          >
-            OK
-          </button>
+  <button
+    id="saveWelcomeBtn"
+    class="btn btn-green welcome-save-btn"
+    type="button"
+  >
+    SAVE WELCOME
+  </button>
 
-        </div>
+</div>
 
-      </div>
+
+<div
+  id="welcomeSaveMessage"
+  class="welcome-save-message"
+></div>
 
     </section>
-
 
   </div>
 
@@ -771,7 +719,14 @@ const $ =
 
 const enabled =
   $("welcomeEnabled");
+  
+const activeText =
+  $("welcomeActiveText");
 
+
+const imageFileName =
+  $("welcomeImageFileName");
+  
 const imageUrl =
   $("welcomeImageUrl");
 
@@ -883,6 +838,15 @@ const previewOk =
 ========================================================= */
 
 function updatePreview() {
+
+  if (activeText) {
+
+  activeText.textContent =
+    enabled.checked
+      ? "Active"
+      : "Inactive";
+
+}
 
   preview.style.background =
     hexToRgba(
@@ -1039,7 +1003,12 @@ imageFile.addEventListener(
     if (!file) {
       return;
     }
+   if (imageFileName) {
 
+  imageFileName.textContent =
+    file.name;
+
+}
 
     try {
 
@@ -1072,8 +1041,8 @@ imageFile.addEventListener(
       );
 
 
-      uploadStatus.textContent =
-        "Image uploaded successfully.";
+uploadStatus.textContent =
+  "Ready";
 
 
       updatePreview();
@@ -1117,6 +1086,16 @@ removeImage.addEventListener(
 
     imagePreviewImg.src =
       "";
+  if (imageFileName) {
+
+  imageFileName.textContent =
+    "Welcome image";
+
+}
+
+
+uploadStatus.textContent =
+  "Ready";
 
     imagePreview.classList.add(
       "hidden"
@@ -1295,22 +1274,65 @@ onValue(
       data.closeOutside !== false;
 
 
-    if (imageUrl.value) {
+if (imageUrl.value) {
 
-      imagePreviewImg.src =
-        imageUrl.value;
+  imagePreviewImg.src =
+    imageUrl.value;
 
-      imagePreview.classList.remove(
-        "hidden"
-      );
 
-    } else {
+  if (imageFileName) {
 
-      imagePreview.classList.add(
-        "hidden"
-      );
+    try {
+
+      const url =
+        new URL(
+          imageUrl.value
+        );
+
+
+      imageFileName.textContent =
+        decodeURIComponent(
+          url.pathname
+            .split("/")
+            .pop() ||
+          "Welcome image"
+        );
+
+
+    } catch {
+
+      imageFileName.textContent =
+        "Welcome image";
 
     }
+
+  }
+
+
+  uploadStatus.textContent =
+    "Ready";
+
+
+  imagePreview.classList.remove(
+    "hidden"
+  );
+
+
+} else {
+
+  if (imageFileName) {
+
+    imageFileName.textContent =
+      "Welcome image";
+
+  }
+
+
+  imagePreview.classList.add(
+    "hidden"
+  );
+
+}
 
 
     updatePreview();

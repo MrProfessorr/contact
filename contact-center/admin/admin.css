@@ -5626,7 +5626,6 @@ input:checked
   font-size:14px;
   font-weight:600;
   text-align:left;
-  text-transform:uppercase;
 }
 
 .visitor-table td {
@@ -5776,39 +5775,50 @@ input:checked
 .visitor-action-btn {
   min-width:
     68px;
-
   padding:
-    6px 8px;
-
+    0px 15px;
   border:
     none;
-
   border-radius:
     6px;
-
   color:
     #ffffff;
-
   cursor:
     pointer;
-
   font-size:
-    8px;
-
-  font-weight:
-    800;
+    14px;
 }
 
 
 .visitor-block-btn {
-  background:
-    #b73847;
+  background:transparent;
+  color:#dc4446;
+  border:1px solid #dc4446;
 }
 
+.visitor-block-btn:hover {
+  color:#e86e6b;
+  border:1px solid #7e2e2f;
+}
+.visitor-block-btn:active {
+  color:#ad393a;
+  border:1px solid #ad393a;
+}
+
+.visitor-unblock-btn:hover {
+  color:#e86e6b;
+  border:1px solid #7e2e2f;
+}
+
+.visitor-unblock-btn:active {
+  color:#ad393a;
+  border:1px solid #ad393a;
+}
 
 .visitor-unblock-btn {
-  background:
-    #16794c;
+  background:transparent;
+  color:#dc4446;
+  border:1px solid #dc4446;
 }
 
 

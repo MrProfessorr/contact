@@ -5488,25 +5488,17 @@ input:checked
     grid;
 
   grid-template-columns:
-    minmax(0,1fr)
-    330px;
+    1fr;
 
   gap:
     18px;
 
   align-items:
     start;
+
+  width:
+    100%;
 }
-
-
-.visitor-side-column {
-  display:
-    grid;
-
-  gap:
-    18px;
-}
-
 
 /* HEAD */
 

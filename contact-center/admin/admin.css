@@ -12,8 +12,8 @@
   --input: #0d1219;
   --line: #283242;
 
-  --text: #ffffff;
-  --muted: #8f9bac;
+  --text: rgba(255,255,255,0.85);
+  --muted: rgba(255,255,255,0.45);
 
   --blue: #4285ff;
   --green: #26c979;
@@ -8224,73 +8224,39 @@ span.flatpickr-weekday {
 .visitor-page-number,
 .visitor-page-nav {
   min-width:32px;
-
   height:32px;
-
   display:inline-flex;
-
   align-items:center;
-
   justify-content:center;
-
   padding:0 6px;
-
-  border:
-    1px solid transparent;
-
+  border:1px solid transparent;
   border-radius:6px;
-
-  color:#d7deea;
-
-  background:#0d1219;
-
+  color: rgba(255,255,255,0.85);
+  background:#141414;
   cursor:pointer;
-
-  font-size:12px;
+  font-size:14px;
+  transition: all .2s ease;
 }
 
 .visitor-page-nav {
-  width:
-    32px;
-
-  min-width:
-    32px;
-
-  height:
-    32px;
-
-  padding:
-    0;
+  width:32px;
+  min-width:32px;
+  height:32px;
+  padding:0;
 }
 .visitor-page-nav-icon {
-  width:
-    12px;
-
-  height:
-    12px;
-
-  display:
-    block;
-
-  fill:
-    rgba(255,255,255,0.85);
-
-  pointer-events:
-    none;
-
-  transition:
-    fill .15s ease;
-}
-.visitor-page-nav-icon: hover {
-  background: rgba(255,255,255,0.85);
+  width:12px;
+  height:12px;
+  display:block;
+  fill:rgba(255,255,255,0.85);
+  pointer-events:none;
+  transition:fill .15s ease;
 }
 .visitor-page-number:hover,
 .visitor-page-nav:hover:not(:disabled) {
-  border-color:
-    rgba(66,133,255,.50);
 
   background:
-    rgba(66,133,255,.10);
+    rgba(255,255,255,0.12);
 }
 .visitor-page-number.active {
   border-color:#2d7bea;
@@ -8337,6 +8303,7 @@ span.flatpickr-weekday {
   border-radius:6px;
   background:#141414;
   cursor:pointer;
+  transition: all .2s ease;
 }
 
 .visitor-page-size-control:focus-within {

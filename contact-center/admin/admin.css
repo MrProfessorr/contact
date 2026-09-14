@@ -8249,7 +8249,38 @@ span.flatpickr-weekday {
   font-size:10px;
 }
 
+.visitor-page-nav {
+  width:
+    28px;
 
+  min-width:
+    28px;
+
+  height:
+    28px;
+
+  padding:
+    0;
+}
+.visitor-page-nav-icon {
+  width:
+    12px;
+
+  height:
+    12px;
+
+  display:
+    block;
+
+  fill:
+    rgba(255,255,255,0.25);
+
+  pointer-events:
+    none;
+
+  transition:
+    fill .15s ease;
+}
 .visitor-page-number:hover,
 .visitor-page-nav:hover:not(:disabled) {
   border-color:

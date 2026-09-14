@@ -5506,22 +5506,13 @@ input:checked
   width:100%;
   max-width:100%;
   min-width:0;
+
   overflow-x:auto;
-  overflow-y:auto;
-  max-height:485px;
-  overscroll-behavior:contain;
+  overflow-y:hidden;
+
   -webkit-overflow-scrolling:touch;
 }
-.visitor-table thead {
-  position:
-    sticky;
 
-  top:
-    0;
-
-  z-index:
-    5;
-}
 /* GARIS PEMISAH HEADER TABLE */
 
 .visitor-table th {
@@ -5541,42 +5532,85 @@ input:checked
 
   background: rgba(255,255,255,.10);
 }
+/* =========================================================
+   VISITOR TABLE BODY SCROLL ONLY
+========================================================= */
 
-.visitor-table thead th {
-  position:
-    sticky;
+.visitor-table {
+  width:100%;
 
-  top:
-    0;
+  border-collapse:
+    collapse;
 
-  z-index:
-    5;
+  table-layout:
+    fixed;
+}
 
-  background:
-    #111720;
 
-  box-shadow:
-    0 1px 0
-    var(--line);
+/* HEADER */
+
+.visitor-table thead {
+  display:
+    table;
+
+  width:
+    100%;
+
+  table-layout:
+    fixed;
+}
+
+
+/* BODY ONLY SCROLL */
+
+.visitor-table tbody {
+  display:
+    block;
+
+  width:
+    100%;
+
+  max-height:
+    430px;
+
+  overflow-y:
+    auto;
+
+  overflow-x:
+    hidden;
+
+  overscroll-behavior:
+    contain;
+}
+
+
+/* EACH BODY ROW MUST KEEP TABLE COLUMNS */
+
+.visitor-table tbody tr {
+  display:
+    table;
+
+  width:
+    100%;
+
+  table-layout:
+    fixed;
 }
 /* VISITOR TABLE SCROLLBAR */
 
-.visitor-table-wrap::-webkit-scrollbar {
+.visitor-table tbody::-webkit-scrollbar {
   width:
-    6px;
-
-  height:
     6px;
 }
 
 
-.visitor-table-wrap::-webkit-scrollbar-track {
+.visitor-table tbody::-webkit-scrollbar-track {
   background:
     transparent;
 }
 
 
-.visitor-table-wrap::-webkit-scrollbar-thumb {
+.visitor-table tbody::-webkit-scrollbar-thumb {
   background:
     rgba(143,155,172,.30);
 
@@ -5585,9 +5619,56 @@ input:checked
 }
 
 
-.visitor-table-wrap::-webkit-scrollbar-thumb:hover {
+.visitor-table tbody::-webkit-scrollbar-thumb:hover {
   background:
     rgba(143,155,172,.55);
+}
+.visitor-table th:nth-child(1),
+.visitor-table td:nth-child(1) {
+  width:
+    17%;
+}
+
+.visitor-table th:nth-child(2),
+.visitor-table td:nth-child(2) {
+  width:
+    8%;
+}
+
+.visitor-table th:nth-child(3),
+.visitor-table td:nth-child(3) {
+  width:
+    9%;
+}
+
+.visitor-table th:nth-child(4),
+.visitor-table td:nth-child(4) {
+  width:
+    20%;
+}
+
+.visitor-table th:nth-child(5),
+.visitor-table td:nth-child(5) {
+  width:
+    10%;
+}
+
+.visitor-table th:nth-child(6),
+.visitor-table td:nth-child(6) {
+  width:
+    18%;
+}
+
+.visitor-table th:nth-child(7),
+.visitor-table td:nth-child(7) {
+  width:
+    9%;
+}
+
+.visitor-table th:nth-child(8),
+.visitor-table td:nth-child(8) {
+  width:
+    9%;
 }
 .visitor-table {
   width:
@@ -5605,9 +5686,6 @@ input:checked
 
 .visitor-table th:last-child,
 .visitor-table td:last-child {
-  width:
-    1%;
-
   white-space:
     nowrap;
 

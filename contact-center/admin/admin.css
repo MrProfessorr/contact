@@ -7865,12 +7865,20 @@ body.visitor-detail-open {
   background:#141414 !important;
   box-shadow:0 15px 40pxrgba(0,0,0,.55) !important;
 }
-
+.flatpickr-current-month span.cur-month {
+    font-family: inherit;
+    font-weight: 600;
+    color: inherit;
+    display: inline-block;
+    margin-left: 0.5ch;
+    padding: 0;
+  font-size: 14px !important;
+}
 
 .flatpickr-months,
 .flatpickr-weekdays {
-  background:
-    #121212 !important;
+  background:#141414 !important;
+  font-size: 12px !important;
 }
 /* FIX WEEKDAYS BACKGROUND */
 
@@ -7904,13 +7912,13 @@ span.flatpickr-weekday {
 .flatpickr-calendar.multiMonth
 .flatpickr-weekdays {
   background:
-    #121212 !important;
+    #141414 !important;
 }
 
 .flatpickr-calendar.multiMonth
 .flatpickr-weekdaycontainer {
   background:
-    #121212 !important;
+    #141414 !important;
 }
 
 .flatpickr-day {

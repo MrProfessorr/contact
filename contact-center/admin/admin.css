@@ -5665,11 +5665,7 @@ input:checked
 
 
 .visitor-id {
-  color:
-    #ffffff;
-
-  font-size:
-    10px;
+  color:rgba(255,255,255,0.85);
 }
 
 
@@ -5721,52 +5717,28 @@ input:checked
 
 
 /* STATUS */
-
 .visitor-status {
-  display:
-    inline-flex;
-
-  align-items:
-    center;
-
-  padding:
-    4px 7px;
-
-  border-radius:
-    999px;
-
-  font-size:
-    8px;
-
-  font-weight:
-    800;
+  display:inline-flex;
+  align-items:center;
+  padding:4px 7px;
+  font-size:10px;
+  border-radius:999px;
+  font-weight:500;
 }
-
 
 .visitor-status-online {
-  color:
-    #32db8b;
-
-  background:
-    rgba(38,201,121,.10);
+  color:#32db8b;
+  background:rgba(38,201,121,.10);
 }
-
 
 .visitor-status-offline {
-  color:
-    #8f9bac;
-
-  background:
-    rgba(143,155,172,.08);
+  color:#8f9bac;
+  background:rgba(143,155,172,.08);
 }
 
-
 .visitor-status-blocked {
-  color:
-    #ff6573;
-
-  background:
-    rgba(220,67,82,.10);
+  color:#ff6573;
+  background:rgba(220,67,82,.10);
 }
 
 
@@ -7041,16 +7013,8 @@ body.visitor-detail-open {
 .visitor-joined-date {
   display:
     inline-block;
-
   white-space:
     nowrap;
-
-  color:
-    #cdd5df;
-
-  font-size:
-    9px;
-
   font-variant-numeric:
     tabular-nums;
 }

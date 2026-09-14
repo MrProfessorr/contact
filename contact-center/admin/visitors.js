@@ -74,14 +74,14 @@ const pageSizeLabel =
     "visitorPageSizeLabel"
   );
 
+const pageSizeInlineInput =
+  document.getElementById(
+    "visitorPageSizeInlineInput"
+  );
+
 const pageSizeMenu =
   document.getElementById(
     "visitorPageSizeMenu"
-  );
-
-const pageSizeCustom =
-  document.getElementById(
-    "visitorPageSizeCustom"
   );
 
 const sourceList =
@@ -3940,11 +3940,145 @@ pageNumbers?.addEventListener(
   }
 );
 
+/* =========================================================
+   PAGE SIZE DROPDOWN + INLINE INPUT
+========================================================= */
+
+function closePageSizeEditor() {
+
+  pageSizeMenu
+    ?.classList
+    .add(
+      "hidden"
+    );
+
+
+  pageSizeToggle
+    ?.classList
+    .remove(
+      "open"
+    );
+
+
+  pageSizeToggle
+    ?.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+
+  pageSizeInlineInput
+    ?.classList
+    .add(
+      "hidden"
+    );
+
+
+  pageSizeLabel
+    ?.classList
+    .remove(
+      "hidden"
+    );
+
+
+  if (
+    pageSizeLabel
+  ) {
+
+    pageSizeLabel.textContent =
+      `${visitorPageSize} / page`;
+
+  }
+
+}
+
+
+function applyInlinePageSize() {
+
+  const size =
+    Number(
+      pageSizeInlineInput?.value
+    );
+
+
+  if (
+    !Number.isFinite(size) ||
+    size < 1
+  ) {
+
+    if (
+      pageSizeInlineInput
+    ) {
+
+      pageSizeInlineInput.value =
+        visitorPageSize;
+
+    }
+
+    return false;
+
+  }
+
+
+  visitorPageSize =
+    Math.min(
+      10000,
+      Math.floor(size)
+    );
+
+
+  visitorCurrentPage =
+    1;
+
+
+  if (
+    pageSizeInlineInput
+  ) {
+
+    pageSizeInlineInput.value =
+      visitorPageSize;
+
+  }
+
+
+  if (
+    pageSizeLabel
+  ) {
+
+    pageSizeLabel.textContent =
+      `${visitorPageSize} / page`;
+
+  }
+
+
+  renderVisitors();
+
+
+  return true;
+
+}
+
+
+/* CLICK TOGGLE */
+
 pageSizeToggle?.addEventListener(
   "click",
   event => {
 
     event.stopPropagation();
+
+
+    /*
+     * Kalau sedang klik dalam input,
+     * jangan toggle dropdown lagi.
+     */
+
+    if (
+      event.target ===
+      pageSizeInlineInput
+    ) {
+      return;
+    }
 
 
     const opening =
@@ -3955,53 +4089,88 @@ pageSizeToggle?.addEventListener(
         );
 
 
-    pageSizeMenu
-      ?.classList
-      .toggle(
-        "hidden"
-      );
-
-
-    pageSizeToggle
-      ?.classList
-      .toggle(
-        "open",
-        Boolean(opening)
-      );
-
-
-    pageSizeToggle
-      ?.setAttribute(
-        "aria-expanded",
-        opening
-          ? "true"
-          : "false"
-      );
     if (
-  opening &&
-  pageSizeCustom
-) {
+      opening
+    ) {
 
-  setTimeout(
-    () => {
+      pageSizeMenu
+        ?.classList
+        .remove(
+          "hidden"
+        );
 
-      pageSizeCustom.focus();
 
-      pageSizeCustom.select();
+      pageSizeToggle
+        ?.classList
+        .add(
+          "open"
+        );
 
-    },
-    0
-  );
 
-}
+      pageSizeToggle
+        ?.setAttribute(
+          "aria-expanded",
+          "true"
+        );
+
+
+      /*
+       * Label berubah menjadi input
+       */
+
+      pageSizeLabel
+        ?.classList
+        .add(
+          "hidden"
+        );
+
+
+      pageSizeInlineInput
+        ?.classList
+        .remove(
+          "hidden"
+        );
+
+
+      if (
+        pageSizeInlineInput
+      ) {
+
+        pageSizeInlineInput.value =
+          visitorPageSize;
+
+
+        setTimeout(
+          () => {
+
+            pageSizeInlineInput.focus();
+
+            pageSizeInlineInput.select();
+
+          },
+          0
+        );
+
+      }
+
+    } else {
+
+      closePageSizeEditor();
+
+    }
 
   }
 );
 
 
+/* PRESET: 10 / 20 / 50 / 100 / ... */
+
 pageSizeMenu?.addEventListener(
   "click",
   event => {
+
+    event.stopPropagation();
+
 
     const button =
       event.target.closest(
@@ -4036,84 +4205,57 @@ pageSizeMenu?.addEventListener(
       1;
 
 
-    pageSizeMenu.classList.add(
-      "hidden"
-    );
+    if (
+      pageSizeInlineInput
+    ) {
+
+      pageSizeInlineInput.value =
+        size;
+
+    }
 
 
-    pageSizeToggle
-      ?.classList
-      .remove(
-        "open"
-      );
+    if (
+      pageSizeLabel
+    ) {
 
+      pageSizeLabel.textContent =
+        `${size} / page`;
+
+    }
+if (
+  pageSizeInlineInput &&
+  document.activeElement !==
+    pageSizeInlineInput
+) {
+
+  pageSizeInlineInput.value =
+    visitorPageSize;
+
+}
 
     renderVisitors();
+
+
+    closePageSizeEditor();
 
   }
 );
 
-function applyCustomVisitorPageSize() {
 
-  const size =
-    Number(
-      pageSizeCustom?.value
-    );
+/* TYPE CUSTOM VALUE */
 
+pageSizeInlineInput?.addEventListener(
+  "click",
+  event => {
 
-  if (
-    !Number.isFinite(size) ||
-    size < 1
-  ) {
-
-    pageSizeCustom?.focus();
-
-    return;
+    event.stopPropagation();
 
   }
+);
 
 
-  visitorPageSize =
-    Math.min(
-      10000,
-      Math.floor(size)
-    );
-
-
-  visitorCurrentPage =
-    1;
-
-
-  if (
-    pageSizeCustom
-  ) {
-
-    pageSizeCustom.value =
-      "";
-
-  }
-
-
-  pageSizeMenu
-    ?.classList
-    .add(
-      "hidden"
-    );
-
-
-  pageSizeToggle
-    ?.classList
-    .remove(
-      "open"
-    );
-
-
-  renderVisitors();
-
-}
-
-
-pageSizeCustom?.addEventListener(
+pageSizeInlineInput?.addEventListener(
   "keydown",
   event => {
 
@@ -4124,66 +4266,41 @@ pageSizeCustom?.addEventListener(
 
       event.preventDefault();
 
-      applyCustomVisitorPageSize();
+      event.stopPropagation();
+
+
+      const success =
+        applyInlinePageSize();
+
+
+      if (
+        success
+      ) {
+
+        closePageSizeEditor();
+
+      }
+
+    }
+
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+
+      event.preventDefault();
+
+      closePageSizeEditor();
 
     }
 
   }
 );
-/* =========================================================
-   LIVE CUSTOM PAGE SIZE
-========================================================= */
-
-let customPageSizeTimer =
-  null;
 
 
-pageSizeCustom?.addEventListener(
-  "input",
-  () => {
+/* CLICK OUTSIDE = CLOSE */
 
-    clearTimeout(
-      customPageSizeTimer
-    );
-
-
-    customPageSizeTimer =
-      setTimeout(
-        () => {
-
-          const size =
-            Number(
-              pageSizeCustom.value
-            );
-
-
-          if (
-            !Number.isFinite(size) ||
-            size < 1
-          ) {
-            return;
-          }
-
-
-          visitorPageSize =
-            Math.min(
-              10000,
-              Math.floor(size)
-            );
-
-
-          visitorCurrentPage =
-            1;
-
-
-          renderVisitors();
-
-        },
-        400
-      );
-
-  }
-);
 document.addEventListener(
   "click",
   event => {
@@ -4194,18 +4311,7 @@ document.addEventListener(
       )
     ) {
 
-      pageSizeMenu
-        ?.classList
-        .add(
-          "hidden"
-        );
-
-
-      pageSizeToggle
-        ?.classList
-        .remove(
-          "open"
-        );
+      closePageSizeEditor();
 
     }
 

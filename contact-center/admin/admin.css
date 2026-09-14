@@ -8223,9 +8223,9 @@ span.flatpickr-weekday {
 
 .visitor-page-number,
 .visitor-page-nav {
-  min-width:28px;
+  min-width:32px;
 
-  height:28px;
+  height:32px;
 
   display:inline-flex;
 
@@ -8233,7 +8233,7 @@ span.flatpickr-weekday {
 
   justify-content:center;
 
-  padding:0 7px;
+  padding:0 6px;
 
   border:
     1px solid transparent;
@@ -8251,13 +8251,13 @@ span.flatpickr-weekday {
 
 .visitor-page-nav {
   width:
-    28px;
+    32px;
 
   min-width:
-    28px;
+    32px;
 
   height:
-    28px;
+    32px;
 
   padding:
     0;
@@ -8328,35 +8328,19 @@ span.flatpickr-weekday {
   margin-left:3px;
 }
 .visitor-page-size-control {
-  position:
-    relative;
-
-  width:
-    100px;
-
-  height:
-    30px;
-
+  position:relative;
+  width:100px;
+  height:32px;
   display:block;
-
   overflow:hidden;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:
-    5px;
-
-  background:
-    #0d1219;
-
-  cursor:
-    pointer;
+  border: 1px solid #424242;
+  border-radius:6px;
+  background:#141414;
+  cursor:pointer;
 }
 
 .visitor-page-size-control:focus-within {
-  border-color:
-    #2d7bea;
+  border-color:#1668dc;
 }
 
 

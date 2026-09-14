@@ -7957,3 +7957,21 @@ body.visitor-detail-open {
   }
 
 }
+.flatpickr-months .flatpickr-month {
+    background: #141414;
+    color: #fff;
+    fill: #fff;
+    height: 34px;
+    line-height: 1;
+    text-align: center;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: hidden;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}

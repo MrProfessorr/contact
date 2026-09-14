@@ -7753,19 +7753,13 @@ body.visitor-detail-open {
 
 .visitor-date-input-wrap {
   position:relative;
-
-  width:260px;
-
-  flex:
-    0 0 260px;
+  width:300px;
+  flex:0 0 300px;
 }
-
 
 #visitorDateRange {
   width:100%;
 }
-
-
 /* TOGGLE */
 #visitorDateRange {
   width:100%;

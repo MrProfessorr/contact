@@ -8235,12 +8235,16 @@ span.flatpickr-weekday {
   }
 
 
-  .visitor-table {
+.visitor-table {
   width:
-    max-content;
+    760px;
 
   min-width:
     760px;
-  }
+}
+  .visitor-table tbody {
+  max-height:
+    430px;
+}
 
 }

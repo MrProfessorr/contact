@@ -2194,13 +2194,13 @@ return (
 
                     ? `
                         <span class="visitor-status visitor-status-online">
-                          ● ONLINE
+                          ● Online
                         </span>
                       `
 
                     : `
                         <span class="visitor-status visitor-status-offline">
-                          OFFLINE
+                          Offline
                         </span>
                       `
                 }

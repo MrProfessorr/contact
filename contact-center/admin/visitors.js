@@ -2233,10 +2233,6 @@ function renderVisitorPagination() {
   }
 
 
-  if (
-    pageSizeLabel
-  ) {
-
 if (
   pageSizeInput &&
   pageSizeInput.readOnly
@@ -2246,8 +2242,6 @@ if (
     `${visitorPageSize} / page`;
 
 }
-
-  }
 
 
   if (

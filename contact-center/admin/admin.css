@@ -8273,12 +8273,9 @@ span.flatpickr-weekday {
 
 
 .visitor-page-dots {
-  min-width:20px;
-
-  color:#69778a;
-
-  font-size:10px;
-
+  min-width:32px;
+  color: rgba(255, 255, 255, 0.25);
+  font-size:14px;
   text-align:center;
 }
 

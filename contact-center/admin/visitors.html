@@ -169,8 +169,69 @@
       </strong>
 
     </div>
+  </section>
+
+  <!-- =========================================================
+     VISITOR TABLE
+========================================================= -->
+
+<div class="visitor-main-grid">
+
+  <section class="card">
+
+    <div class="visitor-card-head visitor-card-head-search">
+
+      <input
+        id="visitorSearch"
+        type="search"
+        placeholder="Search visitor..."
+      >
+
+    </div>
+
+
+    <div class="visitor-table-wrap">
+
+      <table class="visitor-table">
+
+        <thead>
+
+          <tr>
+            <th>Visitor</th>
+            <th>Source</th>
+            <th>Device</th>
+            <th>Page</th>
+            <th>Last Seen</th>
+            <th>Date Joined</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+
+        </thead>
+
+
+        <tbody id="visitorTableBody">
+
+          <tr>
+
+            <td
+              colspan="8"
+              class="visitor-empty"
+            >
+              Loading visitors...
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
 
   </section>
+
+</div>
   <!-- =========================================================
        VISITOR TRAFFIC ANALYTICS
   ========================================================= -->
@@ -415,66 +476,7 @@
     </div>
 
   </div>
-
 </section>
-
-  <div class="visitor-main-grid">
-
-
-    <!-- LEFT -->
-
-    <section class="card">
-
-<div class="visitor-card-head visitor-card-head-search">
-
-  <input
-    id="visitorSearch"
-    type="search"
-    placeholder="Search visitor..."
-  >
-
-</div>
-
-
-      <div class="visitor-table-wrap">
-
-        <table class="visitor-table">
-
-          <thead>
-            <tr>
-              <th>Visitor</th>
-              <th>Source</th>
-              <th>Device</th>
-              <th>Page</th>
-              <th>Last Seen</th>
-              <th>Date Joined</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-
-
-          <tbody id="visitorTableBody">
-
-            <tr>
-
-              <td
-                colspan="8"
-                class="visitor-empty"
-              >
-                Loading visitors...
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-  </div>
 
   <!-- =========================================================
      VISITOR DETAIL MODAL

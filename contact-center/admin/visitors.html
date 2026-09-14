@@ -325,7 +325,74 @@
     </div>
 
   </section>
+<!-- =========================================================
+     RECENT LINK CLICKS
+========================================================= -->
 
+<section class="visitor-click-card">
+
+  <button
+    id="visitorClickToggle"
+    class="visitor-click-toggle"
+    type="button"
+    aria-expanded="false"
+  >
+
+    <span class="visitor-click-arrow">
+      ›
+    </span>
+
+    <span class="visitor-click-toggle-title">
+      Recent Link Clicks
+    </span>
+
+    <small id="visitorClickCountLabel">
+      0 clicks
+    </small>
+
+  </button>
+
+
+  <div
+    id="visitorClickPanel"
+    class="visitor-click-panel hidden"
+  >
+
+    <div class="visitor-click-panel-inner">
+
+      <div class="visitor-click-panel-head">
+
+        <div>
+
+          <h3>
+            Recent Link Clicks
+          </h3>
+
+          <p>
+            Latest customer link activity
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="visitorClickList"
+        class="visitor-click-list visitor-click-list-wide"
+      >
+
+        <div class="visitor-empty">
+          No clicks yet.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
   <div class="visitor-main-grid">
 
@@ -383,34 +450,6 @@
       </div>
 
     </section>
-
-
-    <!-- RIGHT -->
-
-    <div class="visitor-side-column">
-
-      <section class="card">
-
-        <h3>
-          Recent Link Clicks
-        </h3>
-
-        <div
-          id="visitorClickList"
-          class="visitor-click-list"
-        >
-
-          <div class="visitor-empty">
-            No clicks yet.
-          </div>
-
-        </div>
-
-      </section>
-
-
-    </div>
-
   </div>
 
   <!-- =========================================================

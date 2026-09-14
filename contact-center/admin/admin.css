@@ -7860,18 +7860,10 @@ body.visitor-detail-open {
 /* FLATPICKR */
 
 .flatpickr-calendar {
-  border:
-    1px solid #283242 !important;
-
-  border-radius:
-    9px !important;
-
-  background:
-    #121212 !important;
-
-  box-shadow:
-    0 15px 40px
-    rgba(0,0,0,.55) !important;
+  border:none;
+  border-radius:6px !important;
+  background:#141414 !important;
+  box-shadow:0 15px 40pxrgba(0,0,0,.55) !important;
 }
 
 
@@ -7880,7 +7872,46 @@ body.visitor-detail-open {
   background:
     #121212 !important;
 }
+/* FIX WEEKDAYS BACKGROUND */
 
+.flatpickr-weekdays {
+  background:
+    #121212 !important;
+}
+
+.flatpickr-weekdaycontainer {
+  background:
+    #121212 !important;
+}
+
+span.flatpickr-weekday {
+  background:
+    #121212 !important;
+
+  color:
+    #c9d2df !important;
+
+  font-weight:
+    700 !important;
+
+  border:
+    none !important;
+}
+
+
+/* MULTI MONTH */
+
+.flatpickr-calendar.multiMonth
+.flatpickr-weekdays {
+  background:
+    #121212 !important;
+}
+
+.flatpickr-calendar.multiMonth
+.flatpickr-weekdaycontainer {
+  background:
+    #121212 !important;
+}
 
 .flatpickr-day {
   color:#d5d8dd;

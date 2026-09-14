@@ -74,14 +74,19 @@ const pageSizeLabel =
     "visitorPageSizeLabel"
   );
 
-const pageSizeInlineInput =
+const pageSizePreview =
   document.getElementById(
-    "visitorPageSizeInlineInput"
+    "visitorPageSizePreview"
   );
 
 const pageSizeMenu =
   document.getElementById(
     "visitorPageSizeMenu"
+  );
+
+const pageSizeCustom =
+  document.getElementById(
+    "visitorPageSizeCustom"
   );
 
 const sourceList =
@@ -3941,10 +3946,10 @@ pageNumbers?.addEventListener(
 );
 
 /* =========================================================
-   PAGE SIZE DROPDOWN + INLINE INPUT
+   PAGE SIZE DROPDOWN
 ========================================================= */
 
-function closePageSizeEditor() {
+function closePageSizeMenu() {
 
   pageSizeMenu
     ?.classList
@@ -3966,119 +3971,16 @@ function closePageSizeEditor() {
       "false"
     );
 
-
-  pageSizeInlineInput
-    ?.classList
-    .add(
-      "hidden"
-    );
-
-
-  pageSizeLabel
-    ?.classList
-    .remove(
-      "hidden"
-    );
-
-
-  if (
-    pageSizeLabel
-  ) {
-
-    pageSizeLabel.textContent =
-      `${visitorPageSize} / page`;
-
-  }
-
 }
 
 
-function applyInlinePageSize() {
-
-  const size =
-    Number(
-      pageSizeInlineInput?.value
-    );
-
-
-  if (
-    !Number.isFinite(size) ||
-    size < 1
-  ) {
-
-    if (
-      pageSizeInlineInput
-    ) {
-
-      pageSizeInlineInput.value =
-        visitorPageSize;
-
-    }
-
-    return false;
-
-  }
-
-
-  visitorPageSize =
-    Math.min(
-      10000,
-      Math.floor(size)
-    );
-
-
-  visitorCurrentPage =
-    1;
-
-
-  if (
-    pageSizeInlineInput
-  ) {
-
-    pageSizeInlineInput.value =
-      visitorPageSize;
-
-  }
-
-
-  if (
-    pageSizeLabel
-  ) {
-
-    pageSizeLabel.textContent =
-      `${visitorPageSize} / page`;
-
-  }
-
-
-  renderVisitors();
-
-
-  return true;
-
-}
-
-
-/* CLICK TOGGLE */
+/* OPEN / CLOSE DROPDOWN */
 
 pageSizeToggle?.addEventListener(
   "click",
   event => {
 
     event.stopPropagation();
-
-
-    /*
-     * Kalau sedang klik dalam input,
-     * jangan toggle dropdown lagi.
-     */
-
-    if (
-      event.target ===
-      pageSizeInlineInput
-    ) {
-      return;
-    }
 
 
     const opening =
@@ -4089,63 +3991,58 @@ pageSizeToggle?.addEventListener(
         );
 
 
+    pageSizeMenu
+      ?.classList
+      .toggle(
+        "hidden"
+      );
+
+
+    pageSizeToggle
+      ?.classList
+      .toggle(
+        "open",
+        Boolean(opening)
+      );
+
+
+    pageSizeToggle
+      ?.setAttribute(
+        "aria-expanded",
+        opening
+          ? "true"
+          : "false"
+      );
+
+
     if (
       opening
     ) {
 
-      pageSizeMenu
-        ?.classList
-        .remove(
-          "hidden"
-        );
+      if (
+        pageSizePreview
+      ) {
 
+        pageSizePreview.textContent =
+          `${visitorPageSize} / page`;
 
-      pageSizeToggle
-        ?.classList
-        .add(
-          "open"
-        );
-
-
-      pageSizeToggle
-        ?.setAttribute(
-          "aria-expanded",
-          "true"
-        );
-
-
-      /*
-       * Label berubah menjadi input
-       */
-
-      pageSizeLabel
-        ?.classList
-        .add(
-          "hidden"
-        );
-
-
-      pageSizeInlineInput
-        ?.classList
-        .remove(
-          "hidden"
-        );
+      }
 
 
       if (
-        pageSizeInlineInput
+        pageSizeCustom
       ) {
 
-        pageSizeInlineInput.value =
+        pageSizeCustom.value =
           visitorPageSize;
 
 
         setTimeout(
           () => {
 
-            pageSizeInlineInput.focus();
+            pageSizeCustom.focus();
 
-            pageSizeInlineInput.select();
+            pageSizeCustom.select();
 
           },
           0
@@ -4153,17 +4050,13 @@ pageSizeToggle?.addEventListener(
 
       }
 
-    } else {
-
-      closePageSizeEditor();
-
     }
 
   }
 );
 
 
-/* PRESET: 10 / 20 / 50 / 100 / ... */
+/* PRESET BUTTONS */
 
 pageSizeMenu?.addEventListener(
   "click",
@@ -4206,56 +4099,147 @@ pageSizeMenu?.addEventListener(
 
 
     if (
-      pageSizeInlineInput
+      pageSizeLabel
     ) {
 
-      pageSizeInlineInput.value =
-        size;
+      pageSizeLabel.textContent =
+        `${visitorPageSize} / page`;
 
     }
 
 
     if (
-      pageSizeLabel
+      pageSizePreview
     ) {
 
-      pageSizeLabel.textContent =
-        `${size} / page`;
+      pageSizePreview.textContent =
+        `${visitorPageSize} / page`;
 
     }
-if (
-  pageSizeInlineInput &&
-  document.activeElement !==
-    pageSizeInlineInput
-) {
 
-  pageSizeInlineInput.value =
-    visitorPageSize;
 
-}
+    if (
+      pageSizeCustom
+    ) {
+
+      pageSizeCustom.value =
+        visitorPageSize;
+
+    }
+
 
     renderVisitors();
 
-
-    closePageSizeEditor();
-
-  }
-);
-
-
-/* TYPE CUSTOM VALUE */
-
-pageSizeInlineInput?.addEventListener(
-  "click",
-  event => {
-
-    event.stopPropagation();
+    closePageSizeMenu();
 
   }
 );
 
 
-pageSizeInlineInput?.addEventListener(
+/* CUSTOM PAGE SIZE */
+
+function applyCustomPageSize() {
+
+  const size =
+    Number(
+      pageSizeCustom?.value
+    );
+
+
+  if (
+    !Number.isFinite(size) ||
+    size < 1
+  ) {
+    return false;
+  }
+
+
+  visitorPageSize =
+    Math.min(
+      10000,
+      Math.floor(size)
+    );
+
+
+  visitorCurrentPage =
+    1;
+
+
+  if (
+    pageSizeLabel
+  ) {
+
+    pageSizeLabel.textContent =
+      `${visitorPageSize} / page`;
+
+  }
+
+
+  if (
+    pageSizePreview
+  ) {
+
+    pageSizePreview.textContent =
+      `${visitorPageSize} / page`;
+
+  }
+
+
+  renderVisitors();
+
+
+  return true;
+
+}
+
+
+/* LIVE PREVIEW WHILE TYPING */
+
+pageSizeCustom?.addEventListener(
+  "input",
+  () => {
+
+    const size =
+      Number(
+        pageSizeCustom.value
+      );
+
+
+    if (
+      !Number.isFinite(size) ||
+      size < 1
+    ) {
+
+      if (
+        pageSizePreview
+      ) {
+
+        pageSizePreview.textContent =
+          "- / page";
+
+      }
+
+      return;
+
+    }
+
+
+    if (
+      pageSizePreview
+    ) {
+
+      pageSizePreview.textContent =
+        `${Math.floor(size)} / page`;
+
+    }
+
+  }
+);
+
+
+/* ENTER = APPLY */
+
+pageSizeCustom?.addEventListener(
   "keydown",
   event => {
 
@@ -4270,14 +4254,14 @@ pageSizeInlineInput?.addEventListener(
 
 
       const success =
-        applyInlinePageSize();
+        applyCustomPageSize();
 
 
       if (
         success
       ) {
 
-        closePageSizeEditor();
+        closePageSizeMenu();
 
       }
 
@@ -4291,7 +4275,7 @@ pageSizeInlineInput?.addEventListener(
 
       event.preventDefault();
 
-      closePageSizeEditor();
+      closePageSizeMenu();
 
     }
 
@@ -4311,13 +4295,12 @@ document.addEventListener(
       )
     ) {
 
-      closePageSizeEditor();
+      closePageSizeMenu();
 
     }
 
   }
 );
-
 /* =========================================================
    BLOCK / UNBLOCK
 ========================================================= */

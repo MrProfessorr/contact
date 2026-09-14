@@ -5507,12 +5507,8 @@ input:checked
   max-width:100%;
   min-width:0;
 
-  max-height:485px;
-
   overflow-x:auto;
-  overflow-y:auto;
-
-  overscroll-behavior:contain;
+  overflow-y:hidden;
 
   -webkit-overflow-scrolling:touch;
 }
@@ -5536,7 +5532,97 @@ input:checked
 
   background: rgba(255,255,255,.10);
 }
+/* =========================================================
+   VISITOR TABLE BODY SCROLL ONLY
+========================================================= */
 
+.visitor-table {
+  width:100%;
+
+  border-collapse:
+    collapse;
+
+  table-layout:
+    fixed;
+}
+
+
+/* HEADER */
+
+.visitor-table thead {
+  display:
+    table;
+
+  width:
+    100%;
+
+  table-layout:
+    fixed;
+}
+
+
+/* BODY ONLY SCROLL */
+
+.visitor-table tbody {
+  display:
+    block;
+
+  width:
+    100%;
+
+  max-height:
+    430px;
+
+  overflow-y:
+    auto;
+
+  overflow-x:
+    hidden;
+
+  overscroll-behavior:
+    contain;
+}
+
+
+/* EACH BODY ROW MUST KEEP TABLE COLUMNS */
+
+.visitor-table tbody tr {
+  display:
+    table;
+
+  width:
+    100%;
+
+  table-layout:
+    fixed;
+}
+/* VISITOR TABLE SCROLLBAR */
+
+.visitor-table tbody::-webkit-scrollbar {
+  width:
+    6px;
+}
+
+
+.visitor-table tbody::-webkit-scrollbar-track {
+  background:
+    transparent;
+}
+
+
+.visitor-table tbody::-webkit-scrollbar-thumb {
+  background:
+    rgba(143,155,172,.30);
+
+  border-radius:
+    999px;
+}
+
+
+.visitor-table tbody::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(143,155,172,.55);
+}
 .visitor-table th:nth-child(1),
 .visitor-table td:nth-child(1) {
   width:
@@ -5584,46 +5670,18 @@ input:checked
   width:
     9%;
 }
-.visitor-table thead {
-  position:sticky;
+.visitor-table {
+  width:
+    max-content;
 
-  top:0;
+  min-width:
+    100%;
 
-  z-index:5;
-}
+  border-collapse:
+    collapse;
 
-.visitor-table-wrap::-webkit-scrollbar {
-  width:6px;
-  height:6px;
-}
-
-
-.visitor-table-wrap::-webkit-scrollbar-track {
-  background:transparent;
-}
-
-
-.visitor-table-wrap::-webkit-scrollbar-thumb {
-  background:rgba(143,155,172,.30);
-
-  border-radius:999px;
-}
-
-
-.visitor-table-wrap::-webkit-scrollbar-thumb:hover {
-  background:rgba(143,155,172,.55);
-}
-.visitor-table thead th {
-  position:sticky;
-
-  top:0;
-
-  z-index:5;
-
-  background:#111720;
-
-  box-shadow:
-    0 1px 0 var(--line);
+  table-layout:
+    auto;
 }
 
 .visitor-table th:last-child,
@@ -8177,12 +8235,12 @@ span.flatpickr-weekday {
   }
 
 
-.visitor-table {
+  .visitor-table {
   width:
-    760px;
+    max-content;
 
   min-width:
     760px;
-}
+  }
 
 }

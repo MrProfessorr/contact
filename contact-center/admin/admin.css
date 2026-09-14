@@ -5457,7 +5457,7 @@ input:checked
   display:block;
   margin-top:5px;
   color:#ffffff;
-  font-size:20px;
+  font-size:24px;
   line-height:1;
 }
 
@@ -5506,13 +5506,22 @@ input:checked
   width:100%;
   max-width:100%;
   min-width:0;
-
   overflow-x:auto;
-  overflow-y:hidden;
-
+  overflow-y:auto;
+  max-height:485px;
+  overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
 }
+.visitor-table thead {
+  position:
+    sticky;
 
+  top:
+    0;
+
+  z-index:
+    5;
+}
 /* GARIS PEMISAH HEADER TABLE */
 
 .visitor-table th {
@@ -5532,85 +5541,42 @@ input:checked
 
   background: rgba(255,255,255,.10);
 }
-/* =========================================================
-   VISITOR TABLE BODY SCROLL ONLY
-========================================================= */
 
-.visitor-table {
-  width:100%;
+.visitor-table thead th {
+  position:
+    sticky;
 
-  border-collapse:
-    collapse;
+  top:
+    0;
 
-  table-layout:
-    fixed;
-}
+  z-index:
+    5;
 
+  background:
+    #111720;
 
-/* HEADER */
-
-.visitor-table thead {
-  display:
-    table;
-
-  width:
-    100%;
-
-  table-layout:
-    fixed;
-}
-
-
-/* BODY ONLY SCROLL */
-
-.visitor-table tbody {
-  display:
-    block;
-
-  width:
-    100%;
-
-  max-height:
-    430px;
-
-  overflow-y:
-    auto;
-
-  overflow-x:
-    hidden;
-
-  overscroll-behavior:
-    contain;
-}
-
-
-/* EACH BODY ROW MUST KEEP TABLE COLUMNS */
-
-.visitor-table tbody tr {
-  display:
-    table;
-
-  width:
-    100%;
-
-  table-layout:
-    fixed;
+  box-shadow:
+    0 1px 0
+    var(--line);
 }
 /* VISITOR TABLE SCROLLBAR */
 
-.visitor-table tbody::-webkit-scrollbar {
+.visitor-table-wrap::-webkit-scrollbar {
   width:
+    6px;
+
+  height:
     6px;
 }
 
 
-.visitor-table tbody::-webkit-scrollbar-track {
+.visitor-table-wrap::-webkit-scrollbar-track {
   background:
     transparent;
 }
 
 
-.visitor-table tbody::-webkit-scrollbar-thumb {
+.visitor-table-wrap::-webkit-scrollbar-thumb {
   background:
     rgba(143,155,172,.30);
 
@@ -5619,56 +5585,9 @@ input:checked
 }
 
 
-.visitor-table tbody::-webkit-scrollbar-thumb:hover {
+.visitor-table-wrap::-webkit-scrollbar-thumb:hover {
   background:
     rgba(143,155,172,.55);
-}
-.visitor-table th:nth-child(1),
-.visitor-table td:nth-child(1) {
-  width:
-    17%;
-}
-
-.visitor-table th:nth-child(2),
-.visitor-table td:nth-child(2) {
-  width:
-    8%;
-}
-
-.visitor-table th:nth-child(3),
-.visitor-table td:nth-child(3) {
-  width:
-    9%;
-}
-
-.visitor-table th:nth-child(4),
-.visitor-table td:nth-child(4) {
-  width:
-    20%;
-}
-
-.visitor-table th:nth-child(5),
-.visitor-table td:nth-child(5) {
-  width:
-    10%;
-}
-
-.visitor-table th:nth-child(6),
-.visitor-table td:nth-child(6) {
-  width:
-    18%;
-}
-
-.visitor-table th:nth-child(7),
-.visitor-table td:nth-child(7) {
-  width:
-    9%;
-}
-
-.visitor-table th:nth-child(8),
-.visitor-table td:nth-child(8) {
-  width:
-    9%;
 }
 .visitor-table {
   width:
@@ -5686,6 +5605,9 @@ input:checked
 
 .visitor-table th:last-child,
 .visitor-table td:last-child {
+  width:
+    1%;
+
   white-space:
     nowrap;
 

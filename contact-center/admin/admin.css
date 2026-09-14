@@ -8365,7 +8365,19 @@ span.flatpickr-weekday {
     pointer;
 }
 
+.visitor-page-size-input::placeholder {
+  color:
+    #66758a;
 
+  opacity:
+    1;
+
+  font-size:
+    14px;
+
+  font-weight:
+    400;
+}
 .visitor-page-size-input[readonly] {
   cursor:
     pointer;

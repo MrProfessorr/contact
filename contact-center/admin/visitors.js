@@ -2217,7 +2217,7 @@ return (
       class="visitor-action-btn visitor-view-btn"
       data-view-id="${safe(visitor.id)}"
     >
-      VIEW
+      View
     </button>
 
 
@@ -2230,7 +2230,7 @@ return (
             class="visitor-action-btn visitor-unblock-btn"
             data-unblock-id="${safe(visitor.id)}"
           >
-            UNBLOCK
+            Unblock
           </button>
         `
 
@@ -2240,7 +2240,7 @@ return (
             class="visitor-action-btn visitor-block-btn"
             data-block-id="${safe(visitor.id)}"
           >
-            BLOCK
+            Block
           </button>
         `
     }

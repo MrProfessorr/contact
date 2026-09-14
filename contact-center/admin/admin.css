@@ -5572,20 +5572,19 @@ input:checked
     rgba(143,155,172,.55);
 }
 .visitor-table {
-  width:100%;
-
-  min-width:900px;
-
-  border-collapse:collapse;
-
-  table-layout:auto;
-}
-
-.visitor-table th:nth-child(4),
-.visitor-table td:nth-child(4) {
   width:
+    max-content;
+
+  min-width:
     100%;
+
+  border-collapse:
+    collapse;
+
+  table-layout:
+    auto;
 }
+
 .visitor-table th:last-child,
 .visitor-table td:last-child {
   width:
@@ -8155,9 +8154,11 @@ span.flatpickr-weekday {
 
 
   .visitor-table {
-    width:760px;
+  width:
+    max-content;
 
-    min-width:760px;
+  min-width:
+    760px;
   }
 
 }

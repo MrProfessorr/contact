@@ -355,74 +355,72 @@
   </div>
 
 
-  <div class="visitor-page-size">
+<div class="visitor-page-size">
 
-    <button
-      id="visitorPageSizeToggle"
-      class="visitor-page-size-toggle"
-      type="button"
-      aria-expanded="false"
-    >
-
-      <span id="visitorPageSizeLabel">
-        10 / page
-      </span>
-
-      <span class="visitor-page-size-arrow">
-        ˅
-      </span>
-
-    </button>
-
-
-    <div
-      id="visitorPageSizeMenu"
-      class="visitor-page-size-menu hidden"
-    >
-
-      <button type="button" data-page-size="10">
-        10 / page
-      </button>
-
-      <button type="button" data-page-size="20">
-        20 / page
-      </button>
-
-      <button type="button" data-page-size="50">
-        50 / page
-      </button>
-
-      <button type="button" data-page-size="100">
-        100 / page
-      </button>
-
-      <button type="button" data-page-size="200">
-        200 / page
-      </button>
-
-      <button type="button" data-page-size="500">
-        500 / page
-      </button>
-
-      <button type="button" data-page-size="1000">
-        1000 / page
-      </button>
-
-
-<div class="visitor-page-size-custom">
-
-  <input
-    id="visitorPageSizeCustom"
-    type="number"
-    min="1"
-    max="10000"
-    inputmode="numeric"
-    placeholder="Type amount..."
+  <button
+    id="visitorPageSizeToggle"
+    class="visitor-page-size-toggle"
+    type="button"
+    aria-expanded="false"
   >
 
-</div>
+    <span
+      id="visitorPageSizeLabel"
+      class="visitor-page-size-label"
+    >
+      10 / page
+    </span>
 
-    </div>
+    <input
+      id="visitorPageSizeInlineInput"
+      class="visitor-page-size-inline-input hidden"
+      type="number"
+      min="1"
+      max="10000"
+      value="10"
+      inputmode="numeric"
+      autocomplete="off"
+    >
+
+    <span class="visitor-page-size-arrow">
+      ˅
+    </span>
+
+  </button>
+
+
+  <div
+    id="visitorPageSizeMenu"
+    class="visitor-page-size-menu hidden"
+  >
+
+    <button type="button" data-page-size="10">
+      10 / page
+    </button>
+
+    <button type="button" data-page-size="20">
+      20 / page
+    </button>
+
+    <button type="button" data-page-size="50">
+      50 / page
+    </button>
+
+    <button type="button" data-page-size="100">
+      100 / page
+    </button>
+
+    <button type="button" data-page-size="200">
+      200 / page
+    </button>
+
+    <button type="button" data-page-size="500">
+      500 / page
+    </button>
+
+    <button type="button" data-page-size="1000">
+      1000 / page
+    </button>
 
   </div>
 

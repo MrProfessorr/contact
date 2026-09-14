@@ -5486,12 +5486,19 @@ input:checked
 .visitor-main-grid {
   display:grid;
   margin-bottom:10px;
-  grid-template-columns:1fr;
+  grid-template-columns:minmax(0,1fr);
   gap:18px;
   align-items:start;
   width:100%;
+  min-width:0;
+  max-width:100%;
 }
-
+.visitor-main-grid > .card {
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
+}
 /* HEAD */
 
 .visitor-card-head {

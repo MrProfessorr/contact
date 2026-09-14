@@ -8238,7 +8238,7 @@ span.flatpickr-weekday {
   border:
     1px solid transparent;
 
-  border-radius:5px;
+  border-radius:6px;
 
   color:#d7deea;
 
@@ -8273,13 +8273,16 @@ span.flatpickr-weekday {
     block;
 
   fill:
-    rgba(255,255,255,0.25);
+    rgba(255,255,255,0.85);
 
   pointer-events:
     none;
 
   transition:
     fill .15s ease;
+}
+.visitor-page-nav-icon: hover {
+  background: rgba(255,255,255,0.85);
 }
 .visitor-page-number:hover,
 .visitor-page-nav:hover:not(:disabled) {

@@ -72,6 +72,20 @@ const searchInput =
   document.getElementById(
     "visitorSearch"
   );
+const dateRangeInput =
+  document.getElementById(
+    "visitorDateRange"
+  );
+
+const datePresetToggle =
+  document.getElementById(
+    "visitorDatePresetToggle"
+  );
+
+const datePresetPanel =
+  document.getElementById(
+    "visitorDatePresetPanel"
+  );
 const detailModal =
   document.getElementById(
     "visitorDetailModal"
@@ -174,8 +188,17 @@ let dailyAnalytics =
 let visitorTrafficChart =
   null;
 
-let selectedChartDays =
-  7;
+let selectedStartDate =
+  null;
+
+let selectedEndDate =
+  null;
+
+let selectedRangeLabel =
+  "All Time";
+
+let visitorDatePicker =
+  null;
 /* =========================================================
    HELPERS
 ========================================================= */
@@ -236,7 +259,294 @@ function getDateKey() {
 
 }
 
+function startOfDay(value) {
 
+  const date =
+    new Date(value);
+
+  date.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+  return date;
+
+}
+
+
+function endOfDay(value) {
+
+  const date =
+    new Date(value);
+
+  date.setHours(
+    23,
+    59,
+    59,
+    999
+  );
+
+  return date;
+
+}
+
+
+function addDays(
+  value,
+  amount
+) {
+
+  const date =
+    new Date(value);
+
+  date.setDate(
+    date.getDate() +
+    amount
+  );
+
+  return date;
+
+}
+
+
+function getMonday(value) {
+
+  const date =
+    startOfDay(
+      value
+    );
+
+  const day =
+    date.getDay();
+
+  const diff =
+    day === 0
+      ? -6
+      : 1 - day;
+
+  date.setDate(
+    date.getDate() +
+    diff
+  );
+
+  return date;
+
+}
+
+
+function dateToKey(value) {
+
+  const date =
+    new Date(value);
+
+  const year =
+    date.getFullYear();
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
+function getDateKeysBetween(
+  startDate,
+  endDate
+) {
+
+  if (
+    !startDate ||
+    !endDate
+  ) {
+    return [];
+  }
+
+
+  const keys =
+    [];
+
+  const cursor =
+    startOfDay(
+      startDate
+    );
+
+  const end =
+    startOfDay(
+      endDate
+    );
+
+
+  while (
+    cursor <= end
+  ) {
+
+    keys.push(
+      dateToKey(
+        cursor
+      )
+    );
+
+    cursor.setDate(
+      cursor.getDate() +
+      1
+    );
+
+  }
+
+
+  return keys;
+
+}
+
+
+function timestampInSelectedRange(
+  timestamp
+) {
+
+  if (
+    !selectedStartDate ||
+    !selectedEndDate
+  ) {
+    return true;
+  }
+
+
+  const value =
+    Number(
+      timestamp
+    );
+
+
+  return (
+    value >=
+      selectedStartDate.getTime()
+    &&
+    value <=
+      selectedEndDate.getTime()
+  );
+
+}
+
+
+function getSelectedVisitorIds() {
+
+  if (
+    !selectedStartDate ||
+    !selectedEndDate
+  ) {
+
+    return new Set(
+      Object.keys(
+        visitors
+      )
+    );
+
+  }
+
+
+  const ids =
+    new Set();
+
+
+  getDateKeysBetween(
+    selectedStartDate,
+    selectedEndDate
+  )
+    .forEach(
+      key => {
+
+        const day =
+          dailyAnalytics[
+            key
+          ] || {};
+
+        Object
+          .keys(
+            day.visitors ||
+            {}
+          )
+          .forEach(
+            id => {
+
+              ids.add(
+                id
+              );
+
+            }
+          );
+
+      }
+    );
+
+
+  return ids;
+
+}
+function applySelectedRange(
+  startDate,
+  endDate,
+  label = "Custom Range"
+) {
+
+  if (
+    !startDate ||
+    !endDate
+  ) {
+
+    selectedStartDate =
+      null;
+
+    selectedEndDate =
+      null;
+
+    selectedRangeLabel =
+      "All Time";
+
+  } else {
+
+    selectedStartDate =
+      startOfDay(
+        startDate
+      );
+
+    selectedEndDate =
+      endOfDay(
+        endDate
+      );
+
+    selectedRangeLabel =
+      label;
+
+  }
+
+
+  renderStats();
+
+  renderVisitors();
+
+  renderSources();
+
+  renderClicks();
+
+  renderVisitorTrafficChart();
+
+}
 function formatTime(
   timestamp
 ) {
@@ -1059,7 +1369,89 @@ function getChartRows(
 
 }
 
+function getSelectedChartRows() {
 
+  let startDate =
+    selectedStartDate;
+
+  let endDate =
+    selectedEndDate;
+
+
+  if (
+    !startDate ||
+    !endDate
+  ) {
+
+    endDate =
+      endOfDay(
+        new Date()
+      );
+
+    startDate =
+      startOfDay(
+        addDays(
+          new Date(),
+          -6
+        )
+      );
+
+  }
+
+
+  return getDateKeysBetween(
+    startDate,
+    endDate
+  )
+    .map(
+      key => {
+
+        const data =
+          dailyAnalytics[
+            key
+          ] || {};
+
+        const date =
+          new Date(
+            `${key}T00:00:00`
+          );
+
+
+        return {
+
+          key,
+
+          date,
+
+          label:
+            getChartDateLabel(
+              date
+            ),
+
+          visitors:
+            Object.keys(
+              data.visitors ||
+              {}
+            ).length,
+
+          pageViews:
+            Number(
+              data.pageViews ||
+              0
+            ),
+
+          linkClicks:
+            Number(
+              data.linkClicks ||
+              0
+            )
+
+        };
+
+      }
+    );
+
+}
 function renderVisitorTrafficChart() {
 
   if (
@@ -1071,10 +1463,8 @@ function renderVisitorTrafficChart() {
   }
 
 
-  const rows =
-    getChartRows(
-      selectedChartDays
-    );
+const rows =
+  getSelectedChartRows();
 
 
   const visitorData =
@@ -1164,8 +1554,8 @@ function renderVisitorTrafficChart() {
       : "-";
 
 
-  chartRangeLabel.textContent =
-    `Last ${selectedChartDays} days`;
+chartRangeLabel.textContent =
+  selectedRangeLabel;
 
 
   if (
@@ -1398,15 +1788,14 @@ function renderVisitorTrafficChart() {
 
 function renderStats() {
 
-  const allVisitors =
-    Object.values(
-      visitors
-    );
+  const selectedIds =
+    getSelectedVisitorIds();
+
 
   const online =
-    Object
-      .keys(
-        visitors
+    Array
+      .from(
+        selectedIds
       )
       .filter(
         id =>
@@ -1415,8 +1804,84 @@ function renderStats() {
           )
       );
 
+
+  let totalPageViews =
+    0;
+
+  let totalClicks =
+    0;
+
+
+  if (
+    selectedStartDate &&
+    selectedEndDate
+  ) {
+
+    getDateKeysBetween(
+      selectedStartDate,
+      selectedEndDate
+    )
+      .forEach(
+        key => {
+
+          const day =
+            dailyAnalytics[
+              key
+            ] || {};
+
+          totalPageViews +=
+            Number(
+              day.pageViews ||
+              0
+            );
+
+          totalClicks +=
+            Number(
+              day.linkClicks ||
+              0
+            );
+
+        }
+      );
+
+  } else {
+
+    Object
+      .values(
+        dailyAnalytics
+      )
+      .forEach(
+        day => {
+
+          totalPageViews +=
+            Number(
+              day?.pageViews ||
+              0
+            );
+
+          totalClicks +=
+            Number(
+              day?.linkClicks ||
+              0
+            );
+
+        }
+      );
+
+  }
+
+
   onlineCount.textContent =
     online.length;
+
+  todayCount.textContent =
+    selectedIds.size;
+
+  pageViews.textContent =
+    totalPageViews;
+
+  clicksCount.textContent =
+    totalClicks;
 
 }
 
@@ -1450,7 +1915,8 @@ function renderVisitors() {
             a.lastSeen || 0
           )
       );
-
+const selectedIds =
+  getSelectedVisitorIds();
 
   const filtered =
     list.filter(
@@ -1471,10 +1937,22 @@ function renderVisitors() {
             .toLowerCase();
 
 
-        return haystack.includes(
-          searchText
-            .toLowerCase()
-        );
+const matchesDate =
+  selectedIds.has(
+    visitor.id
+  );
+
+const matchesSearch =
+  haystack.includes(
+    searchText
+      .toLowerCase()
+  );
+
+
+return (
+  matchesDate &&
+  matchesSearch
+);
 
       }
     );
@@ -1680,11 +2158,24 @@ function renderSources() {
     {};
 
 
-  Object
-    .values(
-      visitors
-    )
-    .forEach(
+const selectedIds =
+  getSelectedVisitorIds();
+
+
+Array
+  .from(
+    selectedIds
+  )
+  .map(
+    id =>
+      visitors[
+        id
+      ]
+  )
+  .filter(
+    Boolean
+  )
+  .forEach(
       visitor => {
 
         const source =
@@ -1828,7 +2319,12 @@ function renderClicks() {
           ...value
         })
       )
-
+.filter(
+  item =>
+    timestampInSelectedRange(
+      item.timestamp
+    )
+)
       .sort(
         (a, b) =>
           Number(
@@ -2076,44 +2572,6 @@ onValue(
 
 
 /* =========================================================
-   TODAY STATS
-========================================================= */
-
-onValue(
-
-  ref(
-    db,
-    `analytics/daily/${getDateKey()}`
-  ),
-
-  snapshot => {
-
-    const data =
-      snapshot.val() || {};
-
-    const uniqueVisitors =
-      Object.keys(
-        data.visitors || {}
-      ).length;
-
-    todayCount.textContent =
-      uniqueVisitors;
-
-    pageViews.textContent =
-      Number(
-        data.pageViews || 0
-      );
-
-    clicksCount.textContent =
-      Number(
-        data.linkClicks || 0
-      );
-
-  }
-
-);
-
-/* =========================================================
    DAILY ANALYTICS FOR CHART
 ========================================================= */
 
@@ -2126,10 +2584,18 @@ onValue(
 
   snapshot => {
 
-    dailyAnalytics =
-      snapshot.val() || {};
+dailyAnalytics =
+  snapshot.val() || {};
 
-    renderVisitorTrafficChart();
+renderStats();
+
+renderVisitors();
+
+renderSources();
+
+renderClicks();
+
+renderVisitorTrafficChart();
 
   },
 
@@ -2242,61 +2708,453 @@ if (
 
 }
 /* =========================================================
-   CHART RANGE
+   GLOBAL DATE RANGE FILTER
 ========================================================= */
+
+function setDatePreset(
+  preset
+) {
+
+  const now =
+    new Date();
+
+  let start =
+    null;
+
+  let end =
+    null;
+
+  let label =
+    "Custom Range";
+
+
+  if (preset === "today") {
+
+    start =
+      now;
+
+    end =
+      now;
+
+    label =
+      "Today";
+
+  }
+
+  else if (
+    preset ===
+    "yesterday"
+  ) {
+
+    start =
+      addDays(
+        now,
+        -1
+      );
+
+    end =
+      start;
+
+    label =
+      "Yesterday";
+
+  }
+
+  else if (
+    preset ===
+    "this-week"
+  ) {
+
+    start =
+      getMonday(
+        now
+      );
+
+    end =
+      now;
+
+    label =
+      "This Week";
+
+  }
+
+  else if (
+    preset ===
+    "last-week"
+  ) {
+
+    const thisMonday =
+      getMonday(
+        now
+      );
+
+    start =
+      addDays(
+        thisMonday,
+        -7
+      );
+
+    end =
+      addDays(
+        thisMonday,
+        -1
+      );
+
+    label =
+      "Last Week";
+
+  }
+
+  else if (
+    preset ===
+    "this-month"
+  ) {
+
+    start =
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1
+      );
+
+    end =
+      now;
+
+    label =
+      "This Month";
+
+  }
+
+  else if (
+    preset ===
+    "last-month"
+  ) {
+
+    start =
+      new Date(
+        now.getFullYear(),
+        now.getMonth() - 1,
+        1
+      );
+
+    end =
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        0
+      );
+
+    label =
+      "Last Month";
+
+  }
+
+  else if (
+    preset ===
+    "last-7"
+  ) {
+
+    start =
+      addDays(
+        now,
+        -6
+      );
+
+    end =
+      now;
+
+    label =
+      "Last 7 days";
+
+  }
+
+  else if (
+    preset ===
+    "last-15"
+  ) {
+
+    start =
+      addDays(
+        now,
+        -14
+      );
+
+    end =
+      now;
+
+    label =
+      "Last 15 days";
+
+  }
+
+  else if (
+    preset ===
+    "last-30"
+  ) {
+
+    start =
+      addDays(
+        now,
+        -29
+      );
+
+    end =
+      now;
+
+    label =
+      "Last 30 days";
+
+  }
+
+  else if (
+    preset ===
+    "last-60"
+  ) {
+
+    start =
+      addDays(
+        now,
+        -59
+      );
+
+    end =
+      now;
+
+    label =
+      "Last 60 days";
+
+  }
+
+  else if (
+    preset ===
+    "all"
+  ) {
+
+    visitorDatePicker
+      ?.clear();
+
+    applySelectedRange(
+      null,
+      null,
+      "All Time"
+    );
+
+    return;
+
+  }
+
+
+  if (
+    visitorDatePicker &&
+    start &&
+    end
+  ) {
+
+    visitorDatePicker.setDate(
+      [
+        start,
+        end
+      ],
+      false
+    );
+
+  }
+
+
+  applySelectedRange(
+    start,
+    end,
+    label
+  );
+
+}
+
+
+if (
+  dateRangeInput &&
+  typeof window.flatpickr !==
+    "undefined"
+) {
+
+  visitorDatePicker =
+    window.flatpickr(
+      dateRangeInput,
+      {
+
+        mode:
+          "range",
+
+        dateFormat:
+          "Y-m-d",
+
+        allowInput:
+          true,
+
+        showMonths:
+          2,
+
+        monthSelectorType:
+          "static",
+
+        disableMobile:
+          true,
+
+        locale: {
+          rangeSeparator:
+            "  →  "
+        },
+
+
+        onChange:
+          selectedDates => {
+
+            if (
+              selectedDates.length ===
+              2
+            ) {
+
+              applySelectedRange(
+                selectedDates[0],
+                selectedDates[1],
+                "Custom Range"
+              );
+
+            }
+
+          },
+
+
+        onClose:
+          selectedDates => {
+
+            if (
+              selectedDates.length ===
+              0 &&
+              !dateRangeInput.value.trim()
+            ) {
+
+              applySelectedRange(
+                null,
+                null,
+                "All Time"
+              );
+
+            }
+
+          }
+
+      }
+    );
+
+}
+
+if (
+  datePresetToggle &&
+  datePresetPanel
+) {
+
+  datePresetToggle.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+
+      const opening =
+        datePresetPanel
+          .classList
+          .contains(
+            "hidden"
+          );
+
+
+      datePresetPanel
+        .classList
+        .toggle(
+          "hidden"
+        );
+
+
+      datePresetToggle
+        .classList
+        .toggle(
+          "open",
+          opening
+        );
+
+
+      datePresetToggle
+        .setAttribute(
+          "aria-expanded",
+          opening
+            ? "true"
+            : "false"
+        );
+
+    }
+  );
+
+}
+
 
 document.addEventListener(
   "click",
   event => {
 
-    const button =
+    const preset =
       event.target.closest(
-        "[data-chart-days]"
+        "[data-range-preset]"
       );
 
-    if (!button) {
+
+    if (preset) {
+
+      setDatePreset(
+        preset.dataset.rangePreset
+      );
+
+      datePresetPanel
+        ?.classList
+        .add(
+          "hidden"
+        );
+
+      datePresetToggle
+        ?.classList
+        .remove(
+          "open"
+        );
+
       return;
+
     }
-
-
-    const days =
-      Number(
-        button.dataset.chartDays
-      );
 
 
     if (
-      ![7,14,30].includes(
-        days
+      !event.target.closest(
+        ".visitor-date-filter"
       )
     ) {
-      return;
+
+      datePresetPanel
+        ?.classList
+        .add(
+          "hidden"
+        );
+
+      datePresetToggle
+        ?.classList
+        .remove(
+          "open"
+        );
+
     }
 
-
-    selectedChartDays =
-      days;
-
-
-    document
-      .querySelectorAll(
-        "[data-chart-days]"
-      )
-      .forEach(
-        item => {
-
-          item.classList.toggle(
-            "active",
-            item === button
-          );
-
-        }
-      );
-
-
-    renderVisitorTrafficChart();
-
   }
+);
+
+setDatePreset(
+  "today"
 );
 /* =========================================================
    SEARCH

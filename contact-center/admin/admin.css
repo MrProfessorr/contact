@@ -8486,64 +8486,36 @@ span.flatpickr-weekday {
 
 .visitor-page-size-menu {
   position:absolute;
-
   right:0;
-
-  bottom:
-    calc(100% + 5px);
-
+  bottom:calc(100% + 3px);
   z-index:60;
-
-  width:140px;
-
-  padding:5px;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:7px;
-
-  background:#0b1017;
-
-  box-shadow:
-    0 12px 30px
-    rgba(0,0,0,.45);
+  width:100%;
+  padding:4px;
+  border-radius:8px;
+  background:#1f1f1f;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
 }
 
 
 .visitor-page-size-menu >
 button {
   width:100%;
-
-  min-height:28px;
-
+  min-height:32px;
   display:block;
-
-  padding:
-    5px 8px;
-
+  padding:5px 12px;
   border:none;
-
   border-radius:4px;
-
-  color:#cdd5e0;
-
+  color: rgba(255, 255, 255, 0.85);
   background:transparent;
-
   cursor:pointer;
-
-  font-size:10px;
-
-  text-align:left;
+  font-size: 14px;
+  text-align:center;
 }
 
 
 .visitor-page-size-menu >
 button:hover {
-  color:#ffffff;
-
-  background:
-    rgba(66,133,255,.12);
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 #visitorPageSizeCustom:focus {

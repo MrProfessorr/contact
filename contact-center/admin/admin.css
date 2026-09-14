@@ -7875,8 +7875,7 @@ body.visitor-detail-open {
   border:
     1px solid var(--line);
 
-  border-radius:
-    0 0 6px 6px;
+  border-radius: 6px;
 
   background:
     #080b10;
@@ -7910,7 +7909,7 @@ body.visitor-detail-open {
     transparent;
 
   font-size:
-    9px;
+    12px;
 
   white-space:
     nowrap;

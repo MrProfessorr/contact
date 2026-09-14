@@ -363,7 +363,113 @@ function dateToKey(value) {
   return `${year}-${month}-${day}`;
 
 }
+function formatRangeInputDate(
+  value
+) {
 
+  return dateToKey(
+    value
+  );
+
+}
+
+
+function setRangeInputValue(
+  startDate,
+  endDate
+) {
+
+  if (
+    !dateRangeInput ||
+    !startDate ||
+    !endDate
+  ) {
+    return;
+  }
+
+
+  dateRangeInput.value =
+    `${formatRangeInputDate(startDate)}  →  ${formatRangeInputDate(endDate)}`;
+
+}
+
+
+function restoreRangeInputValue() {
+
+  if (
+    !selectedStartDate ||
+    !selectedEndDate
+  ) {
+
+    if (dateRangeInput) {
+      dateRangeInput.value =
+        "";
+    }
+
+    return;
+
+  }
+
+
+  setRangeInputValue(
+    selectedStartDate,
+    selectedEndDate
+  );
+
+}
+
+
+function parseRangeInputValue(
+  value
+) {
+
+  const text =
+    String(
+      value || ""
+    )
+      .trim();
+
+
+  const match =
+    text.match(
+      /^(\d{4}-\d{2}-\d{2})\s*(?:→|->|to)\s*(\d{4}-\d{2}-\d{2})$/i
+    );
+
+
+  if (!match) {
+    return null;
+  }
+
+
+  const start =
+    new Date(
+      `${match[1]}T00:00:00`
+    );
+
+  const end =
+    new Date(
+      `${match[2]}T00:00:00`
+    );
+
+
+  if (
+    Number.isNaN(
+      start.getTime()
+    ) ||
+    Number.isNaN(
+      end.getTime()
+    )
+  ) {
+    return null;
+  }
+
+
+  return {
+    start,
+    end
+  };
+
+}
 
 function getDateKeysBetween(
   startDate,
@@ -534,7 +640,17 @@ function applySelectedRange(
       label;
 
   }
+if (
+  selectedStartDate &&
+  selectedEndDate
+) {
 
+  setRangeInputValue(
+    selectedStartDate,
+    selectedEndDate
+  );
+
+}
 
   renderStats();
 
@@ -2728,7 +2844,10 @@ function setDatePreset(
     "Custom Range";
 
 
-  if (preset === "today") {
+  if (
+    preset ===
+    "today"
+  ) {
 
     start =
       now;
@@ -2740,6 +2859,7 @@ function setDatePreset(
       "Today";
 
   }
+
 
   else if (
     preset ===
@@ -2760,6 +2880,7 @@ function setDatePreset(
 
   }
 
+
   else if (
     preset ===
     "this-week"
@@ -2777,6 +2898,7 @@ function setDatePreset(
       "This Week";
 
   }
+
 
   else if (
     preset ===
@@ -2805,6 +2927,7 @@ function setDatePreset(
 
   }
 
+
   else if (
     preset ===
     "this-month"
@@ -2824,6 +2947,7 @@ function setDatePreset(
       "This Month";
 
   }
+
 
   else if (
     preset ===
@@ -2849,6 +2973,7 @@ function setDatePreset(
 
   }
 
+
   else if (
     preset ===
     "last-7"
@@ -2867,6 +2992,7 @@ function setDatePreset(
       "Last 7 days";
 
   }
+
 
   else if (
     preset ===
@@ -2887,6 +3013,7 @@ function setDatePreset(
 
   }
 
+
   else if (
     preset ===
     "last-30"
@@ -2905,6 +3032,7 @@ function setDatePreset(
       "Last 30 days";
 
   }
+
 
   else if (
     preset ===
@@ -2925,6 +3053,7 @@ function setDatePreset(
 
   }
 
+
   else if (
     preset ===
     "all"
@@ -2933,16 +3062,32 @@ function setDatePreset(
     visitorDatePicker
       ?.clear();
 
+
+    if (
+      dateRangeInput
+    ) {
+
+      dateRangeInput.value =
+        "";
+
+    }
+
+
     applySelectedRange(
       null,
       null,
       "All Time"
     );
 
+
     return;
 
   }
 
+
+  /*
+   * UPDATE FLATPICKR
+   */
 
   if (
     visitorDatePicker &&
@@ -2960,6 +3105,28 @@ function setDatePreset(
 
   }
 
+
+  /*
+   * FORCE INPUT SHOW:
+   * 2026-09-14 → 2026-09-14
+   */
+
+  if (
+    start &&
+    end
+  ) {
+
+    setRangeInputValue(
+      start,
+      end
+    );
+
+  }
+
+
+  /*
+   * APPLY FILTER TO ALL DATA
+   */
 
   applySelectedRange(
     start,
@@ -2999,6 +3166,9 @@ if (
         disableMobile:
           true,
 
+        clickOpens:
+          true,
+
         locale: {
           rangeSeparator:
             "  →  "
@@ -3013,10 +3183,23 @@ if (
               2
             ) {
 
+              const start =
+                selectedDates[0];
+
+              const end =
+                selectedDates[1];
+
+
               applySelectedRange(
-                selectedDates[0],
-                selectedDates[1],
+                start,
+                end,
                 "Custom Range"
+              );
+
+
+              setRangeInputValue(
+                start,
+                end
               );
 
             }
@@ -3025,21 +3208,67 @@ if (
 
 
         onClose:
-          selectedDates => {
+          () => {
 
-            if (
-              selectedDates.length ===
-              0 &&
-              !dateRangeInput.value.trim()
-            ) {
-
-              applySelectedRange(
-                null,
-                null,
-                "All Time"
+            const parsed =
+              parseRangeInputValue(
+                dateRangeInput.value
               );
 
+
+            if (parsed) {
+
+              let start =
+                parsed.start;
+
+              let end =
+                parsed.end;
+
+
+              if (
+                start >
+                end
+              ) {
+
+                [
+                  start,
+                  end
+                ] = [
+                  end,
+                  start
+                ];
+
+              }
+
+
+              visitorDatePicker.setDate(
+                [
+                  start,
+                  end
+                ],
+                false
+              );
+
+
+              applySelectedRange(
+                start,
+                end,
+                "Custom Range"
+              );
+
+
+              setRangeInputValue(
+                start,
+                end
+              );
+
+
+              return;
+
             }
+
+
+            restoreRangeInputValue();
 
           }
 
@@ -3048,6 +3277,109 @@ if (
 
 }
 
+let dateRangeInputTimer =
+  null;
+
+
+dateRangeInput?.addEventListener(
+  "input",
+  () => {
+
+    clearTimeout(
+      dateRangeInputTimer
+    );
+
+
+    dateRangeInputTimer =
+      setTimeout(
+        () => {
+
+          const parsed =
+            parseRangeInputValue(
+              dateRangeInput.value
+            );
+
+
+          if (!parsed) {
+            return;
+          }
+
+
+          let start =
+            parsed.start;
+
+          let end =
+            parsed.end;
+
+
+          if (
+            start >
+            end
+          ) {
+
+            [
+              start,
+              end
+            ] = [
+              end,
+              start
+            ];
+
+          }
+
+
+          visitorDatePicker?.setDate(
+            [
+              start,
+              end
+            ],
+            false
+          );
+
+
+          applySelectedRange(
+            start,
+            end,
+            "Custom Range"
+          );
+
+
+          setRangeInputValue(
+            start,
+            end
+          );
+
+        },
+        350
+      );
+
+  }
+);
+dateRangeInput?.addEventListener(
+  "blur",
+  () => {
+
+    setTimeout(
+      () => {
+
+        const parsed =
+          parseRangeInputValue(
+            dateRangeInput.value
+          );
+
+
+        if (!parsed) {
+
+          restoreRangeInputValue();
+
+        }
+
+      },
+      100
+    );
+
+  }
+);
 if (
   datePresetToggle &&
   datePresetPanel

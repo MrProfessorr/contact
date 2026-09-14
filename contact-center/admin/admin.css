@@ -8410,12 +8410,7 @@ button:hover {
 /* CUSTOM INPUT */
 
 .visitor-page-size-custom {
-  display:grid;
-
-  grid-template-columns:
-    minmax(0,1fr) auto;
-
-  gap:4px;
+  display:block;
 
   margin-top:4px;
 
@@ -8427,64 +8422,69 @@ button:hover {
 
 
 #visitorPageSizeCustom {
+  width:100%;
+
   min-width:0;
 
-  height:28px;
+  height:30px;
 
   padding:
-    4px 6px;
+    5px 8px;
 
-  border-radius:4px;
-
-  font-size:9px;
-}
-
-
-#visitorPageSizeApply {
-  height:28px;
-
-  padding:0 7px;
-
-  border:none;
+  border:
+    1px solid var(--line);
 
   border-radius:4px;
 
   color:#ffffff;
 
-  background:#2869d8;
+  background:#0d1219;
 
-  cursor:pointer;
+  font-size:10px;
 
-  font-size:9px;
+  outline:none;
+}
+
+
+#visitorPageSizeCustom:focus {
+  border-color:
+    #2d7bea;
 }
 
 
 @media(max-width:700px) {
 
   .visitor-pagination {
-    grid-template-columns:
-      1fr;
+    display:flex;
 
-    justify-items:center;
+    justify-content:flex-end;
 
-    gap:8px;
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:6px;
   }
 
 
   .visitor-pagination-info {
-    justify-self:start;
+    width:100%;
+
+    text-align:right;
+
+    margin-right:0;
+  }
+
+
+  .visitor-pagination-center {
+    max-width:100%;
+
+    overflow-x:auto;
   }
 
 
   .visitor-page-size {
-    justify-self:center;
-  }
-
-
-  .visitor-page-numbers {
-    max-width:100%;
-
-    overflow-x:auto;
+    margin-left:0;
   }
 
 }

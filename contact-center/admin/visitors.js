@@ -84,11 +84,6 @@ const pageSizeCustom =
     "visitorPageSizeCustom"
   );
 
-const pageSizeApply =
-  document.getElementById(
-    "visitorPageSizeApply"
-  );
-
 const sourceList =
   document.getElementById(
     "visitorSourceList"
@@ -3982,6 +3977,23 @@ pageSizeToggle?.addEventListener(
           ? "true"
           : "false"
       );
+    if (
+  opening &&
+  pageSizeCustom
+) {
+
+  setTimeout(
+    () => {
+
+      pageSizeCustom.focus();
+
+      pageSizeCustom.select();
+
+    },
+    0
+  );
+
+}
 
   }
 );
@@ -4101,12 +4113,6 @@ function applyCustomVisitorPageSize() {
 }
 
 
-pageSizeApply?.addEventListener(
-  "click",
-  applyCustomVisitorPageSize
-);
-
-
 pageSizeCustom?.addEventListener(
   "keydown",
   event => {
@@ -4124,7 +4130,60 @@ pageSizeCustom?.addEventListener(
 
   }
 );
+/* =========================================================
+   LIVE CUSTOM PAGE SIZE
+========================================================= */
 
+let customPageSizeTimer =
+  null;
+
+
+pageSizeCustom?.addEventListener(
+  "input",
+  () => {
+
+    clearTimeout(
+      customPageSizeTimer
+    );
+
+
+    customPageSizeTimer =
+      setTimeout(
+        () => {
+
+          const size =
+            Number(
+              pageSizeCustom.value
+            );
+
+
+          if (
+            !Number.isFinite(size) ||
+            size < 1
+          ) {
+            return;
+          }
+
+
+          visitorPageSize =
+            Math.min(
+              10000,
+              Math.floor(size)
+            );
+
+
+          visitorCurrentPage =
+            1;
+
+
+          renderVisitors();
+
+        },
+        400
+      );
+
+  }
+);
 document.addEventListener(
   "click",
   event => {

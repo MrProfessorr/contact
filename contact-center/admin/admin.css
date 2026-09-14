@@ -8281,7 +8281,14 @@ span.flatpickr-weekday {
   transition:
     fill .15s ease;
 }
+.visitor-page-number:hover,
+.visitor-page-nav:hover:not(:disabled) {
+  border-color:
+    rgba(66,133,255,.50);
 
+  background:
+    rgba(66,133,255,.10);
+}
 .visitor-page-number.active {
   border-color:#2d7bea;
 

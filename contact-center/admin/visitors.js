@@ -54,7 +54,20 @@ const clickList =
   document.getElementById(
     "visitorClickList"
   );
+const clickToggle =
+  document.getElementById(
+    "visitorClickToggle"
+  );
 
+const clickPanel =
+  document.getElementById(
+    "visitorClickPanel"
+  );
+
+const clickCountLabel =
+  document.getElementById(
+    "visitorClickCountLabel"
+  );
 const searchInput =
   document.getElementById(
     "visitorSearch"
@@ -1798,6 +1811,11 @@ function renderSources() {
 
 function renderClicks() {
 
+  if (!clickList) {
+    return;
+  }
+
+
   const list =
     Object
       .entries(
@@ -1826,6 +1844,18 @@ function renderClicks() {
         0,
         30
       );
+
+
+  if (clickCountLabel) {
+
+    clickCountLabel.textContent =
+      `${list.length} click${
+        list.length === 1
+          ? ""
+          : "s"
+      }`;
+
+  }
 
 
   if (
@@ -1859,13 +1889,26 @@ function renderClicks() {
                 )}
               </strong>
 
-              <span>
-                ${safe(
-                  timeAgo(
-                    item.timestamp
-                  )
-                )}
-              </span>
+
+              <div class="visitor-click-time">
+
+                <strong>
+                  ${safe(
+                    formatJoinedDate(
+                      item.timestamp
+                    )
+                  )}
+                </strong>
+
+                <small>
+                  ${safe(
+                    timeAgo(
+                      item.timestamp
+                    )
+                  )}
+                </small>
+
+              </div>
 
             </div>
 
@@ -1873,11 +1916,17 @@ function renderClicks() {
             <div class="visitor-click-info">
 
               <span>
-                ${safe(item.visitorId || "-")}
+                ${safe(
+                  item.visitorId ||
+                  "-"
+                )}
               </span>
 
               <span>
-                ${safe(item.source || "Direct")}
+                ${safe(
+                  item.source ||
+                  "Direct"
+                )}
               </span>
 
             </div>
@@ -2138,7 +2187,47 @@ if (
 
 }
 
+/* =========================================================
+   RECENT CLICKS SHOW / HIDE
+========================================================= */
 
+if (
+  clickToggle &&
+  clickPanel
+) {
+
+  clickToggle.addEventListener(
+    "click",
+    () => {
+
+      const opening =
+        clickPanel.classList.contains(
+          "hidden"
+        );
+
+
+      clickPanel.classList.toggle(
+        "hidden"
+      );
+
+
+      clickToggle.classList.toggle(
+        "open",
+        opening
+      );
+
+
+      clickToggle.setAttribute(
+        "aria-expanded",
+        opening
+          ? "true"
+          : "false"
+      );
+
+    }
+  );
+
+}
 /* =========================================================
    CHART RANGE
 ========================================================= */

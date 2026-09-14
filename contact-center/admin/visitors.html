@@ -11,7 +11,15 @@
   >
 
   <title>Visitor Analytics</title>
+ <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+>
 
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css"
+>
   <link
     rel="stylesheet"
     href="./admin.css"
@@ -179,15 +187,101 @@
 
   <section class="card">
 
-    <div class="visitor-card-head visitor-card-head-search">
+<div class="visitor-card-head visitor-card-head-search">
+
+  <input
+    id="visitorSearch"
+    type="search"
+    placeholder="Search visitor..."
+  >
+
+
+  <div class="visitor-date-filter">
+
+    <div class="visitor-date-input-wrap">
 
       <input
-        id="visitorSearch"
-        type="search"
-        placeholder="Search visitor..."
+        id="visitorDateRange"
+        type="text"
+        placeholder="Select date range..."
+        autocomplete="off"
       >
 
+      <span class="visitor-date-calendar">
+        ▣
+      </span>
+
     </div>
+
+
+    <button
+      id="visitorDatePresetToggle"
+      class="visitor-date-preset-toggle"
+      type="button"
+      aria-expanded="false"
+    >
+     ⌄
+    </button>
+
+
+    <div
+      id="visitorDatePresetPanel"
+      class="visitor-date-preset-panel hidden"
+    >
+
+      <button type="button" data-range-preset="today">
+        Today
+      </button>
+
+      <button type="button" data-range-preset="yesterday">
+        Yesterday
+      </button>
+
+      <button type="button" data-range-preset="this-week">
+        This Week
+      </button>
+
+      <button type="button" data-range-preset="last-week">
+        Last Week
+      </button>
+
+      <button type="button" data-range-preset="this-month">
+        This Month
+      </button>
+
+      <button type="button" data-range-preset="last-month">
+        Last Month
+      </button>
+
+      <button type="button" data-range-preset="last-7">
+        Last 7 days
+      </button>
+
+      <button type="button" data-range-preset="last-15">
+        Last 15 days
+      </button>
+
+      <button type="button" data-range-preset="last-30">
+        Last 30 days
+      </button>
+
+      <button type="button" data-range-preset="last-60">
+        Last 60 days
+      </button>
+
+      <button
+        type="button"
+        class="visitor-range-all"
+        data-range-preset="all"
+      >
+        All Time
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
 
     <div class="visitor-table-wrap">
@@ -280,36 +374,6 @@
             </p>
 
           </div>
-
-
-          <div class="visitor-chart-range">
-
-            <button
-              type="button"
-              class="visitor-range-btn active"
-              data-chart-days="7"
-            >
-              7D
-            </button>
-
-            <button
-              type="button"
-              class="visitor-range-btn"
-              data-chart-days="14"
-            >
-              14D
-            </button>
-
-            <button
-              type="button"
-              class="visitor-range-btn"
-              data-chart-days="30"
-            >
-              30D
-            </button>
-
-          </div>
-
         </div>
 
 
@@ -536,17 +600,19 @@
   </div>
 
 </div>
-
 </main>
-
 
 <script
   src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
 ></script>
 
-<script 
-  type="module" 
-  src="./visitors.js" 
+<script
+  src="https://cdn.jsdelivr.net/npm/flatpickr"
+></script>
+
+<script
+  type="module"
+  src="./visitors.js"
 ></script>
 
 </body>

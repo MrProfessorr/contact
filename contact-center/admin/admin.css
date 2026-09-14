@@ -8243,6 +8243,7 @@ span.flatpickr-weekday {
   min-width:32px;
   height:32px;
   padding:0;
+  background: transparent;
 }
 .visitor-page-nav-icon {
   width:12px;
@@ -8250,7 +8251,7 @@ span.flatpickr-weekday {
   display:block;
   fill:rgba(255,255,255,0.85);
   pointer-events:none;
-  transition:fill .15s ease;
+  transition: all .2s ease;
 }
 .visitor-page-number:hover,
 .visitor-page-nav:hover:not(:disabled) {
@@ -8259,12 +8260,8 @@ span.flatpickr-weekday {
     rgba(255,255,255,0.12);
 }
 .visitor-page-number.active {
-  border-color:#2d7bea;
-
-  color:#ffffff;
-
-  background:
-    rgba(45,123,234,.14);
+  border-color:#1668dc;
+  color:#1668dc;
 }
 
 

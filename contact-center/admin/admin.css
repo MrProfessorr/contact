@@ -5622,7 +5622,7 @@ input:checked
 .visitor-table th {
   padding:10px 9px;
   color:#ffffff;
-  border-bottom:1px solid var(--line);
+  border-bottom:2px solid var(--line);
   font-size:14px;
   font-weight:600;
   text-align:left;

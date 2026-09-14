@@ -7714,9 +7714,7 @@ body.visitor-detail-open {
   display:flex;
   align-items:center;
   justify-content:flex-start;
-
-  gap:3px;
-
+  gap:8px;
   flex-wrap:nowrap;
 }
 
@@ -7738,15 +7736,10 @@ body.visitor-detail-open {
 
 .visitor-date-filter {
   position:relative;
-
   display:flex;
-
   align-items:center;
-
-  gap:3px;
-
+  gap:8px;
   width:auto;
-
   margin-left:0;
 }
 

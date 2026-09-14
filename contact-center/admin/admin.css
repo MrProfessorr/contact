@@ -7446,73 +7446,6 @@ body.visitor-detail-open {
 }
 
 
-/* CLICK GRID */
-
-.visitor-click-list-wide {
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(3,minmax(0,1fr));
-
-  gap:
-    8px;
-
-  max-height:
-    430px;
-
-  overflow-y:
-    auto;
-}
-
-
-/* DATE + TIME */
-
-.visitor-click-time {
-  display:
-    flex;
-
-  flex-direction:
-    column;
-
-  align-items:
-    flex-end;
-
-  gap:
-    2px;
-
-  flex-shrink:
-    0;
-
-  margin-left:
-    auto;
-
-  white-space:
-    nowrap;
-}
-
-
-.visitor-click-time > strong {
-  color:
-    #a4b0c2;
-
-  font-size:
-    8px;
-
-  font-weight:
-    600;
-}
-
-
-.visitor-click-time > small {
-  color:
-    #68778d;
-
-  font-size:
-    7px;
-}
-
-
 /* TABLET */
 
 @media(max-width:1000px) {
@@ -7523,7 +7456,282 @@ body.visitor-detail-open {
   }
 
 }
+/* =========================================================
+   RECENT LINK CLICKS TABLE
+========================================================= */
 
+.visitor-click-table-wrap {
+  width:
+    100%;
+
+  max-height:
+    365px;
+
+  overflow-y:
+    auto;
+
+  overflow-x:
+    auto;
+
+  border:
+    1px solid rgba(255,255,255,.05);
+
+  border-radius:
+    9px;
+}
+
+
+/* TABLE */
+
+.visitor-click-table {
+  width:
+    100%;
+
+  min-width:
+    760px;
+
+  border-collapse:
+    collapse;
+
+  table-layout:
+    fixed;
+}
+
+
+/* HEADER */
+
+.visitor-click-table thead {
+  position:
+    sticky;
+
+  top:
+    0;
+
+  z-index:
+    3;
+
+  background:
+    #111820;
+}
+
+
+.visitor-click-table th {
+  padding:
+    9px 10px;
+
+  border-bottom:
+    1px solid var(--line);
+
+  color:
+    #8291a7;
+
+  font-size:
+    8px;
+
+  font-weight:
+    800;
+
+  text-align:
+    left;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ROW */
+
+.visitor-click-table td {
+  padding:
+    9px 10px;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.045);
+
+  color:
+    #d8dee8;
+
+  font-size:
+    9px;
+
+  vertical-align:
+    middle;
+}
+
+
+.visitor-click-table tbody tr:last-child td {
+  border-bottom:
+    none;
+}
+
+
+.visitor-click-table tbody tr:hover {
+  background:
+    rgba(255,255,255,.018);
+}
+
+
+/* COLUMN WIDTH */
+
+.visitor-click-table th:nth-child(1),
+.visitor-click-table td:nth-child(1) {
+  width:
+    18%;
+}
+
+
+.visitor-click-table th:nth-child(2),
+.visitor-click-table td:nth-child(2) {
+  width:
+    24%;
+}
+
+
+.visitor-click-table th:nth-child(3),
+.visitor-click-table td:nth-child(3) {
+  width:
+    16%;
+}
+
+
+.visitor-click-table th:nth-child(4),
+.visitor-click-table td:nth-child(4) {
+  width:
+    26%;
+}
+
+
+.visitor-click-table th:nth-child(5),
+.visitor-click-table td:nth-child(5) {
+  width:
+    16%;
+}
+
+
+/* TYPE */
+
+.visitor-click-type {
+  color:
+    #ffffff;
+
+  font-size:
+    9px;
+
+  font-weight:
+    800;
+}
+
+
+/* VISITOR ID */
+
+.visitor-click-id {
+  display:
+    inline-block;
+
+  padding:
+    3px 5px;
+
+  border-radius:
+    5px;
+
+  color:
+    #9fb3cc;
+
+  background:
+    #0d1219;
+
+  font-size:
+    8px;
+}
+
+
+/* SOURCE */
+
+.visitor-click-source {
+  display:
+    inline-block;
+
+  padding:
+    3px 6px;
+
+  border:
+    1px solid rgba(66,133,255,.35);
+
+  border-radius:
+    999px;
+
+  color:
+    #a9c9ff;
+
+  background:
+    rgba(66,133,255,.08);
+
+  font-size:
+    8px;
+}
+
+
+/* DATE */
+
+.visitor-click-date {
+  white-space:
+    nowrap;
+
+  color:
+    #c3cfde;
+
+  font-size:
+    8px;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* LAST ACTIVITY */
+
+.visitor-click-ago {
+  white-space:
+    nowrap;
+
+  color:
+    #718096;
+
+  font-size:
+    8px;
+}
+
+
+/* SCROLLBAR */
+
+.visitor-click-table-wrap::-webkit-scrollbar {
+  width:
+    6px;
+
+  height:
+    6px;
+}
+
+
+.visitor-click-table-wrap::-webkit-scrollbar-track {
+  background:
+    transparent;
+}
+
+
+.visitor-click-table-wrap::-webkit-scrollbar-thumb {
+  background:
+    rgba(143,155,172,.30);
+
+  border-radius:
+    999px;
+}
+
+
+.visitor-click-table-wrap::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(143,155,172,.50);
+}
 
 /* MOBILE */
 

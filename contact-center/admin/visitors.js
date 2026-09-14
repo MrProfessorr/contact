@@ -3968,18 +3968,24 @@ function closePageSizeMenu() {
     );
 
 
-  if (
-    pageSizeInput
-  ) {
+if (
+  pageSizeInput
+) {
 
-    pageSizeInput.readOnly =
-      true;
+  pageSizeInput.readOnly =
+    true;
 
 
-    pageSizeInput.value =
-      `${visitorPageSize} / page`;
+  /* BUANG PLACEHOLDER MODE */
+  pageSizeInput.placeholder =
+    "";
 
-  }
+
+  /* BALIK JADI TEXT BIASA */
+  pageSizeInput.value =
+    `${visitorPageSize} / page`;
+
+}
 
 }
 
@@ -4009,32 +4015,34 @@ function openPageSizeMenu() {
     );
 
 
-  if (
-    pageSizeInput
-  ) {
+if (
+  pageSizeInput
+) {
 
-    pageSizeInput.readOnly =
-      false;
-
-
-    pageSizeInput.value =
-      String(
-        visitorPageSize
-      );
+  pageSizeInput.readOnly =
+    false;
 
 
-    setTimeout(
-      () => {
+  /* VALUE KOSONG */
+  pageSizeInput.value =
+    "";
 
-        pageSizeInput.focus();
 
-        pageSizeInput.select();
+  /* NILAI LAMA JADI PLACEHOLDER */
+  pageSizeInput.placeholder =
+    `${visitorPageSize} / page`;
 
-      },
-      0
-    );
 
-  }
+  setTimeout(
+    () => {
+
+      pageSizeInput.focus();
+
+    },
+    0
+  );
+
+}
 
 }
 
@@ -4180,19 +4188,16 @@ pageSizeInput?.addEventListener(
         );
 
 
-      if (
-        !Number.isFinite(size) ||
-        size < 1
-      ) {
+if (
+  !Number.isFinite(size) ||
+  size < 1
+) {
 
-        pageSizeInput.value =
-          String(
-            visitorPageSize
-          );
+  closePageSizeMenu();
 
-        return;
+  return;
 
-      }
+}
 
 
       visitorPageSize =

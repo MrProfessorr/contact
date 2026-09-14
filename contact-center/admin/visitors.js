@@ -64,29 +64,24 @@ const pageNumbers =
     "visitorPageNumbers"
   );
 
+const pageSizeControl =
+  document.getElementById(
+    "visitorPageSizeControl"
+  );
+
+const pageSizeInput =
+  document.getElementById(
+    "visitorPageSizeInput"
+  );
+
 const pageSizeToggle =
   document.getElementById(
     "visitorPageSizeToggle"
   );
 
-const pageSizeLabel =
-  document.getElementById(
-    "visitorPageSizeLabel"
-  );
-
-const pageSizePreview =
-  document.getElementById(
-    "visitorPageSizePreview"
-  );
-
 const pageSizeMenu =
   document.getElementById(
     "visitorPageSizeMenu"
-  );
-
-const pageSizeCustom =
-  document.getElementById(
-    "visitorPageSizeCustom"
   );
 
 const sourceList =
@@ -2242,8 +2237,15 @@ function renderVisitorPagination() {
     pageSizeLabel
   ) {
 
-    pageSizeLabel.textContent =
-      `${visitorPageSize} / page`;
+if (
+  pageSizeInput &&
+  pageSizeInput.readOnly
+) {
+
+  pageSizeInput.value =
+    `${visitorPageSize} / page`;
+
+}
 
   }
 
@@ -3946,7 +3948,7 @@ pageNumbers?.addEventListener(
 );
 
 /* =========================================================
-   PAGE SIZE DROPDOWN
+   PAGE SIZE EDITABLE COMBOBOX
 ========================================================= */
 
 function closePageSizeMenu() {
@@ -3971,84 +3973,115 @@ function closePageSizeMenu() {
       "false"
     );
 
+
+  if (
+    pageSizeInput
+  ) {
+
+    pageSizeInput.readOnly =
+      true;
+
+
+    pageSizeInput.value =
+      `${visitorPageSize} / page`;
+
+  }
+
 }
 
 
-/* OPEN / CLOSE DROPDOWN */
+/* OPEN */
 
-pageSizeToggle?.addEventListener(
+function openPageSizeMenu() {
+
+  pageSizeMenu
+    ?.classList
+    .remove(
+      "hidden"
+    );
+
+
+  pageSizeToggle
+    ?.classList
+    .add(
+      "open"
+    );
+
+
+  pageSizeToggle
+    ?.setAttribute(
+      "aria-expanded",
+      "true"
+    );
+
+
+  if (
+    pageSizeInput
+  ) {
+
+    pageSizeInput.readOnly =
+      false;
+
+
+    pageSizeInput.value =
+      String(
+        visitorPageSize
+      );
+
+
+    setTimeout(
+      () => {
+
+        pageSizeInput.focus();
+
+        pageSizeInput.select();
+
+      },
+      0
+    );
+
+  }
+
+}
+
+
+/* CLICK MAIN CONTROL */
+
+pageSizeControl?.addEventListener(
   "click",
   event => {
 
     event.stopPropagation();
 
 
-    const opening =
-      pageSizeMenu
+    const isOpen =
+      !pageSizeMenu
         ?.classList
         .contains(
           "hidden"
         );
 
 
-    pageSizeMenu
-      ?.classList
-      .toggle(
-        "hidden"
-      );
+    if (
+      event.target ===
+      pageSizeInput &&
+      isOpen
+    ) {
 
+      return;
 
-    pageSizeToggle
-      ?.classList
-      .toggle(
-        "open",
-        Boolean(opening)
-      );
-
-
-    pageSizeToggle
-      ?.setAttribute(
-        "aria-expanded",
-        opening
-          ? "true"
-          : "false"
-      );
+    }
 
 
     if (
-      opening
+      isOpen
     ) {
 
-      if (
-        pageSizePreview
-      ) {
+      closePageSizeMenu();
 
-        pageSizePreview.textContent =
-          `${visitorPageSize} / page`;
+    } else {
 
-      }
-
-
-      if (
-        pageSizeCustom
-      ) {
-
-        pageSizeCustom.value =
-          visitorPageSize;
-
-
-        setTimeout(
-          () => {
-
-            pageSizeCustom.focus();
-
-            pageSizeCustom.select();
-
-          },
-          0
-        );
-
-      }
+      openPageSizeMenu();
 
     }
 
@@ -4098,36 +4131,6 @@ pageSizeMenu?.addEventListener(
       1;
 
 
-    if (
-      pageSizeLabel
-    ) {
-
-      pageSizeLabel.textContent =
-        `${visitorPageSize} / page`;
-
-    }
-
-
-    if (
-      pageSizePreview
-    ) {
-
-      pageSizePreview.textContent =
-        `${visitorPageSize} / page`;
-
-    }
-
-
-    if (
-      pageSizeCustom
-    ) {
-
-      pageSizeCustom.value =
-        visitorPageSize;
-
-    }
-
-
     renderVisitors();
 
     closePageSizeMenu();
@@ -4136,102 +4139,26 @@ pageSizeMenu?.addEventListener(
 );
 
 
-/* CUSTOM PAGE SIZE */
+/* TYPE CUSTOM VALUE */
 
-function applyCustomPageSize() {
-
-  const size =
-    Number(
-      pageSizeCustom?.value
-    );
-
-
-  if (
-    !Number.isFinite(size) ||
-    size < 1
-  ) {
-    return false;
-  }
-
-
-  visitorPageSize =
-    Math.min(
-      10000,
-      Math.floor(size)
-    );
-
-
-  visitorCurrentPage =
-    1;
-
-
-  if (
-    pageSizeLabel
-  ) {
-
-    pageSizeLabel.textContent =
-      `${visitorPageSize} / page`;
-
-  }
-
-
-  if (
-    pageSizePreview
-  ) {
-
-    pageSizePreview.textContent =
-      `${visitorPageSize} / page`;
-
-  }
-
-
-  renderVisitors();
-
-
-  return true;
-
-}
-
-
-/* LIVE PREVIEW WHILE TYPING */
-
-pageSizeCustom?.addEventListener(
+pageSizeInput?.addEventListener(
   "input",
   () => {
 
-    const size =
-      Number(
-        pageSizeCustom.value
-      );
+    /*
+     * Buang semua selain nombor
+     */
+
+    const cleaned =
+      pageSizeInput.value
+        .replace(
+          /\D/g,
+          ""
+        );
 
 
-    if (
-      !Number.isFinite(size) ||
-      size < 1
-    ) {
-
-      if (
-        pageSizePreview
-      ) {
-
-        pageSizePreview.textContent =
-          "- / page";
-
-      }
-
-      return;
-
-    }
-
-
-    if (
-      pageSizePreview
-    ) {
-
-      pageSizePreview.textContent =
-        `${Math.floor(size)} / page`;
-
-    }
+    pageSizeInput.value =
+      cleaned;
 
   }
 );
@@ -4239,7 +4166,7 @@ pageSizeCustom?.addEventListener(
 
 /* ENTER = APPLY */
 
-pageSizeCustom?.addEventListener(
+pageSizeInput?.addEventListener(
   "keydown",
   event => {
 
@@ -4253,17 +4180,41 @@ pageSizeCustom?.addEventListener(
       event.stopPropagation();
 
 
-      const success =
-        applyCustomPageSize();
+      const size =
+        Number(
+          pageSizeInput.value
+        );
 
 
       if (
-        success
+        !Number.isFinite(size) ||
+        size < 1
       ) {
 
-        closePageSizeMenu();
+        pageSizeInput.value =
+          String(
+            visitorPageSize
+          );
+
+        return;
 
       }
+
+
+      visitorPageSize =
+        Math.min(
+          10000,
+          Math.floor(size)
+        );
+
+
+      visitorCurrentPage =
+        1;
+
+
+      renderVisitors();
+
+      closePageSizeMenu();
 
     }
 
@@ -4283,21 +4234,57 @@ pageSizeCustom?.addEventListener(
 );
 
 
-/* CLICK OUTSIDE = CLOSE */
+/* CLICK OUTSIDE = APPLY IF VALID, THEN CLOSE */
 
 document.addEventListener(
   "click",
   event => {
 
     if (
-      !event.target.closest(
+      event.target.closest(
         ".visitor-page-size"
       )
     ) {
+      return;
+    }
 
-      closePageSizeMenu();
+
+    if (
+      pageSizeInput &&
+      pageSizeInput.readOnly ===
+        false
+    ) {
+
+      const size =
+        Number(
+          pageSizeInput.value
+        );
+
+
+      if (
+        Number.isFinite(size) &&
+        size >= 1
+      ) {
+
+        visitorPageSize =
+          Math.min(
+            10000,
+            Math.floor(size)
+          );
+
+
+        visitorCurrentPage =
+          1;
+
+
+        renderVisitors();
+
+      }
 
     }
+
+
+    closePageSizeMenu();
 
   }
 );

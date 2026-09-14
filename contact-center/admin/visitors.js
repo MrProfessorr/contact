@@ -1838,11 +1838,6 @@ function renderClicks() {
           Number(
             a.timestamp || 0
           )
-      )
-
-      .slice(
-        0,
-        30
       );
 
 
@@ -1863,9 +1858,16 @@ function renderClicks() {
   ) {
 
     clickList.innerHTML = `
-      <div class="visitor-empty">
-        No clicks yet.
-      </div>
+      <tr>
+
+        <td
+          colspan="5"
+          class="visitor-empty"
+        >
+          No clicks yet.
+        </td>
+
+      </tr>
     `;
 
     return;
@@ -1877,11 +1879,12 @@ function renderClicks() {
     list
       .map(
         item => `
-          <div class="visitor-click-item">
 
-            <div class="visitor-click-top">
+          <tr>
 
-              <strong>
+            <td>
+
+              <strong class="visitor-click-type">
                 ${safe(
                   item.contactName ||
                   item.contactType ||
@@ -1889,55 +1892,65 @@ function renderClicks() {
                 )}
               </strong>
 
-
-              <div class="visitor-click-time">
-
-                <strong>
-                  ${safe(
-                    formatJoinedDate(
-                      item.timestamp
-                    )
-                  )}
-                </strong>
-
-                <small>
-                  ${safe(
-                    timeAgo(
-                      item.timestamp
-                    )
-                  )}
-                </small>
-
-              </div>
-
-            </div>
+            </td>
 
 
-            <div class="visitor-click-info">
+            <td>
 
-              <span>
+              <span class="visitor-click-id">
                 ${safe(
                   item.visitorId ||
                   "-"
                 )}
               </span>
 
-              <span>
+            </td>
+
+
+            <td>
+
+              <span class="visitor-click-source">
                 ${safe(
                   item.source ||
                   "Direct"
                 )}
               </span>
 
-            </div>
+            </td>
 
-          </div>
+
+            <td>
+
+              <span class="visitor-click-date">
+                ${safe(
+                  formatJoinedDate(
+                    item.timestamp
+                  )
+                )}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span class="visitor-click-ago">
+                ${safe(
+                  timeAgo(
+                    item.timestamp
+                  )
+                )}
+              </span>
+
+            </td>
+
+          </tr>
+
         `
       )
       .join("");
 
 }
-
 
 /* =========================================================
    RENDER ALL

@@ -5522,18 +5522,15 @@ input:checked
 /* TABLE */
 
 .visitor-table-wrap {
-  width:
-    100%;
-  max-height:
-    485px;
-  overflow-y:
-    auto;
-  overflow-x:
-    auto;
-  overscroll-behavior:
-    contain;
-  scrollbar-gutter:
-    stable;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow-x:auto;
+  overflow-y:auto;
+  max-height:485px;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  -webkit-overflow-scrolling:touch;
 }
 
 /* VISITOR TABLE SCROLLBAR */
@@ -8088,4 +8085,52 @@ span.flatpickr-weekday {
     -webkit-flex: 1;
     -ms-flex: 1;
     flex: 1;
+}
+@media(max-width:650px) {
+
+  .visitor-main-grid {
+    width:100%;
+
+    min-width:0;
+
+    max-width:100%;
+  }
+
+
+  .visitor-main-grid > .card {
+    width:100%;
+
+    min-width:0;
+
+    max-width:100%;
+
+    padding:
+      12px;
+
+    overflow:hidden;
+  }
+
+
+  .visitor-table-wrap {
+    width:100%;
+
+    max-width:100%;
+
+    min-width:0;
+
+    overflow-x:auto;
+
+    overflow-y:auto;
+
+    -webkit-overflow-scrolling:
+      touch;
+  }
+
+
+  .visitor-table {
+    width:760px;
+
+    min-width:760px;
+  }
+
 }

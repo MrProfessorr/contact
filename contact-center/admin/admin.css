@@ -5532,7 +5532,35 @@ input:checked
   scrollbar-gutter:stable;
   -webkit-overflow-scrolling:touch;
 }
+.visitor-table thead {
+  position:
+    sticky;
 
+  top:
+    0;
+
+  z-index:
+    5;
+}
+
+
+.visitor-table thead th {
+  position:
+    sticky;
+
+  top:
+    0;
+
+  z-index:
+    5;
+
+  background:
+    #111720;
+
+  box-shadow:
+    0 1px 0
+    var(--line);
+}
 /* VISITOR TABLE SCROLLBAR */
 
 .visitor-table-wrap::-webkit-scrollbar {

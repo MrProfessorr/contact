@@ -5522,7 +5522,25 @@ input:checked
   z-index:
     5;
 }
+/* GARIS PEMISAH HEADER TABLE */
 
+.visitor-table th {
+  position: relative;
+}
+
+.visitor-table th:not(:last-child)::after {
+  content: "";
+
+  position: absolute;
+
+  top: 25%;
+  right: 0;
+
+  width: 1px;
+  height: 50%;
+
+  background: rgba(255,255,255,.10);
+}
 
 .visitor-table thead th {
   position:

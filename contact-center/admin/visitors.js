@@ -1024,9 +1024,9 @@ function openVisitorDetail(
 
             : online
 
-              ? "● ONLINE"
+              ? "● Online"
 
-              : "OFFLINE"
+              : "Offline"
         }
 
       </span>

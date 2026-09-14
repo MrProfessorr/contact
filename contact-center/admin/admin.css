@@ -8170,14 +8170,15 @@ span.flatpickr-weekday {
 ========================================================= */
 
 .visitor-pagination {
-  display:grid;
-
-  grid-template-columns:
-    1fr auto 1fr;
+  display:flex;
 
   align-items:center;
 
-  gap:12px;
+  justify-content:flex-end;
+
+  flex-wrap:wrap;
+
+  gap:8px;
 
   margin-top:8px;
 
@@ -8195,6 +8196,8 @@ span.flatpickr-weekday {
   font-size:10px;
 
   white-space:nowrap;
+
+  margin-right:3px;
 }
 
 
@@ -8203,7 +8206,7 @@ span.flatpickr-weekday {
 
   align-items:center;
 
-  justify-content:center;
+  justify-content:flex-start;
 
   gap:4px;
 }
@@ -8290,7 +8293,7 @@ span.flatpickr-weekday {
 .visitor-page-size {
   position:relative;
 
-  justify-self:end;
+  margin-left:3px;
 }
 
 

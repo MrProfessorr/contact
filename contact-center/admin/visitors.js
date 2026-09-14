@@ -2292,7 +2292,7 @@ if (
 
             return `
               <span class="visitor-page-dots">
-                ...
+                •••
               </span>
             `;
 

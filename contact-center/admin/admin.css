@@ -7873,6 +7873,7 @@ body.visitor-detail-open {
   background:transparent;
   font-size:12px;
   white-space:nowrap;
+  transition: all .2s ease;
 }
 
 

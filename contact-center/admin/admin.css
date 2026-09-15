@@ -8381,8 +8381,12 @@ span.flatpickr-weekday {
   transition: all .2s ease;
 }
 
+.visitor-page-size-control:not(:focus-within):hover {
+  border-color: #3c89e8;
+}
+
 .visitor-page-size-control:focus-within {
-  border-color:#1668dc;
+  border-color: #1668dc;
 }
 
 

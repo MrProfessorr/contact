@@ -6232,7 +6232,87 @@ function detectDeviceType() {
 
 }
 
+/* =========================================================
+   OPERATING SYSTEM
+========================================================= */
 
+function detectOS() {
+
+  const ua =
+    navigator.userAgent || "";
+
+  const platform =
+    navigator.platform || "";
+
+  /* iPhone / iPad / iPod */
+
+  if (
+    /iPhone|iPad|iPod/i.test(ua)
+  ) {
+    return "iOS";
+  }
+
+
+  /*
+    iPadOS kadang-kadang report sebagai Mac.
+    Touch points membantu bezakan iPad dari Mac.
+  */
+
+  if (
+    platform === "MacIntel" &&
+    navigator.maxTouchPoints > 1
+  ) {
+    return "iOS";
+  }
+
+
+  /* Android */
+
+  if (
+    /Android/i.test(ua)
+  ) {
+    return "Android";
+  }
+
+
+  /* Windows */
+
+  if (
+    /Windows NT/i.test(ua)
+  ) {
+    return "Windows";
+  }
+
+
+  /* macOS */
+
+  if (
+    /Macintosh|Mac OS X/i.test(ua)
+  ) {
+    return "macOS";
+  }
+
+
+  /* ChromeOS */
+
+  if (
+    /CrOS/i.test(ua)
+  ) {
+    return "ChromeOS";
+  }
+
+
+  /* Linux */
+
+  if (
+    /Linux/i.test(ua)
+  ) {
+    return "Linux";
+  }
+
+
+  return "Other";
+}
 function detectBrowser() {
 
   const ua =
@@ -6512,11 +6592,14 @@ async function startVisitorTracking() {
         referrer:
           traffic.referrer,
 
-        device:
-          detectDeviceType(),
+device:
+  detectDeviceType(),
 
-        browser:
-          detectBrowser(),
+os:
+  detectOS(),
+
+browser:
+  detectBrowser(),
 
         language:
           navigator.language || "",

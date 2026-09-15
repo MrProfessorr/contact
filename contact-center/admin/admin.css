@@ -6765,7 +6765,16 @@ body.visitor-detail-open {
   font-size:12px;
   transition:transform .2s ease;
 }
+/* SVG COLLAPSE ARROW */
 
+.visitor-toggle-arrow-icon {
+  display:block;
+
+  width:12px;
+  height:12px;
+  fill:#e5edf8;
+  pointer-events:none;
+}
 
 .visitor-chart-toggle.open
 .visitor-chart-arrow {

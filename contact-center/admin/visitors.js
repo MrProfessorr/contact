@@ -2775,20 +2775,20 @@ Array
     );
 
 
-  if (
-    !list.length ||
-    !totalVisitors
-  ) {
+if (
+  !list.length ||
+  !totalVisitors
+) {
 
-    sourceList.innerHTML = `
-      <div class="visitor-empty">
-        No traffic yet.
-      </div>
-    `;
+  sourceList.innerHTML =
+    createEmptyState(
+      "No data"
+    );
 
-    return;
 
-  }
+  return;
+
+}
 
 
   sourceList.innerHTML =
@@ -2908,26 +2908,31 @@ function renderClicks() {
   }
 
 
-  if (
-    !list.length
-  ) {
+if (
+  !list.length
+) {
 
-    clickList.innerHTML = `
-      <tr>
+  clickList.innerHTML = `
+    <tr>
 
-        <td
-          colspan="5"
-          class="visitor-empty"
-        >
-          No clicks yet.
-        </td>
+      <td
+        colspan="5"
+        class="shared-empty-table-cell"
+      >
 
-      </tr>
-    `;
+        ${createEmptyState(
+          "No data"
+        )}
 
-    return;
+      </td>
 
-  }
+    </tr>
+  `;
+
+
+  return;
+
+}
 
 
   clickList.innerHTML =

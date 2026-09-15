@@ -8342,11 +8342,10 @@ span.flatpickr-weekday {
   height:32px;
   display:block;
   overflow:hidden;
-  border: 1px solid #424242;
+  border:1px solid #424242;
   border-radius:6px;
   background:#141414;
-  cursor:pointer;
-  transition: all .2s ease;
+  transition:all .2s ease;
 }
 
 .visitor-page-size-control:not(:focus-within):hover {
@@ -8392,7 +8391,7 @@ span.flatpickr-weekday {
     left;
 
   cursor:
-    pointer;
+    text;
 }
 
 .visitor-page-size-input::placeholder {
@@ -8410,7 +8409,7 @@ span.flatpickr-weekday {
 }
 .visitor-page-size-input[readonly] {
   cursor:
-    pointer;
+    text;
 }
 
 

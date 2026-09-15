@@ -8446,11 +8446,10 @@ span.flatpickr-weekday {
 /* CUSTOM MENU */
 
 .visitor-page-size-menu {
-  position:bsolute;
+  position:absolute;
   right:0;
   bottom:calc(100% + 3px);
-  z-index:
-    60;
+  z-index:60;
   width:100%;
   max-height:137px;
   overflow-y:auto;

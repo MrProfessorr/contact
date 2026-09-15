@@ -6228,14 +6228,10 @@ body.visitor-detail-open {
 /* CONTENT */
 
 .visitor-detail-content {
-  min-height:
-    0;
-
-  overflow-y:
-    auto;
-
-  padding:
-    18px;
+  min-height:0;
+  overflow-y:auto;
+  padding:18px;
+  bakcground:var(--panel);
 }
 
 

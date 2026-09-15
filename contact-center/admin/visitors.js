@@ -2509,17 +2509,26 @@ if (
 
   tableBody.innerHTML = `
     <tr>
+
       <td
         colspan="8"
-        class="visitor-empty"
+        class="shared-empty-table-cell"
       >
-        No visitor found.
+
+        ${createEmptyState(
+          "No data"
+        )}
+
       </td>
+
     </tr>
   `;
 
+
   visitorFilteredTotal =
     0;
+
+
   renderVisitorPagination();
 
 

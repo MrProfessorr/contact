@@ -7828,14 +7828,22 @@ body.visitor-detail-open {
   border:1px solid var(--line);
   border-radius:6px;
   cursor:pointer;
-  color:#b3bdca;
+  color:rgba(255,255,255,0.85);
   background:#0d1219;
 }
 
-.visitor-date-preset-toggle.open {
-  transform:rotate(180deg);
+.visitor-date-preset-icon {
+  width:14px;
+  height:14px;
+  display:block;
+  fill:currentColor;
+  transition:transform .2s ease;
 }
 
+.visitor-date-preset-toggle.open
+.visitor-date-preset-icon {
+  transform: rotate(180deg);
+}
 
 .visitor-date-preset-panel {
   position:absolute;

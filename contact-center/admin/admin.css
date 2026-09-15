@@ -8552,31 +8552,7 @@ span.flatpickr-weekday {
 
   transform:
     scale(1);
-}
-
-
-/* INPUT FOCUS = ARROW HILANG */
-
-.visitor-page-size-control:focus-within
-.visitor-page-size-icon-arrow {
-  opacity:
-    0;
-
-  transform:
-    scale(.8);
-}
-
-
-/* INPUT FOCUS = SEARCH MUNCUL */
-
-.visitor-page-size-control:focus-within
-.visitor-page-size-icon-search {
-  opacity:
-    1;
-
-  transform:
-    scale(1);
-}
+}  
 
 .visitor-page-size-toggle {
   min-width:90px;

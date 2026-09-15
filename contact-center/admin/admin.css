@@ -8122,6 +8122,15 @@ span.flatpickr-weekday {
   }
 
 }
+/* THEAD - ROUND KIRI & KANAN ATAS */
+
+.visitor-table thead th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.visitor-table thead th:last-child {
+  border-top-right-radius: 8px;
+}
 /* =========================================================
    VISITOR PAGINATION
 ========================================================= */
@@ -8132,7 +8141,6 @@ span.flatpickr-weekday {
   justify-content:flex-end;
   flex-wrap:wrap;
   gap:8px;
-  margin-top:8px;
   padding:10px;
   border-top:1px solid var(--line);
 }

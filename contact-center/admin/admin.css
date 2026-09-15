@@ -7812,9 +7812,14 @@ body.visitor-detail-open {
   cursor:pointer;
   color:rgba(255,255,255,0.85);
   background:var(--input);
+  transition: all 0.2s;
 }
 .visitor-date-preset-toggle:hover {
   border:1px solid var(--input-line-hover);
+}
+.visitor-date-preset-toggle:focus {
+  border:1px solid var(--input-line-focus);
+  coloe: var(--input-line-focus);
 }
 .visitor-date-preset-icon {
   width:14px;

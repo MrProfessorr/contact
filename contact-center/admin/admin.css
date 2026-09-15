@@ -8248,8 +8248,8 @@ span.flatpickr-weekday {
 }
 /* ACTIVE PAGE = HOVER COLOR + BORDER ONLY */
 .visitor-page-number.active:hover {
-  color:#4096ff;
-  border-color:#4096ff;
+  color:#3c89e8;
+  border-color:#3c89e8;
 }
 .visitor-page-number.active {
   border-color:#1668dc;

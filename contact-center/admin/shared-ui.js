@@ -189,10 +189,15 @@ const alignClass =
         aria-live="polite"
       >
 
-        <div
-          class="shared-loading-spinner"
-          aria-hidden="true"
-        ></div>
+<div
+  class="shared-loading-dots"
+  aria-hidden="true"
+>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
 
 
 ${

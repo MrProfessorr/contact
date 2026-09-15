@@ -195,11 +195,17 @@ const alignClass =
         ></div>
 
 
+${
+  safeText
+    ? `
         <div
           class="shared-loading-text"
         >
           ${safeText}
         </div>
+      `
+    : ""
+}
 
       </div>
     `;

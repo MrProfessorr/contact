@@ -8239,11 +8239,17 @@ span.flatpickr-weekday {
   pointer-events:none;
   transition: all .2s ease;
 }
-.visitor-page-number:hover,
-.visitor-page-nav:hover:not(:disabled) {
+/* NON-ACTIVE PAGE = HOVER BACKGROUND ONLY */
 
+.visitor-page-number:not(.active):hover,
+.visitor-page-nav:hover:not(:disabled) {
   background:
     rgba(255,255,255,0.12);
+}
+/* ACTIVE PAGE = HOVER COLOR + BORDER ONLY */
+.visitor-page-number.active:hover {
+  color:#4096ff;
+  border-color:#4096ff;
 }
 .visitor-page-number.active {
   border-color:#1668dc;

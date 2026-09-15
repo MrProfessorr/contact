@@ -2782,7 +2782,8 @@ if (
   sourceList.innerHTML =
     createEmptyState(
       "No data",
-      "small"
+      "small",
+      "center"
     );
 
 

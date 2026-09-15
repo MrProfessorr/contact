@@ -347,7 +347,7 @@ label {
   color:
     #cad2dd;
 }
-input {
+.search-input {
   width:100%;
   border:1px solid var(--input-line);
   border-radius:6px;
@@ -357,10 +357,10 @@ input {
   outline:none;
   transition: all 0.2s;
 }
-input:hover {
+.search-input:hover {
   border:1px solid var(--input-line-hover);
 }
-input:focus {
+.search-input:focus {
   border:1px solid var(--input-line-focus);
 }
 textarea,

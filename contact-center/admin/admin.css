@@ -6224,7 +6224,28 @@ body.visitor-detail-open {
   background:var(--panel);
 }
 
+/* VISITOR DETAIL SCROLLBAR */
 
+.visitor-detail-content::-webkit-scrollbar {
+  width:6px;
+  height:6px;
+}
+
+
+.visitor-detail-content::-webkit-scrollbar-track {
+  background:transparent;
+}
+
+
+.visitor-detail-content::-webkit-scrollbar-thumb {
+  background:rgba(143,155,172,.30);
+  border-radius:999px;
+}
+
+
+.visitor-detail-content::-webkit-scrollbar-thumb:hover {
+  background:rgba(143,155,172,.55);
+}
 .visitor-detail-status-row {
   display:
     flex;

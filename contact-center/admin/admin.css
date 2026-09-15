@@ -5516,6 +5516,7 @@ input:checked
   overflow-y:visible;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
+  padding:5px;
 }
 .visitor-table thead {
   position:
@@ -8126,39 +8127,26 @@ span.flatpickr-weekday {
 
 .visitor-pagination {
   display:flex;
-
   align-items:center;
-
   justify-content:flex-end;
-
   flex-wrap:wrap;
-
   gap:8px;
-
   margin-top:8px;
-
-  padding:
-    8px 10px 2px;
-
-  border-top:
-    1px solid rgba(255,255,255,.05);
+  padding:10px;
+  border-top:1px solid var(--input-line);
 }
 
 .visitor-pagination-info {
-  color:rgba (255,255,255,0.85);
+  color: var(--text);
   font-size:14px;
   white-space:nowrap;
   margin-right:3px;
 }
 
-
 .visitor-pagination-center {
   display:flex;
-
   align-items:center;
-
   justify-content:flex-start;
-
   gap:4px;
 }
 
@@ -8182,8 +8170,8 @@ span.flatpickr-weekday {
   padding:0 6px;
   border:1px solid transparent;
   border-radius:6px;
-  color: rgba(255,255,255,0.85);
-  background:#141414;
+  color: var(--text);
+  background:var(--iinput);
   cursor:pointer;
   font-size:14px;
   transition: all .2s ease;
@@ -8200,7 +8188,7 @@ span.flatpickr-weekday {
   width:12px;
   height:12px;
   display:block;
-  fill:rgba(255,255,255,0.85);
+  fill:var(--text);
   pointer-events:none;
   transition: all .2s ease;
 }
@@ -8296,8 +8284,7 @@ span.flatpickr-weekday {
   height:
     12px;
 
-  fill:
-    #1668dc;
+  fill:var(--input-line-focus);
 
   opacity:
     0;
@@ -8671,32 +8658,24 @@ button.active {
 /* CUSTOM INPUT */
 
 @media(max-width:700px) {
-
   .visitor-pagination {
     display:flex;
-
     justify-content:flex-end;
-
     align-items:center;
-
     flex-wrap:wrap;
-
     gap:6px;
   }
 
 
   .visitor-pagination-info {
     width:100%;
-
     text-align:right;
-
     margin-right:0;
   }
 
 
   .visitor-pagination-center {
     max-width:100%;
-
     overflow-x:auto;
   }
 

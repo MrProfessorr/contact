@@ -4288,16 +4288,7 @@ pageSizeControl?.addEventListener(
         );
 
 
-    if (
-      event.target ===
-      pageSizeInput &&
-      isOpen
-    ) {
-
-      return;
-
-    }
-
+    /* JIKA SUDAH OPEN = TUTUP BALIK */
 
     if (
       isOpen
@@ -4305,15 +4296,17 @@ pageSizeControl?.addEventListener(
 
       closePageSizeMenu();
 
-    } else {
-
-      openPageSizeMenu();
+      return;
 
     }
 
+
+    /* JIKA MASIH TUTUP = BUKA */
+
+    openPageSizeMenu();
+
   }
 );
-
 
 /* PRESET BUTTONS */
 

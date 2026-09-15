@@ -3862,7 +3862,31 @@ if (
 
 }
 
+/* =========================================================
+   ACTIVE DATE PRESET
+========================================================= */
 
+function setActiveDatePreset(
+  presetValue
+) {
+
+  datePresetPanel
+    ?.querySelectorAll(
+      "[data-range-preset]"
+    )
+    .forEach(
+      button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.rangePreset ===
+            presetValue
+        );
+
+      }
+    );
+
+}
 document.addEventListener(
   "click",
   event => {
@@ -3873,17 +3897,27 @@ document.addEventListener(
       );
 
 
-    if (preset) {
+if (preset) {
 
-      setDatePreset(
-        preset.dataset.rangePreset
-      );
+  const presetValue =
+    preset.dataset.rangePreset;
 
-      datePresetPanel
-        ?.classList
-        .add(
-          "hidden"
-        );
+
+  setDatePreset(
+    presetValue
+  );
+
+
+  setActiveDatePreset(
+    presetValue
+  );
+
+
+  datePresetPanel
+    ?.classList
+    .add(
+      "hidden"
+    );
 
       datePresetToggle
         ?.classList

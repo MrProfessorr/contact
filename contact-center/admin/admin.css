@@ -7785,6 +7785,7 @@ body.visitor-detail-open {
   font-variant-numeric:tabular-nums;
   text-align: center;
   transition: all 0.2s;
+  outline:none;
 }
 #visitorDateRange:hover {
   border:1px solid var(--input-line-hover);

@@ -115,8 +115,8 @@
 .shared-loading-dots {
   position:relative;
 
-  width:25px;
-  height:25px;
+  width:22px;
+  height:22px;
 
   flex:none;
 
@@ -144,7 +144,7 @@
 
 .shared-loading-dots span:nth-child(1) {
   top:0;
-  left:12px;
+  left:8px;
 
   opacity:1;
 }
@@ -153,7 +153,7 @@
 /* RIGHT */
 
 .shared-loading-dots span:nth-child(2) {
-  top:12px;
+  top:8px;
   right:0;
 
   opacity:.75;
@@ -164,7 +164,7 @@
 
 .shared-loading-dots span:nth-child(3) {
   bottom:0;
-  left:12px;
+  left:8px;
 
   opacity:.5;
 }
@@ -173,7 +173,7 @@
 /* LEFT */
 
 .shared-loading-dots span:nth-child(4) {
-  top:12px;
+  top:8px;
   left:0;
 
   opacity:.25;

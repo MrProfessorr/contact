@@ -1037,11 +1037,10 @@ function openVisitorDetail(
           )
           .join("")
 
-      : `
-          <div class="visitor-detail-no-activity">
-            No link clicks from this visitor yet.
-          </div>
-        `;
+: createEmptyState(
+    "No data",
+    "small"
+  );
 
 
   detailContent.innerHTML = `

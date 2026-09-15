@@ -65,10 +65,11 @@
      EMPTY STATE
   ======================================================= */
 
-  function createEmptyState(
-    text = "No data",
-    size = ""
-  ) {
+function createEmptyState(
+  text = "No data",
+  size = "",
+  align = ""
+) {
 
     const safeText =
       escapeSharedText(
@@ -81,10 +82,15 @@
         size
       );
 
-
+const alignClass =
+  align === "center"
+    ? "shared-center"
+    : align === "left"
+      ? "shared-left"
+      : "";
     return `
       <div
-        class="shared-empty ${sizeClass}"
+        class="shared-empty ${sizeClass} ${alignClass}"
       >
 
         <div
@@ -205,11 +211,12 @@
      SET EMPTY DIRECTLY
   ======================================================= */
 
-  function showEmptyState(
-    target,
-    text = "No data",
-    size = ""
-  ) {
+function showEmptyState(
+  target,
+  text = "No data",
+  size = "",
+  align = ""
+) {
 
     const element =
       typeof target === "string"
@@ -226,11 +233,12 @@
     }
 
 
-    element.innerHTML =
-      createEmptyState(
-        text,
-        size
-      );
+element.innerHTML =
+  createEmptyState(
+    text,
+    size,
+    align
+  );
 
   }
 

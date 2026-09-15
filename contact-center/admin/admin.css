@@ -16,10 +16,14 @@
   --text: rgba(255,255,255,0.85);
   --muted: rgba(255,255,255,0.45);
 
-  --blue: #4285ff;
+  --blue: #1668dc;
   --green: #26c979;
   --red: #dc4352;
   --yellow: #d69116;
+
+  --input-line-hover:#3c89e8;
+  --input-line-active:#1554ad;
+  --input-line-focus:#1668dc;
 }
 
 body {
@@ -349,8 +353,14 @@ input {
   color:var(--text);
   padding:4px 11px;
   outline:none;
+  transition: all 0.2s;
 }
-
+input:hover {
+  border:1px solid var(--input-line-hover);
+}
+input:focus {
+  border:1px solid var(--input-line-focus);
+}
 textarea,
 select {
   width:100%;
@@ -371,7 +381,6 @@ textarea {
     vertical;
 }
 
-input:focus,
 textarea:focus,
 select:focus {
 
@@ -7766,9 +7775,14 @@ body.visitor-detail-open {
   font-size:14px;
   font-variant-numeric:tabular-nums;
   text-align: center;
+  transition: all 0.2s;
 }
-
-
+#visitorDateRange:hover {
+  border:1px solid var(--input-line-hover);
+}
+#visitorDateRange:focus {
+  border:1px solid var(--input-line-focus);
+}
 .visitor-date-calendar {
   position:absolute;
 
@@ -7799,7 +7813,9 @@ body.visitor-detail-open {
   color:rgba(255,255,255,0.85);
   background:var(--input);
 }
-
+.visitor-date-preset-toggle:hover {
+  border:1px solid var(--input-line-hover);
+}
 .visitor-date-preset-icon {
   width:14px;
   height:14px;

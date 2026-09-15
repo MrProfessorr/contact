@@ -2609,13 +2609,17 @@ if (
 
               <td>
 
-                <strong>
-                  ${safe(visitor.device || "-")}
-                </strong>
+<strong>
+  ${safe(
+    visitor.os ||
+    visitor.device ||
+    "-"
+  )}
+</strong>
 
-                <small>
-                  ${safe(visitor.screen || "")}
-                </small>
+<small>
+  ${safe(visitor.screen || "")}
+</small>
 
               </td>
 

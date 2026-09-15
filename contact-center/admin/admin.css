@@ -14,7 +14,7 @@
   --input: #141414;
   --line: #2b3e5b;
   --input-line:#424242;
-  
+  --text2:rgba(255,255,255,0.25};
   --text: rgba(255,255,255,0.85);
   --muted: rgba(255,255,255,0.45);
 
@@ -8395,17 +8395,9 @@ span.flatpickr-weekday {
 }
 
 .visitor-page-size-input::placeholder {
-  color:
-    #66758a;
-
-  opacity:
-    1;
-
-  font-size:
-    14px;
-
-  font-weight:
-    400;
+  color:var(--text2);
+  font-size:14px;
+  font-weight:400;
 }
 .visitor-page-size-input[readonly] {
   cursor:

@@ -5485,6 +5485,7 @@ input:checked
   min-width:0;
   max-width:100%;
   overflow:visible;
+  padding:0;
 }
 /* HEAD */
 
@@ -8133,7 +8134,7 @@ span.flatpickr-weekday {
   gap:8px;
   margin-top:8px;
   padding:10px;
-  border-top:1px solid var(--input-line);
+  border-top:1px solid var(--line);
 }
 
 .visitor-pagination-info {

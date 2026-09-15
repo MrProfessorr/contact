@@ -193,3 +193,64 @@
   }
 
 }
+/* =========================================================
+   EMPTY ALIGNMENT
+========================================================= */
+
+
+/* FORCE CENTER */
+
+.shared-empty.shared-center {
+  width:100% !important;
+
+  margin-left:auto !important;
+  margin-right:auto !important;
+
+  align-items:center !important;
+  justify-content:center !important;
+
+  text-align:center !important;
+}
+
+
+.shared-empty.shared-center
+.shared-empty-image {
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+
+
+.shared-empty.shared-center
+.shared-empty-text {
+  width:100% !important;
+
+  margin-left:auto !important;
+  margin-right:auto !important;
+
+  text-align:center !important;
+}
+
+
+/* FORCE LEFT */
+
+.shared-empty.shared-left {
+  align-items:flex-start !important;
+  justify-content:center !important;
+
+  text-align:left !important;
+}
+
+
+.shared-empty.shared-left
+.shared-empty-image {
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+
+
+.shared-empty.shared-left
+.shared-empty-text {
+  width:100% !important;
+
+  text-align:left !important;
+}

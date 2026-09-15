@@ -6,6 +6,8 @@
 
 :root {
   --tx-hover:#1d304b;
+  --tx-surface-soft:#1c2b42;
+  
   --bg: #000000;
   --panel: #152237;
   --panel2: #171e28;
@@ -5549,7 +5551,7 @@ input:checked
   position:sticky;
   top:0;
   z-index:5;
-  background:#152237;
+  background:var(--tx-surface-soft);
   box-shadow: 0 6px 20px #14315b0d;
 }
 /* VISITOR TABLE SCROLLBAR */
@@ -7816,6 +7818,7 @@ body.visitor-detail-open {
 }
 .visitor-date-preset-toggle:hover {
   border:1px solid var(--input-line-hover);
+  color:var(--input-line-hover);
 }
 .visitor-date-preset-toggle:focus {
   border:1px solid var(--input-line-focus);

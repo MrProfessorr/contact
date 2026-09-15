@@ -7876,10 +7876,17 @@ body.visitor-detail-open {
 }
 
 
-.visitor-date-preset-panel button:hover {
-  background:#1d304b;
-}
+/* HOVER - HANYA YANG TIDAK ACTIVE */
 
+.visitor-date-preset-panel
+button:not(.active):hover {
+  color:#3c89e8;
+}
+/* ACTIVE DATE PRESET */
+.visitor-date-preset-panel
+button.active {
+  color:#1668dc;
+}
 
 .visitor-range-all {
   color:#78aaff !important;

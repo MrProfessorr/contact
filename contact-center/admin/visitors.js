@@ -2416,9 +2416,9 @@ function renderVisitors() {
           class="shared-loading-table-cell"
         >
 
-          ${createLoadingState(
-            "Loading..."
-          )}
+         ${createLoadingState(
+          ""
+         )}
 
         </td>
 

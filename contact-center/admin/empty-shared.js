@@ -1,6 +1,6 @@
 /* =========================================================
-   SHARED EMPTY STATE
-   Reusable for all pages
+   SHARED UI
+   Reusable for all admin pages
 ========================================================= */
 
 (function () {
@@ -12,7 +12,7 @@
      ESCAPE TEXT
   ======================================================= */
 
-  function escapeEmptyText(
+  function escapeSharedText(
     value
   ) {
 
@@ -44,7 +44,25 @@
 
 
   /* =======================================================
-     CREATE EMPTY STATE
+     SIZE CLASS
+  ======================================================= */
+
+  function getSharedSizeClass(
+    size
+  ) {
+
+    return (
+      size === "small" ||
+      size === "large"
+    )
+      ? size
+      : "";
+
+  }
+
+
+  /* =======================================================
+     EMPTY STATE
   ======================================================= */
 
   function createEmptyState(
@@ -53,16 +71,15 @@
   ) {
 
     const safeText =
-      escapeEmptyText(
+      escapeSharedText(
         text
       );
 
 
     const sizeClass =
-      size === "small" ||
-      size === "large"
-        ? size
-        : "";
+      getSharedSizeClass(
+        size
+      );
 
 
     return `
@@ -139,10 +156,169 @@
 
 
   /* =======================================================
-     MAKE AVAILABLE TO ALL PAGE JS
+     LOADING STATE
+  ======================================================= */
+
+  function createLoadingState(
+    text = "Loading...",
+    size = ""
+  ) {
+
+    const safeText =
+      escapeSharedText(
+        text
+      );
+
+
+    const sizeClass =
+      getSharedSizeClass(
+        size
+      );
+
+
+    return `
+      <div
+        class="shared-loading ${sizeClass}"
+        role="status"
+        aria-live="polite"
+      >
+
+        <div
+          class="shared-loading-spinner"
+          aria-hidden="true"
+        ></div>
+
+
+        <div
+          class="shared-loading-text"
+        >
+          ${safeText}
+        </div>
+
+      </div>
+    `;
+
+  }
+
+
+  /* =======================================================
+     SET EMPTY DIRECTLY
+  ======================================================= */
+
+  function showEmptyState(
+    target,
+    text = "No data",
+    size = ""
+  ) {
+
+    const element =
+      typeof target === "string"
+        ? document.querySelector(
+            target
+          )
+        : target;
+
+
+    if (
+      !element
+    ) {
+      return;
+    }
+
+
+    element.innerHTML =
+      createEmptyState(
+        text,
+        size
+      );
+
+  }
+
+
+  /* =======================================================
+     SET LOADING DIRECTLY
+  ======================================================= */
+
+  function showLoadingState(
+    target,
+    text = "Loading...",
+    size = ""
+  ) {
+
+    const element =
+      typeof target === "string"
+        ? document.querySelector(
+            target
+          )
+        : target;
+
+
+    if (
+      !element
+    ) {
+      return;
+    }
+
+
+    element.innerHTML =
+      createLoadingState(
+        text,
+        size
+      );
+
+  }
+
+
+  /* =======================================================
+     CLEAR CONTENT
+  ======================================================= */
+
+  function clearSharedState(
+    target
+  ) {
+
+    const element =
+      typeof target === "string"
+        ? document.querySelector(
+            target
+          )
+        : target;
+
+
+    if (
+      !element
+    ) {
+      return;
+    }
+
+
+    element.innerHTML = "";
+
+  }
+
+
+  /* =======================================================
+     GLOBAL
+     Available to every page
   ======================================================= */
 
   window.createEmptyState =
     createEmptyState;
+
+
+  window.createLoadingState =
+    createLoadingState;
+
+
+  window.showEmptyState =
+    showEmptyState;
+
+
+  window.showLoadingState =
+    showLoadingState;
+
+
+  window.clearSharedState =
+    clearSharedState;
 
 })();

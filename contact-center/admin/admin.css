@@ -8446,39 +8446,19 @@ span.flatpickr-weekday {
 /* CUSTOM MENU */
 
 .visitor-page-size-menu {
-  position:
-    absolute;
-
-  right:
-    0;
-
-  bottom:
-    calc(100% + 3px);
-
+  position:bsolute;
+  right:0;
+  bottom:calc(100% + 3px);
   z-index:
     60;
-
-  width:
-    100%;
-
-  /*
-   * Bila ruang pendek,
-   * menu tidak terlalu tinggi.
-   */
-  max-height:
-    150px;
-  overflow-y:
-    auto;
-  overflow-x:
-    hidden;
-  overscroll-behavior:
-    contain;
-  padding:
-    4px;
-  border-radius:
-    8px;
-  background:
-    #1f1f1f;
+  width:100%;
+  max-height:137px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  padding:4px;
+  border-radius:8px;
+  background:#1f1f1f;
   box-shadow:
     0 6px 16px 0 rgba(0,0,0,0.08),
     0 3px 6px -4px rgba(0,0,0,0.12),

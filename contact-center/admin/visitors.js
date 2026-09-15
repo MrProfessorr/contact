@@ -217,7 +217,10 @@ let clicks =
 
 let blockedVisitors =
   {};
+/* VISITOR INITIAL LOADING */
 
+let visitorsLoaded =
+  false;
 let searchText =
   "";
 let visitorCurrentPage =
@@ -2399,6 +2402,33 @@ if (
 }
 function renderVisitors() {
 
+    /* SHOW LOADING UNTIL FIREBASE RETURNS */
+
+  if (
+    !visitorsLoaded
+  ) {
+
+    tableBody.innerHTML = `
+      <tr>
+
+        <td
+          colspan="8"
+          class="shared-loading-table-cell"
+        >
+
+          ${createLoadingState(
+            "Loading..."
+          )}
+
+        </td>
+
+      </tr>
+    `;
+
+    return;
+
+  }
+
   const list =
     Object
       .entries(
@@ -3028,7 +3058,11 @@ function renderAll() {
   renderClicks();
 
 }
+/* =========================================================
+   INITIAL LOADING
+========================================================= */
 
+renderVisitors();
 
 /* =========================================================
    FIREBASE LISTENERS
@@ -3046,7 +3080,32 @@ onValue(
     visitors =
       snapshot.val() || {};
 
+
+    /* FIREBASE FINISHED */
+
+    visitorsLoaded =
+      true;
+
+
     renderAll();
+
+  },
+
+  error => {
+
+    console.error(
+      "Visitors load error:",
+      error
+    );
+
+
+    /* STOP LOADING EVEN IF FIREBASE FAILS */
+
+    visitorsLoaded =
+      true;
+
+
+    renderVisitors();
 
   }
 

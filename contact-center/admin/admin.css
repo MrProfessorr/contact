@@ -5537,16 +5537,12 @@ input:checked
 
 .visitor-table th:not(:last-child)::after {
   content: "";
-
   position: absolute;
-
   top: 25%;
   right: 0;
-
-  width: 1px;
+  width: 2px;
   height: 50%;
-
-  background: rgba(255,255,255,.10);
+  background: var(--line);
 }
 
 .visitor-table thead th {

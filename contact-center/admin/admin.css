@@ -8257,13 +8257,104 @@ span.flatpickr-weekday {
 
 
 .visitor-page-dots {
-  min-width:32px;
-  color: rgba(255, 255, 255, 0.25);
-  font-size:14px;
-  text-align:center;
+  position:
+    relative;
+
+  width:
+    32px;
+
+  min-width:
+    32px;
+
+  height:
+    32px;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    0;
+
+  border:
+    none;
+
+  border-radius:
+    6px;
+
+  color:
+    rgba(255,255,255,0.25);
+
+  background:
+    transparent;
+
+  cursor:
+    pointer;
+
+  font-size:
+    14px;
+
+  text-align:
+    center;
+
+  transition:
+    all .2s;
+}
+
+.visitor-page-dots-text {
+  display:
+    block;
+
+  transition:
+    all .2s;
 }
 
 
+.visitor-page-dots-icon {
+  position:
+    absolute;
+
+  width:
+    12px;
+
+  height:
+    12px;
+
+  fill:
+    #1668dc;
+
+  opacity:
+    0;
+
+  pointer-events:
+    none;
+
+  transition:
+    all .2s;
+}
+
+
+/* HOVER: HIDE DOTS */
+
+.visitor-page-dots:hover
+.visitor-page-dots-text {
+  opacity:
+    0;
+}
+
+
+/* HOVER: SHOW JUMP ICON */
+
+.visitor-page-dots:hover
+.visitor-page-dots-icon {
+  opacity:
+    1;
+}
 /* PAGE SIZE */
 
 .visitor-page-size {

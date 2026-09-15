@@ -2242,7 +2242,28 @@ if (
     `${visitorPageSize} / page`;
 
 }
+/* ACTIVE PAGE SIZE PRESET */
 
+pageSizeMenu
+  ?.querySelectorAll(
+    "[data-page-size]"
+  )
+  .forEach(
+    button => {
+
+      const size =
+        Number(
+          button.dataset.pageSize
+        );
+
+
+      button.classList.toggle(
+        "active",
+        size === visitorPageSize
+      );
+
+    }
+  );
 
   if (
     pagePrevBtn

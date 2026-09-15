@@ -8668,8 +8668,9 @@ button {
 
 
 .visitor-page-size-menu >
-button:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+button:not(.active):hover {
+  background-color:
+    rgba(255,255,255,0.08);
 }
 /* ACTIVE PAGE SIZE */
 
@@ -8680,17 +8681,6 @@ button.active {
   font-weight:600;
 }
 
-
-/* ACTIVE + HOVER */
-
-.visitor-page-size-menu >
-button.active:hover {
-  color:
-    rgba(255,255,255,0.85);
-
-  background:
-    rgba(255,255,255,0.12);
-}
 #visitorPageSizeCustom:focus {
   border-color:
     #4285ff;

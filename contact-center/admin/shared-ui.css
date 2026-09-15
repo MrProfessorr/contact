@@ -1,0 +1,195 @@
+/* =========================================================
+   SHARED UI
+   Reusable for all admin pages
+========================================================= */
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.shared-empty {
+  width:100%;
+  min-height:110px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  gap:8px;
+
+  padding:16px;
+
+  color:
+    rgba(255,255,255,0.45);
+
+  text-align:center;
+}
+
+
+.shared-empty-image {
+  width:64px;
+  height:41px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+
+.shared-empty-image svg {
+  display:block;
+
+  width:64px;
+  height:41px;
+
+  flex:none;
+}
+
+
+.shared-empty-text {
+  margin:0;
+
+  color:
+    rgba(255,255,255,0.45);
+
+  font-size:12px;
+  font-weight:400;
+  line-height:1.5;
+}
+
+
+/* EMPTY INSIDE TABLE */
+
+.shared-empty-table-cell {
+  padding:0 !important;
+}
+
+
+/* EMPTY SMALL */
+
+.shared-empty.small {
+  min-height:80px;
+  gap:6px;
+}
+
+
+.shared-empty.small
+.shared-empty-image,
+.shared-empty.small
+.shared-empty-image svg {
+  width:48px;
+  height:auto;
+}
+
+
+/* EMPTY LARGE */
+
+.shared-empty.large {
+  min-height:160px;
+}
+
+
+/* =========================================================
+   LOADING STATE
+========================================================= */
+
+.shared-loading {
+  width:100%;
+  min-height:110px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  gap:9px;
+
+  padding:16px;
+
+  text-align:center;
+}
+
+
+.shared-loading-spinner {
+  width:22px;
+  height:22px;
+
+  flex:none;
+
+  border:
+    2px solid
+    rgba(255,255,255,0.12);
+
+  border-top-color:
+    #1677ff;
+
+  border-radius:50%;
+
+  animation:
+    sharedLoadingSpin
+    .7s
+    linear
+    infinite;
+}
+
+
+.shared-loading-text {
+  margin:0;
+
+  color:
+    rgba(255,255,255,0.45);
+
+  font-size:12px;
+  font-weight:400;
+  line-height:1.5;
+}
+
+
+/* LOADING INSIDE TABLE */
+
+.shared-loading-table-cell {
+  padding:0 !important;
+}
+
+
+/* LOADING SMALL */
+
+.shared-loading.small {
+  min-height:80px;
+  gap:7px;
+}
+
+
+.shared-loading.small
+.shared-loading-spinner {
+  width:18px;
+  height:18px;
+}
+
+
+/* LOADING LARGE */
+
+.shared-loading.large {
+  min-height:160px;
+}
+
+
+.shared-loading.large
+.shared-loading-spinner {
+  width:26px;
+  height:26px;
+}
+
+
+/* LOADING ANIMATION */
+
+@keyframes sharedLoadingSpin {
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+
+}

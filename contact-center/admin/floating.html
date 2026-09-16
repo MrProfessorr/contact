@@ -828,7 +828,10 @@ const opacityInput =
   document.getElementById(
     "floatingOpacity"
   );
-
+const opacityValue =
+  document.getElementById(
+    "floatingOpacityValue"
+  );
 const showCloseInput =
   document.getElementById(
     "floatingShowClose"
@@ -1329,6 +1332,10 @@ function updatePreview() {
 
   const data =
     getFormData();
+
+
+  opacityValue.textContent =
+    data.opacity;
 
 
   clearPreviewClasses();

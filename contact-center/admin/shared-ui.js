@@ -581,8 +581,8 @@ function updateIcon() {
 
 
   /*
-    OPEN + SEARCH TEXT
-    = CLEAR
+    OPEN + USER TYPING
+    = ALWAYS CLEAR
   */
 
   if (
@@ -602,17 +602,14 @@ function updateIcon() {
 
 
   /*
-    OPEN + SELECTED VALUE
+    OPEN + SELECTED VALUE + HOVER INPUT
     = CLEAR
-
-    Example:
-    Telegram is currently selected,
-    but displayed as temporary placeholder.
   */
 
   if (
     isOpen &&
-    hasSelectedValue
+    hasSelectedValue &&
+    isHovering
   ) {
 
     icon.innerHTML =
@@ -627,7 +624,7 @@ function updateIcon() {
 
 
   /*
-    OPEN + NO VALUE
+    OPEN + NOT HOVERING
     = SEARCH
   */
 
@@ -653,8 +650,8 @@ function updateIcon() {
 
   if (
     !isOpen &&
-    isHovering &&
-    hasSelectedValue
+    hasSelectedValue &&
+    isHovering
   ) {
 
     icon.innerHTML =
@@ -669,7 +666,7 @@ function updateIcon() {
 
 
   /*
-    DEFAULT
+    DEFAULT CLOSED
     = ARROW
   */
 

@@ -439,7 +439,7 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  color:var(--text);
+  color:var(--text2);
   transform:translateY(-50%);
   cursor:pointer;
   pointer-events:auto;

@@ -18,7 +18,10 @@
     rel="stylesheet"
     href="./admin.css"
   >
-
+<link
+  rel="stylesheet"
+  href="./shared-ui.css"
+>
 </head>
 
 
@@ -166,13 +169,17 @@
   <div class="form-group">
     <label>Animation</label>
 
-    <select id="welcomeAnimation">
-      <option value="zoom">Zoom</option>
-      <option value="fade">Fade</option>
-      <option value="slide-down">Slide Down</option>
-      <option value="slide-up">Slide Up</option>
-      <option value="none">None</option>
-    </select>
+<select
+  id="welcomeAnimation"
+  data-shared-dropdown
+  data-placeholder="Select animation"
+>
+  <option value="zoom">Zoom</option>
+  <option value="fade">Fade</option>
+  <option value="slide-down">Slide Down</option>
+  <option value="slide-up">Slide Up</option>
+  <option value="none">None</option>
+</select>
   </div>
 
 
@@ -331,12 +338,16 @@
   <div class="form-group">
     <label>Show Again</label>
 
-    <select id="welcomeShowMode">
-      <option value="refresh">Every Refresh</option>
-      <option value="session">Once Per Session</option>
-      <option value="day">Once Per Day</option>
-      <option value="24h">Once Per 24 Hours</option>
-    </select>
+<select
+  id="welcomeShowMode"
+  data-shared-dropdown
+  data-placeholder="Select show mode"
+>
+  <option value="refresh">Every Refresh</option>
+  <option value="session">Once Per Session</option>
+  <option value="day">Once Per Day</option>
+  <option value="24h">Once Per 24 Hours</option>
+</select>
   </div>
 
 </div>
@@ -619,7 +630,7 @@
 
 </main>
 
-
+<script src="./shared-ui.js"></script>
 <script type="module">
 
 import {
@@ -636,7 +647,7 @@ import {
 
 requireAdmin();
 setupLogout();
-
+initSharedDropdowns();
 
 
 /* =========================================================
@@ -1261,7 +1272,28 @@ onValue(
       data.showMode ||
       "refresh";
 
+/*
+  Sync Shared Dropdown UI
+*/
 
+[
+  animation,
+  showMode
+
+].forEach(
+  select => {
+
+    select.dispatchEvent(
+      new Event(
+        "change",
+        {
+          bubbles:true
+        }
+      )
+    );
+
+  }
+);
     closeX.checked =
       data.closeX !== false;
 

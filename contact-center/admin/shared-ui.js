@@ -573,12 +573,7 @@ function updateIcon() {
 
 
 const hasSearchText =
-  input.value.trim() !== "" &&
-  !input.classList.contains(
-    "search-ready"
-  );
-
-
+  input.value.trim() !== "";
   /*
     OPEN + USER TYPED
     = CLEAR
@@ -940,9 +935,43 @@ input.setAttribute(
 );
 
 
-input.classList.add(
-  "search-ready"
-);
+/*
+  Get current selected option.
+*/
+
+const selectedOption =
+  select.options[
+    select.selectedIndex
+  ];
+
+
+const selectedText =
+  selectedOption &&
+  selectedOption.value !== ""
+    ? (
+        selectedOption.textContent ||
+        ""
+      ).trim()
+    : "";
+
+
+/*
+  Selected value becomes temporary
+  placeholder while searching.
+*/
+
+input.placeholder =
+  selectedText ||
+  config.placeholder;
+
+
+/*
+  Actual input becomes empty.
+  This allows real blinking caret.
+*/
+
+input.value =
+  "";
 
 
 renderOptions(
@@ -958,7 +987,10 @@ requestAnimationFrame(
 
     input.focus();
 
-    input.select();
+    input.setSelectionRange(
+      0,
+      0
+    );
 
   }
 );
@@ -982,18 +1014,18 @@ requestAnimationFrame(
         "false"
       );
 
-
 /*
-  Remove temporary search appearance.
+  Restore normal placeholder.
 */
-input.classList.remove(
-  "search-ready"
-);
+
+input.placeholder =
+  config.placeholder;
+
 
 /*
   Restore actual selected option.
-  Example: Facebook comes back when
-  user cancels the search.
+  Example:
+  Facebook returns if user cancels.
 */
 
 updateValue();
@@ -1068,16 +1100,6 @@ input.addEventListener(
       open();
 
     }
-
-
-    /*
-      User has started typing.
-      This is now real search text.
-    */
-
-    input.classList.remove(
-      "search-ready"
-    );
 
 
     renderOptions(
@@ -1176,18 +1198,13 @@ if (
     .contains("open")
 ) {
 
-  input.value =
-    "";
+input.value =
+  "";
 
 
-  input.classList.remove(
-    "search-ready"
-  );
-
-
-  renderOptions(
-    ""
-  );
+renderOptions(
+  ""
+);
 
 
   updateIcon();

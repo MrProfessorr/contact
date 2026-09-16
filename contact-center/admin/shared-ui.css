@@ -424,7 +424,14 @@
   color:var(--text2);
   opacity:1;
 }
+/*
+  Selected value while dropdown
+  is ready for searching
+*/
 
+.shared-dropdown-input.search-ready {
+  color:var(--text2);
+}
 
 /* =========================================================
    RIGHT ICON

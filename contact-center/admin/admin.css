@@ -5027,7 +5027,27 @@ input:checked
   background:
     rgba(0,0,0,.78);
 }
+/* =========================================================
+   WELCOME BACKDROP OPACITY
+========================================================= */
 
+.welcome-opacity-header {
+  display:flex;
+  align-items:center;
+  gap:5px;
+  margin-bottom:6px;
+}
+
+.welcome-opacity-header label {
+  margin-bottom:0;
+}
+
+.welcome-opacity-value {
+  color:var(--muted);
+  font-size:10px;
+  font-weight:400;
+  line-height:1;
+}
 
 .welcome-preview-modal {
   position: relative;

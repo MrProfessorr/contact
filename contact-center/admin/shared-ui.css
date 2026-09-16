@@ -2,6 +2,36 @@
    SHARED UI
    Reusable for all admin pages
 ========================================================= */
+:root {
+  --tx-hover:#1d304b;
+  --tx-surface-soft:#1c2b42;
+  --tx-muted:#9aaac0;
+  --tx-ink:#e5edf8;
+    
+  --bg: #000000;
+  --panel: #152237;
+  --panel2: #171e28;
+ 
+  --line: #2b3e5b;
+ 
+ 
+  --text: rgba(255,255,255,0.85);
+  --text2:rgba(255,255,255,0.25);
+  --muted: rgba(255,255,255,0.45);
+
+  --blue: #1668dc;
+  --green: #26c979;
+  --red: #dc4352;
+  --yellow: #d69116;
+   
+  --input-line:#424242;
+  --input-line:#424242;
+  --input-line-hover:#3c89e8;
+  --input-line-active:#1554ad;
+  --input-line-focus:#1668dc;
+
+  --dropdown-bg-active:#111a2c;
+}
 
 
 /* =========================================================
@@ -373,40 +403,23 @@
 .shared-dropdown-input {
   width:100%;
   height:100%;
-
   min-width:0;
-
-  padding:
-    0
-    34px
-    0
-    10px;
-
+  padding:0 24px 0 11px;
   border:0;
   outline:0;
-
-  color:
-    var(--text, #ffffff);
-
+  color:var(--text);
   background:transparent;
-
   font-family:inherit;
   font-size:14px;
   font-weight:400;
-
   cursor:text;
-
-  caret-color:#ffffff;
-
   appearance:none;
   -webkit-appearance:none;
 }
 
 
 .shared-dropdown-input::placeholder {
-  color:
-    rgba(255,255,255,0.25);
-
+  color:var(--text2);
   opacity:1;
 }
 
@@ -417,37 +430,25 @@
 
 .shared-dropdown-icon {
   position:absolute;
-
   top:50%;
   right:10px;
-
   width:12px;
   height:12px;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
-  color:
-    rgba(255,255,255,0.25);
-
-  transform:
-    translateY(-50%);
-
+  color:var(--text);
+  transform:translateY(-50%);
   cursor:pointer;
-
   pointer-events:auto;
 }
 
 
 .shared-dropdown-icon svg {
   display:block;
-
   width:12px;
   height:12px;
-
   flex:none;
-
   fill:currentColor;
 }
 
@@ -458,34 +459,17 @@
 
 .shared-dropdown-panel {
   position:absolute;
-
-  top:
-    calc(100% + 5px);
-
+  top:calc(100% + 3px);
   left:0;
-
   z-index:10000;
-
   width:100%;
-
-  min-width:
-    max(100%, 120px);
-
+  min-width:max(100%, 120px);
   display:none;
-
   overflow:hidden;
-
-  border:
-    1px solid
-    var(--line, #2c3440);
-
-  border-radius:7px;
-
-  background:#141414;
-
-  box-shadow:
-    0 8px 24px
-    rgba(0,0,0,.40);
+  border:1px solid var(--line, #2c3440);
+  border-radius:8px;
+  background:var(--input);
+  box-shadow:0 8px 24pxrgba(0,0,0,.40);
 }
 
 
@@ -501,75 +485,52 @@
 
 .shared-dropdown-options {
   max-height:220px;
-
   overflow-y:auto;
-
   padding:4px;
-
   overscroll-behavior:contain;
-
   scrollbar-width:thin;
-
-  scrollbar-color:
-    rgba(143,155,172,.30)
-    transparent;
+  scrollbar-color:rgba(143,155,172,.30) transparent;
 }
 
 
 .shared-dropdown-option {
   width:100%;
   min-height:32px;
-
   display:flex;
   align-items:center;
-
-  padding:6px 9px;
-
+  padding:5px 12px;
   border:0;
-  border-radius:5px;
-
-  color:
-    var(--text, #ffffff);
-
+  border-radius:4px;
+  color:var(--text);
   background:transparent;
-
   cursor:pointer;
-
   font-family:inherit;
   font-size:14px;
   font-weight:400;
-
   text-align:left;
-
-  transition:
-    background .15s ease,
-    color .15s ease;
+  transition:background .15s ease,color .15s ease;
 }
 
 
 .shared-dropdown-option:hover {
-  background:
-    rgba(255,255,255,.08);
+  background: rgba(255,255,255,.08);
 }
 
 
 .shared-dropdown-option.active {
-  color:#3c89e8;
-
-  background:
-    rgba(22,104,220,.12);
+  color:var(--text);
+  background:var(--dropdown-bg-active);
+  font-weight:600;
 }
 
 
 .shared-dropdown-option.active:hover {
-  background:
-    rgba(22,104,220,.18);
+  background:var(--dropdown-bg-active);
 }
 
 
 .shared-dropdown-option:disabled {
   opacity:.35;
-
   cursor:not-allowed;
 }
 
@@ -580,12 +541,8 @@
 
 .shared-dropdown-empty {
   padding:15px 10px;
-
-  color:
-    rgba(255,255,255,.45);
-
+  color: rgba(255,255,255,.45);
   text-align:center;
-
   font-size:12px;
 }
 

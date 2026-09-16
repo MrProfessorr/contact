@@ -572,17 +572,23 @@ function updateIcon() {
     );
 
 
-const hasSearchText =
-  input.value.trim() !== "";
+  const hasSearchText =
+    input.value.trim() !== "";
+
+
+  const hasSelectedValue =
+    select.value !== "";
+
+
   /*
-    OPEN + USER TYPED
+    OPEN + SEARCH TEXT
     = CLEAR
   */
 
-if (
-  isOpen &&
-  hasSearchText
-) {
+  if (
+    isOpen &&
+    hasSearchText
+  ) {
 
     icon.innerHTML =
       clearIcon;
@@ -596,7 +602,32 @@ if (
 
 
   /*
-    OPEN + EMPTY
+    OPEN + SELECTED VALUE
+    = CLEAR
+
+    Example:
+    Telegram is currently selected,
+    but displayed as temporary placeholder.
+  */
+
+  if (
+    isOpen &&
+    hasSelectedValue
+  ) {
+
+    icon.innerHTML =
+      clearIcon;
+
+    icon.dataset.icon =
+      "clear";
+
+    return;
+
+  }
+
+
+  /*
+    OPEN + NO VALUE
     = SEARCH
   */
 
@@ -623,7 +654,7 @@ if (
   if (
     !isOpen &&
     isHovering &&
-    select.value !== ""
+    hasSelectedValue
   ) {
 
     icon.innerHTML =
@@ -1198,19 +1229,55 @@ if (
     .contains("open")
 ) {
 
-input.value =
-  "";
+  /*
+    Clear selected dropdown value.
+  */
+
+  select.value =
+    "";
 
 
-renderOptions(
-  ""
-);
+  select.dispatchEvent(
+    new Event(
+      "change",
+      {
+        bubbles:true
+      }
+    )
+  );
+
+
+  /*
+    Clear search text.
+  */
+
+  input.value =
+    "";
+
+
+  /*
+    Restore normal placeholder.
+  */
+
+  input.placeholder =
+    config.placeholder;
+
+
+  renderOptions(
+    ""
+  );
 
 
   updateIcon();
 
 
   input.focus();
+
+
+  input.setSelectionRange(
+    0,
+    0
+  );
 
 
   return;

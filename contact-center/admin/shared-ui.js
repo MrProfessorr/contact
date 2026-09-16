@@ -572,8 +572,11 @@ function updateIcon() {
     );
 
 
-  const hasInputText =
-    input.value.trim() !== "";
+const hasSearchText =
+  input.value.trim() !== "" &&
+  !input.classList.contains(
+    "search-ready"
+  );
 
 
   /*
@@ -581,10 +584,10 @@ function updateIcon() {
     = CLEAR
   */
 
-  if (
-    isOpen &&
-    hasInputText
-  ) {
+if (
+  isOpen &&
+  hasSearchText
+) {
 
     icon.innerHTML =
       clearIcon;
@@ -926,37 +929,39 @@ function updateIcon() {
         );
 
 
-      wrapper.classList.add(
-        "open"
-      );
+wrapper.classList.add(
+  "open"
+);
 
 
-      input.setAttribute(
-        "aria-expanded",
-        "true"
-      );
-
-      /*
-        Empty current label so this same
-        input becomes the search field.
-      */
-
-      input.value =
-        "";
-      updateIcon();
-
-      renderOptions(
-        ""
-      );
+input.setAttribute(
+  "aria-expanded",
+  "true"
+);
 
 
-      requestAnimationFrame(
-        () => {
+input.classList.add(
+  "search-ready"
+);
 
-          input.focus();
 
-        }
-      );
+renderOptions(
+  ""
+);
+
+
+updateIcon();
+
+
+requestAnimationFrame(
+  () => {
+
+    input.focus();
+
+    input.select();
+
+  }
+);
 
     }
 
@@ -978,12 +983,21 @@ function updateIcon() {
       );
 
 
-/* RESTORE SELECTED LABEL */
+/*
+  Remove temporary search appearance.
+*/
+input.classList.remove(
+  "search-ready"
+);
+
+/*
+  Restore actual selected option.
+  Example: Facebook comes back when
+  user cancels the search.
+*/
 
 updateValue();
 
-
-/* RESTORE RIGHT ICON */
 
 updateIcon();
 
@@ -1054,6 +1068,16 @@ input.addEventListener(
       open();
 
     }
+
+
+    /*
+      User has started typing.
+      This is now real search text.
+    */
+
+    input.classList.remove(
+      "search-ready"
+    );
 
 
     renderOptions(
@@ -1146,30 +1170,34 @@ icon.addEventListener(
         clear only search text.
       */
 
-      if (
-        wrapper
-          .classList
-          .contains("open")
-      ) {
+if (
+  wrapper
+    .classList
+    .contains("open")
+) {
 
-        input.value =
-          "";
-
-
-        renderOptions(
-          ""
-        );
+  input.value =
+    "";
 
 
-        updateIcon();
+  input.classList.remove(
+    "search-ready"
+  );
 
 
-        input.focus();
+  renderOptions(
+    ""
+  );
 
 
-        return;
+  updateIcon();
 
-      }
+
+  input.focus();
+
+
+  return;
+}
 
 
       /*

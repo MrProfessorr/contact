@@ -917,39 +917,26 @@ function updateIcon() {
       }
 
 
-      document
-        .querySelectorAll(
-          ".shared-dropdown.open"
-        )
-        .forEach(
-          dropdown => {
+document
+  .querySelectorAll(
+    "select[data-shared-dropdown]"
+  )
+  .forEach(
+    otherSelect => {
 
-            if (
-              dropdown !== wrapper
-            ) {
+      if (
+        otherSelect !== select &&
+        otherSelect._sharedDropdown
+      ) {
 
-              dropdown
-                .classList
-                .remove("open");
+        otherSelect
+          ._sharedDropdown
+          .close();
 
+      }
 
-              const otherInput =
-                dropdown
-                  .querySelector(
-                    ".shared-dropdown-input"
-                  );
-
-
-              otherInput
-                ?.setAttribute(
-                  "aria-expanded",
-                  "false"
-                );
-
-            }
-
-          }
-        );
+    }
+  );
 
 
 wrapper.classList.add(

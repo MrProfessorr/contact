@@ -15,6 +15,10 @@
     rel="stylesheet"
     href="./admin.css"
   >
+  <link
+  rel="stylesheet"
+  href="./shared-ui.css"
+>
 </head>
 
 <body>
@@ -133,17 +137,21 @@ Customer
         Position
       </label>
 
-      <select id="marqueePosition">
+<select
+  id="marqueePosition"
+  data-shared-dropdown
+  data-placeholder="Select position"
+>
 
-        <option value="top">
-          Above Page Container
-        </option>
+  <option value="top">
+    Above Container
+  </option>
 
-        <option value="bottom">
-          Below Page Container
-        </option>
+  <option value="bottom">
+    Below Container
+  </option>
 
-      </select>
+</select>
 
     </div>
 
@@ -154,18 +162,21 @@ Customer
         Direction
       </label>
 
-      <select id="marqueeDirection">
+<select
+  id="marqueeDirection"
+  data-shared-dropdown
+  data-placeholder="Select direction"
+>
 
-        <option value="right-to-left">
-          Right → Left
-        </option>
+  <option value="right-to-left">
+    Right → Left
+  </option>
 
-        <option value="left-to-right">
-          Left → Right
-        </option>
+  <option value="left-to-right">
+    Left → Right
+  </option>
 
-      </select>
-
+</select>
     </div>
 
   </div>
@@ -234,17 +245,21 @@ Customer
         Pause When Hover
       </label>
 
-      <select id="marqueePauseHover">
+<select
+  id="marqueePauseHover"
+  data-shared-dropdown
+  data-placeholder="Select option"
+>
 
-        <option value="true">
-          Yes
-        </option>
+  <option value="true">
+    Yes
+  </option>
 
-        <option value="false">
-          No
-        </option>
+  <option value="false">
+    No
+  </option>
 
-      </select>
+</select>
 
     </div>
 
@@ -398,7 +413,7 @@ Customer
 
 </main>
 
-
+<script src="./shared-ui.js"></script>
 <script type="module">
 
 import {
@@ -414,7 +429,7 @@ import {
 requireAdmin();
 
 setupLogout();
-
+initSharedDropdowns();
 
 const enabledInput =
   document.getElementById(
@@ -805,7 +820,34 @@ updateMarqueeActiveText();
         data.pause_hover ??
         true
       );
+positionInput.dispatchEvent(
+  new Event(
+    "change",
+    {
+      bubbles:true
+    }
+  )
+);
 
+
+directionInput.dispatchEvent(
+  new Event(
+    "change",
+    {
+      bubbles:true
+    }
+  )
+);
+
+
+pauseHoverInput.dispatchEvent(
+  new Event(
+    "change",
+    {
+      bubbles:true
+    }
+  )
+);
 
     updatePreview();
 

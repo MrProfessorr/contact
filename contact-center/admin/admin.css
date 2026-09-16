@@ -311,6 +311,7 @@ a {
 .card h3 {
   font-size:15px;
   margin-bottom:17px;
+  color:var(--tx-ink);
 }
 
 

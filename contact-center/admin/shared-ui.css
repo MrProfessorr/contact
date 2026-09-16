@@ -30,7 +30,9 @@
   --input-line-active:#1554ad;
   --input-line-focus:#1668dc;
 
+  --dropdown-bg:#1f1f1f;
   --dropdown-bg-active:#111a2c;
+ 
 }
 
 
@@ -449,7 +451,7 @@
   width:12px;
   height:12px;
   flex:none;
-  fill:currentColor;
+  fill:var(--text2);
 }
 
 
@@ -466,10 +468,10 @@
   min-width:max(100%, 120px);
   display:none;
   overflow:hidden;
-  border:1px solid var(--line, #2c3440);
+  border:nen;
   border-radius:8px;
-  background:var(--input);
-  box-shadow:0 8px 24pxrgba(0,0,0,.40);
+  background:var(--dropdown-bg);
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
 }
 
 

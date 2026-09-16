@@ -372,22 +372,30 @@ Customer
     </div>
 
 
-    <div class="form-group">
+<div class="form-group">
 
-      <label>
-        Opacity
-      </label>
+  <div class="floating-opacity-header">
 
-      <input
-        id="floatingOpacity"
-        class="shared-input"
-        type="number"
-        min="10"
-        max="100"
-        value="100"
-      >
+    <label for="floatingOpacity">
+      Opacity
+    </label>
 
-    </div>
+    <span class="floating-opacity-value">
+      <span id="floatingOpacityValue">100</span>%
+    </span>
+
+  </div>
+
+  <input
+    id="floatingOpacity"
+    type="range"
+    min="10"
+    max="100"
+    step="5"
+    value="100"
+  >
+
+</div>
 
   </div>
 

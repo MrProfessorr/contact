@@ -15,6 +15,10 @@
     rel="stylesheet"
     href="./admin.css"
   >
+  <link
+  rel="stylesheet"
+  href="./shared-ui.css"
+>
 </head>
 
 
@@ -167,7 +171,11 @@ Customer
         Position
       </label>
 
-      <select id="floatingPosition">
+<select
+  id="floatingPosition"
+  data-shared-dropdown
+  data-placeholder="Select position"
+>
 
         <option value="left-top">
           Left Top
@@ -215,7 +223,11 @@ Customer
         Movement
       </label>
 
-      <select id="floatingAnimation">
+<select
+  id="floatingAnimation"
+  data-shared-dropdown
+  data-placeholder="Select movement"
+>
 
         <option value="none">
           No Movement
@@ -255,7 +267,11 @@ Customer
         After Customer Closes
       </label>
 
-      <select id="floatingCloseMode">
+<select
+  id="floatingCloseMode"
+  data-shared-dropdown
+  data-placeholder="Select close mode"
+>
 
         <option value="refresh">
           Show Again After Refresh
@@ -379,7 +395,11 @@ Customer
         Show On Desktop
       </label>
 
-      <select id="floatingShowDesktop">
+<select
+  id="floatingShowDesktop"
+  data-shared-dropdown
+  data-placeholder="Select option"
+>
 
         <option value="true">
           Yes
@@ -400,7 +420,11 @@ Customer
         Show On Mobile
       </label>
 
-      <select id="floatingShowMobile">
+  <select
+  id="floatingShowMobile"
+  data-shared-dropdown
+  data-placeholder="Select option"
+>
 
         <option value="true">
           Yes
@@ -421,7 +445,11 @@ Customer
         Close Button
       </label>
 
-      <select id="floatingShowClose">
+<select
+  id="floatingShowClose"
+  data-shared-dropdown
+  data-placeholder="Select option"
+>
 
         <option value="true">
           Show X Button
@@ -667,7 +695,7 @@ Customer
 <!-- =====================================================
      PAGE SCRIPT
 ===================================================== -->
-
+<script src="./shared-ui.js"></script>
 <script type="module">
 
 import {
@@ -687,7 +715,7 @@ import {
 requireAdmin();
 
 setupLogout();
-
+initSharedDropdowns();
 
 
 /* =====================================================
@@ -1588,7 +1616,28 @@ if (
         true
       );
 
+[
+  positionInput,
+  animationInput,
+  closeModeInput,
+  showDesktopInput,
+  showMobileInput,
+  showCloseInput
 
+].forEach(
+  select => {
+
+    select.dispatchEvent(
+      new Event(
+        "change",
+        {
+          bubbles:true
+        }
+      )
+    );
+
+  }
+);
     showMobileInput.value =
       String(
         data.show_mobile ??

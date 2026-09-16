@@ -415,6 +415,7 @@
   font-size:14px;
   font-weight:400;
   cursor:text;
+  caret-color:#ffffff;
   appearance:none;
   -webkit-appearance:none;
 }
@@ -423,14 +424,6 @@
 .shared-dropdown-input::placeholder {
   color:var(--text2);
   opacity:1;
-}
-/*
-  Selected value while dropdown
-  is ready for searching
-*/
-
-.shared-dropdown-input.search-ready {
-  color:var(--text2);
 }
 
 /* =========================================================

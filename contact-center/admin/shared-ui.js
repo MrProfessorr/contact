@@ -315,8 +315,9 @@ element.innerHTML =
 
   }
 
+
   /* =======================================================
-     SHARED CUSTOM DROPDOWN
+     SHARED SEARCHABLE DROPDOWN
   ======================================================= */
 
   function createSharedDropdown(
@@ -341,142 +342,167 @@ element.innerHTML =
     /* PREVENT DOUBLE INIT */
 
     if (
-      select.dataset.sharedDropdown === "true"
+      select.dataset.sharedDropdown ===
+      "true"
     ) {
-      return select._sharedDropdown || null;
+
+      return (
+        select._sharedDropdown ||
+        null
+      );
+
     }
 
 
     const config = {
+
       placeholder:
         options.placeholder ||
         select.dataset.placeholder ||
         "Select option",
 
-      searchable:
-        options.searchable === true,
-
-      searchPlaceholder:
-        options.searchPlaceholder ||
-        "Search...",
-
       emptyText:
         options.emptyText ||
         "No data"
+
     };
 
 
-    /* WRAPPER */
+    /* =====================================================
+       ICONS
+    ===================================================== */
 
-    const wrapper =
-      document.createElement("div");
-
-    wrapper.className =
-      "shared-dropdown";
-
-
-    /* TRIGGER */
-
-    const trigger =
-      document.createElement("button");
-
-    trigger.type = "button";
-
-    trigger.className =
-      "shared-dropdown-trigger";
-
-    trigger.setAttribute(
-      "aria-haspopup",
-      "listbox"
-    );
-
-    trigger.setAttribute(
-      "aria-expanded",
-      "false"
-    );
-
-
-    trigger.innerHTML = `
-      <span
-        class="shared-dropdown-value"
-      ></span>
-
+    const arrowIcon = `
       <svg
-        class="shared-dropdown-arrow"
-        viewBox="0 0 12 12"
+        viewBox="0 0 1024 1024"
         aria-hidden="true"
       >
         <path
-          d="M2.2 4.2 6 8l3.8-3.8"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+          fill="currentColor"
         />
       </svg>
     `;
 
 
-    /* PANEL */
+    const searchIcon = `
+      <svg
+        viewBox="0 0 1024 1024"
+        aria-hidden="true"
+      >
+        <path
+          d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"
+          fill="currentColor"
+        />
+      </svg>
+    `;
+
+
+    /* =====================================================
+       WRAPPER
+    ===================================================== */
+
+    const wrapper =
+      document.createElement("div");
+
+
+    wrapper.className =
+      "shared-dropdown";
+
+
+    /* =====================================================
+       TRIGGER
+    ===================================================== */
+
+    const trigger =
+      document.createElement("div");
+
+
+    trigger.className =
+      "shared-dropdown-trigger";
+
+
+    /* INPUT */
+
+    const input =
+      document.createElement("input");
+
+
+    input.type =
+      "text";
+
+
+    input.className =
+      "shared-dropdown-input";
+
+
+    input.placeholder =
+      config.placeholder;
+
+
+    input.autocomplete =
+      "off";
+
+
+    input.spellcheck =
+      false;
+
+
+    input.setAttribute(
+      "aria-haspopup",
+      "listbox"
+    );
+
+
+    input.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+
+    /* ICON */
+
+    const icon =
+      document.createElement("span");
+
+
+    icon.className =
+      "shared-dropdown-icon";
+
+
+    icon.innerHTML =
+      arrowIcon;
+
+
+    trigger.appendChild(
+      input
+    );
+
+
+    trigger.appendChild(
+      icon
+    );
+
+
+    /* =====================================================
+       PANEL
+    ===================================================== */
 
     const panel =
       document.createElement("div");
+
 
     panel.className =
       "shared-dropdown-panel";
 
 
-    /* SEARCH */
-
-    let searchInput = null;
-
-
-    if (
-      config.searchable
-    ) {
-
-      const searchWrap =
-        document.createElement("div");
-
-      searchWrap.className =
-        "shared-dropdown-search-wrap";
-
-
-      searchInput =
-        document.createElement("input");
-
-      searchInput.type = "text";
-
-      searchInput.className =
-        "shared-dropdown-search";
-
-      searchInput.placeholder =
-        config.searchPlaceholder;
-
-      searchInput.autocomplete =
-        "off";
-
-
-      searchWrap.appendChild(
-        searchInput
-      );
-
-
-      panel.appendChild(
-        searchWrap
-      );
-
-    }
-
-
-    /* OPTIONS AREA */
-
     const optionList =
       document.createElement("div");
 
+
     optionList.className =
       "shared-dropdown-options";
+
 
     optionList.setAttribute(
       "role",
@@ -489,7 +515,9 @@ element.innerHTML =
     );
 
 
-    /* INSERT */
+    /* =====================================================
+       INSERT
+    ===================================================== */
 
     select.parentNode.insertBefore(
       wrapper,
@@ -501,9 +529,11 @@ element.innerHTML =
       select
     );
 
+
     wrapper.appendChild(
       trigger
     );
+
 
     wrapper.appendChild(
       panel
@@ -519,14 +549,8 @@ element.innerHTML =
       "true";
 
 
-    const valueElement =
-      trigger.querySelector(
-        ".shared-dropdown-value"
-      );
-
-
     /* =====================================================
-       UPDATE TRIGGER TEXT
+       UPDATE DISPLAY VALUE
     ===================================================== */
 
     function updateValue() {
@@ -542,16 +566,14 @@ element.innerHTML =
         selectedOption.value !== "";
 
 
-      valueElement.textContent =
+      input.value =
         hasValue
-          ? selectedOption.textContent
-          : config.placeholder;
-
-
-      valueElement.classList.toggle(
-        "placeholder",
-        !hasValue
-      );
+          ? (
+              selectedOption
+                .textContent ||
+              ""
+            ).trim()
+          : "";
 
     }
 
@@ -564,11 +586,14 @@ element.innerHTML =
       search = ""
     ) {
 
-      optionList.innerHTML = "";
+      optionList.innerHTML =
+        "";
 
 
       const keyword =
-        String(search)
+        String(
+          search
+        )
           .trim()
           .toLowerCase();
 
@@ -576,151 +601,152 @@ element.innerHTML =
       let count = 0;
 
 
-      Array.from(
-        select.options
-      ).forEach(
-        option => {
+      Array
+        .from(
+          select.options
+        )
+        .forEach(
+          option => {
 
-          /*
-            Empty option acts as placeholder.
-            Do not show it inside dropdown.
-          */
-
-          if (
-            option.value === ""
-          ) {
-            return;
-          }
+            if (
+              option.value === ""
+            ) {
+              return;
+            }
 
 
-          const text =
-            option.textContent || "";
+            const text =
+              (
+                option.textContent ||
+                ""
+              ).trim();
 
 
-          if (
-            keyword &&
-            !text
-              .toLowerCase()
-              .includes(keyword)
-          ) {
-            return;
-          }
-
-
-          const item =
-            document.createElement(
-              "button"
-            );
-
-
-          item.type =
-            "button";
-
-
-          item.className =
-            "shared-dropdown-option";
-
-
-          item.setAttribute(
-            "role",
-            "option"
-          );
-
-
-          item.dataset.value =
-            option.value;
-
-
-          item.textContent =
-            text;
-
-
-          if (
-            option.disabled
-          ) {
-
-            item.disabled = true;
-
-          }
-
-
-          if (
-            option.value ===
-            select.value
-          ) {
-
-            item.classList.add(
-              "active"
-            );
-
-            item.setAttribute(
-              "aria-selected",
-              "true"
-            );
-
-          } else {
-
-            item.setAttribute(
-              "aria-selected",
-              "false"
-            );
-
-          }
-
-
-          item.addEventListener(
-            "click",
-            event => {
-
-              event.stopPropagation();
-
-
-              if (
-                option.disabled
-              ) {
-                return;
-              }
-
-
-              select.value =
-                option.value;
-
-
-              /*
-                IMPORTANT:
-                Trigger native change event.
-                Existing tab scripts can listen normally.
-              */
-
-              select.dispatchEvent(
-                new Event(
-                  "change",
-                  {
-                    bubbles:true
-                  }
+            if (
+              keyword &&
+              !text
+                .toLowerCase()
+                .includes(
+                  keyword
                 )
+            ) {
+              return;
+            }
+
+
+            const item =
+              document.createElement(
+                "button"
               );
 
 
-              updateValue();
+            item.type =
+              "button";
 
-              renderOptions();
 
-              close();
+            item.className =
+              "shared-dropdown-option";
+
+
+            item.textContent =
+              text;
+
+
+            item.setAttribute(
+              "role",
+              "option"
+            );
+
+
+            item.setAttribute(
+              "aria-selected",
+              option.value ===
+              select.value
+                ? "true"
+                : "false"
+            );
+
+
+            if (
+              option.value ===
+              select.value
+            ) {
+
+              item.classList.add(
+                "active"
+              );
 
             }
-          );
 
 
-          optionList.appendChild(
-            item
-          );
+            if (
+              option.disabled
+            ) {
+
+              item.disabled =
+                true;
+
+            }
 
 
-          count++;
+            item.addEventListener(
+              "mousedown",
+              event => {
 
-        }
-      );
+                /*
+                  Prevent input blur before
+                  option selection.
+                */
+
+                event.preventDefault();
+
+              }
+            );
+
+
+            item.addEventListener(
+              "click",
+              event => {
+
+                event.stopPropagation();
+
+
+                if (
+                  option.disabled
+                ) {
+                  return;
+                }
+
+
+                select.value =
+                  option.value;
+
+
+                select.dispatchEvent(
+                  new Event(
+                    "change",
+                    {
+                      bubbles:true
+                    }
+                  )
+                );
+
+
+                close();
+
+              }
+            );
+
+
+            optionList.appendChild(
+              item
+            );
+
+
+            count++;
+
+          }
+        );
 
 
       if (
@@ -756,9 +782,12 @@ element.innerHTML =
 
     function open() {
 
-      /*
-        Close other shared dropdowns first
-      */
+      if (
+        select.disabled
+      ) {
+        return;
+      }
+
 
       document
         .querySelectorAll(
@@ -776,16 +805,18 @@ element.innerHTML =
                 .remove("open");
 
 
-              const otherTrigger =
-                dropdown.querySelector(
-                  ".shared-dropdown-trigger"
+              const otherInput =
+                dropdown
+                  .querySelector(
+                    ".shared-dropdown-input"
+                  );
+
+
+              otherInput
+                ?.setAttribute(
+                  "aria-expanded",
+                  "false"
                 );
-
-
-              otherTrigger?.setAttribute(
-                "aria-expanded",
-                "false"
-              );
 
             }
 
@@ -798,31 +829,39 @@ element.innerHTML =
       );
 
 
-      trigger.setAttribute(
+      input.setAttribute(
         "aria-expanded",
         "true"
       );
 
 
-      renderOptions();
+      /* ARROW -> SEARCH */
+
+      icon.innerHTML =
+        searchIcon;
 
 
-      if (
-        searchInput
-      ) {
+      /*
+        Empty current label so this same
+        input becomes the search field.
+      */
 
-        searchInput.value = "";
+      input.value =
+        "";
 
 
-        requestAnimationFrame(
-          () => {
+      renderOptions(
+        ""
+      );
 
-            searchInput.focus();
 
-          }
-        );
+      requestAnimationFrame(
+        () => {
 
-      }
+          input.focus();
+
+        }
+      );
 
     }
 
@@ -838,91 +877,132 @@ element.innerHTML =
       );
 
 
-      trigger.setAttribute(
+      input.setAttribute(
         "aria-expanded",
         "false"
       );
 
 
-      if (
-        searchInput
-      ) {
+      /* SEARCH -> ARROW */
 
-        searchInput.value = "";
-
-      }
-
-    }
+      icon.innerHTML =
+        arrowIcon;
 
 
-    /* =====================================================
-       TOGGLE
-    ===================================================== */
+      /* RESTORE SELECTED LABEL */
 
-    function toggle() {
-
-      if (
-        wrapper.classList.contains(
-          "open"
-        )
-      ) {
-
-        close();
-
-      } else {
-
-        open();
-
-      }
+      updateValue();
 
     }
 
 
     /* =====================================================
-       TRIGGER CLICK
+       INPUT CLICK
     ===================================================== */
 
-    trigger.addEventListener(
+    input.addEventListener(
       "click",
       event => {
 
         event.stopPropagation();
 
-        toggle();
+
+        if (
+          !wrapper
+            .classList
+            .contains("open")
+        ) {
+
+          open();
+
+        }
 
       }
     );
 
 
     /* =====================================================
-       SEARCH
+       INPUT FOCUS
     ===================================================== */
 
-    searchInput?.addEventListener(
+    input.addEventListener(
+      "focus",
+      () => {
+
+        if (
+          !wrapper
+            .classList
+            .contains("open")
+        ) {
+
+          open();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       SEARCH AS USER TYPES
+    ===================================================== */
+
+    input.addEventListener(
       "input",
       () => {
 
+        if (
+          !wrapper
+            .classList
+            .contains("open")
+        ) {
+
+          open();
+
+        }
+
+
         renderOptions(
-          searchInput.value
+          input.value
         );
 
       }
     );
 
 
-    searchInput?.addEventListener(
-      "click",
+    /* =====================================================
+       ICON CLICK
+    ===================================================== */
+
+    icon.addEventListener(
+      "mousedown",
       event => {
 
+        event.preventDefault();
+
         event.stopPropagation();
+
+
+        if (
+          wrapper
+            .classList
+            .contains("open")
+        ) {
+
+          close();
+
+        } else {
+
+          open();
+
+        }
 
       }
     );
 
 
     /* =====================================================
-       NATIVE SELECT CHANGE
-       Useful when tab script changes value itself
+       SELECT CHANGE
     ===================================================== */
 
     select.addEventListener(
@@ -931,16 +1011,14 @@ element.innerHTML =
 
         updateValue();
 
-        renderOptions(
-          searchInput?.value || ""
-        );
+        renderOptions();
 
       }
     );
 
 
     /* =====================================================
-       DISABLED STATE
+       DISABLED
     ===================================================== */
 
     function updateDisabled() {
@@ -949,27 +1027,31 @@ element.innerHTML =
         select.disabled;
 
 
-      trigger.disabled =
+      input.disabled =
         disabled;
 
 
-      wrapper.classList.toggle(
-        "disabled",
-        disabled
-      );
+      wrapper
+        .classList
+        .toggle(
+          "disabled",
+          disabled
+        );
 
 
       if (
         disabled
       ) {
+
         close();
+
       }
 
     }
 
 
     /* =====================================================
-       API
+       PUBLIC API
     ===================================================== */
 
     const api = {
@@ -988,13 +1070,16 @@ element.innerHTML =
 
       },
 
+
       setValue(
         value,
         dispatchChange = true
       ) {
 
         select.value =
-          String(value);
+          String(
+            value
+          );
 
 
         updateValue();
@@ -1019,6 +1104,7 @@ element.innerHTML =
 
       },
 
+
       getValue() {
 
         return select.value;
@@ -1042,53 +1128,43 @@ element.innerHTML =
     return api;
 
   }
-
-
   /* =======================================================
      INIT ALL SHARED DROPDOWNS
   ======================================================= */
 
-  function initSharedDropdowns(
-    root = document
-  ) {
+function initSharedDropdowns(
+  root = document
+) {
 
-    root
-      .querySelectorAll(
-        "select[data-shared-dropdown]"
-      )
-      .forEach(
-        select => {
+  root
+    .querySelectorAll(
+      "select[data-shared-dropdown]"
+    )
+    .forEach(
+      select => {
 
-          createSharedDropdown(
-            select,
-            {
-              searchable:
-                select.dataset.searchable ===
-                "true",
+        createSharedDropdown(
+          select,
+          {
+            placeholder:
+              select.dataset.placeholder ||
+              "Select option"
+          }
+        );
 
-              placeholder:
-                select.dataset.placeholder ||
-                "Select option",
+      }
+    );
 
-              searchPlaceholder:
-                select.dataset.searchPlaceholder ||
-                "Search..."
-            }
-          );
-
-        }
-      );
-
-  }
+}
 
 
-  /* =======================================================
+    /* =======================================================
      CLOSE WHEN CLICK OUTSIDE
   ======================================================= */
 
   document.addEventListener(
     "click",
-    () => {
+    event => {
 
       document
         .querySelectorAll(
@@ -1097,19 +1173,24 @@ element.innerHTML =
         .forEach(
           dropdown => {
 
-            dropdown
-              .classList
-              .remove("open");
-
-
-            dropdown
-              .querySelector(
-                ".shared-dropdown-trigger"
+            if (
+              dropdown.contains(
+                event.target
               )
-              ?.setAttribute(
-                "aria-expanded",
-                "false"
+            ) {
+              return;
+            }
+
+
+            const select =
+              dropdown.querySelector(
+                "select[data-shared-dropdown]"
               );
+
+
+            select
+              ?._sharedDropdown
+              ?.close();
 
           }
         );
@@ -1140,19 +1221,15 @@ element.innerHTML =
         .forEach(
           dropdown => {
 
-            dropdown
-              .classList
-              .remove("open");
-
-
-            dropdown
-              .querySelector(
-                ".shared-dropdown-trigger"
-              )
-              ?.setAttribute(
-                "aria-expanded",
-                "false"
+            const select =
+              dropdown.querySelector(
+                "select[data-shared-dropdown]"
               );
+
+
+            select
+              ?._sharedDropdown
+              ?.close();
 
           }
         );

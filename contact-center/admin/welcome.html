@@ -315,18 +315,30 @@
   </div>
 
 
-  <div class="form-group">
-    <label>Backdrop Opacity (%)</label>
+<div class="form-group">
 
-    <input
-      id="welcomeBackdropOpacity"
-      class="shared-input"
-      type="number"
-      min="0"
-      max="100"
-      value="78"
-    >
+  <div class="welcome-opacity-header">
+
+    <label for="welcomeBackdropOpacity">
+      Backdrop Opacity
+    </label>
+
+    <span class="welcome-opacity-value">
+      <span id="welcomeBackdropOpacityValue">78</span>%
+    </span>
+
   </div>
+
+  <input
+    id="welcomeBackdropOpacity"
+    type="range"
+    min="0"
+    max="100"
+    step="1"
+    value="78"
+  >
+
+</div>
 
 </div>
 
@@ -797,6 +809,8 @@ const backdropColor =
 
 const backdropOpacity =
   $("welcomeBackdropOpacity");
+  const backdropOpacityValue =
+  $("welcomeBackdropOpacityValue");
 
 const okText =
   $("welcomeOkText");
@@ -866,6 +880,8 @@ const previewOk =
 ========================================================= */
 
 function updatePreview() {
+    backdropOpacityValue.textContent =
+    backdropOpacity.value;
 
   if (activeText) {
 

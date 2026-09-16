@@ -8139,7 +8139,7 @@ span.flatpickr-weekday {
   border:1px solid transparent;
   border-radius:6px;
   color: var(--text);
-  background:var(--iinput);
+  background:var(--input);
   cursor:pointer;
   font-size:14px;
   transition: all .2s ease;

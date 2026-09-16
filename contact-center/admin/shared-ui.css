@@ -372,12 +372,12 @@
 
   border:
     1px solid
-    var(--input-line, #424242);
+    var(--input-line);
 
   border-radius:6px;
 
   background:
-    var(--input, #141414);
+    var(--input);
 
   transition:
     border-color .2s ease,
@@ -387,14 +387,14 @@
 
 .shared-dropdown-trigger:hover {
   border-color:
-    var(--input-line-hover, #3c89e8);
+    var(--input-line-hover);
 }
 
 
 .shared-dropdown.open
 .shared-dropdown-trigger {
   border-color:
-    var(--input-line-focus, #1668dc);
+    var(--input-line-focus);
 }
 
 

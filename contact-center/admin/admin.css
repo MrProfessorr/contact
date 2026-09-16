@@ -3394,7 +3394,32 @@ input:checked
     rgba(255,255,255,.018);
 }
 
+/* =========================================================
+   FLOATING OPACITY
+========================================================= */
 
+.floating-opacity-header {
+  display:flex;
+  align-items:center;
+  gap:5px;
+
+  margin-bottom:6px;
+}
+
+
+.floating-opacity-header label {
+  margin-bottom:0;
+}
+
+
+.floating-opacity-value {
+  color:var(--muted);
+
+  font-size:10px;
+  font-weight:400;
+
+  line-height:1;
+}
 .floating-upload-preview img {
   display:
     block;

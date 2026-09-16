@@ -1659,7 +1659,33 @@ input[type="color"] {
   align-items: start;
 }
 
+/* =========================================================
+   LOADING OPACITY HEADER
+========================================================= */
 
+.loading-opacity-header {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  margin-bottom: 6px;
+}
+
+
+.loading-opacity-header label {
+  margin-bottom: 0;
+}
+
+
+.loading-opacity-value {
+  color: var(--muted);
+
+  font-size: 10px;
+  font-weight: 400;
+
+  line-height: 1;
+}
 /* =========================================================
    COLOR INPUT
 ========================================================= */

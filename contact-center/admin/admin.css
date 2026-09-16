@@ -365,32 +365,6 @@ label {
 .search-input:focus {
   border:1px solid var(--input-line-focus);
 }
-textarea,
-select {
-  width:100%;
-  border:1px solid var(--input-line);
-  border-radius:6px;
-  background:var(--input);
-  color:var(--text);
-  padding:11px 12px;
-  outline:none;
-}
-
-textarea {
-
-  min-height:
-    105px;
-
-  resize:
-    vertical;
-}
-
-textarea:focus,
-select:focus {
-
-  border-color:
-    var(--blue);
-}
 
 .help-text {
 

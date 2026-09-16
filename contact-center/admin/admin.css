@@ -4733,7 +4733,7 @@ input[type="color"] {
 
 .welcome-grid {
   display: grid;
-  gap: 12px;
+  gap: 8px;
   align-items: end;
 }
 

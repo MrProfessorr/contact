@@ -712,3 +712,73 @@
 
   cursor:pointer;
 }
+/* =========================================================
+   SHARED TEXTAREA
+========================================================= */
+
+.shared-textarea {
+  width:100%;
+  min-width:0;
+  min-height:90px;
+
+  padding:
+    8px
+    11px;
+
+  border:
+    1px solid
+    var(--input-line);
+
+  border-radius:6px;
+
+  outline:none;
+
+  color:
+    var(--text);
+
+  background:
+    var(--input);
+
+  font-family:inherit;
+  font-size:14px;
+  font-weight:400;
+  line-height:1.5;
+
+  caret-color:#ffffff;
+
+  resize:vertical;
+
+  transition:
+    border-color .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
+}
+
+
+.shared-textarea::placeholder {
+  color:
+    var(--text2);
+
+  opacity:1;
+}
+
+
+.shared-textarea:hover {
+  border-color:
+    var(--input-line-hover);
+}
+
+
+.shared-textarea:focus {
+  border-color:
+    var(--input-line-focus);
+
+  box-shadow:none;
+}
+
+
+.shared-textarea:disabled {
+  opacity:.45;
+
+  cursor:not-allowed;
+}

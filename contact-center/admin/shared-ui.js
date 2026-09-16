@@ -315,7 +315,850 @@ element.innerHTML =
 
   }
 
+  /* =======================================================
+     SHARED CUSTOM DROPDOWN
+  ======================================================= */
 
+  function createSharedDropdown(
+    target,
+    options = {}
+  ) {
+
+    const select =
+      typeof target === "string"
+        ? document.querySelector(target)
+        : target;
+
+
+    if (
+      !select ||
+      select.tagName !== "SELECT"
+    ) {
+      return null;
+    }
+
+
+    /* PREVENT DOUBLE INIT */
+
+    if (
+      select.dataset.sharedDropdown === "true"
+    ) {
+      return select._sharedDropdown || null;
+    }
+
+
+    const config = {
+      placeholder:
+        options.placeholder ||
+        select.dataset.placeholder ||
+        "Select option",
+
+      searchable:
+        options.searchable === true,
+
+      searchPlaceholder:
+        options.searchPlaceholder ||
+        "Search...",
+
+      emptyText:
+        options.emptyText ||
+        "No data"
+    };
+
+
+    /* WRAPPER */
+
+    const wrapper =
+      document.createElement("div");
+
+    wrapper.className =
+      "shared-dropdown";
+
+
+    /* TRIGGER */
+
+    const trigger =
+      document.createElement("button");
+
+    trigger.type = "button";
+
+    trigger.className =
+      "shared-dropdown-trigger";
+
+    trigger.setAttribute(
+      "aria-haspopup",
+      "listbox"
+    );
+
+    trigger.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+
+    trigger.innerHTML = `
+      <span
+        class="shared-dropdown-value"
+      ></span>
+
+      <svg
+        class="shared-dropdown-arrow"
+        viewBox="0 0 12 12"
+        aria-hidden="true"
+      >
+        <path
+          d="M2.2 4.2 6 8l3.8-3.8"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    `;
+
+
+    /* PANEL */
+
+    const panel =
+      document.createElement("div");
+
+    panel.className =
+      "shared-dropdown-panel";
+
+
+    /* SEARCH */
+
+    let searchInput = null;
+
+
+    if (
+      config.searchable
+    ) {
+
+      const searchWrap =
+        document.createElement("div");
+
+      searchWrap.className =
+        "shared-dropdown-search-wrap";
+
+
+      searchInput =
+        document.createElement("input");
+
+      searchInput.type = "text";
+
+      searchInput.className =
+        "shared-dropdown-search";
+
+      searchInput.placeholder =
+        config.searchPlaceholder;
+
+      searchInput.autocomplete =
+        "off";
+
+
+      searchWrap.appendChild(
+        searchInput
+      );
+
+
+      panel.appendChild(
+        searchWrap
+      );
+
+    }
+
+
+    /* OPTIONS AREA */
+
+    const optionList =
+      document.createElement("div");
+
+    optionList.className =
+      "shared-dropdown-options";
+
+    optionList.setAttribute(
+      "role",
+      "listbox"
+    );
+
+
+    panel.appendChild(
+      optionList
+    );
+
+
+    /* INSERT */
+
+    select.parentNode.insertBefore(
+      wrapper,
+      select
+    );
+
+
+    wrapper.appendChild(
+      select
+    );
+
+    wrapper.appendChild(
+      trigger
+    );
+
+    wrapper.appendChild(
+      panel
+    );
+
+
+    select.classList.add(
+      "shared-dropdown-native"
+    );
+
+
+    select.dataset.sharedDropdown =
+      "true";
+
+
+    const valueElement =
+      trigger.querySelector(
+        ".shared-dropdown-value"
+      );
+
+
+    /* =====================================================
+       UPDATE TRIGGER TEXT
+    ===================================================== */
+
+    function updateValue() {
+
+      const selectedOption =
+        select.options[
+          select.selectedIndex
+        ];
+
+
+      const hasValue =
+        selectedOption &&
+        selectedOption.value !== "";
+
+
+      valueElement.textContent =
+        hasValue
+          ? selectedOption.textContent
+          : config.placeholder;
+
+
+      valueElement.classList.toggle(
+        "placeholder",
+        !hasValue
+      );
+
+    }
+
+
+    /* =====================================================
+       RENDER OPTIONS
+    ===================================================== */
+
+    function renderOptions(
+      search = ""
+    ) {
+
+      optionList.innerHTML = "";
+
+
+      const keyword =
+        String(search)
+          .trim()
+          .toLowerCase();
+
+
+      let count = 0;
+
+
+      Array.from(
+        select.options
+      ).forEach(
+        option => {
+
+          /*
+            Empty option acts as placeholder.
+            Do not show it inside dropdown.
+          */
+
+          if (
+            option.value === ""
+          ) {
+            return;
+          }
+
+
+          const text =
+            option.textContent || "";
+
+
+          if (
+            keyword &&
+            !text
+              .toLowerCase()
+              .includes(keyword)
+          ) {
+            return;
+          }
+
+
+          const item =
+            document.createElement(
+              "button"
+            );
+
+
+          item.type =
+            "button";
+
+
+          item.className =
+            "shared-dropdown-option";
+
+
+          item.setAttribute(
+            "role",
+            "option"
+          );
+
+
+          item.dataset.value =
+            option.value;
+
+
+          item.textContent =
+            text;
+
+
+          if (
+            option.disabled
+          ) {
+
+            item.disabled = true;
+
+          }
+
+
+          if (
+            option.value ===
+            select.value
+          ) {
+
+            item.classList.add(
+              "active"
+            );
+
+            item.setAttribute(
+              "aria-selected",
+              "true"
+            );
+
+          } else {
+
+            item.setAttribute(
+              "aria-selected",
+              "false"
+            );
+
+          }
+
+
+          item.addEventListener(
+            "click",
+            event => {
+
+              event.stopPropagation();
+
+
+              if (
+                option.disabled
+              ) {
+                return;
+              }
+
+
+              select.value =
+                option.value;
+
+
+              /*
+                IMPORTANT:
+                Trigger native change event.
+                Existing tab scripts can listen normally.
+              */
+
+              select.dispatchEvent(
+                new Event(
+                  "change",
+                  {
+                    bubbles:true
+                  }
+                )
+              );
+
+
+              updateValue();
+
+              renderOptions();
+
+              close();
+
+            }
+          );
+
+
+          optionList.appendChild(
+            item
+          );
+
+
+          count++;
+
+        }
+      );
+
+
+      if (
+        count === 0
+      ) {
+
+        const empty =
+          document.createElement(
+            "div"
+          );
+
+
+        empty.className =
+          "shared-dropdown-empty";
+
+
+        empty.textContent =
+          config.emptyText;
+
+
+        optionList.appendChild(
+          empty
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       OPEN
+    ===================================================== */
+
+    function open() {
+
+      /*
+        Close other shared dropdowns first
+      */
+
+      document
+        .querySelectorAll(
+          ".shared-dropdown.open"
+        )
+        .forEach(
+          dropdown => {
+
+            if (
+              dropdown !== wrapper
+            ) {
+
+              dropdown
+                .classList
+                .remove("open");
+
+
+              const otherTrigger =
+                dropdown.querySelector(
+                  ".shared-dropdown-trigger"
+                );
+
+
+              otherTrigger?.setAttribute(
+                "aria-expanded",
+                "false"
+              );
+
+            }
+
+          }
+        );
+
+
+      wrapper.classList.add(
+        "open"
+      );
+
+
+      trigger.setAttribute(
+        "aria-expanded",
+        "true"
+      );
+
+
+      renderOptions();
+
+
+      if (
+        searchInput
+      ) {
+
+        searchInput.value = "";
+
+
+        requestAnimationFrame(
+          () => {
+
+            searchInput.focus();
+
+          }
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       CLOSE
+    ===================================================== */
+
+    function close() {
+
+      wrapper.classList.remove(
+        "open"
+      );
+
+
+      trigger.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+
+      if (
+        searchInput
+      ) {
+
+        searchInput.value = "";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       TOGGLE
+    ===================================================== */
+
+    function toggle() {
+
+      if (
+        wrapper.classList.contains(
+          "open"
+        )
+      ) {
+
+        close();
+
+      } else {
+
+        open();
+
+      }
+
+    }
+
+
+    /* =====================================================
+       TRIGGER CLICK
+    ===================================================== */
+
+    trigger.addEventListener(
+      "click",
+      event => {
+
+        event.stopPropagation();
+
+        toggle();
+
+      }
+    );
+
+
+    /* =====================================================
+       SEARCH
+    ===================================================== */
+
+    searchInput?.addEventListener(
+      "input",
+      () => {
+
+        renderOptions(
+          searchInput.value
+        );
+
+      }
+    );
+
+
+    searchInput?.addEventListener(
+      "click",
+      event => {
+
+        event.stopPropagation();
+
+      }
+    );
+
+
+    /* =====================================================
+       NATIVE SELECT CHANGE
+       Useful when tab script changes value itself
+    ===================================================== */
+
+    select.addEventListener(
+      "change",
+      () => {
+
+        updateValue();
+
+        renderOptions(
+          searchInput?.value || ""
+        );
+
+      }
+    );
+
+
+    /* =====================================================
+       DISABLED STATE
+    ===================================================== */
+
+    function updateDisabled() {
+
+      const disabled =
+        select.disabled;
+
+
+      trigger.disabled =
+        disabled;
+
+
+      wrapper.classList.toggle(
+        "disabled",
+        disabled
+      );
+
+
+      if (
+        disabled
+      ) {
+        close();
+      }
+
+    }
+
+
+    /* =====================================================
+       API
+    ===================================================== */
+
+    const api = {
+
+      open,
+
+      close,
+
+      refresh() {
+
+        updateValue();
+
+        updateDisabled();
+
+        renderOptions();
+
+      },
+
+      setValue(
+        value,
+        dispatchChange = true
+      ) {
+
+        select.value =
+          String(value);
+
+
+        updateValue();
+
+        renderOptions();
+
+
+        if (
+          dispatchChange
+        ) {
+
+          select.dispatchEvent(
+            new Event(
+              "change",
+              {
+                bubbles:true
+              }
+            )
+          );
+
+        }
+
+      },
+
+      getValue() {
+
+        return select.value;
+
+      }
+
+    };
+
+
+    select._sharedDropdown =
+      api;
+
+
+    updateValue();
+
+    updateDisabled();
+
+    renderOptions();
+
+
+    return api;
+
+  }
+
+
+  /* =======================================================
+     INIT ALL SHARED DROPDOWNS
+  ======================================================= */
+
+  function initSharedDropdowns(
+    root = document
+  ) {
+
+    root
+      .querySelectorAll(
+        "select[data-shared-dropdown]"
+      )
+      .forEach(
+        select => {
+
+          createSharedDropdown(
+            select,
+            {
+              searchable:
+                select.dataset.searchable ===
+                "true",
+
+              placeholder:
+                select.dataset.placeholder ||
+                "Select option",
+
+              searchPlaceholder:
+                select.dataset.searchPlaceholder ||
+                "Search..."
+            }
+          );
+
+        }
+      );
+
+  }
+
+
+  /* =======================================================
+     CLOSE WHEN CLICK OUTSIDE
+  ======================================================= */
+
+  document.addEventListener(
+    "click",
+    () => {
+
+      document
+        .querySelectorAll(
+          ".shared-dropdown.open"
+        )
+        .forEach(
+          dropdown => {
+
+            dropdown
+              .classList
+              .remove("open");
+
+
+            dropdown
+              .querySelector(
+                ".shared-dropdown-trigger"
+              )
+              ?.setAttribute(
+                "aria-expanded",
+                "false"
+              );
+
+          }
+        );
+
+    }
+  );
+
+
+  /* =======================================================
+     CLOSE WITH ESC
+  ======================================================= */
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key !== "Escape"
+      ) {
+        return;
+      }
+
+
+      document
+        .querySelectorAll(
+          ".shared-dropdown.open"
+        )
+        .forEach(
+          dropdown => {
+
+            dropdown
+              .classList
+              .remove("open");
+
+
+            dropdown
+              .querySelector(
+                ".shared-dropdown-trigger"
+              )
+              ?.setAttribute(
+                "aria-expanded",
+                "false"
+              );
+
+          }
+        );
+
+    }
+  );
   /* =======================================================
      GLOBAL
      Available to every page
@@ -340,4 +1183,10 @@ element.innerHTML =
   window.clearSharedState =
     clearSharedState;
 
+     window.createSharedDropdown =
+    createSharedDropdown;
+
+
+  window.initSharedDropdowns =
+    initSharedDropdowns;
 })();

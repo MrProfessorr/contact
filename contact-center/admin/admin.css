@@ -302,27 +302,15 @@ a {
 }
 
 .card {
-
-  background:
-    var(--panel);
-
-  border:
-    1px solid var(--line);
-
-  border-radius:
-    16px;
-
-  padding:
-    18px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px;
 }
 
 .card h3 {
-
-  font-size:
-    15px;
-
-  margin-bottom:
-    17px;
+  font-size:15px;
+  margin-bottom:17px;
 }
 
 
@@ -333,21 +321,11 @@ a {
 }
 
 label {
-
-  display:
-    block;
-
-  margin-bottom:
-    6px;
-
-  font-size:
-    11px;
-
-  font-weight:
-    700;
-
-  color:
-    #cad2dd;
+  display:block;
+  margin-bottom:6px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--tx-muted);
 }
 .search-input {
   width:100%;
@@ -367,45 +345,24 @@ label {
 }
 
 .help-text {
-
-  color:
-    var(--muted);
-
-  font-size:
-    10px;
-
-  margin-top:
-    5px;
-
-  line-height:
-    1.5;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+  line-height:1.5;
 }
 
 
 /* BUTTON */
 
 .btn {
-
-  cursor:
-    pointer;
-
-  border:
-    none;
-
-  border-radius:
-    9px;
-
-  color:
-    white;
-
-  padding:
-    10px 13px;
-
-  font-weight:
-    700;
-
-  font-size:
-    11px;
+  cursor:pointer;
+  border:none;
+  border-radius:8px;
+  color:white;
+  padding:0px 15px;
+  font-weight:400;
+  font-size:14px;
+  height:32px;
 }
 
 .full {
@@ -413,7 +370,7 @@ label {
 }
 
 .btn-primary {
-  background: #2869d8;
+  background: #1668dc;
 }
 
 .btn-green {
@@ -427,7 +384,6 @@ label {
 .btn-dark {
   background: #282f3b;
 }
-
 
 /* LIST */
 
@@ -1974,23 +1930,16 @@ input[type="color"] {
 ========================================================= */
 
 .contact-form-row {
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0,1fr));
-
-  gap:
-    14px;
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:8px;
 }
 
 
 .contact-form-row
 .form-group {
-  min-width:
-    0;
+  min-width:0;
 }
-
 
 /* DESCRIPTION */
 
@@ -2968,14 +2917,9 @@ input:checked
 ========================================================= */
 
 .marquee-form-row {
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0,1fr));
-
-  gap:
-    14px;
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:8px;
 }
 
 
@@ -2987,14 +2931,12 @@ input:checked
 
 .marquee-form-row
 .form-group {
-  min-width:
-    0;
+  min-width:0;
 }
 
 
 #marqueeText {
-  min-height:
-    125px;
+  min-height:125px;
 }
 
 
@@ -3002,17 +2944,10 @@ input:checked
 
 .marquee-form-row
 input[type="color"] {
-  width:
-    100%;
-
-  height:
-    32px;
-
-  padding:
-    4px 11px;
-
-  cursor:
-    pointer;
+  width:100%;
+  height:32px;
+  padding:4px 11px;
+  cursor:pointer;
 }
 
 
@@ -3266,11 +3201,8 @@ input:checked
 
 
 .floating-form-row {
-  display:
-    grid;
-
-  gap:
-    12px;
+  display:grid;
+  gap:8px;
 }
 
 
@@ -3797,24 +3729,19 @@ input:checked
 
 
 .loading-form-row {
-  display:
-    grid;
-
-  gap:
-    12px;
+  display:grid;
+  gap:8px;
 }
 
 
 .loading-form-row-three {
-  grid-template-columns:
-    repeat(3,minmax(0,1fr));
+  grid-template-columns:repeat(3,minmax(0,1fr));
 }
 
 
 .loading-form-row
 .form-group {
-  min-width:
-    0;
+  min-width:0;
 }
 
 
@@ -4753,24 +4680,16 @@ input:checked
 ========================================================= */
 
 .skin-color-row {
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0,1fr));
-
-  gap:
-    12px;
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:8px;
 }
 
 
 .skin-color-row
 .form-group {
-  min-width:
-    0;
-
-  margin-bottom:
-    14px;
+  min-width:0;
+  margin-bottom:14px;
 }
 
 

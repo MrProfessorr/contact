@@ -284,8 +284,9 @@
 
   text-align:left !important;
 }
+
 /* =========================================================
-   SHARED CUSTOM DROPDOWN
+   SHARED SEARCHABLE DROPDOWN
 ========================================================= */
 
 .shared-dropdown {
@@ -296,7 +297,9 @@
 }
 
 
-/* HIDE ORIGINAL SELECT */
+/* =========================================================
+   HIDE ORIGINAL SELECT
+========================================================= */
 
 .shared-dropdown-native {
   position:absolute !important;
@@ -323,20 +326,17 @@
 
 
 /* =========================================================
-   TRIGGER
+   COMBINED INPUT + DROPDOWN
 ========================================================= */
 
 .shared-dropdown-trigger {
+  position:relative;
+
   width:100%;
   height:32px;
 
   display:flex;
   align-items:center;
-  justify-content:space-between;
-
-  gap:8px;
-
-  padding:0 10px;
 
   border:
     1px solid
@@ -344,20 +344,8 @@
 
   border-radius:6px;
 
-  color:
-    var(--text, #ffffff);
-
   background:
     var(--input, #141414);
-
-  outline:none;
-
-  cursor:pointer;
-
-  font-family:inherit;
-  font-size:14px;
-
-  text-align:left;
 
   transition:
     border-color .2s ease,
@@ -378,56 +366,94 @@
 }
 
 
-/* VALUE */
+/* =========================================================
+   INPUT
+========================================================= */
 
-.shared-dropdown-value {
+.shared-dropdown-input {
+  width:100%;
+  height:100%;
+
   min-width:0;
 
-  flex:1;
+  padding:
+    0
+    34px
+    0
+    10px;
 
-  overflow:hidden;
-
-  white-space:nowrap;
-
-  text-overflow:ellipsis;
+  border:0;
+  outline:0;
 
   color:
     var(--text, #ffffff);
+
+  background:transparent;
+
+  font-family:inherit;
+  font-size:14px;
+  font-weight:400;
+
+  cursor:text;
+
+  caret-color:#ffffff;
+
+  appearance:none;
+  -webkit-appearance:none;
 }
 
 
-.shared-dropdown-value.placeholder {
-  color:#66758a;
+.shared-dropdown-input::placeholder {
+  color:
+    rgba(255,255,255,0.25);
+
+  opacity:1;
 }
 
 
-/* ARROW */
+/* =========================================================
+   RIGHT ICON
+========================================================= */
 
-.shared-dropdown-arrow {
+.shared-dropdown-icon {
+  position:absolute;
+
+  top:50%;
+  right:10px;
+
+  width:12px;
+  height:12px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:
+    rgba(255,255,255,0.25);
+
+  transform:
+    translateY(-50%);
+
+  cursor:pointer;
+
+  pointer-events:auto;
+}
+
+
+.shared-dropdown-icon svg {
+  display:block;
+
   width:12px;
   height:12px;
 
   flex:none;
 
-  color:#8f9bac;
-
-  transition:
-    transform .2s ease,
-    color .2s ease;
-}
-
-
-.shared-dropdown.open
-.shared-dropdown-arrow {
-  transform:
-    rotate(180deg);
-
-  color:#ffffff;
+  fill:currentColor;
 }
 
 
 /* =========================================================
-   PANEL
+   DROPDOWN PANEL
 ========================================================= */
 
 .shared-dropdown-panel {
@@ -444,8 +470,6 @@
 
   min-width:
     max(100%, 120px);
-
-  max-height:260px;
 
   display:none;
 
@@ -472,65 +496,6 @@
 
 
 /* =========================================================
-   SEARCH
-========================================================= */
-
-.shared-dropdown-search-wrap {
-  padding:6px;
-
-  border-bottom:
-    1px solid
-    var(--line, #2c3440);
-}
-
-
-.shared-dropdown-search {
-  width:100%;
-  height:30px;
-
-  padding:0 9px;
-
-  border:
-    1px solid
-    var(--input-line, #424242);
-
-  border-radius:5px;
-
-  color:#ffffff;
-
-  background:
-    var(--input, #101010);
-
-  outline:none;
-
-  font-family:inherit;
-  font-size:13px;
-
-  caret-color:#ffffff;
-
-  transition:
-    border-color .2s ease;
-}
-
-
-.shared-dropdown-search::placeholder {
-  color:#66758a;
-}
-
-
-.shared-dropdown-search:hover {
-  border-color:
-    var(--input-line-hover, #3c89e8);
-}
-
-
-.shared-dropdown-search:focus {
-  border-color:
-    var(--input-line-focus, #1668dc);
-}
-
-
-/* =========================================================
    OPTIONS
 ========================================================= */
 
@@ -542,6 +507,12 @@
   padding:4px;
 
   overscroll-behavior:contain;
+
+  scrollbar-width:thin;
+
+  scrollbar-color:
+    rgba(143,155,172,.30)
+    transparent;
 }
 
 
@@ -554,7 +525,7 @@
 
   padding:6px 9px;
 
-  border:none;
+  border:0;
   border-radius:5px;
 
   color:
@@ -566,6 +537,7 @@
 
   font-family:inherit;
   font-size:14px;
+  font-weight:400;
 
   text-align:left;
 
@@ -602,7 +574,9 @@
 }
 
 
-/* NO RESULT */
+/* =========================================================
+   EMPTY SEARCH RESULT
+========================================================= */
 
 .shared-dropdown-empty {
   padding:15px 10px;
@@ -619,15 +593,6 @@
 /* =========================================================
    SCROLLBAR
 ========================================================= */
-
-.shared-dropdown-options {
-  scrollbar-width:thin;
-
-  scrollbar-color:
-    rgba(143,155,172,.30)
-    transparent;
-}
-
 
 .shared-dropdown-options::-webkit-scrollbar {
   width:6px;
@@ -657,10 +622,18 @@
    DISABLED
 ========================================================= */
 
-.shared-dropdown.disabled
-.shared-dropdown-trigger,
-.shared-dropdown-trigger:disabled {
+.shared-dropdown.disabled {
   opacity:.45;
+}
 
+
+.shared-dropdown.disabled
+.shared-dropdown-input {
+  cursor:not-allowed;
+}
+
+
+.shared-dropdown.disabled
+.shared-dropdown-icon {
   cursor:not-allowed;
 }

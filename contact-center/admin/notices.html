@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Manage Notices</title>
 <link rel="stylesheet" href="./admin.css">
+<link rel="stylesheet" href="./shared-ui.css">
 <link rel="stylesheet" href="../notice-shared.css">
 </head>
 
@@ -135,17 +136,21 @@ Add Notice
         Pinned
       </label>
 
-      <select id="pinned">
+<select
+  id="pinned"
+  data-shared-dropdown
+  data-placeholder="Select pinned"
+>
 
-        <option value="false">
-          Normal
-        </option>
+  <option value="false">
+    Normal
+  </option>
 
-        <option value="true">
-          📌 PIN NOTICE
-        </option>
+  <option value="true">
+    📌 PIN NOTICE
+  </option>
 
-      </select>
+</select>
 
     </div>
 
@@ -352,7 +357,7 @@ Add Notice
 
 </main>
 
-
+<script src="./shared-ui.js"></script>
 <script type="module">
 
 import {
@@ -375,7 +380,7 @@ import {
 requireAdmin();
 
 setupLogout();
-
+initSharedDropdowns();
 
 const form =
   document
@@ -867,7 +872,18 @@ function resetForm() {
     )
     .value =
     "false";
-
+document
+  .getElementById(
+    "pinned"
+  )
+  .dispatchEvent(
+    new Event(
+      "change",
+      {
+        bubbles:true
+      }
+    )
+  );
 
   document
     .getElementById(
@@ -1007,7 +1023,17 @@ updateNoticeActiveText();
       item.pinned === true
     );
 
-
+document
+  .getElementById("pinned")
+  .dispatchEvent(
+    new Event(
+      "change",
+      {
+        bubbles:true
+      }
+    )
+  );
+  
   document
     .getElementById(
       "formTitle"

@@ -1072,7 +1072,6 @@ trigger.addEventListener(
     isHovering =
       true;
 
-
     updateIcon();
 
   }
@@ -1086,8 +1085,33 @@ trigger.addEventListener(
     isHovering =
       false;
 
-
     updateIcon();
+
+  }
+);
+
+
+/*
+  Input already contains selected text.
+  Do not automatically open dropdown
+  just because hover state changed.
+*/
+
+input.addEventListener(
+  "mousemove",
+  () => {
+
+    if (
+      !wrapper.classList.contains("open") &&
+      select.value !== ""
+    ) {
+
+      isHovering =
+        true;
+
+      updateIcon();
+
+    }
 
   }
 );
@@ -1220,17 +1244,18 @@ icon.addEventListener(
        SELECT CHANGE
     ===================================================== */
 
-    select.addEventListener(
-      "change",
-      () => {
+select.addEventListener(
+  "change",
+  () => {
 
-        updateValue();
+    updateValue();
 
-        renderOptions();
+    renderOptions();
 
-      }
-    );
+    updateIcon();
 
+  }
+);
 
     /* =====================================================
        DISABLED
@@ -1333,11 +1358,13 @@ icon.addEventListener(
       api;
 
 
-    updateValue();
+updateValue();
 
-    updateDisabled();
+updateDisabled();
 
-    renderOptions();
+renderOptions();
+
+updateIcon();
 
 
     return api;

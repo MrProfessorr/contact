@@ -1129,29 +1129,17 @@ function renderCustomerNavigation(
               href="${safe(item.url || "#")}"
             >
 
-              <span class="customer-nav-icon">
-                ${navigationIconHtml(item)}
-              </span>
-${
-  item.footerTextImageUrl
-    ? `
-      <span class="customer-footer-text-image">
-        <img
-          src="${safe(item.footerTextImageUrl)}"
-          alt="${safe(item.name || "")}"
-        >
-      </span>
-    `
-    : `
-      <span class="customer-nav-label">
-        ${safe(item.name)}
-      </span>
-    `
-}
+<span class="customer-nav-icon">
+  ${navigationIconHtml(item)}
+</span>
 
-              <span class="customer-sidebar-arrow">
-                ›
-              </span>
+<span class="customer-nav-label">
+  ${safe(item.name)}
+</span>
+
+<span class="customer-sidebar-arrow">
+  ›
+</span>
 
             </a>
           `
@@ -1183,13 +1171,26 @@ ${
               href="${safe(item.url || "#")}"
             >
 
-              <span class="customer-nav-icon">
-                ${navigationIconHtml(item)}
-              </span>
+<span class="customer-nav-icon">
+  ${navigationIconHtml(item)}
+</span>
 
-              <span class="customer-nav-label">
-                ${safe(item.name)}
-              </span>
+${
+  item.footerTextImageUrl
+    ? `
+      <span class="customer-footer-text-image">
+        <img
+          src="${safe(item.footerTextImageUrl)}"
+          alt="${safe(item.name || "")}"
+        >
+      </span>
+    `
+    : `
+      <span class="customer-nav-label">
+        ${safe(item.name)}
+      </span>
+    `
+}
 
             </a>
           `

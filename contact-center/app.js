@@ -908,7 +908,9 @@ function safe(value = "") {
    CUSTOMER INTERNAL PAGE LOADER
 ========================================================= */
 
-function showCustomerHome() {
+function showCustomerHome(
+  updateHistory = true
+) {
 
   if (customerHomeView) {
     customerHomeView.hidden =
@@ -928,13 +930,39 @@ function showCustomerHome() {
   currentCustomerTabUrl =
     "home";
 
+
+  /*
+    Tukar URL kembali ke
+    /contact/contact-center/
+  */
+
+  if (updateHistory) {
+
+    const homeUrl =
+      new URL(
+        "./",
+        document.baseURI
+      );
+
+    window.history.pushState(
+      {
+        customerPage: "home"
+      },
+      "",
+      homeUrl.pathname
+    );
+
+  }
+
+
   updateCustomerActiveTab();
 
 }
 
 
 async function loadCustomerInternalPage(
-  url
+  url,
+  updateHistory = true
 ) {
 
   const value =
@@ -1093,11 +1121,44 @@ async function loadCustomerInternalPage(
       bodyClone.innerHTML;
 
 
-    currentCustomerTabUrl =
-      value;
+currentCustomerTabUrl =
+  value;
 
 
-    updateCustomerActiveTab();
+if (updateHistory) {
+
+  const pageUrl =
+    new URL(
+      value,
+      document.baseURI
+    );
+
+
+  let cleanPath =
+    pageUrl.pathname;
+
+
+  cleanPath =
+    cleanPath.replace(
+      /\.html$/i,
+      ""
+    );
+
+
+  window.history.pushState(
+    {
+      customerPage: value
+    },
+    "",
+    cleanPath +
+    pageUrl.search +
+    pageUrl.hash
+  );
+
+}
+
+
+updateCustomerActiveTab();
 
 
     /*
@@ -1190,7 +1251,46 @@ async function loadCustomerInternalPage(
 
 }
 
+/* =========================================================
+   BROWSER BACK / FORWARD
+========================================================= */
 
+window.addEventListener(
+  "popstate",
+  event => {
+
+    const page =
+      event.state?.customerPage;
+
+
+    /*
+      HOME
+    */
+
+    if (
+      !page ||
+      page === "home"
+    ) {
+
+      showCustomerHome(
+        false
+      );
+
+      return;
+    }
+
+
+    /*
+      INTERNAL PAGE
+    */
+
+    loadCustomerInternalPage(
+      page,
+      false
+    );
+
+  }
+);
 /* =========================================================
    ACTIVE NAV TAB
 ========================================================= */

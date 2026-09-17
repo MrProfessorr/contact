@@ -1132,10 +1132,22 @@ function renderCustomerNavigation(
               <span class="customer-nav-icon">
                 ${navigationIconHtml(item)}
               </span>
-
-              <span class="customer-nav-label">
-                ${safe(item.name)}
-              </span>
+${
+  item.footerTextImageUrl
+    ? `
+      <span class="customer-footer-text-image">
+        <img
+          src="${safe(item.footerTextImageUrl)}"
+          alt="${safe(item.name || "")}"
+        >
+      </span>
+    `
+    : `
+      <span class="customer-nav-label">
+        ${safe(item.name)}
+      </span>
+    `
+}
 
               <span class="customer-sidebar-arrow">
                 ›

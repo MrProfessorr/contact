@@ -3255,13 +3255,9 @@ body.welcome-popup-open {
 
   width:230px;
   height:100%;
-  padding: 8px 16px;
-
   overflow-y:auto;
-
   background:
     #171717;
-
   border-right:
     1px solid
     rgba(255,255,255,.08);
@@ -3292,22 +3288,13 @@ body.welcome-popup-open {
 
 .customer-sidebar-tab {
   min-height:52px;
-
   display:flex;
   align-items:center;
-
   gap:13px;
-
-  padding:
-    8px 18px;
-
+  padding:8px 16px;
   color:#ffffff;
-
   text-decoration:none;
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.045);
+  border-bottom:1px solidrgba(255,255,255,.045);
 }
 
 
@@ -3395,10 +3382,6 @@ body.welcome-popup-open {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-
-  border-top:
-    1px solid rgba(248,221,118,.28);
-
   box-shadow:
     0 -8px 30px rgba(0,0,0,.32);
 }

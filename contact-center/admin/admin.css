@@ -8602,3 +8602,178 @@ button.active {
   }
 
 }
+/* =========================================================
+   NAVIGATION TABS ADMIN
+========================================================= */
+
+.tabs-admin-layout {
+  display:grid;
+  grid-template-columns:
+    450px minmax(0,1fr);
+  gap:18px;
+  align-items:start;
+}
+
+
+.tabs-settings-card {
+  margin-bottom:18px;
+}
+
+
+.tabs-switch-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:14px;
+}
+
+
+.tabs-form-actions {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:18px;
+}
+
+
+.tabs-icon-preview-wrap {
+  margin-bottom:8px;
+}
+
+
+.tabs-icon-preview {
+  width:48px;
+  height:48px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:10px;
+
+  background:
+    var(--panel2);
+
+  font-size:25px;
+}
+
+
+.tabs-icon-preview img,
+.tabs-preview-image {
+  width:100%;
+  height:100%;
+
+  display:block;
+
+  object-fit:contain;
+}
+
+
+.tabs-admin-list {
+  display:grid;
+  gap:10px;
+}
+
+
+.tabs-admin-item {
+  padding:12px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:10px;
+
+  background:
+    var(--panel2);
+}
+
+
+.tabs-admin-item-main {
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+
+.tabs-admin-item-icon {
+  flex:0 0 38px;
+
+  width:38px;
+  height:38px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden;
+
+  border-radius:8px;
+
+  background:
+    rgba(255,255,255,.04);
+
+  font-size:21px;
+}
+
+
+.tabs-admin-item-icon img {
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+
+.tabs-admin-item-info {
+  min-width:0;
+  flex:1;
+}
+
+
+.tabs-admin-item-info strong {
+  display:block;
+
+  color:
+    var(--text);
+
+  font-size:13px;
+}
+
+
+.tabs-admin-item-info small {
+  display:block;
+
+  margin:
+    4px 0 7px;
+
+  color:
+    var(--muted);
+
+  font-size:10px;
+}
+
+
+.tabs-admin-item-actions {
+  display:flex;
+  flex-wrap:wrap;
+
+  gap:7px;
+
+  margin-top:11px;
+}
+
+
+@media(max-width:900px) {
+
+  .tabs-admin-layout {
+    grid-template-columns:1fr;
+  }
+
+}

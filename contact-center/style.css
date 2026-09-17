@@ -3367,35 +3367,35 @@ body.welcome-popup-open {
 ========================================================= */
 
 .customer-bottom-nav {
-  position:fixed;
+  position: fixed;
 
-  left:50%;
-  bottom:0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
-  z-index:500;
+  z-index: 500;
 
-  width:
-    min(100%,720px);
+  width: 100%;
+  max-width: 100%;
+  height: 60px;
+  min-height: 60px;
 
-  min-height:62px;
+  display: none;
+  align-items: stretch;
+  justify-content: center;
 
-  display:none;
+  background-image:
+    url("https://api.5g88.homes/media/Untitled_design_Hjq8KRJ_Y6ldTH5.png");
 
-  align-items:stretch;
-
-  transform:
-    translateX(-50%);
-
-  background:
-    #001522;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 
   border-top:
-    1px solid
-    rgba(248,221,118,.28);
+    1px solid rgba(248,221,118,.28);
 
   box-shadow:
-    0 -8px 30px
-    rgba(0,0,0,.32);
+    0 -8px 30px rgba(0,0,0,.32);
 }
 
 
@@ -3405,25 +3405,28 @@ body.welcome-popup-open {
 
 
 .customer-bottom-tab {
-  min-width:0;
+  min-width: 0;
+  height: 60px;
 
-  flex:
-    1 1 0;
+  flex: 1 1 0;
 
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
 
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
 
-  gap:3px;
+  gap: 3px;
+  padding: 5px 4px;
 
-  padding:
-    7px 3px;
+  color: #ffffff;
+  text-decoration: none;
 
-  color:#ffc34f;
+  background: transparent;
 
-  text-decoration:none;
+  transition:
+    background .18s ease,
+    transform .18s ease;
 }
 
 

@@ -2264,6 +2264,7 @@ color:
   cursor: pointer;
   font-family: inherit;
   outline: none;
+  margin-left:auto;
 }
 
 .notice-unread-badge {

@@ -1133,26 +1133,30 @@ if (updateHistory) {
       document.baseURI
     );
 
+  const fileName =
+    pageUrl.pathname
+      .split("/")
+      .pop()
+      .replace(/\.html$/i, "");
 
-  let cleanPath =
-    pageUrl.pathname;
-
-
-  cleanPath =
-    cleanPath.replace(
-      /\.html$/i,
-      ""
+  const shellUrl =
+    new URL(
+      "./",
+      document.baseURI
     );
 
+  shellUrl.searchParams.set(
+    "page",
+    fileName
+  );
 
   window.history.pushState(
     {
       customerPage: value
     },
     "",
-    cleanPath +
-    pageUrl.search +
-    pageUrl.hash
+    shellUrl.pathname +
+    shellUrl.search
   );
 
 }
@@ -1723,14 +1727,81 @@ onValue(
       snapshot.val() || {};
 
 
-    renderCustomerNavigation(
-      data
-    );
+renderCustomerNavigation(
+  data
+);
 
 
-    markReady(
-      "navigation"
+/*
+  OPEN PAGE FROM URL
+  Example:
+  ?page=term
+*/
+
+const requestedPage =
+  new URLSearchParams(
+    window.location.search
+  ).get("page");
+
+
+if (requestedPage) {
+
+  const tabs =
+    Object.values(
+      data.tabs || {}
     );
+
+  const matchedTab =
+    tabs.find(item => {
+
+      const tabUrl =
+        String(
+          item.url || ""
+        );
+
+      try {
+
+        const parsed =
+          new URL(
+            tabUrl,
+            document.baseURI
+          );
+
+        const fileName =
+          parsed.pathname
+            .split("/")
+            .pop()
+            .replace(/\.html$/i, "");
+
+        return (
+          fileName ===
+          requestedPage
+        );
+
+      } catch {
+
+        return false;
+
+      }
+
+    });
+
+
+  if (matchedTab?.url) {
+
+    loadCustomerInternalPage(
+      matchedTab.url,
+      false
+    );
+
+  }
+
+}
+
+
+markReady(
+  "navigation"
+);
 
   },
 

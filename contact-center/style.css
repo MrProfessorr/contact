@@ -3167,3 +3167,324 @@ body.welcome-popup-open {
   }
 
 }
+/* =========================================================
+   CUSTOMER DYNAMIC NAVIGATION
+========================================================= */
+
+.customer-sidebar-open {
+  width:40px;
+  height:40px;
+
+  flex:0 0 40px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:0;
+
+  color:#f8dd76;
+  background:transparent;
+
+  cursor:pointer;
+
+  font-size:27px;
+  line-height:1;
+}
+
+
+.customer-sidebar-open-image {
+  display:block;
+
+  width:28px;
+  height:28px;
+
+  object-fit:contain;
+}
+
+
+.customer-sidebar-fallback-icon {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+
+/* BACKDROP */
+
+.customer-sidebar-backdrop {
+  position:fixed;
+  inset:0;
+
+  z-index:998;
+
+  background:
+    rgba(0,0,0,.58);
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:
+    opacity .22s ease,
+    visibility .22s ease;
+}
+
+
+.customer-sidebar-backdrop.show {
+  opacity:1;
+  visibility:visible;
+}
+
+
+/* SIDEBAR */
+
+.customer-nav-sidebar {
+  position:fixed;
+
+  top:0;
+  left:0;
+  bottom:0;
+
+  z-index:999;
+
+  width:
+    min(300px,82vw);
+
+  padding:
+    82px 0 20px;
+
+  overflow-y:auto;
+
+  background:
+    #171717;
+
+  border-right:
+    1px solid
+    rgba(255,255,255,.08);
+
+  transform:
+    translateX(-100%);
+
+  transition:
+    transform .24s ease;
+
+  box-shadow:
+    18px 0 40px
+    rgba(0,0,0,.38);
+}
+
+
+.customer-nav-sidebar.open {
+  transform:
+    translateX(0);
+}
+
+
+.customer-sidebar-tabs {
+  display:flex;
+  flex-direction:column;
+}
+
+
+.customer-sidebar-tab {
+  min-height:52px;
+
+  display:flex;
+  align-items:center;
+
+  gap:13px;
+
+  padding:
+    8px 18px;
+
+  color:#ffffff;
+
+  text-decoration:none;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.045);
+}
+
+
+.customer-sidebar-tab:hover {
+  background:
+    rgba(255,255,255,.055);
+}
+
+
+.customer-sidebar-tab
+.customer-nav-icon {
+  width:28px;
+  height:28px;
+
+  flex:0 0 28px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#ffc34f;
+
+  font-size:21px;
+}
+
+
+.customer-sidebar-tab
+.customer-nav-icon img {
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+}
+
+
+.customer-sidebar-tab
+.customer-nav-label {
+  min-width:0;
+
+  flex:1;
+
+  font-size:13px;
+  font-weight:600;
+}
+
+
+.customer-sidebar-arrow {
+  color:
+    rgba(255,255,255,.7);
+
+  font-size:22px;
+}
+
+
+/* =========================================================
+   BOTTOM NAVIGATION
+========================================================= */
+
+.customer-bottom-nav {
+  position:fixed;
+
+  left:50%;
+  bottom:0;
+
+  z-index:500;
+
+  width:
+    min(100%,720px);
+
+  min-height:62px;
+
+  display:none;
+
+  align-items:stretch;
+
+  transform:
+    translateX(-50%);
+
+  background:
+    #001522;
+
+  border-top:
+    1px solid
+    rgba(248,221,118,.28);
+
+  box-shadow:
+    0 -8px 30px
+    rgba(0,0,0,.32);
+}
+
+
+.customer-bottom-nav.show {
+  display:flex;
+}
+
+
+.customer-bottom-tab {
+  min-width:0;
+
+  flex:
+    1 1 0;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  gap:3px;
+
+  padding:
+    7px 3px;
+
+  color:#ffc34f;
+
+  text-decoration:none;
+}
+
+
+.customer-bottom-tab:hover {
+  background:
+    rgba(255,255,255,.045);
+}
+
+
+.customer-bottom-tab
+.customer-nav-icon {
+  width:25px;
+  height:25px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:21px;
+}
+
+
+.customer-bottom-tab
+.customer-nav-icon img {
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+}
+
+
+.customer-bottom-tab
+.customer-nav-label {
+  width:100%;
+
+  overflow:hidden;
+
+  color:#ffc34f;
+
+  font-size:9px;
+  font-weight:700;
+
+  text-align:center;
+
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+
+/* SPACE FOR FIXED BOTTOM NAV */
+
+body:has(
+  .customer-bottom-nav.show
+) {
+  padding-bottom:62px;
+}
+
+
+@media(max-width:550px) {
+
+  .customer-nav-sidebar {
+    width:
+      min(280px,86vw);
+  }
+
+}

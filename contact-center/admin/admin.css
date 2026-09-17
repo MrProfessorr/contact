@@ -8777,3 +8777,44 @@ button.active {
   }
 
 }
+/* =========================================================
+   FOOTER NAVIGATION BACKGROUND PREVIEW
+========================================================= */
+
+.tabs-footer-background-preview {
+  width: 100%;
+  height: 70px;
+
+  margin-bottom: 10px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.12);
+
+  border-radius: 8px;
+
+  background-color: #171717;
+  background-image: none;
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  overflow: hidden;
+}
+.tabs-footer-color-input {
+  width: 100%;
+  height: 42px;
+
+  padding: 3px;
+
+  border:
+    1px solid
+    var(--input-line);
+
+  border-radius: 8px;
+
+  background: var(--input);
+
+  cursor: pointer;
+}

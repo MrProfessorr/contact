@@ -232,6 +232,26 @@ const customerBottomNav =
   document.getElementById(
     "customerBottomNav"
   );
+const customerPageContainer =
+  document.getElementById(
+    "customerPageContainer"
+  );
+
+
+const customerHomeView =
+  document.getElementById(
+    "customerHomeView"
+  );
+
+
+const customerDynamicView =
+  document.getElementById(
+    "customerDynamicView"
+  );
+
+
+let currentCustomerTabUrl =
+  "home";
 /* =========================================================
    IMAGE ZOOM STATE
 ========================================================= */
@@ -884,7 +904,320 @@ function safe(value = "") {
 /* =========================================================
    CUSTOMER NAVIGATION
 ========================================================= */
+/* =========================================================
+   CUSTOMER INTERNAL PAGE LOADER
+========================================================= */
 
+function showCustomerHome() {
+
+  if (customerHomeView) {
+    customerHomeView.hidden =
+      false;
+  }
+
+  if (customerDynamicView) {
+
+    customerDynamicView.hidden =
+      true;
+
+    customerDynamicView.innerHTML =
+      "";
+
+  }
+
+  currentCustomerTabUrl =
+    "home";
+
+  updateCustomerActiveTab();
+
+}
+
+
+async function loadCustomerInternalPage(
+  url
+) {
+
+  const value =
+    String(
+      url || ""
+    ).trim();
+
+
+  /*
+    HOME
+  */
+
+  if (
+    !value ||
+    value === "#" ||
+    value === "home" ||
+    value === "./" ||
+    value === "./index.html" ||
+    value === "index.html"
+  ) {
+
+    showCustomerHome();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+    return;
+  }
+
+
+  if (!customerDynamicView) {
+    return;
+  }
+
+
+  try {
+
+    /*
+      HOME disembunyikan,
+      bukan dibuang.
+    */
+
+    if (customerHomeView) {
+
+      customerHomeView.hidden =
+        true;
+
+    }
+
+
+    customerDynamicView.hidden =
+      false;
+
+
+    customerDynamicView.innerHTML = `
+      <div class="customer-tab-loading">
+        Loading...
+      </div>
+    `;
+
+
+    const response =
+      await fetch(
+        value,
+        {
+          cache: "no-store"
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+
+    }
+
+
+    const html =
+      await response.text();
+
+
+    const parser =
+      new DOMParser();
+
+
+    const doc =
+      parser.parseFromString(
+        html,
+        "text/html"
+      );
+
+
+    /*
+      Ambil content BODY sahaja.
+      <head>, browser header dll
+      tidak dimasukkan.
+    */
+
+    const body =
+      doc.body;
+
+
+    if (!body) {
+
+      throw new Error(
+        "Page body not found."
+      );
+
+    }
+
+
+    /*
+      Masukkan STYLE daripada
+      page seperti term.html.
+    */
+
+    const styles =
+      Array.from(
+        doc.querySelectorAll(
+          "style"
+        )
+      )
+        .map(
+          style =>
+            style.outerHTML
+        )
+        .join("\n");
+
+
+    /*
+      Jangan inject SCRIPT dengan
+      innerHTML kerana script tidak
+      execute secara automatik.
+    */
+
+    const bodyClone =
+      body.cloneNode(true);
+
+
+    bodyClone
+      .querySelectorAll(
+        "script"
+      )
+      .forEach(
+        script =>
+          script.remove()
+      );
+
+
+    customerDynamicView.innerHTML =
+      styles +
+      bodyClone.innerHTML;
+
+
+    currentCustomerTabUrl =
+      value;
+
+
+    updateCustomerActiveTab();
+
+
+    /*
+      Jalankan script daripada
+      halaman dynamic.
+    */
+
+    const scripts =
+      Array.from(
+        doc.querySelectorAll(
+          "script"
+        )
+      );
+
+
+    scripts.forEach(
+      oldScript => {
+
+        const newScript =
+          document.createElement(
+            "script"
+          );
+
+
+        Array.from(
+          oldScript.attributes
+        )
+          .forEach(
+            attr => {
+
+              newScript.setAttribute(
+                attr.name,
+                attr.value
+              );
+
+            }
+          );
+
+
+        if (!oldScript.src) {
+
+          newScript.textContent =
+            oldScript.textContent;
+
+        }
+
+
+        customerDynamicView
+          .appendChild(
+            newScript
+          );
+
+      }
+    );
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }
+  catch (error) {
+
+    console.error(
+      "Customer internal page error:",
+      error
+    );
+
+
+    if (customerHomeView) {
+
+      customerHomeView.hidden =
+        true;
+
+    }
+
+
+    customerDynamicView.hidden =
+      false;
+
+
+    customerDynamicView.innerHTML = `
+      <div class="customer-tab-error">
+        Failed to load page.
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   ACTIVE NAV TAB
+========================================================= */
+
+function updateCustomerActiveTab() {
+
+  document
+    .querySelectorAll(
+      ".customer-bottom-tab, .customer-sidebar-tab"
+    )
+    .forEach(
+      tab => {
+
+        const tabUrl =
+          tab.dataset.pageUrl ||
+          "";
+
+        tab.classList.toggle(
+          "active",
+          tabUrl ===
+            currentCustomerTabUrl
+        );
+
+      }
+    );
+
+}
 function navigationIconHtml(
   item = {}
 ) {
@@ -1139,10 +1472,11 @@ if (!sidebarIsEnabled) {
       sidebarTabs
         .map(
           item => `
-            <a
-              class="customer-sidebar-tab"
-              href="${safe(item.url || "#")}"
-            >
+<a
+  class="customer-sidebar-tab"
+  href="${safe(item.url || "#")}"
+  data-page-url="${safe(item.url || "#")}"
+>
 
 <span class="customer-nav-icon">
   ${navigationIconHtml(item)}
@@ -1160,7 +1494,31 @@ if (!sidebarIsEnabled) {
           `
         )
         .join("");
+    
+customerSidebarTabs
+  .querySelectorAll(
+    ".customer-sidebar-tab"
+  )
+  .forEach(
+    tab => {
 
+      tab.addEventListener(
+        "click",
+        event => {
+
+          event.preventDefault();
+
+          closeCustomerSidebar();
+
+          loadCustomerInternalPage(
+            tab.dataset.pageUrl
+          );
+
+        }
+      );
+
+    }
+  );
   }
 
 
@@ -1181,10 +1539,11 @@ if (!sidebarIsEnabled) {
       footerTabs
         .map(
           item => `
-            <a
-              class="customer-bottom-tab"
-              href="${safe(item.url || "#")}"
-            >
+<a
+  class="customer-bottom-tab"
+  href="${safe(item.url || "#")}"
+  data-page-url="${safe(item.url || "#")}"
+>
 
 <span class="customer-nav-icon">
   ${navigationIconHtml(item)}
@@ -1212,7 +1571,31 @@ ${
         )
         .join("");
 
+customerBottomNav
+  .querySelectorAll(
+    ".customer-bottom-tab"
+  )
+  .forEach(
+    tab => {
 
+      tab.addEventListener(
+        "click",
+        event => {
+
+          event.preventDefault();
+
+          loadCustomerInternalPage(
+            tab.dataset.pageUrl
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+updateCustomerActiveTab();
     customerBottomNav
       .classList
       .toggle(

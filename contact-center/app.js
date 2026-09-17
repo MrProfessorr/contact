@@ -1520,7 +1520,42 @@ function renderCustomerNavigation(
   const sidebar =
     data.sidebar || {};
 
+  /*
+    FOOTER NAVIGATION STYLE
+  */
 
+  const footerStyle =
+    data.footerStyle || {};
+
+
+  const footerBgColor =
+    footerStyle.backgroundColor ||
+    "#171717";
+
+
+  const footerBgImage =
+    String(
+      footerStyle.backgroundImageUrl ||
+      ""
+    ).trim();
+
+
+  document.documentElement
+    .style
+    .setProperty(
+      "--footer-nav-bg-color",
+      footerBgColor
+    );
+
+
+  document.documentElement
+    .style
+    .setProperty(
+      "--footer-nav-bg-image",
+      footerBgImage
+        ? `url("${footerBgImage}")`
+        : "none"
+    );
   /*
     SIDEBAR MAIN BUTTON
   */

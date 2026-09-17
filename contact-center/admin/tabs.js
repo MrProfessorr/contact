@@ -144,7 +144,44 @@ const saveSidebarBtn =
   document.getElementById(
     "saveSidebarBtn"
   );
+/*
+  FOOTER NAVIGATION BACKGROUND
+*/
 
+const footerNavColor =
+  document.getElementById(
+    "footerNavColor"
+  );
+
+
+const footerNavBackgroundFile =
+  document.getElementById(
+    "footerNavBackgroundFile"
+  );
+
+
+const footerNavBackgroundUploadBtn =
+  document.getElementById(
+    "footerNavBackgroundUploadBtn"
+  );
+
+
+const footerNavBackgroundRemoveBtn =
+  document.getElementById(
+    "footerNavBackgroundRemoveBtn"
+  );
+
+
+const footerNavBackgroundPreview =
+  document.getElementById(
+    "footerNavBackgroundPreview"
+  );
+
+
+const saveFooterNavBtn =
+  document.getElementById(
+    "saveFooterNavBtn"
+  );
 
 const editingTabId =
   document.getElementById(
@@ -258,11 +295,37 @@ let tabIconUrl =
   "";
 let footerTextImageUrl =
   "";
-
+let footerNavBackgroundUrl =
+  "";
 /* =========================================================
    HELPERS
 ========================================================= */
+function updateFooterNavBackgroundPreview() {
 
+  if (!footerNavBackgroundPreview) {
+    return;
+  }
+
+
+  footerNavBackgroundPreview.style.backgroundColor =
+    footerNavColor?.value ||
+    "#171717";
+
+
+  if (footerNavBackgroundUrl) {
+
+    footerNavBackgroundPreview.style.backgroundImage =
+      `url("${footerNavBackgroundUrl}")`;
+
+  }
+  else {
+
+    footerNavBackgroundPreview.style.backgroundImage =
+      "none";
+
+  }
+
+}
 function showMessage(
   message,
   isError = false
@@ -530,7 +593,162 @@ saveSidebarBtn
     }
   );
 
+/* =========================================================
+   FOOTER NAVIGATION BACKGROUND
+========================================================= */
 
+footerNavBackgroundUploadBtn
+  ?.addEventListener(
+    "click",
+    () => {
+
+      footerNavBackgroundFile.click();
+
+    }
+  );
+
+
+footerNavBackgroundFile
+  ?.addEventListener(
+    "change",
+    async () => {
+
+      const file =
+        footerNavBackgroundFile
+          .files?.[0];
+
+
+      if (!file) {
+        return;
+      }
+
+
+      try {
+
+        footerNavBackgroundUploadBtn.disabled =
+          true;
+
+        footerNavBackgroundUploadBtn.textContent =
+          "Uploading...";
+
+
+        footerNavBackgroundUrl =
+          await uploadNavigationImage(
+            file
+          );
+
+
+        updateFooterNavBackgroundPreview();
+
+      }
+      catch (error) {
+
+        console.error(error);
+
+        showMessage(
+          "Footer background upload failed.",
+          true
+        );
+
+      }
+      finally {
+
+        footerNavBackgroundUploadBtn.disabled =
+          false;
+
+        footerNavBackgroundUploadBtn.textContent =
+          "Upload Background";
+
+      }
+
+    }
+  );
+
+
+footerNavBackgroundRemoveBtn
+  ?.addEventListener(
+    "click",
+    () => {
+
+      footerNavBackgroundUrl =
+        "";
+
+      footerNavBackgroundFile.value =
+        "";
+
+      updateFooterNavBackgroundPreview();
+
+    }
+  );
+
+
+footerNavColor
+  ?.addEventListener(
+    "input",
+    updateFooterNavBackgroundPreview
+  );
+
+
+saveFooterNavBtn
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        saveFooterNavBtn.disabled =
+          true;
+
+        saveFooterNavBtn.textContent =
+          "Saving...";
+
+
+        await set(
+          ref(
+            db,
+            "navigation_settings/footerStyle"
+          ),
+          {
+            backgroundColor:
+              footerNavColor.value ||
+              "#171717",
+
+            backgroundImageUrl:
+              footerNavBackgroundUrl,
+
+            updatedAt:
+              Date.now()
+          }
+        );
+
+
+        showMessage(
+          "Footer background saved."
+        );
+
+      }
+      catch (error) {
+
+        console.error(error);
+
+        showMessage(
+          "Failed to save footer background.",
+          true
+        );
+
+      }
+      finally {
+
+        saveFooterNavBtn.disabled =
+          false;
+
+        saveFooterNavBtn.textContent =
+          "Save Footer Background";
+
+      }
+
+    }
+  );
 /* =========================================================
    TAB ICON
 ========================================================= */
@@ -1333,7 +1551,45 @@ cancelEditTabBtn
     resetTabForm
   );
 
+/* =========================================================
+   FIREBASE FOOTER NAVIGATION STYLE
+========================================================= */
 
+onValue(
+  ref(
+    db,
+    "navigation_settings/footerStyle"
+  ),
+
+  snapshot => {
+
+    const data =
+      snapshot.val() || {};
+
+
+    footerNavColor.value =
+      data.backgroundColor ||
+      "#171717";
+
+
+    footerNavBackgroundUrl =
+      data.backgroundImageUrl ||
+      "";
+
+
+    updateFooterNavBackgroundPreview();
+
+  },
+
+  error => {
+
+    console.error(
+      "Footer navigation style error:",
+      error
+    );
+
+  }
+);
 /* =========================================================
    FIREBASE SIDEBAR
 ========================================================= */

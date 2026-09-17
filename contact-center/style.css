@@ -3283,6 +3283,9 @@ body.welcome-popup-open {
 .customer-sidebar-tabs {
   display:flex;
   flex-direction:column;
+  padding:16px 0px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 
@@ -3294,7 +3297,7 @@ body.welcome-popup-open {
   padding:8px 16px;
   color:#ffffff;
   text-decoration:none;
-  border-bottom:1px solidrgba(255,255,255,.045);
+  border-bottom:1px solid rgba(255,255,255,.045);
 }
 
 

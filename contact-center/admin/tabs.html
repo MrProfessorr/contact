@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Navigation Tabs</title>
+
+  <link
+    rel="stylesheet"
+    href="./admin.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./shared-ui.css"
+  >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     ADMIN NAV
+===================================================== -->
+
+<header class="admin-nav">
+
+  <div class="admin-nav-inner">
+
+    <div class="admin-brand">
+
+      <h1>
+        Navigation Tabs
+      </h1>
+
+      <p id="adminEmail">
+        Admin
+      </p>
+
+    </div>
+
+
+    <div class="nav-links">
+
+      <a href="./index.html">
+        Dashboard
+      </a>
+
+      <a
+        href="./tabs.html"
+        class="active"
+      >
+        Tabs
+      </a>
+
+      <button
+        id="logoutBtn"
+        class="btn btn-red"
+        type="button"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<main class="admin-container">
+
+  <div class="page-title">
+
+    <div>
+
+      <h2>
+        Customer Navigation
+      </h2>
+
+      <p>
+        Manage customer sidebar and bottom navigation.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="tabs-admin-layout">
+
+
+    <!-- =================================================
+         LEFT SETTINGS
+    ================================================== -->
+
+    <div>
+
+
+      <!-- SIDEBAR SETTINGS -->
+
+      <section class="card tabs-settings-card">
+
+        <h3>
+          Sidebar Settings
+        </h3>
+
+
+        <div class="form-group">
+
+          <div class="tabs-switch-row">
+
+            <div>
+
+              <label>
+                Customer Sidebar
+              </label>
+
+              <div class="help-text">
+                Show or hide the sidebar menu.
+              </div>
+
+            </div>
+
+
+            <label class="switch">
+
+              <input
+                id="sidebarEnabled"
+                type="checkbox"
+                checked
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Sidebar Icon
+          </label>
+
+
+          <div class="tabs-icon-preview-wrap">
+
+            <div
+              id="sidebarIconPreview"
+              class="tabs-icon-preview"
+            >
+              ☰
+            </div>
+
+          </div>
+
+
+          <input
+            id="sidebarIconFile"
+            type="file"
+            accept="image/*"
+            hidden
+          >
+
+
+          <button
+            id="sidebarIconUploadBtn"
+            class="btn btn-dark"
+            type="button"
+          >
+            Upload Icon
+          </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Or Emoji
+          </label>
+
+          <input
+            id="sidebarIconEmoji"
+            class="shared-input"
+            type="text"
+            maxlength="10"
+            autocomplete="off"
+            placeholder="☰"
+          >
+
+        </div>
+
+
+        <button
+          id="saveSidebarBtn"
+          class="btn btn-primary full"
+          type="button"
+        >
+          Save Sidebar
+        </button>
+
+      </section>
+
+
+      <!-- ADD TAB -->
+
+      <section class="card tabs-settings-card">
+
+        <h3 id="tabFormTitle">
+          Add Tab
+        </h3>
+
+
+        <input
+          id="editingTabId"
+          type="hidden"
+        >
+
+
+        <div class="form-group">
+
+          <label for="tabName">
+            Tab Name
+          </label>
+
+          <input
+            id="tabName"
+            class="shared-input"
+            type="text"
+            autocomplete="off"
+            placeholder="Example: Home"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="tabUrl">
+            Link / URL
+          </label>
+
+          <input
+            id="tabUrl"
+            class="shared-input"
+            type="url"
+            autocomplete="off"
+            placeholder="https://..."
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Tab Icon
+          </label>
+
+
+          <div class="tabs-icon-preview-wrap">
+
+            <div
+              id="tabIconPreview"
+              class="tabs-icon-preview"
+            >
+              🔗
+            </div>
+
+          </div>
+
+
+          <input
+            id="tabIconFile"
+            type="file"
+            accept="image/*"
+            hidden
+          >
+
+
+          <button
+            id="tabIconUploadBtn"
+            class="btn btn-dark"
+            type="button"
+          >
+            Upload Icon
+          </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="tabIconEmoji">
+            Or Emoji
+          </label>
+
+          <input
+            id="tabIconEmoji"
+            class="shared-input"
+            type="text"
+            maxlength="10"
+            autocomplete="off"
+            placeholder="🏠"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="tabSort">
+            Sort Position
+          </label>
+
+          <input
+            id="tabSort"
+            class="shared-input"
+            type="number"
+            min="1"
+            step="1"
+            value="1"
+          >
+
+        </div>
+
+
+        <div class="tabs-switch-row">
+
+          <span>
+            Active
+          </span>
+
+          <label class="switch">
+
+            <input
+              id="tabEnabled"
+              type="checkbox"
+              checked
+            >
+
+            <span class="slider"></span>
+
+          </label>
+
+        </div>
+
+
+        <div class="tabs-switch-row">
+
+          <span>
+            Show In Sidebar
+          </span>
+
+          <label class="switch">
+
+            <input
+              id="tabSidebar"
+              type="checkbox"
+              checked
+            >
+
+            <span class="slider"></span>
+
+          </label>
+
+        </div>
+
+
+        <div class="tabs-switch-row">
+
+          <span>
+            Show In Footer
+          </span>
+
+          <label class="switch">
+
+            <input
+              id="tabFooter"
+              type="checkbox"
+              checked
+            >
+
+            <span class="slider"></span>
+
+          </label>
+
+        </div>
+
+
+        <div class="tabs-form-actions">
+
+          <button
+            id="saveTabBtn"
+            class="btn btn-primary"
+            type="button"
+          >
+            Save Tab
+          </button>
+
+
+          <button
+            id="cancelEditTabBtn"
+            class="btn btn-dark hidden"
+            type="button"
+          >
+            Cancel
+          </button>
+
+        </div>
+
+
+        <div
+          id="tabsSaveMessage"
+          class="help-text"
+        ></div>
+
+      </section>
+
+    </div>
+
+
+    <!-- =================================================
+         RIGHT LIST
+    ================================================== -->
+
+    <section class="card">
+
+      <h3>
+        Current Tabs
+      </h3>
+
+      <div
+        id="tabsList"
+        class="tabs-admin-list"
+      >
+
+        <div class="help-text">
+          Loading tabs...
+        </div>
+
+      </div>
+
+    </section>
+
+
+  </div>
+
+</main>
+
+
+<script src="./shared-ui.js"></script>
+
+<script
+  type="module"
+  src="./tabs.js"
+></script>
+
+
+</body>
+</html>

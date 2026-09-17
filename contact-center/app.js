@@ -1021,12 +1021,27 @@ function renderCustomerNavigation(
     SIDEBAR MAIN BUTTON
   */
 
-  if (customerSidebarOpen) {
+const sidebarIsEnabled =
+  sidebar.enabled === true;
 
-    customerSidebarOpen.hidden =
-      sidebar.enabled === false;
 
-  }
+if (customerSidebarOpen) {
+
+  customerSidebarOpen.hidden =
+    !sidebarIsEnabled;
+
+  customerSidebarOpen.classList.toggle(
+    "navigation-hidden",
+    !sidebarIsEnabled
+  );
+
+}
+
+if (!sidebarIsEnabled) {
+
+  closeCustomerSidebar();
+
+}
 
 
   if (

@@ -252,6 +252,9 @@ const customerDynamicView =
 
 let currentCustomerTabUrl =
   "home";
+let customerPageRequestId = 0;
+let customerPageAbortController = null;
+
 /* =========================================================
    IMAGE ZOOM STATE
 ========================================================= */
@@ -911,7 +914,12 @@ function safe(value = "") {
 function showCustomerHome(
   updateHistory = true
 ) {
+  customerPageRequestId++;
 
+  if (customerPageAbortController) {
+    customerPageAbortController.abort();
+    customerPageAbortController = null;
+  }
   if (customerHomeView) {
     customerHomeView.hidden =
       false;
@@ -995,45 +1003,50 @@ async function loadCustomerInternalPage(
   }
 
 
-  if (!customerDynamicView) {
-    return;
-  }
+if (!customerDynamicView) {
+  return;
+}
 
 
-  try {
+/*
+  Batalkan navigation sebelumnya
+  kalau customer tekan tab cepat-cepat.
+*/
 
-    /*
-      HOME disembunyikan,
-      bukan dibuang.
-    */
+customerPageRequestId++;
 
-    if (customerHomeView) {
+const requestId =
+  customerPageRequestId;
 
-      customerHomeView.hidden =
-        true;
 
+if (customerPageAbortController) {
+  customerPageAbortController.abort();
+}
+
+
+customerPageAbortController =
+  new AbortController();
+
+
+const requestController =
+  customerPageAbortController;
+
+
+try {
+const response =
+  await fetch(
+    value,
+    {
+      cache: "no-store",
+      signal: requestController.signal
     }
-
-
-    customerDynamicView.hidden =
-      false;
-
-
-    customerDynamicView.innerHTML = `
-      <div class="customer-tab-loading">
-        Loading...
-      </div>
-    `;
-
-
-    const response =
-      await fetch(
-        value,
-        {
-          cache: "no-store"
-        }
-      );
-
+  );
+  
+if (
+  requestId !== customerPageRequestId
+) {
+  return;
+}
 
     if (!response.ok) {
 
@@ -1044,12 +1057,19 @@ async function loadCustomerInternalPage(
     }
 
 
-    const html =
-      await response.text();
+const html =
+  await response.text();
 
 
-    const parser =
-      new DOMParser();
+if (
+  requestId !== customerPageRequestId
+) {
+  return;
+}
+
+
+const parser =
+  new DOMParser();
 
 
     const doc =
@@ -1116,9 +1136,36 @@ async function loadCustomerInternalPage(
       );
 
 
-    customerDynamicView.innerHTML =
-      styles +
-      bodyClone.innerHTML;
+/*
+  Jangan render kalau user sudah
+  pindah ke tab lain.
+*/
+
+if (
+  requestId !== customerPageRequestId
+) {
+  return;
+}
+
+
+/*
+  PAGE BARU SUDAH SIAP.
+  Sekarang baru swap content.
+*/
+
+if (customerHomeView) {
+  customerHomeView.hidden =
+    true;
+}
+
+
+customerDynamicView.hidden =
+  false;
+
+
+customerDynamicView.innerHTML =
+  styles +
+  bodyClone.innerHTML;
 
 
 currentCustomerTabUrl =
@@ -1225,12 +1272,32 @@ updateCustomerActiveTab();
     });
 
   }
-  catch (error) {
+catch (error) {
 
-    console.error(
-      "Customer internal page error:",
-      error
-    );
+  /*
+    Abort bukan error.
+    Ini berlaku apabila user tekan
+    tab lain dengan cepat.
+  */
+
+  if (
+    error?.name === "AbortError"
+  ) {
+    return;
+  }
+
+
+  if (
+    requestId !== customerPageRequestId
+  ) {
+    return;
+  }
+
+
+  console.error(
+    "Customer internal page error:",
+    error
+  );
 
 
     if (customerHomeView) {

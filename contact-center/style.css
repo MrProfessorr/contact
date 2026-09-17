@@ -3525,3 +3525,49 @@ body:has(
 .customer-sidebar-open[hidden] {
   display: none !important;
 }
+/* =========================================================
+   CUSTOMER DYNAMIC TAB PAGES
+========================================================= */
+
+.customer-page-view[hidden] {
+  display: none !important;
+}
+
+
+#customerDynamicView {
+  width: 100%;
+  min-height: 300px;
+}
+
+
+.customer-tab-loading,
+.customer-tab-error {
+  width: 100%;
+  min-height: 300px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  color: #f8dd76;
+  font-size: 13px;
+  text-align: center;
+}
+
+
+/* ACTIVE FOOTER TAB */
+
+.customer-bottom-tab.active {
+  background:
+    rgba(255,255,255,.08);
+}
+
+
+/* ACTIVE SIDEBAR TAB */
+
+.customer-sidebar-tab.active {
+  background:
+    rgba(255,255,255,.08);
+}

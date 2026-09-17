@@ -853,3 +853,48 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   cursor:pointer;
 }
 
+/* =========================================================
+   SHARED INPUT - BROWSER AUTOFILL
+   Keep custom dark UI when Chrome autofills
+========================================================= */
+
+.shared-input:-webkit-autofill,
+.shared-input:-webkit-autofill:hover,
+.shared-input:-webkit-autofill:focus,
+.shared-input:-webkit-autofill:active {
+  -webkit-text-fill-color:
+    var(--text) !important;
+
+  -webkit-box-shadow:
+    0 0 0 1000px
+    var(--input) inset !important;
+
+  box-shadow:
+    0 0 0 1000px
+    var(--input) inset !important;
+
+  caret-color:
+    #ffffff !important;
+
+  border-color:
+    var(--input-line) !important;
+
+  transition:
+    background-color 9999s ease-out 0s;
+}
+
+
+/* AUTOFILL + HOVER */
+
+.shared-input:-webkit-autofill:hover {
+  border-color:
+    var(--input-line-hover) !important;
+}
+
+
+/* AUTOFILL + FOCUS */
+
+.shared-input:-webkit-autofill:focus {
+  border-color:
+    var(--input-line-focus) !important;
+}

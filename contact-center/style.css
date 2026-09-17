@@ -3382,12 +3382,27 @@ body.welcome-popup-open {
   align-items: stretch;
   justify-content: center;
 
-  background-image:
-    url("https://api.5g88.homes/media/Untitled_design_Hjq8KRJ_Y6ldTH5.png");
+  background-color:
+    var(
+      --footer-nav-bg-color,
+      #171717
+    );
 
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-image:
+    var(
+      --footer-nav-bg-image,
+      none
+    );
+
+  background-position:
+    center;
+
+  background-size:
+    cover;
+
+  background-repeat:
+    no-repeat;
+
   box-shadow:
     0 -8px 30px rgba(0,0,0,.32);
 }

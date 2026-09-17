@@ -3535,3 +3535,7 @@ body:has(
 .customer-sidebar-fallback-icon[hidden] {
   display: none !important;
 }
+.customer-sidebar-open.navigation-hidden,
+.customer-sidebar-open[hidden] {
+  display: none !important;
+}

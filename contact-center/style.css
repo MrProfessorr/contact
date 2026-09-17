@@ -3253,11 +3253,9 @@ body.welcome-popup-open {
 
   z-index:999;
 
-  width:
-    min(300px,82vw);
-
-  padding:
-    82px 0 20px;
+  width:230px;
+  height:100%;
+  padding: 8px 16px;
 
   overflow-y:auto;
 

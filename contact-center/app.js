@@ -93,11 +93,14 @@ const firebaseReady = {
   floating:
     false,
 
-  marquee:
-    false,
+marquee:
+  false,
 
-  blocked:
-    false
+navigation:
+  false,
+
+blocked:
+  false
 
 };
 
@@ -190,6 +193,44 @@ const imageModal =
 const modalImage =
   document.getElementById(
     "modalImage"
+  );
+/* =========================================================
+   CUSTOMER NAVIGATION DOM
+========================================================= */
+
+const customerSidebarOpen =
+  document.getElementById(
+    "customerSidebarOpen"
+  );
+
+const customerSidebarIcon =
+  document.getElementById(
+    "customerSidebarIcon"
+  );
+
+const customerSidebarFallbackIcon =
+  document.getElementById(
+    "customerSidebarFallbackIcon"
+  );
+
+const customerSidebar =
+  document.getElementById(
+    "customerSidebar"
+  );
+
+const customerSidebarBackdrop =
+  document.getElementById(
+    "customerSidebarBackdrop"
+  );
+
+const customerSidebarTabs =
+  document.getElementById(
+    "customerSidebarTabs"
+  );
+
+const customerBottomNav =
+  document.getElementById(
+    "customerBottomNav"
   );
 /* =========================================================
    IMAGE ZOOM STATE
@@ -840,7 +881,363 @@ function safe(value = "") {
     );
 
 }
+/* =========================================================
+   CUSTOMER NAVIGATION
+========================================================= */
 
+function navigationIconHtml(
+  item = {}
+) {
+
+  if (item.iconUrl) {
+
+    return `
+      <img
+        src="${safe(item.iconUrl)}"
+        alt=""
+      >
+    `;
+
+  }
+
+
+  return `
+    <span>
+      ${safe(
+        item.iconEmoji ||
+        "🔗"
+      )}
+    </span>
+  `;
+
+}
+
+
+function closeCustomerSidebar() {
+
+  customerSidebar
+    ?.classList
+    .remove(
+      "open"
+    );
+
+  customerSidebarBackdrop
+    ?.classList
+    .remove(
+      "show"
+    );
+
+  customerSidebar
+    ?.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+}
+
+
+function openCustomerSidebar() {
+
+  customerSidebar
+    ?.classList
+    .add(
+      "open"
+    );
+
+  customerSidebarBackdrop
+    ?.classList
+    .add(
+      "show"
+    );
+
+  customerSidebar
+    ?.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+}
+
+
+customerSidebarOpen
+  ?.addEventListener(
+    "click",
+    () => {
+
+      if (
+        customerSidebar
+          ?.classList
+          .contains(
+            "open"
+          )
+      ) {
+
+        closeCustomerSidebar();
+
+      }
+      else {
+
+        openCustomerSidebar();
+
+      }
+
+    }
+  );
+
+
+customerSidebarBackdrop
+  ?.addEventListener(
+    "click",
+    closeCustomerSidebar
+  );
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+
+      closeCustomerSidebar();
+
+    }
+
+  }
+);
+
+
+function renderCustomerNavigation(
+  data = {}
+) {
+
+  const sidebar =
+    data.sidebar || {};
+
+
+  /*
+    SIDEBAR MAIN BUTTON
+  */
+
+  if (customerSidebarOpen) {
+
+    customerSidebarOpen.hidden =
+      sidebar.enabled === false;
+
+  }
+
+
+  if (
+    sidebar.iconUrl &&
+    customerSidebarIcon
+  ) {
+
+    customerSidebarIcon.src =
+      sidebar.iconUrl;
+
+    customerSidebarIcon.hidden =
+      false;
+
+    if (
+      customerSidebarFallbackIcon
+    ) {
+
+      customerSidebarFallbackIcon.hidden =
+        true;
+
+    }
+
+  }
+  else {
+
+    if (
+      customerSidebarIcon
+    ) {
+
+      customerSidebarIcon.hidden =
+        true;
+
+      customerSidebarIcon.removeAttribute(
+        "src"
+      );
+
+    }
+
+
+    if (
+      customerSidebarFallbackIcon
+    ) {
+
+      customerSidebarFallbackIcon.hidden =
+        false;
+
+      customerSidebarFallbackIcon.textContent =
+        sidebar.iconEmoji ||
+        "☰";
+
+    }
+
+  }
+
+
+  /*
+    ACTIVE TABS
+  */
+
+  const tabs =
+    Object.entries(
+      data.tabs || {}
+    )
+      .map(
+        ([id, item]) => ({
+          id,
+          ...item
+        })
+      )
+      .filter(
+        item =>
+          item.enabled !== false
+      )
+      .sort(
+        (a, b) =>
+          Number(a.sort || 999) -
+          Number(b.sort || 999)
+      );
+
+
+  /*
+    SIDEBAR TABS
+  */
+
+  const sidebarTabs =
+    tabs.filter(
+      item =>
+        item.sidebar === true
+    );
+
+
+  if (customerSidebarTabs) {
+
+    customerSidebarTabs.innerHTML =
+      sidebarTabs
+        .map(
+          item => `
+            <a
+              class="customer-sidebar-tab"
+              href="${safe(item.url || "#")}"
+            >
+
+              <span class="customer-nav-icon">
+                ${navigationIconHtml(item)}
+              </span>
+
+              <span class="customer-nav-label">
+                ${safe(item.name)}
+              </span>
+
+              <span class="customer-sidebar-arrow">
+                ›
+              </span>
+
+            </a>
+          `
+        )
+        .join("");
+
+  }
+
+
+  /*
+    BOTTOM NAVIGATION
+  */
+
+  const footerTabs =
+    tabs.filter(
+      item =>
+        item.footer === true
+    );
+
+
+  if (customerBottomNav) {
+
+    customerBottomNav.innerHTML =
+      footerTabs
+        .map(
+          item => `
+            <a
+              class="customer-bottom-tab"
+              href="${safe(item.url || "#")}"
+            >
+
+              <span class="customer-nav-icon">
+                ${navigationIconHtml(item)}
+              </span>
+
+              <span class="customer-nav-label">
+                ${safe(item.name)}
+              </span>
+
+            </a>
+          `
+        )
+        .join("");
+
+
+    customerBottomNav
+      .classList
+      .toggle(
+        "show",
+        footerTabs.length > 0
+      );
+
+  }
+
+}
+
+
+/* FIREBASE NAVIGATION */
+
+onValue(
+
+  ref(
+    db,
+    "navigation_settings"
+  ),
+
+  snapshot => {
+
+    const data =
+      snapshot.val() || {};
+
+
+    renderCustomerNavigation(
+      data
+    );
+
+
+    markReady(
+      "navigation"
+    );
+
+  },
+
+  error => {
+
+    console.error(
+      "Navigation settings error:",
+      error
+    );
+
+
+    markReady(
+      "navigation"
+    );
+
+  }
+
+);
 /* =========================================================
    COPY CONTACT VALUE
 ========================================================= */

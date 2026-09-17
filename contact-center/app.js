@@ -704,7 +704,7 @@ function applySkinSettings(
 
     root.style.setProperty(
       "--skin-body-color",
-      "#0a0a0a"
+      "#171717"
     );
 
 
@@ -716,7 +716,7 @@ function applySkinSettings(
 
     root.style.setProperty(
       "--skin-footer-color",
-      "#0a0a0a"
+      "#171717"
     );
 
 

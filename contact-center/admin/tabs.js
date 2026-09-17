@@ -185,7 +185,25 @@ const tabIconPreview =
   document.getElementById(
     "tabIconPreview"
   );
+const footerTextImageFile =
+  document.getElementById(
+    "footerTextImageFile"
+  );
 
+const footerTextImageUploadBtn =
+  document.getElementById(
+    "footerTextImageUploadBtn"
+  );
+
+const footerTextImageRemoveBtn =
+  document.getElementById(
+    "footerTextImageRemoveBtn"
+  );
+
+const footerTextImagePreview =
+  document.getElementById(
+    "footerTextImagePreview"
+  );
 const tabSort =
   document.getElementById(
     "tabSort"
@@ -238,7 +256,8 @@ let sidebarIconUrl =
 
 let tabIconUrl =
   "";
-
+let footerTextImageUrl =
+  "";
 
 /* =========================================================
    HELPERS
@@ -335,7 +354,28 @@ function updateTabPreview() {
 
 }
 
+function updateFooterTextImagePreview() {
 
+  if (!footerTextImagePreview) {
+    return;
+  }
+
+  if (footerTextImageUrl) {
+
+    footerTextImagePreview.innerHTML = `
+      <img
+        src="${safe(footerTextImageUrl)}"
+        alt=""
+      >
+    `;
+
+    return;
+  }
+
+  footerTextImagePreview.textContent =
+    "No Image";
+
+}
 /* =========================================================
    SIDEBAR ICON
 ========================================================= */
@@ -584,7 +624,88 @@ tabIconEmoji
     }
   );
 
+/* =========================================================
+   FOOTER TEXT IMAGE
+========================================================= */
 
+footerTextImageUploadBtn
+  .addEventListener(
+    "click",
+    () => {
+
+      footerTextImageFile.click();
+
+    }
+  );
+
+
+footerTextImageFile
+  .addEventListener(
+    "change",
+    async () => {
+
+      const file =
+        footerTextImageFile.files?.[0];
+
+      if (!file) {
+        return;
+      }
+
+      try {
+
+        footerTextImageUploadBtn.disabled =
+          true;
+
+        footerTextImageUploadBtn.textContent =
+          "Uploading...";
+
+        footerTextImageUrl =
+          await uploadNavigationImage(
+            file
+          );
+
+        updateFooterTextImagePreview();
+
+      }
+      catch (error) {
+
+        console.error(error);
+
+        showMessage(
+          "Footer text image upload failed.",
+          true
+        );
+
+      }
+      finally {
+
+        footerTextImageUploadBtn.disabled =
+          false;
+
+        footerTextImageUploadBtn.textContent =
+          "Upload Text Image";
+
+      }
+
+    }
+  );
+
+
+footerTextImageRemoveBtn
+  .addEventListener(
+    "click",
+    () => {
+
+      footerTextImageUrl =
+        "";
+
+      footerTextImageFile.value =
+        "";
+
+      updateFooterTextImagePreview();
+
+    }
+  );
 /* =========================================================
    RESET FORM
 ========================================================= */
@@ -611,7 +732,13 @@ function resetTabForm() {
 
   tabIconUrl =
     "";
+footerTextImageUrl =
+  "";
 
+footerTextImageFile.value =
+  "";
+
+updateFooterTextImagePreview();
   tabSort.value =
     tabs.length + 1;
 
@@ -685,16 +812,19 @@ saveTabBtn
 
         url,
 
-        iconUrl:
-          tabIconUrl,
+iconUrl:
+  tabIconUrl,
 
-        iconEmoji:
-          tabIconEmoji
-            .value
-            .trim(),
+iconEmoji:
+  tabIconEmoji
+    .value
+    .trim(),
 
-        enabled:
-          tabEnabled.checked,
+footerTextImageUrl:
+  footerTextImageUrl,
+
+enabled:
+  tabEnabled.checked,
 
         sidebar:
           tabSidebar.checked,
@@ -828,6 +958,10 @@ function editTab(id) {
 
   tabIconUrl =
     item.iconUrl || "";
+  footerTextImageUrl =
+  item.footerTextImageUrl || "";
+
+updateFooterTextImagePreview();
 
   tabSort.value =
     Number(

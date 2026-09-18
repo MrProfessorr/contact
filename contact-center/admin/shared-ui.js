@@ -1577,7 +1577,953 @@ function initSharedDropdowns(
 /* =======================================================
    ADMIN SIDEBAR NAVIGATION
 ======================================================= */
+/* =======================================================
+   ADMIN WORKSPACE TABS
+======================================================= */
 
+const ADMIN_WORKSPACE_KEY =
+  "adminWorkspaceTabs";
+
+
+const ADMIN_WORKSPACE_NAV_KEY =
+  "adminWorkspaceNavigation";
+
+
+const ADMIN_DEFAULT_TAB = {
+  file:"visitors.html",
+  name:"Visitors"
+};
+
+
+const ADMIN_TAB_REFRESH_ICON = `
+  <svg
+    viewBox="0 0 1024 1024"
+    aria-hidden="true"
+  >
+    <path
+      d="M909.1 209.3l-56.4 44.1C775.8 155.1 656.2 92 521.9 92 290 92 102.3 279.5 102 511.5 101.7 743.7 289.8 932 521.9 932c181.3 0 335.8-115 394.6-276.1 1.5-4.2-.7-8.9-4.9-10.3l-56.7-19.5a8 8 0 00-10.1 4.8c-1.8 5-3.8 10-5.9 14.9-17.3 41-42.1 77.8-73.7 109.4A344.77 344.77 0 01655.9 829c-42.3 17.9-87.4 27-133.8 27-46.5 0-91.5-9.1-133.8-27A341.5 341.5 0 01279 755.2a342.16 342.16 0 01-73.7-109.4c-17.9-42.4-27-87.4-27-133.9s9.1-91.5 27-133.9c17.3-41 42.1-77.8 73.7-109.4 31.6-31.6 68.4-56.4 109.3-73.8 42.3-17.9 87.4-27 133.8-27 46.5 0 91.5 9.1 133.8 27a341.5 341.5 0 01109.3 73.8c9.9 9.9 19.2 20.4 27.8 31.4l-60.2 47a8 8 0 003 14.1l175.6 43c5 1.2 9.9-2.6 9.9-7.7l.8-180.9c-.1-6.6-7.8-10.3-13-6.2z"
+      fill="currentColor"
+    />
+  </svg>
+`;
+
+
+const ADMIN_TAB_CLOSE_ICON = `
+  <svg
+    viewBox="0 0 1024 1024"
+    aria-hidden="true"
+  >
+    <path
+      d="M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z"
+      fill="currentColor"
+    />
+  </svg>
+`;
+
+
+function getAdminWorkspaceTabs() {
+
+  try {
+
+    const data =
+      JSON.parse(
+        sessionStorage.getItem(
+          ADMIN_WORKSPACE_KEY
+        ) || "[]"
+      );
+
+
+    return Array.isArray(data)
+      ? data
+      : [];
+
+  }
+  catch {
+
+    return [];
+
+  }
+
+}
+
+
+function saveAdminWorkspaceTabs(
+  tabs
+) {
+
+  sessionStorage.setItem(
+    ADMIN_WORKSPACE_KEY,
+    JSON.stringify(tabs)
+  );
+
+}
+
+
+function markAdminWorkspaceNavigation() {
+
+  sessionStorage.setItem(
+    ADMIN_WORKSPACE_NAV_KEY,
+    "1"
+  );
+
+}
+
+
+function addAdminWorkspaceTab(
+  tab
+) {
+
+  const tabs =
+    getAdminWorkspaceTabs();
+
+
+  const exists =
+    tabs.some(
+      item =>
+        item.file === tab.file
+    );
+
+
+  if (!exists) {
+
+    tabs.push({
+      file:tab.file,
+      name:tab.name
+    });
+
+  }
+
+
+  saveAdminWorkspaceTabs(
+    tabs
+  );
+
+
+  markAdminWorkspaceNavigation();
+
+}
+
+
+function initAdminWorkspaceTabs(
+  menuItems
+) {
+
+  const adminNav =
+    document.querySelector(
+      ".admin-nav"
+    );
+
+
+  if (
+    !adminNav ||
+    document.getElementById(
+      "adminWorkspaceTabs"
+    )
+  ) {
+    return;
+  }
+
+
+  const currentPage =
+    window.location.pathname
+      .split("/")
+      .pop() ||
+    "visitors.html";
+
+
+  const navigation =
+    sessionStorage.getItem(
+      ADMIN_WORKSPACE_NAV_KEY
+    ) === "1";
+
+
+  sessionStorage.removeItem(
+    ADMIN_WORKSPACE_NAV_KEY
+  );
+
+
+  let tabs =
+    getAdminWorkspaceTabs();
+
+
+  /*
+    FULL REFRESH:
+    RESET BACK TO VISITORS
+  */
+
+  if (!navigation) {
+
+    tabs = [
+      {
+        ...ADMIN_DEFAULT_TAB
+      }
+    ];
+
+    saveAdminWorkspaceTabs(
+      tabs
+    );
+
+  }
+
+
+  /*
+    NORMAL SIDEBAR/TAB NAVIGATION:
+    MAKE SURE CURRENT PAGE EXISTS
+  */
+
+  if (navigation) {
+
+    const currentItem =
+      menuItems.find(
+        item =>
+          item.file ===
+          currentPage
+      );
+
+
+    if (
+      currentItem &&
+      !tabs.some(
+        item =>
+          item.file ===
+          currentPage
+      )
+    ) {
+
+      tabs.push({
+        file:currentItem.file,
+        name:currentItem.name
+      });
+
+      saveAdminWorkspaceTabs(
+        tabs
+      );
+
+    }
+
+  }
+
+
+  const bar =
+    document.createElement(
+      "div"
+    );
+
+
+  bar.id =
+    "adminWorkspaceTabs";
+
+  bar.className =
+    "admin-workspace-tabs";
+
+
+  const list =
+    document.createElement(
+      "div"
+    );
+
+
+  list.className =
+    "admin-workspace-tabs-list";
+
+
+  bar.appendChild(
+    list
+  );
+
+
+  adminNav.insertAdjacentElement(
+    "afterend",
+    bar
+  );
+
+
+  function navigateToTab(
+    tab
+  ) {
+
+    markAdminWorkspaceNavigation();
+
+    window.location.href =
+      `./${tab.file}`;
+
+  }
+
+
+  function showNoData() {
+
+    document
+      .querySelectorAll(
+        "body > *"
+      )
+      .forEach(
+        element => {
+
+          if (
+            element ===
+              document.querySelector(
+                ".admin-nav"
+              ) ||
+            element === bar ||
+            element.id ===
+              "adminSidebar" ||
+            element.id ===
+              "adminSidebarBackdrop"
+          ) {
+            return;
+          }
+
+
+          element.style.display =
+            "none";
+
+        }
+      );
+
+
+    const empty =
+      document.createElement(
+        "div"
+      );
+
+
+    empty.className =
+      "admin-workspace-empty";
+
+    empty.id =
+      "adminWorkspaceEmpty";
+
+
+    empty.innerHTML =
+      createEmptyState(
+        "No data",
+        "large",
+        "center"
+      );
+
+
+    document.body.appendChild(
+      empty
+    );
+
+  }
+
+
+  function renderTabs() {
+
+    tabs =
+      getAdminWorkspaceTabs();
+
+
+    list.innerHTML =
+      "";
+
+
+    tabs.forEach(
+      tab => {
+
+        const element =
+          document.createElement(
+            "div"
+          );
+
+
+        element.className =
+          "admin-workspace-tab";
+
+
+        element.dataset.file =
+          tab.file;
+
+
+        if (
+          tab.file ===
+          currentPage
+        ) {
+
+          element.classList.add(
+            "active"
+          );
+
+        }
+
+
+        const name =
+          document.createElement(
+            "span"
+          );
+
+
+        name.className =
+          "admin-workspace-tab-name";
+
+        name.textContent =
+          tab.name;
+
+
+        const actions =
+          document.createElement(
+            "span"
+          );
+
+
+        actions.className =
+          "admin-workspace-tab-actions";
+
+
+        const refresh =
+          document.createElement(
+            "button"
+          );
+
+
+        refresh.type =
+          "button";
+
+        refresh.className =
+          "admin-workspace-tab-refresh";
+
+        refresh.title =
+          "Refresh";
+
+        refresh.innerHTML =
+          ADMIN_TAB_REFRESH_ICON;
+
+
+        const close =
+          document.createElement(
+            "button"
+          );
+
+
+        close.type =
+          "button";
+
+        close.className =
+          "admin-workspace-tab-close";
+
+        close.title =
+          "Close";
+
+        close.innerHTML =
+          ADMIN_TAB_CLOSE_ICON;
+
+
+        refresh.addEventListener(
+          "pointerdown",
+          event =>
+            event.stopPropagation()
+        );
+
+
+        close.addEventListener(
+          "pointerdown",
+          event =>
+            event.stopPropagation()
+        );
+
+
+        refresh.addEventListener(
+          "click",
+          event => {
+
+            event.stopPropagation();
+
+
+            if (
+              tab.file ===
+              currentPage
+            ) {
+
+              markAdminWorkspaceNavigation();
+
+              window.location.reload();
+
+              return;
+
+            }
+
+
+            navigateToTab(
+              tab
+            );
+
+          }
+        );
+
+
+        close.addEventListener(
+          "click",
+          event => {
+
+            event.stopPropagation();
+
+
+            const currentTabs =
+              getAdminWorkspaceTabs();
+
+
+            const index =
+              currentTabs.findIndex(
+                item =>
+                  item.file ===
+                  tab.file
+              );
+
+
+            if (
+              index === -1
+            ) {
+              return;
+            }
+
+
+            const wasActive =
+              tab.file ===
+              currentPage;
+
+
+            currentTabs.splice(
+              index,
+              1
+            );
+
+
+            saveAdminWorkspaceTabs(
+              currentTabs
+            );
+
+
+            if (!wasActive) {
+
+              tabs =
+                currentTabs;
+
+              renderTabs();
+
+              return;
+
+            }
+
+
+            if (
+              currentTabs.length === 0
+            ) {
+
+              tabs = [];
+
+              renderTabs();
+
+              showNoData();
+
+              return;
+
+            }
+
+
+            const nextTab =
+              currentTabs[
+                Math.min(
+                  index,
+                  currentTabs.length - 1
+                )
+              ];
+
+
+            navigateToTab(
+              nextTab
+            );
+
+          }
+        );
+
+
+        element.addEventListener(
+          "click",
+          event => {
+
+            if (
+              element.classList.contains(
+                "dragging"
+              )
+            ) {
+              return;
+            }
+
+
+            if (
+              tab.file !==
+              currentPage
+            ) {
+
+              navigateToTab(
+                tab
+              );
+
+            }
+
+          }
+        );
+
+
+        actions.appendChild(
+          refresh
+        );
+
+        actions.appendChild(
+          close
+        );
+
+
+        element.appendChild(
+          name
+        );
+
+        element.appendChild(
+          actions
+        );
+
+
+        list.appendChild(
+          element
+        );
+
+      }
+    );
+
+
+    initTabDrag();
+
+  }
+
+
+  function initTabDrag() {
+
+    const tabElements =
+      Array.from(
+        list.querySelectorAll(
+          ".admin-workspace-tab"
+        )
+      );
+
+
+    tabElements.forEach(
+      tabElement => {
+
+        tabElement.addEventListener(
+          "pointerdown",
+          event => {
+
+            if (
+              event.button !== 0 ||
+              event.target.closest(
+                ".admin-workspace-tab-refresh, .admin-workspace-tab-close"
+              )
+            ) {
+              return;
+            }
+
+
+            event.preventDefault();
+
+
+            const startX =
+              event.clientX;
+
+
+            const startRect =
+              tabElement
+                .getBoundingClientRect();
+
+
+            let dragging =
+              false;
+
+
+            let currentX =
+              startX;
+
+
+            tabElement.setPointerCapture(
+              event.pointerId
+            );
+
+
+            function move(
+              moveEvent
+            ) {
+
+              currentX =
+                moveEvent.clientX;
+
+
+              const deltaX =
+                currentX -
+                startX;
+
+
+              if (
+                !dragging &&
+                Math.abs(deltaX) <
+                  4
+              ) {
+                return;
+              }
+
+
+              if (!dragging) {
+
+                dragging =
+                  true;
+
+                tabElement
+                  .classList
+                  .add(
+                    "dragging"
+                  );
+
+                list.classList.add(
+                  "is-dragging"
+                );
+
+              }
+
+
+              tabElement.style.transform =
+                `translate3d(${deltaX}px,0,0)`;
+
+
+              const draggedCenter =
+                startRect.left +
+                deltaX +
+                startRect.width / 2;
+
+
+              const siblings =
+                Array.from(
+                  list.querySelectorAll(
+                    ".admin-workspace-tab:not(.dragging)"
+                  )
+                );
+
+
+              siblings.forEach(
+                sibling => {
+
+                  const rect =
+                    sibling
+                      .getBoundingClientRect();
+
+
+                  const center =
+                    rect.left +
+                    rect.width / 2;
+
+
+                  sibling.style.transform =
+                    "translate3d(0,0,0)";
+
+
+                  if (
+                    startRect.left <
+                      rect.left &&
+                    draggedCenter >
+                      center
+                  ) {
+
+                    sibling.style.transform =
+                      `translate3d(-${startRect.width}px,0,0)`;
+
+                  }
+
+
+                  if (
+                    startRect.left >
+                      rect.left &&
+                    draggedCenter <
+                      center
+                  ) {
+
+                    sibling.style.transform =
+                      `translate3d(${startRect.width}px,0,0)`;
+
+                  }
+
+                }
+              );
+
+          }
+
+
+            function end() {
+
+              tabElement.removeEventListener(
+                "pointermove",
+                move
+              );
+
+
+              tabElement.removeEventListener(
+                "pointerup",
+                end
+              );
+
+
+              tabElement.removeEventListener(
+                "pointercancel",
+                end
+              );
+
+
+              if (!dragging) {
+
+                tabElement.style.transform =
+                  "";
+
+                return;
+
+              }
+
+
+              const draggedRect =
+                tabElement
+                  .getBoundingClientRect();
+
+
+              const draggedCenter =
+                draggedRect.left +
+                draggedRect.width / 2;
+
+
+              const currentTabs =
+                getAdminWorkspaceTabs();
+
+
+              const oldIndex =
+                currentTabs.findIndex(
+                  item =>
+                    item.file ===
+                    tabElement.dataset.file
+                );
+
+
+              let newIndex =
+                0;
+
+
+              Array
+                .from(
+                  list.querySelectorAll(
+                    ".admin-workspace-tab:not(.dragging)"
+                  )
+                )
+                .forEach(
+                  sibling => {
+
+                    const rect =
+                      sibling
+                        .getBoundingClientRect();
+
+
+                    if (
+                      draggedCenter >
+                      rect.left +
+                      rect.width / 2
+                    ) {
+
+                      newIndex++;
+
+                    }
+
+                  }
+                );
+
+
+              if (
+                oldIndex !== -1
+              ) {
+
+                const [
+                  movedTab
+                ] =
+                  currentTabs.splice(
+                    oldIndex,
+                    1
+                  );
+
+
+                currentTabs.splice(
+                  newIndex,
+                  0,
+                  movedTab
+                );
+
+
+                saveAdminWorkspaceTabs(
+                  currentTabs
+                );
+
+              }
+
+
+              tabElement.classList.remove(
+                "dragging"
+              );
+
+
+              list.classList.remove(
+                "is-dragging"
+              );
+
+
+              Array
+                .from(
+                  list.children
+                )
+                .forEach(
+                  child => {
+
+                    child.style.transform =
+                      "";
+
+                }
+              );
+
+
+              renderTabs();
+
+            }
+
+
+            tabElement.addEventListener(
+              "pointermove",
+              move
+            );
+
+
+            tabElement.addEventListener(
+              "pointerup",
+              end
+            );
+
+
+            tabElement.addEventListener(
+              "pointercancel",
+              end
+            );
+
+          }
+        );
+
+      }
+    );
+
+  }
+
+
+  renderTabs();
+
+}
 function initAdminSidebar() {
 
   const adminNav =
@@ -1987,13 +2933,13 @@ adminNavInner.appendChild(
 
   const menuItems = [
     {
-      file: "tabs.html",
-      name: "Tabs Settings"
-    },
-
-    {
       file: "visitors.html",
       name: "Visitors"
+    },
+     
+    {
+      file: "tabs.html",
+      name: "Tabs Settings"
     },
 
     {
@@ -2033,7 +2979,9 @@ adminNavInner.appendChild(
 
   ];
 
-
+initAdminWorkspaceTabs(
+  menuItems
+);
   const linksHtml =
     menuItems
       .map(
@@ -2044,18 +2992,20 @@ adminNavInner.appendChild(
             item.file;
 
 
-          return `
-            <a
-              href="./${item.file}"
-              class="admin-sidebar-link${
-                active
-                  ? " active"
-                  : ""
-              }"
-            >
-              ${item.name}
-            </a>
-          `;
+return `
+  <a
+    href="./${item.file}"
+    data-admin-tab-file="${item.file}"
+    data-admin-tab-name="${item.name}"
+    class="admin-sidebar-link${
+      active
+        ? " active"
+        : ""
+    }"
+  >
+    ${item.name}
+  </a>
+`;
 
         }
       )
@@ -2090,7 +3040,32 @@ adminNavInner.appendChild(
 
   `;
 
+sidebar
+  .querySelectorAll(
+    "[data-admin-tab-file]"
+  )
+  .forEach(
+    link => {
 
+      link.addEventListener(
+        "click",
+        () => {
+
+          addAdminWorkspaceTab({
+            file:
+              link.dataset
+                .adminTabFile,
+
+            name:
+              link.dataset
+                .adminTabName
+          });
+
+        }
+      );
+
+    }
+  );
   document.body.appendChild(
     backdrop
   );

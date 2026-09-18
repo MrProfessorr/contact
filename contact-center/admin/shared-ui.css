@@ -1022,22 +1022,39 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
     );
 
   right:0;
-  bottom:0;
 
   z-index:9999;
 
-  width:260px;
-  max-width:88vw;
+  /*
+    FIXED WIDTH MACAM CONTOH
+  */
+  width:200px;
+  min-width:200px;
+  max-width:200px;
 
+  flex:
+    0 0 200px;
+
+  /*
+    HEIGHT IKUT CONTENT
+    MAXIMUM 85% SCREEN
+  */
+  height:auto;
+  max-height:85dvh;
+
+  /*
+    AUTO SCROLL DALAM SIDEBAR
+  */
   overflow-y:auto;
+  overflow-x:hidden;
+
   overscroll-behavior:contain;
 
   border-left:
     1px solid
     var(--line);
 
-  background:
-    #071c30;
+  background:#001529;
 
   box-shadow:
     -8px 8px 24px
@@ -1049,8 +1066,9 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   visibility:hidden;
 
   transition:
-    transform .22s ease,
-    visibility .22s ease;
+    transform .2s ease,
+    visibility .2s ease,
+    background 0s;
 }
 
 
@@ -1153,14 +1171,37 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 
 /* =========================================================
-   MOBILE
+   ADMIN SIDEBAR SCROLLBAR
 ========================================================= */
 
-@media (max-width:700px) {
+.admin-sidebar {
+  scrollbar-width:thin;
 
-  .admin-sidebar {
-    width:240px;
-    max-width:88vw;
-  }
+  scrollbar-color:
+    rgba(255,255,255,.28)
+    transparent;
+}
 
+
+.admin-sidebar::-webkit-scrollbar {
+  width:5px;
+}
+
+
+.admin-sidebar::-webkit-scrollbar-track {
+  background:transparent;
+}
+
+
+.admin-sidebar::-webkit-scrollbar-thumb {
+  background:
+    rgba(255,255,255,.28);
+
+  border-radius:999px;
+}
+
+
+.admin-sidebar::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(255,255,255,.45);
 }

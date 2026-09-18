@@ -898,3 +898,269 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   border-color:
     var(--input-line-focus) !important;
 }
+/* =========================================================
+   ADMIN SIDEBAR NAVIGATION
+========================================================= */
+
+
+/* =========================================================
+   MENU BUTTON
+========================================================= */
+
+.admin-menu-btn {
+  width:32px;
+  height:32px;
+
+  flex:0 0 32px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-left:auto;
+  padding:0;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:6px;
+
+  outline:none;
+
+  color:
+    rgba(255,255,255,.85);
+
+  background:
+    transparent;
+
+  cursor:pointer;
+
+  transition:
+    color .2s ease,
+    background .2s ease,
+    border-color .2s ease;
+}
+
+
+.admin-menu-btn:hover,
+.admin-menu-btn.active {
+  color:#ffffff;
+
+  background:
+    var(--tx-hover);
+
+  border-color:
+    var(--input-line-hover);
+}
+
+
+/*
+  MENU SVG = EXACT 16PX
+*/
+
+.admin-menu-btn svg {
+  display:block;
+
+  width:16px;
+  height:16px;
+
+  flex:none;
+
+  fill:currentColor;
+}
+
+
+/* =========================================================
+   BACKDROP
+========================================================= */
+
+.admin-sidebar-backdrop {
+  position:fixed;
+
+  top:
+    var(
+      --admin-nav-height,
+      60px
+    );
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  z-index:9998;
+
+  background:
+    rgba(0,0,0,.45);
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:
+    opacity .2s ease,
+    visibility .2s ease;
+}
+
+
+.admin-sidebar-backdrop.show {
+  opacity:1;
+  visibility:visible;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.admin-sidebar {
+  position:fixed;
+
+  top:
+    var(
+      --admin-nav-height,
+      60px
+    );
+
+  right:0;
+  bottom:0;
+
+  z-index:9999;
+
+  width:260px;
+  max-width:88vw;
+
+  overflow-y:auto;
+  overscroll-behavior:contain;
+
+  border-left:
+    1px solid
+    var(--line);
+
+  background:
+    #071c30;
+
+  box-shadow:
+    -8px 8px 24px
+    rgba(0,0,0,.35);
+
+  transform:
+    translateX(100%);
+
+  visibility:hidden;
+
+  transition:
+    transform .22s ease,
+    visibility .22s ease;
+}
+
+
+.admin-sidebar.open {
+  transform:
+    translateX(0);
+
+  visibility:visible;
+}
+
+
+/* =========================================================
+   SIDEBAR MENU
+========================================================= */
+
+.admin-sidebar-menu {
+  display:flex;
+  flex-direction:column;
+
+  padding:
+    8px
+    6px
+    16px;
+}
+
+
+/* =========================================================
+   SIDEBAR LINKS
+========================================================= */
+
+.admin-sidebar-link {
+  width:100%;
+  min-height:42px;
+
+  display:flex;
+  align-items:center;
+
+  padding:
+    8px
+    12px;
+
+  border:0;
+  border-left:
+    2px solid
+    transparent;
+
+  border-radius:0;
+
+  color:
+    var(--text);
+
+  background:
+    transparent;
+
+  font-family:inherit;
+  font-size:13px;
+  font-weight:400;
+
+  text-align:left;
+  text-decoration:none;
+
+  cursor:pointer;
+
+  transition:
+    color .15s ease,
+    background .15s ease,
+    border-color .15s ease;
+}
+
+
+.admin-sidebar-link:hover {
+  color:#ffffff;
+
+  background:
+    rgba(255,255,255,.06);
+}
+
+
+.admin-sidebar-link.active {
+  color:#ffffff;
+
+  background:
+    rgba(22,104,220,.18);
+
+  border-left-color:
+    var(--blue);
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.admin-sidebar-logout {
+  margin-top:4px;
+
+  color:
+    #ff8f98;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width:700px) {
+
+  .admin-sidebar {
+    width:240px;
+    max-width:88vw;
+  }
+
+}

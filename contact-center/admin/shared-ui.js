@@ -1585,8 +1585,8 @@ const ADMIN_WORKSPACE_KEY =
   "adminWorkspaceTabs";
 
 
-const ADMIN_WORKSPACE_NAV_KEY =
-  "adminWorkspaceNavigation";
+const ADMIN_WORKSPACE_ACTIVE_KEY =
+  "adminWorkspaceActiveTab";
 
 
 const ADMIN_DEFAULT_TAB = {
@@ -1627,7 +1627,7 @@ function getAdminWorkspaceTabs() {
 
     const data =
       JSON.parse(
-        sessionStorage.getItem(
+        localStorage.getItem(
           ADMIN_WORKSPACE_KEY
         ) || "[]"
       );
@@ -1651,19 +1651,9 @@ function saveAdminWorkspaceTabs(
   tabs
 ) {
 
-  sessionStorage.setItem(
+  localStorage.setItem(
     ADMIN_WORKSPACE_KEY,
     JSON.stringify(tabs)
-  );
-
-}
-
-
-function markAdminWorkspaceNavigation() {
-
-  sessionStorage.setItem(
-    ADMIN_WORKSPACE_NAV_KEY,
-    "1"
   );
 
 }
@@ -1699,7 +1689,10 @@ function addAdminWorkspaceTab(
   );
 
 
-  markAdminWorkspaceNavigation();
+  localStorage.setItem(
+    ADMIN_WORKSPACE_ACTIVE_KEY,
+    tab.file
+  );
 
 }
 
@@ -1731,77 +1724,69 @@ function initAdminWorkspaceTabs(
     "visitors.html";
 
 
-  const navigation =
-    sessionStorage.getItem(
-      ADMIN_WORKSPACE_NAV_KEY
-    ) === "1";
+let tabs =
+  getAdminWorkspaceTabs();
 
 
-  sessionStorage.removeItem(
-    ADMIN_WORKSPACE_NAV_KEY
+const currentItem =
+  menuItems.find(
+    item =>
+      item.file ===
+      currentPage
   );
 
 
-  let tabs =
-    getAdminWorkspaceTabs();
+/*
+  FIRST TIME ONLY:
+  CREATE DEFAULT VISITORS TAB
+*/
 
+if (tabs.length === 0) {
 
-  /*
-    FULL REFRESH:
-    RESET BACK TO VISITORS
-  */
-
-  if (!navigation) {
-
-    tabs = [
-      {
-        ...ADMIN_DEFAULT_TAB
-      }
-    ];
-
-    saveAdminWorkspaceTabs(
-      tabs
-    );
-
-  }
-
-
-  /*
-    NORMAL SIDEBAR/TAB NAVIGATION:
-    MAKE SURE CURRENT PAGE EXISTS
-  */
-
-  if (navigation) {
-
-    const currentItem =
-      menuItems.find(
-        item =>
-          item.file ===
-          currentPage
-      );
-
-
-    if (
-      currentItem &&
-      !tabs.some(
-        item =>
-          item.file ===
-          currentPage
-      )
-    ) {
-
-      tabs.push({
-        file:currentItem.file,
-        name:currentItem.name
-      });
-
-      saveAdminWorkspaceTabs(
-        tabs
-      );
-
+  tabs = [
+    {
+      ...ADMIN_DEFAULT_TAB
     }
+  ];
 
-  }
+}
+
+
+/*
+  MAKE SURE CURRENT PAGE EXISTS
+  INSIDE WORKSPACE
+*/
+
+if (
+  currentItem &&
+  !tabs.some(
+    item =>
+      item.file ===
+      currentPage
+  )
+) {
+
+  tabs.push({
+    file:currentItem.file,
+    name:currentItem.name
+  });
+
+}
+
+
+saveAdminWorkspaceTabs(
+  tabs
+);
+
+
+if (currentItem) {
+
+  localStorage.setItem(
+    ADMIN_WORKSPACE_ACTIVE_KEY,
+    currentPage
+  );
+
+}
 
 
   const bar =
@@ -1838,16 +1823,20 @@ function initAdminWorkspaceTabs(
   );
 
 
-  function navigateToTab(
-    tab
-  ) {
+function navigateToTab(
+  tab
+) {
 
-    markAdminWorkspaceNavigation();
+  localStorage.setItem(
+    ADMIN_WORKSPACE_ACTIVE_KEY,
+    tab.file
+  );
 
-    window.location.href =
-      `./${tab.file}`;
 
-  }
+  window.location.href =
+    `./${tab.file}`;
+
+}
 
 
   function showNoData() {
@@ -2030,18 +2019,22 @@ function initAdminWorkspaceTabs(
             event.stopPropagation();
 
 
-            if (
-              tab.file ===
-              currentPage
-            ) {
+if (
+  tab.file ===
+  currentPage
+) {
 
-              markAdminWorkspaceNavigation();
+  localStorage.setItem(
+    ADMIN_WORKSPACE_ACTIVE_KEY,
+    tab.file
+  );
 
-              window.location.reload();
 
-              return;
+  window.location.reload();
 
-            }
+  return;
+
+}
 
 
             navigateToTab(

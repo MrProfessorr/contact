@@ -1741,12 +1741,6 @@ function initAdminSidebar() {
   ===================================================== */
 
   const menuItems = [
-
-    {
-      file: "index.html",
-      name: "Dashboard"
-    },
-
     {
       file: "tabs.html",
       name: "Tabs Settings"

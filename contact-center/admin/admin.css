@@ -189,8 +189,8 @@ a {
 /* PAGE */
 
 .admin-container {
-  width:calc(100% - 20px);
-  margin:24px auto;
+  width: auto;
+  margin: 10px 12px 24px;
 }
 
 .page-title {

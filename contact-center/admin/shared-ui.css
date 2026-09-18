@@ -916,8 +916,9 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 
 .admin-user-btn {
-  width:330px;
-  max-width:330px;
+  width:auto;
+  max-width:240px;
+  min-width:0;
   height:32px;
 
   display:inline-flex;
@@ -987,12 +988,11 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 
 .admin-user-name {
-  min-width:50px;
+  min-width:0;
+  max-width:180px;
 
   overflow:hidden;
-
   text-overflow:ellipsis;
-
   white-space:nowrap;
 }
 
@@ -1384,8 +1384,8 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
     flex:0 0 48px;
   }
-   .admin-user-wrapper {
-  flex:1 1 auto;
+.admin-user-wrapper {
+  flex:0 1 auto;
   min-width:0;
 
   margin-left:8px;
@@ -1393,14 +1393,15 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 }
 
 .admin-user-btn {
-  width:100%;
-  max-width:none;
+  width:auto;
+  max-width:160px;
 
   padding:0 10px;
 }
 
 .admin-user-name {
   min-width:0;
+  max-width:110px;
 
   overflow:hidden;
   text-overflow:ellipsis;

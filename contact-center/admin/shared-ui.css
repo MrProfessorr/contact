@@ -990,8 +990,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
   z-index:10002;
 
-  background:
-    rgba(0,0,0,.45);
+  background:none;
 
   opacity:0;
   visibility:hidden;
@@ -1079,13 +1078,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 .admin-sidebar-menu {
   display:flex;
   flex-direction:column;
-
-  padding:
-    8px
-    6px
-    16px;
 }
-
 
 /* =========================================================
    SIDEBAR LINKS

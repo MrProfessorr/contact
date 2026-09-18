@@ -1550,37 +1550,22 @@ padding:0 12px;
   flex:1 1 auto;
   min-width:0;
 
-  overflow-x:auto;
-  overflow-y:hidden;
+overflow-x:auto;
+overflow-y:hidden;
 
-  white-space:nowrap;
+white-space:nowrap;
 
-  scrollbar-width:thin;
+scrollbar-width:none;
 
-  scrollbar-color:
-    rgba(255,255,255,.20)
-    transparent;
+-ms-overflow-style:none;
+
+overscroll-behavior-x:contain;
+
+scroll-behavior:smooth;
 }
-
-
 .admin-workspace-tabs-list::-webkit-scrollbar {
-  height:4px;
+  display:none;
 }
-
-
-.admin-workspace-tabs-list::-webkit-scrollbar-track {
-  background:transparent;
-}
-
-
-.admin-workspace-tabs-list::-webkit-scrollbar-thumb {
-  background:
-    rgba(255,255,255,.20);
-
-  border-radius:999px;
-}
-
-
 /* =========================================================
    TAB
 ========================================================= */

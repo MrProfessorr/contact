@@ -141,7 +141,23 @@ const form =
 
 const errorBox =
   document.getElementById("loginError");
+  
+function getLastAdminPage() {
 
+  const lastPage =
+    localStorage.getItem(
+      "adminWorkspaceActiveTab"
+    );
+
+
+  return (
+    lastPage &&
+    /^[a-z0-9_-]+\.html$/i.test(lastPage)
+  )
+    ? lastPage
+    : "visitors.html";
+
+}
 
 onAuthStateChanged(
   auth,
@@ -149,8 +165,12 @@ onAuthStateChanged(
 
     if (user) {
 
+      const lastPage =
+        getLastAdminPage();
+
+
       location.replace(
-        "./contacts.html"
+        `./${lastPage}`
       );
 
     }
@@ -188,34 +208,28 @@ if (!email.includes("@")) {
         .value;
 
 
-    try {
+try {
 
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+  await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
 
+} catch (error) {
 
-      location.replace(
-        "./contacts.html"
-      );
-
-
-    } catch (error) {
-
-      console.error(error);
+  console.error(error);
 
 
-      errorBox.textContent =
-        "Email or password incorrect.";
+  errorBox.textContent =
+    "Email or password incorrect.";
 
 
-      errorBox
-        .classList
-        .remove("hidden");
+  errorBox
+    .classList
+    .remove("hidden");
 
-    }
+}
 
   }
 );

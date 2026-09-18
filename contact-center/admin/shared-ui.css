@@ -988,7 +988,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   right:0;
   bottom:0;
 
-  z-index:9998;
+  z-index:10002;
 
   background:
     rgba(0,0,0,.45);
@@ -1023,7 +1023,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
   right:0;
 
-  z-index:9999;
+  z-index:10003;
 
   /*
     FIXED WIDTH MACAM CONTOH

@@ -1757,8 +1757,36 @@ function closeAdminUserDropdown() {
   );
 
 }
+function openAdminUserDropdown() {
+
+  userWrapper.classList.add(
+    "open"
+  );
+
+  userButton.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+}
+userWrapper.addEventListener(
+  "mouseenter",
+  () => {
+
+    openAdminUserDropdown();
+
+  }
+);
 
 
+userWrapper.addEventListener(
+  "mouseleave",
+  () => {
+
+    closeAdminUserDropdown();
+
+  }
+);
 userButton.addEventListener(
   "click",
   event => {

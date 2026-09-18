@@ -1533,14 +1533,8 @@ padding:0 12px;
     12px
     12px
     0;
-
   overflow:hidden;
-
   background:transparent;
-
-  border-bottom:
-    1px solid #303030;
-
   box-sizing:border-box;
 }
 
@@ -1567,7 +1561,8 @@ scrollbar-width:none;
 -ms-overflow-style:none;
 
 overscroll-behavior-x:contain;
-
+  border-bottom:
+    1px solid #303030;
 scroll-behavior:smooth;
 }
 .admin-workspace-tabs-list::-webkit-scrollbar {

@@ -1574,6 +1574,421 @@ function initSharedDropdowns(
 
     }
   );
+/* =======================================================
+   ADMIN SIDEBAR NAVIGATION
+======================================================= */
+
+function initAdminSidebar() {
+
+  const adminNav =
+    document.querySelector(
+      ".admin-nav"
+    );
+
+  const adminNavInner =
+    document.querySelector(
+      ".admin-nav-inner"
+    );
+
+
+  if (
+    !adminNav ||
+    !adminNavInner
+  ) {
+    return;
+  }
+
+
+  if (
+    document.getElementById(
+      "adminSidebar"
+    )
+  ) {
+    return;
+  }
+
+
+  /* =====================================================
+     ADMIN NAV HEIGHT
+  ===================================================== */
+
+  function updateAdminNavHeight() {
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--admin-nav-height",
+        `${adminNav.offsetHeight}px`
+      );
+
+  }
+
+
+  updateAdminNavHeight();
+
+
+  window.addEventListener(
+    "resize",
+    updateAdminNavHeight
+  );
+
+
+  /* =====================================================
+     CURRENT PAGE
+  ===================================================== */
+
+  const currentPage =
+    window.location.pathname
+      .split("/")
+      .pop() ||
+    "index.html";
+
+
+  /* =====================================================
+     MENU BUTTON
+  ===================================================== */
+
+  const menuButton =
+    document.createElement(
+      "button"
+    );
+
+
+  menuButton.type =
+    "button";
+
+
+  menuButton.id =
+    "adminMenuBtn";
+
+
+  menuButton.className =
+    "admin-menu-btn";
+
+
+  menuButton.setAttribute(
+    "aria-label",
+    "Open admin menu"
+  );
+
+
+  menuButton.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+
+  /*
+    SVG MENU ICON BRO
+  */
+
+  menuButton.innerHTML = `
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM142.4 642.1L298.7 519a8.84 8.84 0 000-13.9L142.4 381.9c-5.8-4.6-14.4-.5-14.4 6.9v246.3a8.9 8.9 0 0014.4 7z"
+        fill="currentColor"
+      />
+    </svg>
+  `;
+
+
+  adminNavInner.appendChild(
+    menuButton
+  );
+
+
+  /* =====================================================
+     BACKDROP
+  ===================================================== */
+
+  const backdrop =
+    document.createElement(
+      "div"
+    );
+
+
+  backdrop.id =
+    "adminSidebarBackdrop";
+
+
+  backdrop.className =
+    "admin-sidebar-backdrop";
+
+
+  /* =====================================================
+     SIDEBAR
+  ===================================================== */
+
+  const sidebar =
+    document.createElement(
+      "aside"
+    );
+
+
+  sidebar.id =
+    "adminSidebar";
+
+
+  sidebar.className =
+    "admin-sidebar";
+
+
+  /* =====================================================
+     MENU ITEMS
+  ===================================================== */
+
+  const menuItems = [
+
+    {
+      file: "index.html",
+      name: "Dashboard"
+    },
+
+    {
+      file: "tabs.html",
+      name: "Tabs Settings"
+    },
+
+    {
+      file: "visitors.html",
+      name: "Visitors"
+    },
+
+    {
+      file: "contacts.html",
+      name: "Contacts"
+    },
+
+    {
+      file: "notices.html",
+      name: "Notices"
+    },
+
+    {
+      file: "marquee.html",
+      name: "Marquee"
+    },
+
+    {
+      file: "floating.html",
+      name: "Floating Image"
+    },
+
+    {
+      file: "loading.html",
+      name: "Loading"
+    },
+
+    {
+      file: "skin.html",
+      name: "Skin Config"
+    },
+
+    {
+      file: "welcome.html",
+      name: "Welcome"
+    }
+
+  ];
+
+
+  const linksHtml =
+    menuItems
+      .map(
+        item => {
+
+          const active =
+            currentPage ===
+            item.file;
+
+
+          return `
+            <a
+              href="./${item.file}"
+              class="admin-sidebar-link${
+                active
+                  ? " active"
+                  : ""
+              }"
+            >
+              ${item.name}
+            </a>
+          `;
+
+        }
+      )
+      .join("");
+
+
+  sidebar.innerHTML = `
+
+    <div class="admin-sidebar-menu">
+
+      ${linksHtml}
+
+
+      <a
+        href="../index.html"
+        target="_blank"
+        class="admin-sidebar-link"
+      >
+        Customer
+      </a>
+
+
+      <button
+        id="logoutBtn"
+        type="button"
+        class="admin-sidebar-link admin-sidebar-logout"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    backdrop
+  );
+
+
+  document.body.appendChild(
+    sidebar
+  );
+
+
+  /* =====================================================
+     OPEN
+  ===================================================== */
+
+  function openAdminSidebar() {
+
+    sidebar.classList.add(
+      "open"
+    );
+
+
+    backdrop.classList.add(
+      "show"
+    );
+
+
+    menuButton.classList.add(
+      "active"
+    );
+
+
+    menuButton.setAttribute(
+      "aria-expanded",
+      "true"
+    );
+
+  }
+
+
+  /* =====================================================
+     CLOSE
+  ===================================================== */
+
+  function closeAdminSidebar() {
+
+    sidebar.classList.remove(
+      "open"
+    );
+
+
+    backdrop.classList.remove(
+      "show"
+    );
+
+
+    menuButton.classList.remove(
+      "active"
+    );
+
+
+    menuButton.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+  }
+
+
+  /* =====================================================
+     MENU CLICK
+  ===================================================== */
+
+  menuButton.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+
+      if (
+        sidebar.classList.contains(
+          "open"
+        )
+      ) {
+
+        closeAdminSidebar();
+
+      }
+      else {
+
+        openAdminSidebar();
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     BACKDROP CLICK
+  ===================================================== */
+
+  backdrop.addEventListener(
+    "click",
+    closeAdminSidebar
+  );
+
+
+  /* =====================================================
+     ESC CLOSE
+  ===================================================== */
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key ===
+        "Escape"
+      ) {
+
+        closeAdminSidebar();
+
+      }
+
+    }
+  );
+
+}
+
+
+/*
+  shared-ui.js bro sudah dipanggil
+  di bawah HTML, jadi boleh init terus.
+*/
+
+initAdminSidebar();
   /* =======================================================
      GLOBAL
      Available to every page

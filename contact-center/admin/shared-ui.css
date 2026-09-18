@@ -981,7 +981,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   top:
     var(
       --admin-nav-height,
-      60px
+      64px
     );
 
   left:0;
@@ -1018,7 +1018,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   top:
     var(
       --admin-nav-height,
-      60px
+      64px
     );
 
   right:0;

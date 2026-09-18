@@ -2689,9 +2689,7 @@ userButton.innerHTML = `
   <span
     id="adminUsername"
     class="admin-user-name"
-  >
-    Loading...
-  </span>
+  ></span>
 `;
 
 

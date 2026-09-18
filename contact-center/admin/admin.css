@@ -4642,18 +4642,6 @@ input[type="color"] {
 /* =========================================================
    WELCOME POPUP ADMIN
 ========================================================= */
-
-.welcome-admin-layout {
-  display: grid;
-
-  grid-template-columns:
-    450px minmax(0, 1fr);
-
-  gap: 18px;
-
-  align-items: start;
-}
-
 /* GRID */
 
 .welcome-grid {
@@ -5243,13 +5231,6 @@ input:checked
 
 
 /* RESPONSIVE */
-
-@media(max-width:1050px) {
-
-  .welcome-admin-layout {
-  grid-template-columns:
-    1fr;
-}
 
   .welcome-grid-4 {
     grid-template-columns:

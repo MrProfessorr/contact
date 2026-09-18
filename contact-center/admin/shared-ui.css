@@ -906,6 +906,63 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 /* =========================================================
    MENU BUTTON
 ========================================================= */
+.admin-nav-actions {
+  height:64px;
+
+  display:flex;
+  align-items:center;
+
+  margin-left:auto;
+}
+
+.admin-refresh-btn {
+  width:64px;
+  height:64px;
+
+  flex:0 0 64px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+  border-radius:0;
+  outline:0;
+
+  color:rgba(255,255,255,.85);
+  background:transparent;
+
+  box-shadow:none;
+
+  cursor:pointer;
+
+  transition:
+    color .2s ease,
+    background .2s ease;
+}
+
+.admin-refresh-btn:hover {
+  color:#ffffff;
+  background:rgba(255,255,255,.08);
+}
+
+.admin-refresh-btn:active {
+  background:rgba(255,255,255,.18);
+}
+
+.admin-refresh-btn svg {
+  display:block;
+
+  width:16px;
+  height:16px;
+
+  flex:none;
+
+  fill:currentColor;
+}
 
 .admin-menu-btn {
   width:64px;
@@ -914,7 +971,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   display:flex;
   align-items:center;
   justify-content:center;
-  margin-left:auto;
+  margin-left:0;
   padding:0;
   border:0;
   border-radius:6px;
@@ -1152,4 +1209,20 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 .admin-sidebar::-webkit-scrollbar-thumb:hover {
   background:
     rgba(255,255,255,.45);
+}
+@media(max-width:650px) {
+
+  .admin-nav-actions {
+    height:64px;
+  }
+
+  .admin-refresh-btn,
+  .admin-menu-btn {
+    width:48px;
+    height:64px;
+
+    flex:0 0 48px;
+  }
+   
+
 }

@@ -908,9 +908,9 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 ========================================================= */
 
 .admin-menu-btn {
-  width:48px;
+  width:64px;
   height:64px;
-  flex:0 0 16px;
+  flex:0 0 64px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -923,6 +923,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   background:transparent;
   box-shadow:none;
   cursor:pointer;
+  transition: all .2s ease;
 }
 
 .admin-menu-btn:hover {
@@ -937,12 +938,9 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-menu-btn svg {
   display:block;
-
   width:16px;
   height:16px;
-
   flex:none;
-
   fill:currentColor;
 }
 

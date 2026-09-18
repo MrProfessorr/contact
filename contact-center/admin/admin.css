@@ -549,18 +549,8 @@ label {
 
 
 @media(max-width:900px) {
-
   .admin-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-nav-inner {
-
-    flex-direction:
-      column;
-
-    align-items:
-      flex-start;
+    grid-template-columns:1fr;
   }
 
 }

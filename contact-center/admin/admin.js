@@ -72,17 +72,39 @@ export function requireAdmin() {
       }
 
 
-      const adminEmail =
-        document
-          .getElementById(
-            "adminEmail"
-          );
+      /* FULL EMAIL */
 
+      const adminEmail =
+        document.getElementById(
+          "adminEmail"
+        );
 
       if (adminEmail) {
 
         adminEmail.textContent =
-          user.email || "Admin";
+          user.email ||
+          "Admin";
+
+      }
+
+
+      /* TOP NAV USERNAME */
+
+      const adminUsername =
+        document.getElementById(
+          "adminUsername"
+        );
+
+      if (adminUsername) {
+
+        const username =
+          user.displayName ||
+          user.email
+            ?.split("@")[0] ||
+          "Admin";
+
+        adminUsername.textContent =
+          username;
 
       }
 
@@ -96,24 +118,42 @@ export function requireAdmin() {
 
 export function setupLogout() {
 
-  const logout =
-    document
-      .getElementById("logoutBtn");
+  const logoutButtons =
+    document.querySelectorAll(
+      "#logoutBtn, #adminUserLogoutBtn"
+    );
 
 
-  if (!logout) {
+  if (!logoutButtons.length) {
     return;
   }
 
 
-  logout.addEventListener(
-    "click",
-    async () => {
+  logoutButtons.forEach(
+    button => {
 
-      await signOut(auth);
+      button.addEventListener(
+        "click",
+        async () => {
 
-      location.replace(
-        "./login.html"
+          try {
+
+            await signOut(auth);
+
+            location.replace(
+              "./login.html"
+            );
+
+          } catch (error) {
+
+            console.error(
+              "Logout failed:",
+              error
+            );
+
+          }
+
+        }
       );
 
     }

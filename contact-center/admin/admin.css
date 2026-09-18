@@ -199,52 +199,6 @@ a {
     10px;
 }
 
-.nav-links {
-
-  display:
-    flex;
-
-  gap:
-    7px;
-
-  flex-wrap:
-    wrap;
-}
-
-.nav-links a {
-
-  text-decoration:
-    none;
-
-  color:
-    #bac4d2;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:
-    8px;
-
-  padding:
-    8px 11px;
-
-  font-size:
-    10px;
-
-  background:
-    var(--panel);
-}
-
-.nav-links a.active {
-
-  background:
-    #2259bc;
-
-  color:
-    white;
-}
-
-
 /* PAGE */
 
 .admin-container {
@@ -618,22 +572,6 @@ label {
 
 }
 
-@media(max-width:550px) {
-
-  .nav-links {
-    width: 100%;
-  }
-
-  .nav-links a {
-
-    flex:
-      1;
-
-    text-align:
-      center;
-  }
-
-}
 /* =========================================================
    FLOATING IMAGE ADMIN
 ========================================================= */

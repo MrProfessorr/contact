@@ -1049,20 +1049,12 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   overflow-x:hidden;
 
   overscroll-behavior:contain;
-
-  border-left:
-    1px solid
-    var(--line);
-
   background:#001529;
-
   box-shadow:
     -8px 8px 24px
     rgba(0,0,0,.35);
-
   transform:
     translateX(100%);
-
   visibility:hidden;
 
   transition:
@@ -1101,37 +1093,26 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-sidebar-link {
   width:100%;
-  min-height:42px;
-
+  min-height:40px;
   display:flex;
   align-items:center;
 
-  padding:
-    8px
-    12px;
-
+  padding-inline:16px;
   border:0;
   border-left:
     2px solid
     transparent;
-
   border-radius:0;
-
   color:
     var(--text);
-
   background:
     transparent;
-
   font-family:inherit;
-  font-size:13px;
+  font-size:14px;
   font-weight:400;
-
   text-align:left;
   text-decoration:none;
-
   cursor:pointer;
-
   transition:
     color .15s ease,
     background .15s ease,

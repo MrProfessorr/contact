@@ -1059,23 +1059,16 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-user-dropdown::before {
   content:"";
-
   position:absolute;
-
   top:-5px;
   left:50%;
   right:auto;
- 
   transform:
   translateX(-50%)
   rotate(45deg);
-
   width:10px;
   height:10px;
-
   background:#1f1f1f;
-
-  transform:rotate(45deg);
 }
 
 
@@ -1512,12 +1505,12 @@ padding:0 12px;
 
   /* USER DROPDOWN */
 
-  .admin-user-dropdown {
-    width:240px;
-    max-width:calc(100vw - 16px);
+.admin-user-dropdown {
+  width:240px;
+  max-width:calc(100vw - 16px);
 
-    right:0;
-    left:auto;
-  }
+  left:50%;
+  right:auto;
+}
 
 }

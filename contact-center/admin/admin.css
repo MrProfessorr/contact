@@ -2296,12 +2296,10 @@ input[type="color"] {
 
 @media(min-width:901px) {
 
+  .notice-admin-page
   .admin-grid > .card:first-child {
-    position:
-      sticky;
-
-    top:
-      88px;
+    position: sticky;
+    top: 88px;
   }
 
 }
@@ -5231,7 +5229,7 @@ input:checked
 
 
 /* RESPONSIVE */
-
+@media(max-width:1050px) {
   .welcome-grid-4 {
     grid-template-columns:
       repeat(2,minmax(0,1fr));

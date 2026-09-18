@@ -1821,7 +1821,48 @@ if (currentItem) {
     "afterend",
     bar
   );
+/*
+  MOUSE WHEEL
+  VERTICAL WHEEL -> HORIZONTAL TAB SCROLL
+*/
 
+list.addEventListener(
+  "wheel",
+  event => {
+
+    const canScroll =
+      list.scrollWidth >
+      list.clientWidth;
+
+
+    if (!canScroll) {
+      return;
+    }
+
+
+    const delta =
+      Math.abs(event.deltaY) >
+      Math.abs(event.deltaX)
+        ? event.deltaY
+        : event.deltaX;
+
+
+    if (delta === 0) {
+      return;
+    }
+
+
+    event.preventDefault();
+
+
+    list.scrollLeft +=
+      delta;
+
+  },
+  {
+    passive:false
+  }
+);
 
 function navigateToTab(
   tab
@@ -2185,9 +2226,28 @@ if (
     );
 
 
-    initTabDrag();
+initTabDrag();
+
+
+requestAnimationFrame(
+  () => {
+
+    const activeTab =
+      list.querySelector(
+        ".admin-workspace-tab.active"
+      );
+
+
+    activeTab?.scrollIntoView({
+      behavior:"smooth",
+      block:"nearest",
+      inline:"nearest"
+    });
 
   }
+);
+
+}
 
 
   function initTabDrag() {

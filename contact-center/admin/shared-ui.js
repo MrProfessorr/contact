@@ -1575,6 +1575,96 @@ function initSharedDropdowns(
     }
   );
 /* =======================================================
+   ADMIN PAGE LOADING OVERLAY
+======================================================= */
+
+function createAdminPageLoading() {
+
+  let overlay =
+    document.getElementById(
+      "adminPageLoading"
+    );
+
+
+  if (overlay) {
+    return overlay;
+  }
+
+
+  overlay =
+    document.createElement(
+      "div"
+    );
+
+
+  overlay.id =
+    "adminPageLoading";
+
+  overlay.className =
+    "admin-page-loading";
+
+
+  overlay.innerHTML = `
+    <div
+      class="admin-page-loading-dots"
+      aria-hidden="true"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div
+      class="admin-page-loading-text"
+    >
+      Please wait while fetching...
+    </div>
+  `;
+
+
+  document.body.appendChild(
+    overlay
+  );
+
+
+  return overlay;
+
+}
+
+
+function showAdminPageLoading() {
+
+  const overlay =
+    createAdminPageLoading();
+
+
+  overlay.classList.add(
+    "show"
+  );
+
+}
+
+
+function hideAdminPageLoading() {
+
+  const overlay =
+    document.getElementById(
+      "adminPageLoading"
+    );
+
+
+  if (!overlay) {
+    return;
+  }
+
+
+  overlay.classList.remove(
+    "show"
+  );
+
+}
+/* =======================================================
    ADMIN SIDEBAR NAVIGATION
 ======================================================= */
 /* =======================================================
@@ -2196,19 +2286,37 @@ function updateMoreTabs() {
 
           event.stopPropagation();
 
-          if (
-            tab.file ===
-            currentPage
-          ) {
+if (
+  tab.file ===
+  currentPage
+) {
 
-            window.location.reload();
-            return;
+  showAdminPageLoading();
 
-          }
 
-          navigateToTab(
-            tab
-          );
+  requestAnimationFrame(
+    () => {
+
+      requestAnimationFrame(
+        () => {
+
+          window.location.reload();
+
+        }
+      );
+
+    }
+  );
+
+
+  return;
+
+}
+
+
+navigateToTab(
+  tab
+);
 
         }
       );
@@ -2428,13 +2536,14 @@ searchSelect.addEventListener(
     }
 
 
-    addAdminWorkspaceTab(
-      item
-    );
+addAdminWorkspaceTab(
+  item
+);
 
 
-    window.location.href =
-      `./${item.file}`;
+navigateToTab(
+  item
+);
 
   }
 );
@@ -2550,7 +2659,8 @@ window.addEventListener(
   }
 );
 function navigateToTab(
-  tab
+  tab,
+  showLoading = true
 ) {
 
   localStorage.setItem(
@@ -2559,8 +2669,27 @@ function navigateToTab(
   );
 
 
-  window.location.href =
-    `./${tab.file}`;
+  if (showLoading) {
+
+    showAdminPageLoading();
+
+  }
+
+
+  requestAnimationFrame(
+    () => {
+
+      requestAnimationFrame(
+        () => {
+
+          window.location.href =
+            `./${tab.file}`;
+
+        }
+      );
+
+    }
+  );
 
 }
 
@@ -2756,7 +2885,23 @@ if (
   );
 
 
-  window.location.reload();
+  showAdminPageLoading();
+
+
+  requestAnimationFrame(
+    () => {
+
+      requestAnimationFrame(
+        () => {
+
+          window.location.reload();
+
+        }
+      );
+
+    }
+  );
+
 
   return;
 
@@ -3892,22 +4037,35 @@ sidebar
   .forEach(
     link => {
 
-      link.addEventListener(
-        "click",
-        () => {
+link.addEventListener(
+  "click",
+  event => {
 
-          addAdminWorkspaceTab({
-            file:
-              link.dataset
-                .adminTabFile,
+    event.preventDefault();
 
-            name:
-              link.dataset
-                .adminTabName
-          });
 
-        }
-      );
+    const item = {
+      file:
+        link.dataset
+          .adminTabFile,
+
+      name:
+        link.dataset
+          .adminTabName
+    };
+
+
+    addAdminWorkspaceTab(
+      item
+    );
+
+
+    navigateToTab(
+      item
+    );
+
+  }
+);
 
     }
   );

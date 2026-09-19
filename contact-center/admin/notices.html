@@ -321,7 +321,18 @@ requireAdmin();
 setupLogout();
 
 showAdminLoading();
+let noticeInitialLoaded = false;
 
+function finishNoticeInitialLoad() {
+
+  if (noticeInitialLoaded) {
+    return;
+  }
+
+  noticeInitialLoaded = true;
+
+  hideAdminLoading();
+}
 initSharedDropdowns();
 
 const form =
@@ -1063,7 +1074,7 @@ onValue(
           No notices.
         </div>
       `;
- hideAdminLoading();
+ finishNoticeInitialLoad();
       return;
     }
 
@@ -1255,9 +1266,31 @@ items.forEach(item => {
 );
 
 });
-hideAdminLoading();
 
-  }
+
+// INITIAL FIREBASE LOAD SELESAI
+finishNoticeInitialLoad();
+
+},
+
+error => {
+
+  console.error(
+    "Notice load error:",
+    error
+  );
+
+  list.innerHTML = `
+    <div class="empty">
+      Failed to load notices.
+    </div>
+  `;
+
+  // ERROR PUN INITIAL LOADING SELESAI
+  finishNoticeInitialLoad();
+
+}
+
 );
 
 </script>

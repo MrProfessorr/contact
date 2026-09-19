@@ -3391,9 +3391,6 @@ function updateAdminTime() {
         minute:
           "2-digit",
 
-        second:
-          "2-digit",
-
         hour12:
           false,
 
@@ -3420,7 +3417,6 @@ function updateAdminTime() {
   adminTimeValue.textContent =
     `${getPart("hour")}:` +
     `${getPart("minute")}:` +
-    `${getPart("second")} ` +
     `${getPart("month")} ` +
     `${getPart("day")}`;
 

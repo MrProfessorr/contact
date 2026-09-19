@@ -1977,7 +1977,7 @@ const morePanel =
   );
 
 morePanel.className =
-  "admin-workspace-more-panel";
+  "shared-dropdown-panel admin-workspace-more-panel";
 
 
 const moreList =

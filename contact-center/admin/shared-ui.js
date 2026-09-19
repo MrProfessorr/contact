@@ -3331,7 +3331,109 @@ function initAdminSidebar() {
 /* =====================================================
    ADMIN USER BUTTON
 ===================================================== */
+const adminTime =
+  document.createElement(
+    "div"
+  );
 
+adminTime.className =
+  "admin-header-time";
+
+
+const adminTimeCity =
+  document.createElement(
+    "div"
+  );
+
+adminTimeCity.className =
+  "admin-header-time-city";
+
+adminTimeCity.textContent =
+  "Kuala Lumpur";
+
+
+const adminTimeValue =
+  document.createElement(
+    "div"
+  );
+
+adminTimeValue.className =
+  "admin-header-time-value";
+
+
+adminTime.appendChild(
+  adminTimeCity
+);
+
+adminTime.appendChild(
+  adminTimeValue
+);
+
+
+/* UPDATE KUALA LUMPUR TIME */
+
+function updateAdminTime() {
+
+  const now =
+    new Date();
+
+
+  const parts =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone:
+          "Asia/Kuala_Lumpur",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit",
+
+        hour12:
+          false,
+
+        month:
+          "short",
+
+        day:
+          "2-digit"
+      }
+    )
+    .formatToParts(
+      now
+    );
+
+
+  const getPart =
+    type =>
+      parts.find(
+        part =>
+          part.type === type
+      )?.value || "";
+
+
+  adminTimeValue.textContent =
+    `${getPart("hour")}:` +
+    `${getPart("minute")}:` +
+    `${getPart("second")} ` +
+    `${getPart("month")} ` +
+    `${getPart("day")}`;
+
+}
+
+
+updateAdminTime();
+
+setInterval(
+  updateAdminTime,
+  1000
+);
+   
 const userWrapper =
   document.createElement(
     "div"
@@ -3611,6 +3713,11 @@ const adminNavActions =
 
 adminNavActions.className =
   "admin-nav-actions";
+
+
+adminNavActions.appendChild(
+  adminTime
+);
 
 adminNavActions.appendChild(
   userWrapper

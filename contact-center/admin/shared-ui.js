@@ -2058,11 +2058,36 @@ function openWorkspaceSearch() {
     "open"
   );
 
-  renderSearchResults("");
+
+  const activeItem =
+    menuItems.find(
+      item =>
+        item.file ===
+        currentPage
+    );
+
+
+  searchInput.value =
+    activeItem
+      ? activeItem.name
+      : "";
+
+
+  renderSearchResults(
+    searchInput.value
+  );
+
 
   requestAnimationFrame(
     () => {
+
       searchInput.focus();
+
+      searchInput.setSelectionRange(
+        0,
+        searchInput.value.length
+      );
+
     }
   );
 

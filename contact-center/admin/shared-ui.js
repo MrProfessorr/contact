@@ -4138,8 +4138,22 @@ link.addEventListener(
     );
 
 
-    navigateToTab(
-      item
+    showAdminPageLoading();
+
+
+    requestAnimationFrame(
+      () => {
+
+        requestAnimationFrame(
+          () => {
+
+            window.location.href =
+              `./${item.file}`;
+
+          }
+        );
+
+      }
     );
 
   }

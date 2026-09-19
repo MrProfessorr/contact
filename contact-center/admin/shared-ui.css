@@ -2533,3 +2533,19 @@ padding:0 12px;
   margin-top: 0 !important;
   padding-top: 20px !important;
 }
+/* =========================================================
+   HIDE ORIGINAL PARENT CONTENT
+========================================================= */
+
+.admin-workspace-content-open
+body > .admin-container {
+  visibility: hidden !important;
+}
+
+
+/* CONTENT INSIDE IFRAME MUST STAY VISIBLE */
+
+.admin-workspace-frame-page
+body > .admin-container {
+  visibility: visible !important;
+}

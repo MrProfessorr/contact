@@ -4108,6 +4108,13 @@ return `
 
   `;
 
+sidebar
+  .querySelectorAll(
+    "[data-admin-tab-file]"
+  )
+  .forEach(
+    link => {
+
 link.addEventListener(
   "click",
   event => {
@@ -4131,22 +4138,8 @@ link.addEventListener(
     );
 
 
-    showAdminPageLoading();
-
-
-    requestAnimationFrame(
-      () => {
-
-        requestAnimationFrame(
-          () => {
-
-            window.location.href =
-              `./${item.file}`;
-
-          }
-        );
-
-      }
+    navigateToTab(
+      item
     );
 
   }

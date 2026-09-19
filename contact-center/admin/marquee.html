@@ -353,6 +353,18 @@ setupLogout();
 
 showAdminLoading();
 
+  let marqueeInitialLoaded = false;
+
+function finishMarqueeInitialLoad() {
+
+  if (marqueeInitialLoaded) {
+    return;
+  }
+
+  marqueeInitialLoaded = true;
+
+  hideAdminLoading();
+}
 initSharedDropdowns();
 
 const enabledInput =
@@ -686,7 +698,7 @@ if (!data) {
 
   updatePreview();
 
-  hideAdminLoading();
+  finishMarqueeInitialLoad();
 
   return;
 }
@@ -775,7 +787,7 @@ pauseHoverInput.dispatchEvent(
 
 updatePreview();
 
-hideAdminLoading();
+finishMarqueeInitialLoad();
 
 },
 
@@ -793,7 +805,7 @@ hideAdminLoading();
 
     saveMessage.className =
       "marquee-save-message error";
-hideAdminLoading();
+finishMarqueeInitialLoad();
   }
 
 );

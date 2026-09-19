@@ -2994,9 +2994,10 @@ if (
               ];
 
 
-            navigateToTab(
-              nextTab
-            );
+           navigateToTab(
+  nextTab,
+  false
+);
 
           }
         );
@@ -3797,7 +3798,24 @@ refreshButton.innerHTML = `
 refreshButton.addEventListener(
   "click",
   () => {
-    window.location.reload();
+
+    showAdminPageLoading();
+
+
+    requestAnimationFrame(
+      () => {
+
+        requestAnimationFrame(
+          () => {
+
+            window.location.reload();
+
+          }
+        );
+
+      }
+    );
+
   }
 );
   /* =====================================================

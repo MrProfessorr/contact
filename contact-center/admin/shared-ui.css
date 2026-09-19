@@ -1746,6 +1746,8 @@ padding:0 12px;
   z-index:10020;
 
   overflow:visible;
+
+  box-sizing:border-box;
 }
 
 
@@ -1758,25 +1760,21 @@ padding:0 12px;
 
 .admin-workspace-more-btn {
   position:relative;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
+  flex:0 0 auto;
   padding:8px 16px;
-
-  border:0;
   outline:0;
-
-  color:rgba(255,255,255,.85);
-
+  color:var(--text);
   background:red;
-
   font-family:inherit;
-
+  font-size:14px;
+  font-weight:400;
+  line-height:1.5715;
+  box-sizing:border-box;
   cursor:pointer;
 }
-
 
 .admin-workspace-more-btn:hover {
   color:#ffffff;
@@ -1786,8 +1784,8 @@ padding:0 12px;
 .admin-workspace-more-btn svg {
   display:block;
 
-  width:14px;
-  height:14px;
+  width:13.333px;
+  height:13.333px;
 
   fill:currentColor;
 

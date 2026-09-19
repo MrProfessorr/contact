@@ -1804,26 +1804,33 @@ function openAdminContentPage(
    SHOW LOADING ON PAGE LOAD / BROWSER REFRESH
 ======================================================= */
 
-if (document.readyState === "loading") {
+if (!ADMIN_IS_WORKSPACE_FRAME) {
 
-  document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+  if (
+    document.readyState ===
+    "loading"
+  ) {
 
-      showAdminPageLoading();
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
 
-    },
-    {
-      once:true
-    }
-  );
+        showAdminPageLoading();
 
-} else {
+      },
+      {
+        once:true
+      }
+    );
 
-  showAdminPageLoading();
+  }
+  else {
+
+    showAdminPageLoading();
+
+  }
 
 }
-
 
 /* HIDE AFTER PAGE FULLY LOADED */
 

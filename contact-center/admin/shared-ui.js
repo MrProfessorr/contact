@@ -1680,21 +1680,27 @@ function hideAdminPageLoading() {
   );
 
 }
+/* =======================================================
+   ADMIN CONTENT WORKSPACE
+======================================================= */
 
+
+ /* =======================================================
+   ADMIN WORKSPACE NAVIGATION
+======================================================= */
+
+  tab
+) {
 
   if (!tab?.file) {
     return;
   }
 
 
-  /* ADD TAB IF NOT EXISTS */
-
   addAdminWorkspaceTab(
     tab
   );
 
-
-  /* SET ACTIVE TAB */
 
   localStorage.setItem(
     ADMIN_WORKSPACE_ACTIVE_KEY,
@@ -1702,24 +1708,22 @@ function hideAdminPageLoading() {
   );
 
 
-  /* OPEN CONTENT */
-
-  openAdminContentPage(
-    tab.file
-  );
+  showAdminPageLoading();
 
 
-  /* UPDATE WORKSPACE TAB BAR */
+  requestAnimationFrame(
+    () => {
 
-  window.dispatchEvent(
-    new CustomEvent(
-      "adminWorkspaceChanged",
-      {
-        detail:{
-          file:tab.file
+      requestAnimationFrame(
+        () => {
+
+          window.location.href =
+            `./${tab.file}`;
+
         }
-      }
-    )
+      );
+
+    }
   );
 
 }
@@ -3172,30 +3176,7 @@ requestAnimationFrame(
 
 }
 
-/* =========================================
-   WORKSPACE TAB UPDATE
-========================================= */
 
-window.addEventListener(
-  "adminWorkspaceChanged",
-  event => {
-
-    const file =
-      event.detail?.file;
-
-    if (!file) {
-      return;
-    }
-
-
-    tabs =
-      getAdminWorkspaceTabs();
-
-
-    renderTabs();
-
-  }
-);
   function initTabDrag() {
 
     const tabElements =

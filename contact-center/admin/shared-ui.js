@@ -1801,7 +1801,6 @@ if (currentItem) {
   bar.className =
     "admin-workspace-tabs";
 
-
 const searchWrap =
   document.createElement(
     "div"
@@ -1810,6 +1809,10 @@ const searchWrap =
 searchWrap.className =
   "admin-workspace-search";
 
+
+/* =========================================
+   CLOSED SEARCH BUTTON
+========================================= */
 
 const searchButton =
   document.createElement(
@@ -1847,59 +1850,72 @@ searchButton.innerHTML =
   SEARCH_ICON;
 
 
-const searchInput =
+/* =========================================
+   SHARED DROPDOWN SELECT
+========================================= */
+
+const searchSelect =
   document.createElement(
-    "input"
+    "select"
   );
 
-searchInput.type =
-  "text";
+searchSelect.setAttribute(
+  "data-shared-dropdown",
+  ""
+);
 
-searchInput.className =
-  "admin-workspace-search-input";
-
-searchInput.placeholder =
-  "Search module...";
-
-searchInput.autocomplete =
-  "off";
+searchSelect.dataset.placeholder =
+  "Search module";
 
 
-const searchInputIcon =
-  document.createElement(
-    "span"
-  );
+/* =========================================
+   ADD MODULE OPTIONS
+========================================= */
 
-searchInputIcon.className =
-  "admin-workspace-search-input-icon";
+menuItems.forEach(
+  item => {
 
-searchInputIcon.innerHTML =
-  SEARCH_ICON;
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      item.file;
+
+    option.textContent =
+      item.name;
+
+    searchSelect.appendChild(
+      option
+    );
+
+  }
+);
 
 
-const searchResults =
-  document.createElement(
-    "div"
-  );
+/* =========================================
+   CURRENT ACTIVE MODULE
+========================================= */
 
-searchResults.className =
-  "admin-workspace-search-results";
+if (currentItem) {
 
+  searchSelect.value =
+    currentItem.file;
+
+}
+
+
+/* =========================================
+   INSERT SEARCH
+========================================= */
 
 searchWrap.appendChild(
   searchButton
 );
 
 searchWrap.appendChild(
-  searchInput
-);
-
-searchWrap.appendChild(
-  searchInputIcon
-);
-
-searchWrap.appendChild(
-  searchResults
+  searchSelect
 );
 
 
@@ -1921,197 +1937,32 @@ bar.appendChild(
 );
 
 
-  adminNav.insertAdjacentElement(
-    "afterend",
-    bar
-  );
-function renderSearchResults(
-  keyword = ""
-) {
-
-  const query =
-    keyword
-      .trim()
-      .toLowerCase();
+adminNav.insertAdjacentElement(
+  "afterend",
+  bar
+);
 
 
-  const results =
-    menuItems.filter(
-      item =>
-        !query ||
-        item.name
-          .toLowerCase()
-          .includes(query)
-    );
+/* =========================================
+   INITIALIZE EXISTING SHARED DROPDOWN
+========================================= */
 
+const searchDropdown =
+  createSharedDropdown(
+    searchSelect,
+    {
+      placeholder:
+        "Search module",
 
-  searchResults.innerHTML =
-    "";
-
-
-  if (results.length === 0) {
-
-    const empty =
-      document.createElement(
-        "div"
-      );
-
-    empty.className =
-      "admin-workspace-search-empty";
-
-    empty.textContent =
-      "No data";
-
-    searchResults.appendChild(
-      empty
-    );
-
-    searchResults.classList.add(
-      "show"
-    );
-
-    return;
-  }
-
-
-  results.forEach(
-    item => {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.type =
-        "button";
-
-      button.className =
-        "admin-workspace-search-item";
-
-      button.textContent =
-        item.name;
-
-
-      button.addEventListener(
-        "click",
-        event => {
-
-          event.stopPropagation();
-
-
-          let currentTabs =
-            getAdminWorkspaceTabs();
-
-
-          if (
-            !currentTabs.some(
-              tab =>
-                tab.file ===
-                item.file
-            )
-          ) {
-
-            currentTabs.push({
-              file:item.file,
-              name:item.name
-            });
-
-
-            saveAdminWorkspaceTabs(
-              currentTabs
-            );
-
-          }
-
-
-          localStorage.setItem(
-            ADMIN_WORKSPACE_ACTIVE_KEY,
-            item.file
-          );
-
-
-          window.location.href =
-            `./${item.file}`;
-
-        }
-      );
-
-
-      searchResults.appendChild(
-        button
-      );
-
+      emptyText:
+        "No data"
     }
   );
 
 
-  searchResults.classList.add(
-    "show"
-  );
-
-}
-
-
-function openWorkspaceSearch() {
-
-  searchWrap.classList.add(
-    "open"
-  );
-
-
-  const activeItem =
-    menuItems.find(
-      item =>
-        item.file ===
-        currentPage
-    );
-
-
-  searchInput.value =
-    activeItem
-      ? activeItem.name
-      : "";
-
-
-  renderSearchResults(
-    searchInput.value
-  );
-
-
-  requestAnimationFrame(
-    () => {
-
-      searchInput.focus();
-
-      const length =
-        searchInput.value.length;
-
-      searchInput.setSelectionRange(
-        length,
-        length
-      );
-
-    }
-  );
-
-}
-
-
-function closeWorkspaceSearch() {
-
-  searchWrap.classList.remove(
-    "open"
-  );
-
-  searchResults.classList.remove(
-    "show"
-  );
-
-  searchInput.value =
-    "";
-
-}
-
+/* =========================================
+   OPEN SEARCH
+========================================= */
 
 searchButton.addEventListener(
   "click",
@@ -2119,77 +1970,81 @@ searchButton.addEventListener(
 
     event.stopPropagation();
 
-    openWorkspaceSearch();
+    searchWrap.classList.add(
+      "open"
+    );
+
+    searchDropdown?.open();
 
   }
 );
 
 
-searchInput.addEventListener(
-  "input",
+/* =========================================
+   SELECT MODULE
+========================================= */
+
+searchSelect.addEventListener(
+  "change",
   () => {
 
-    renderSearchResults(
-      searchInput.value
+    const file =
+      searchSelect.value;
+
+
+    if (!file) {
+      return;
+    }
+
+
+    const item =
+      menuItems.find(
+        menu =>
+          menu.file === file
+      );
+
+
+    if (!item) {
+      return;
+    }
+
+
+    addAdminWorkspaceTab(
+      item
+    );
+
+
+    window.location.href =
+      `./${item.file}`;
+
+  }
+);
+
+
+/* =========================================
+   CLOSE COMPACT SEARCH
+========================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      searchWrap.contains(
+        event.target
+      )
+    ) {
+      return;
+    }
+
+
+    searchWrap.classList.remove(
+      "open"
     );
 
   }
 );
 
-
-searchInput.addEventListener(
-  "click",
-  event => {
-
-    event.stopPropagation();
-
-  }
-);
-
-
-searchResults.addEventListener(
-  "click",
-  event => {
-
-    event.stopPropagation();
-
-  }
-);
-
-
-document.addEventListener(
-  "click",
-  event => {
-
-    if (
-      !searchWrap.contains(
-        event.target
-      )
-    ) {
-
-      closeWorkspaceSearch();
-
-    }
-
-  }
-);
-
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key ===
-      "Escape"
-    ) {
-
-      closeWorkspaceSearch();
-
-    }
-
-  }
-);
 /*
   MOUSE WHEEL
   VERTICAL WHEEL -> HORIZONTAL TAB SCROLL

@@ -1534,7 +1534,11 @@ padding:0 12px;
     width .2s cubic-bezier(.645,.045,.355,1),
     min-width .2s cubic-bezier(.645,.045,.355,1);
 }
+/* CLOSE SEARCH INSTANT */
 
+.admin-workspace-search.closing {
+  transition:none !important;
+}
 
 /* EXPANDED */
 

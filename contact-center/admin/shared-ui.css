@@ -1880,7 +1880,7 @@ padding:0 12px;
   border-radius:0;
   outline:0;
 
-  color:rgba(255,255,255,.45);
+  color:grey;
   background:transparent;
   font-size:12px;
   cursor:pointer;
@@ -1894,7 +1894,7 @@ padding:0 12px;
 
 .admin-workspace-tab-refresh:hover {
   background:rgb(245 245 245);
-  color:rgba(255,255,255,.45);color:
+  color:grey;
 }
 
 
@@ -1902,11 +1902,6 @@ padding:0 12px;
 
 .admin-workspace-tab-close:hover {
   color:rgba(255,255,255,.85);
-}
-
-
-.admin-workspace-tab-refresh:active {
-  background:rgba(255,255,255,.14);
 }
 
 .admin-workspace-tab-close:active {

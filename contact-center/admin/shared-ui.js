@@ -1665,6 +1665,50 @@ function hideAdminPageLoading() {
 
 }
 /* =======================================================
+   SHOW LOADING ON PAGE LOAD / BROWSER REFRESH
+======================================================= */
+
+if (document.readyState === "loading") {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+      showAdminPageLoading();
+
+    },
+    {
+      once:true
+    }
+  );
+
+} else {
+
+  showAdminPageLoading();
+
+}
+
+
+/* HIDE AFTER PAGE FULLY LOADED */
+
+window.addEventListener(
+  "load",
+  () => {
+
+    requestAnimationFrame(
+      () => {
+
+        hideAdminPageLoading();
+
+      }
+    );
+
+  },
+  {
+    once:true
+  }
+);
+/* =======================================================
    ADMIN SIDEBAR NAVIGATION
 ======================================================= */
 /* =======================================================

@@ -2436,8 +2436,8 @@ padding:0 12px;
 
   top:
     calc(
-      var(--admin-nav-height, 60px) +
-      44px
+      var(--admin-nav-height, 64px) +
+      45px
     );
 
   left: 0;
@@ -2446,9 +2446,11 @@ padding:0 12px;
 
   display: none;
 
-  background: #0a0a0a;
+  overflow: hidden;
 
-  z-index: 20;
+  background: var(--bg, #000);
+
+  z-index: 999;
 }
 
 
@@ -2463,9 +2465,13 @@ padding:0 12px;
 
   display: block;
 
-  border: 0;
+  margin: 0;
+  padding: 0;
 
-  background: #0a0a0a;
+  border: 0;
+  outline: 0;
+
+  background: var(--bg);
 }
 
 
@@ -2479,9 +2485,16 @@ padding:0 12px;
   align-items: center;
   justify-content: center;
 
-  background: #0a0a0a;
+  background: var(--bg);
 
-  z-index: 10;
+  z-index: 50;
+
+  pointer-events: all;
+}
+
+
+.admin-content-loading.show {
+  display: flex;
 }
 
 

@@ -1590,98 +1590,6 @@ function initSharedDropdowns(
 
     }
   );
-/* =======================================================
-   ADMIN PAGE LOADING OVERLAY
-======================================================= */
-
-function createAdminPageLoading() {
-
-  let overlay =
-    document.getElementById(
-      "adminPageLoading"
-    );
-
-
-  if (overlay) {
-    return overlay;
-  }
-
-
-  overlay =
-    document.createElement(
-      "div"
-    );
-
-
-  overlay.id =
-    "adminPageLoading";
-
-  overlay.className =
-    "admin-page-loading";
-
-
-  overlay.innerHTML = `
-    <div
-      class="admin-page-loading-dots"
-      aria-hidden="true"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-
-    <div
-      class="admin-page-loading-text"
-    >
-      Please wait while fetching...
-    </div>
-  `;
-
-
-  document.body.appendChild(
-    overlay
-  );
-
-
-  return overlay;
-
-}
-
-
-function showAdminPageLoading() {
-
-  const overlay =
-    createAdminPageLoading();
-
-
-  overlay.classList.add(
-    "show"
-  );
-
-}
-
-
-function hideAdminPageLoading() {
-
-  const overlay =
-    document.getElementById(
-      "adminPageLoading"
-    );
-
-
-  if (!overlay) {
-    return;
-  }
-
-
-  overlay.classList.remove(
-    "show"
-  );
-
-}
-
-
 
 /* =======================================================
    ADMIN WORKSPACE NAVIGATION
@@ -1707,95 +1615,16 @@ function navigateToTab(
   );
 
 
-  showAdminPageLoading();
-
-
-  requestAnimationFrame(
-    () => {
-
-      requestAnimationFrame(
-        () => {
-
-          window.location.href =
-            `./${tab.file}`;
-
-        }
-      );
-
-    }
+  sessionStorage.setItem(
+    "adminShowContentLoading",
+    "1"
   );
 
-}
-/* =======================================================
-   SHOW LOADING ON PAGE LOAD / BROWSER REFRESH
-======================================================= */
 
-if (!ADMIN_IS_WORKSPACE_FRAME) {
-
-  if (
-    document.readyState ===
-    "loading"
-  ) {
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      () => {
-
-        showAdminPageLoading();
-
-      },
-      {
-        once:true
-      }
-    );
-
-  }
-  else {
-
-    showAdminPageLoading();
-
-  }
+  window.location.href =
+    `./${tab.file}`;
 
 }
-
-/* HIDE AFTER PAGE FULLY LOADED */
-
-const adminLoadingStartedAt =
-  performance.now();
-
-
-window.addEventListener(
-  "load",
-  () => {
-
-    const elapsed =
-      performance.now() -
-      adminLoadingStartedAt;
-
-    const remaining =
-      Math.max(
-        0,
-        300 - elapsed
-      );
-
-
-    setTimeout(
-      () => {
-
-        hideAdminPageLoading();
-
-      },
-      remaining
-    );
-
-  },
-  {
-    once:true
-  }
-);
-/* =======================================================
-   ADMIN SIDEBAR NAVIGATION
-======================================================= */
 /* =======================================================
    ADMIN WORKSPACE TABS
 ======================================================= */
@@ -2419,10 +2248,18 @@ refresh.addEventListener(
 
     event.stopPropagation();
 
+
     localStorage.setItem(
       ADMIN_WORKSPACE_ACTIVE_KEY,
       tab.file
     );
+
+
+    sessionStorage.setItem(
+      "adminShowContentLoading",
+      "1"
+    );
+
 
     if (
       tab.file !==
@@ -2431,8 +2268,6 @@ refresh.addEventListener(
         .pop()
     ) {
 
-      showAdminPageLoading();
-
       window.location.href =
         `./${tab.file}`;
 
@@ -2440,17 +2275,7 @@ refresh.addEventListener(
     }
 
 
-    showAdminPageLoading();
-
-    requestAnimationFrame(() => {
-
-      requestAnimationFrame(() => {
-
-        window.location.reload();
-
-      });
-
-    });
+    window.location.reload();
 
   }
 );
@@ -2673,11 +2498,6 @@ searchSelect.addEventListener(
     if (!item) {
       return;
     }
-
-
-addAdminWorkspaceTab(
-  item
-);
 
 
 navigateToTab(
@@ -2982,22 +2802,20 @@ refresh.addEventListener(
 
     event.stopPropagation();
 
+
     localStorage.setItem(
       ADMIN_WORKSPACE_ACTIVE_KEY,
       tab.file
     );
 
-    showAdminPageLoading();
 
-    requestAnimationFrame(() => {
+    sessionStorage.setItem(
+      "adminShowContentLoading",
+      "1"
+    );
 
-      requestAnimationFrame(() => {
 
-        window.location.reload();
-
-      });
-
-    });
+    window.location.reload();
 
   }
 );
@@ -3087,10 +2905,14 @@ const wasActive =
               ];
 
 
-           navigateToTab(
-  nextTab,
-  false
+localStorage.setItem(
+  ADMIN_WORKSPACE_ACTIVE_KEY,
+  nextTab.file
 );
+
+
+window.location.href =
+  `./${nextTab.file}`;
 
           }
         );
@@ -4168,11 +3990,6 @@ link.addEventListener(
         link.dataset
           .adminTabName
     };
-
-
-addAdminWorkspaceTab(
-  item
-);
 
 
 navigateToTab(

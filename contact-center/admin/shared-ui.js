@@ -6,7 +6,23 @@
 (function () {
 
   "use strict";
+/* =======================================================
+   ADMIN WORKSPACE FRAME MODE
+======================================================= */
 
+const ADMIN_IS_WORKSPACE_FRAME =
+  new URLSearchParams(
+    window.location.search
+  ).get("workspace") === "1";
+
+
+if (ADMIN_IS_WORKSPACE_FRAME) {
+
+  document.documentElement.classList.add(
+    "admin-workspace-frame-page"
+  );
+
+}
 
   /* =======================================================
      ESCAPE TEXT
@@ -1665,49 +1681,124 @@ function hideAdminPageLoading() {
 
 }
 /* =======================================================
-   ADMIN CONTENT LOADING
+   ADMIN CONTENT WORKSPACE
 ======================================================= */
 
-function getAdminContent() {
-  return document.querySelector(
-    "#adminContent"
-  );
-}
+function getAdminContentWorkspace() {
 
-
-function showAdminContentLoading() {
-
-  const content =
-    getAdminContent();
-
-  if (!content) {
-    return;
-  }
-
-  content.classList.add(
-    "admin-content-loading"
-  );
-
-  content.innerHTML =
-    createLoadingState(
-      "Please wait while fetching...",
-      "large"
+  let workspace =
+    document.getElementById(
+      "adminContentWorkspace"
     );
+
+
+  if (workspace) {
+    return workspace;
+  }
+
+
+  workspace =
+    document.createElement(
+      "div"
+    );
+
+
+  workspace.id =
+    "adminContentWorkspace";
+
+  workspace.className =
+    "admin-content-workspace";
+
+
+  workspace.innerHTML = `
+
+    <div
+      id="adminContentLoading"
+      class="admin-content-loading"
+    >
+
+      ${createLoadingState(
+        "Please wait while fetching...",
+        "large"
+      )}
+
+    </div>
+
+
+    <iframe
+      id="adminContentFrame"
+      class="admin-content-frame"
+      title="Admin Content"
+    ></iframe>
+
+  `;
+
+
+  document.body.appendChild(
+    workspace
+  );
+
+
+  return workspace;
+
 }
 
 
-function hideAdminContentLoading() {
+function openAdminContentPage(
+  file
+) {
 
-  const content =
-    getAdminContent();
-
-  if (!content) {
+  if (!file) {
     return;
   }
 
-  content.classList.remove(
-    "admin-content-loading"
+
+  const workspace =
+    getAdminContentWorkspace();
+
+
+  const frame =
+    workspace.querySelector(
+      "#adminContentFrame"
+    );
+
+
+  const loading =
+    workspace.querySelector(
+      "#adminContentLoading"
+    );
+
+
+  if (
+    !frame ||
+    !loading
+  ) {
+    return;
+  }
+
+
+  workspace.classList.add(
+    "show"
   );
+
+
+  loading.classList.add(
+    "show"
+  );
+
+
+  frame.onload = () => {
+
+    loading.classList.remove(
+      "show"
+    );
+
+  };
+
+
+  frame.src =
+    `./${file}?workspace=1`;
+
 }
 /* =======================================================
    SHOW LOADING ON PAGE LOAD / BROWSER REFRESH
@@ -1907,6 +1998,10 @@ function initAdminWorkspaceTabs(
   menuItems
 ) {
 
+ if (ADMIN_IS_WORKSPACE_FRAME) {
+    return;
+  }
+   
   const adminNav =
     document.querySelector(
       ".admin-nav"
@@ -2764,11 +2859,14 @@ window.addEventListener(
 
   }
 );
-async function navigateToTab(tab) {
+function navigateToTab(
+  tab
+) {
 
   if (!tab?.file) {
     return;
   }
+
 
   localStorage.setItem(
     ADMIN_WORKSPACE_ACTIVE_KEY,
@@ -2776,138 +2874,11 @@ async function navigateToTab(tab) {
   );
 
 
-  /* =========================================
-     SAME PAGE
-  ========================================= */
-
-  const currentFile =
-    window.location.pathname
-      .split("/")
-      .pop();
-
-  if (currentFile === tab.file) {
-    return;
-  }
-
-
-  /* =========================================
-     CONTENT LOADING ONLY
-  ========================================= */
-
-  showAdminContentLoading();
-
-
-  try {
-
-    const response =
-      await fetch(
-        `./${tab.file}`,
-        {
-          cache:"no-store"
-        }
-      );
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        `HTTP ${response.status}`
-      );
-
-    }
-
-
-    const html =
-      await response.text();
-
-
-    const parser =
-      new DOMParser();
-
-
-    const newDocument =
-      parser.parseFromString(
-        html,
-        "text/html"
-      );
-
-
-    const newContent =
-      newDocument.querySelector(
-        "#adminContent"
-      );
-
-
-    const currentContent =
-      getAdminContent();
-
-
-    if (
-      !newContent ||
-      !currentContent
-    ) {
-
-      throw new Error(
-        "#adminContent not found"
-      );
-
-    }
-
-
-    /* =========================================
-       REPLACE CONTENT ONLY
-    ========================================= */
-
-    currentContent.innerHTML =
-      newContent.innerHTML;
-
-
-    /* =========================================
-       UPDATE URL WITHOUT PAGE RELOAD
-    ========================================= */
-
-    history.pushState(
-      {
-        file:tab.file
-      },
-      "",
-      `./${tab.file}`
-    );
-
-
-    /* =========================================
-       RE-INIT SHARED COMPONENTS
-    ========================================= */
-
-    initSharedDropdowns(
-      currentContent
-    );
-
-
-    hideAdminContentLoading();
-
-  }
-  catch (error) {
-
-    console.error(
-      "Admin navigation failed:",
-      error
-    );
-
-
-    /*
-      Fallback kalau AJAX gagal.
-    */
-
-    showAdminPageLoading();
-
-    window.location.href =
-      `./${tab.file}`;
-
-  }
+  openAdminContentPage(
+    tab.file
+  );
 
 }
-
 
   function showNoData() {
 
@@ -3604,6 +3575,10 @@ requestAnimationFrame(
 }
 function initAdminSidebar() {
 
+ if (ADMIN_IS_WORKSPACE_FRAME) {
+    return;
+  }
+
   const adminNav =
     document.querySelector(
       ".admin-nav"
@@ -4265,28 +4240,17 @@ link.addEventListener(
     };
 
 
-    addAdminWorkspaceTab(
-      item
-    );
+addAdminWorkspaceTab(
+  item
+);
 
 
-    showAdminPageLoading();
+navigateToTab(
+  item
+);
 
 
-    requestAnimationFrame(
-      () => {
-
-        requestAnimationFrame(
-          () => {
-
-            window.location.href =
-              `./${item.file}`;
-
-          }
-        );
-
-      }
-    );
+closeAdminSidebar();
 
   }
 );

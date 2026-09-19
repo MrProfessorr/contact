@@ -3718,22 +3718,12 @@ refreshButton.addEventListener(
   "click",
   () => {
 
-    showAdminPageLoading();
-
-
-    requestAnimationFrame(
-      () => {
-
-        requestAnimationFrame(
-          () => {
-
-            window.location.reload();
-
-          }
-        );
-
-      }
+    sessionStorage.setItem(
+      "adminShowContentLoading",
+      "1"
     );
+
+    window.location.reload();
 
   }
 );

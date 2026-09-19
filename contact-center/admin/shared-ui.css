@@ -1529,9 +1529,7 @@ padding:0 12px;
   height:32px;
   z-index:2;
   flex:0 0 32px;
-
-  margin-right:8px;
-
+  bottom:4px;
   transition:
     width .2s cubic-bezier(.645,.045,.355,1),
     min-width .2s cubic-bezier(.645,.045,.355,1);

@@ -1795,24 +1795,10 @@ padding:0 12px;
   background:var(--input);
   border-bottom-color:#141414;
   z-index:2;
+  margin-bottom:-1px;
+  padding-bottom:9px;
 }
-.admin-workspace-tab.active::after {
-  content:"";
 
-  position:absolute;
-
-  left:-1px;
-  right:-1px;
-  bottom:-2px;
-
-  height:3px;
-
-  background:#000;
-
-  pointer-events:none;
-
-  z-index:3;
-}
 /* =========================================================
    TAB NAME
 ========================================================= */

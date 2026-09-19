@@ -1777,14 +1777,21 @@ function openAdminContentPage(
   }
 
 
-  workspace.classList.add(
-    "show"
-  );
+workspace.classList.add(
+  "show"
+);
 
 
-  loading.classList.add(
-    "show"
-  );
+/* HIDE ORIGINAL PARENT CONTENT */
+
+document.documentElement.classList.add(
+  "admin-workspace-content-open"
+);
+
+
+loading.classList.add(
+  "show"
+);
 
 
   frame.onload = () => {

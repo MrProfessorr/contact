@@ -1784,20 +1784,20 @@ padding:0 12px;
 }
 
 .admin-workspace-tab:hover {
-  background:
-    rgba(255,255,255,.07);
+  color: var(--input-line-hover);
 }
-
+.admin-workspace-tab:active {
+  color: var(--input-line-active);
+}
 
 .admin-workspace-tab.active {
-  color:#1668dc;
-
-  background:#141414;
-
-  border-bottom-color:
-    #141414;
+  color:var(--input-line-focus);
+  background:tra;
+  border-bottom-color:#141414;
+  z-index:2;
+  margin-bottom:-1px;
+  padding-bottom:9px;
 }
-
 
 /* =========================================================
    TAB NAME

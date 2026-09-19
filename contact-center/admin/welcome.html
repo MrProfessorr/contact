@@ -572,13 +572,17 @@ import {
   set,
   onValue,
   requireAdmin,
-  setupLogout
+  setupLogout,
+
+  showAdminLoading,
+  hideAdminLoading
 
 } from "./admin.js";
 
 
 requireAdmin();
 setupLogout();
+showAdminLoading();
 initSharedDropdowns();
 
 
@@ -1308,6 +1312,27 @@ if (imageUrl.value) {
 
 
     updatePreview();
+
+    // FIREBASE SUDAH SELESAI LOAD
+    hideAdminLoading();
+
+  },
+
+  error => {
+
+    console.error(
+      "Welcome settings load error:",
+      error
+    );
+
+    saveMessage.textContent =
+      "Failed to load welcome settings.";
+
+    saveMessage.className =
+      "welcome-save-message error";
+
+    // JANGAN BIARKAN LOADING TERUS BERPUTAR
+    hideAdminLoading();
 
   }
 

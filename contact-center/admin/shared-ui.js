@@ -1813,17 +1813,42 @@ function navigateToTab(
   }
 
 
+  /* ADD TAB IF NOT EXISTS */
+
+  addAdminWorkspaceTab(
+    tab
+  );
+
+
+  /* SET ACTIVE TAB */
+
   localStorage.setItem(
     ADMIN_WORKSPACE_ACTIVE_KEY,
     tab.file
   );
 
 
+  /* OPEN CONTENT */
+
   openAdminContentPage(
     tab.file
   );
 
-}  
+
+  /* UPDATE WORKSPACE TAB BAR */
+
+  window.dispatchEvent(
+    new CustomEvent(
+      "adminWorkspaceChanged",
+      {
+        detail:{
+          file:tab.file
+        }
+      }
+    )
+  );
+
+}
 /* =======================================================
    SHOW LOADING ON PAGE LOAD / BROWSER REFRESH
 ======================================================= */
@@ -2575,10 +2600,15 @@ refresh.addEventListener(
             return;
           }
 
+const activeFile =
+  localStorage.getItem(
+    ADMIN_WORKSPACE_ACTIVE_KEY
+  );
 
-          const wasActive =
-            tab.file ===
-            currentPage;
+
+const wasActive =
+  tab.file ===
+  activeFile;
 
 
           currentTabs.splice(
@@ -2977,16 +3007,22 @@ window.addEventListener(
           tab.file;
 
 
-        if (
-          tab.file ===
-          currentPage
-        ) {
+const activeFile =
+  localStorage.getItem(
+    ADMIN_WORKSPACE_ACTIVE_KEY
+  );
 
-          element.classList.add(
-            "active"
-          );
 
-        }
+if (
+  tab.file ===
+  activeFile
+) {
+
+  element.classList.add(
+    "active"
+  );
+
+}
 
 
         const name =
@@ -3116,9 +3152,15 @@ refresh.addEventListener(
             }
 
 
-            const wasActive =
-              tab.file ===
-              currentPage;
+const activeFile =
+  localStorage.getItem(
+    ADMIN_WORKSPACE_ACTIVE_KEY
+  );
+
+
+const wasActive =
+  tab.file ===
+  activeFile;
 
 
             currentTabs.splice(
@@ -3256,7 +3298,30 @@ requestAnimationFrame(
 
 }
 
+/* =========================================
+   WORKSPACE TAB UPDATE
+========================================= */
 
+window.addEventListener(
+  "adminWorkspaceChanged",
+  event => {
+
+    const file =
+      event.detail?.file;
+
+    if (!file) {
+      return;
+    }
+
+
+    tabs =
+      getAdminWorkspaceTabs();
+
+
+    renderTabs();
+
+  }
+);
   function initTabDrag() {
 
     const tabElements =

@@ -1800,6 +1800,30 @@ function openAdminContentPage(
     `./${file}?workspace=1`;
 
 }
+ /* =======================================================
+   ADMIN WORKSPACE NAVIGATION
+======================================================= */
+
+function navigateToTab(
+  tab
+) {
+
+  if (!tab?.file) {
+    return;
+  }
+
+
+  localStorage.setItem(
+    ADMIN_WORKSPACE_ACTIVE_KEY,
+    tab.file
+  );
+
+
+  openAdminContentPage(
+    tab.file
+  );
+
+}  
 /* =======================================================
    SHOW LOADING ON PAGE LOAD / BROWSER REFRESH
 ======================================================= */
@@ -2866,26 +2890,6 @@ window.addEventListener(
 
   }
 );
-function navigateToTab(
-  tab
-) {
-
-  if (!tab?.file) {
-    return;
-  }
-
-
-  localStorage.setItem(
-    ADMIN_WORKSPACE_ACTIVE_KEY,
-    tab.file
-  );
-
-
-  openAdminContentPage(
-    tab.file
-  );
-
-}
 
   function showNoData() {
 

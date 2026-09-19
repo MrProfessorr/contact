@@ -1578,16 +1578,18 @@ padding:0 12px;
 
 
 .admin-workspace-search-btn:hover {
-  border-color:#3c89e8;
+  border-color:var(--input-line-hover);
+  color:var(--input-line-hover);
 }
-
+.admin-workspace-search-btn:active {
+  border-color:var(--input-line-active);
+  color:var(--input-line-active);
+}
 
 .admin-workspace-search-btn svg {
   display:block;
-
   width:14px;
   height:14px;
-
   fill:currentColor;
 }
 
@@ -1833,8 +1835,9 @@ padding:0 12px;
 }
 
 
-.admin-workspace-tab-refresh,
-.admin-workspace-tab-close {
+/* REFRESH BUTTON */
+
+.admin-workspace-tab-refresh {
   display:flex;
   align-items:center;
   justify-content:center;
@@ -1846,12 +1849,9 @@ padding:0 12px;
 
   border:0;
   border-radius:4px;
-
   outline:0;
 
-  color:
-    rgba(255,255,255,.45);
-
+  color:rgba(255,255,255,.45);
   background:transparent;
 
   font-size:12px;
@@ -1864,20 +1864,54 @@ padding:0 12px;
 }
 
 
-.admin-workspace-tab-refresh:hover,
-.admin-workspace-tab-close:hover {
-  color:
-    rgba(255,255,255,.85);
+/* CLOSE X - ICON ONLY */
 
-  background:
-    rgba(255,255,255,.08);
+.admin-workspace-tab-close {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  flex:none;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+  border-radius:0;
+  outline:0;
+
+  color:rgba(255,255,255,.45);
+  background:transparent;
+
+  font-size:12px;
+
+  cursor:pointer;
+
+  transition:
+    color .15s ease;
 }
 
 
-.admin-workspace-tab-refresh:active,
+/* REFRESH HOVER */
+
+.admin-workspace-tab-refresh:hover {
+  background:rgb(245 245 245);
+}
+
+
+/* CLOSE HOVER */
+
+.admin-workspace-tab-close:hover {
+  color:rgba(255,255,255,.85);
+}
+
+
+.admin-workspace-tab-refresh:active {
+  background:rgba(255,255,255,.14);
+}
+
 .admin-workspace-tab-close:active {
-  background:
-    rgba(255,255,255,.14);
+  color:var(--input-line-focus);
 }
 
 

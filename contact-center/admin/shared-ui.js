@@ -1606,7 +1606,18 @@ const ADMIN_TAB_REFRESH_ICON = `
     />
   </svg>
 `;
-
+   
+const ADMIN_TAB_MORE_ICON = `
+  <svg
+    viewBox="0 0 1024 1024"
+    aria-hidden="true"
+  >
+    <path
+      d="M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z"
+      fill="currentColor"
+    />
+  </svg>
+`;
 
 const ADMIN_TAB_CLOSE_ICON = `
   <svg
@@ -1927,7 +1938,69 @@ const list =
 list.className =
   "admin-workspace-tabs-list";
 
+/* =========================================
+   TAB MORE / OVERFLOW
+========================================= */
 
+const moreWrap =
+  document.createElement(
+    "div"
+  );
+
+moreWrap.className =
+  "admin-workspace-more";
+
+
+const moreButton =
+  document.createElement(
+    "button"
+  );
+
+moreButton.type =
+  "button";
+
+moreButton.className =
+  "admin-workspace-more-btn";
+
+moreButton.setAttribute(
+  "aria-label",
+  "More tabs"
+);
+
+moreButton.innerHTML =
+  ADMIN_TAB_MORE_ICON;
+
+
+const morePanel =
+  document.createElement(
+    "div"
+  );
+
+morePanel.className =
+  "admin-workspace-more-panel";
+
+
+const moreList =
+  document.createElement(
+    "div"
+  );
+
+moreList.className =
+  "admin-workspace-more-list";
+
+
+morePanel.appendChild(
+  moreList
+);
+
+moreWrap.appendChild(
+  moreButton
+);
+
+moreWrap.appendChild(
+  morePanel
+);
+   
 bar.appendChild(
   searchWrap
 );
@@ -1936,13 +2009,359 @@ bar.appendChild(
   list
 );
 
+bar.appendChild(
+  moreWrap
+);
+
 
 adminNav.insertAdjacentElement(
   "afterend",
   bar
 );
 
+/* =========================================
+   UPDATE TAB OVERFLOW MENU
+========================================= */
 
+function updateMoreTabs() {
+
+  const tabElements =
+    Array.from(
+      list.querySelectorAll(
+        ".admin-workspace-tab"
+      )
+    );
+
+
+  const listRect =
+    list.getBoundingClientRect();
+
+
+  const hiddenTabs =
+    tabElements.filter(
+      element => {
+
+        const rect =
+          element.getBoundingClientRect();
+
+        return (
+          rect.left <
+            listRect.left - 1 ||
+          rect.right >
+            listRect.right + 1
+        );
+
+      }
+    );
+
+
+  moreList.innerHTML = "";
+
+
+  if (
+    list.scrollWidth <=
+    list.clientWidth + 1
+  ) {
+
+    moreWrap.classList.remove(
+      "show"
+    );
+
+    moreWrap.classList.remove(
+      "open"
+    );
+
+    return;
+  }
+
+
+  moreWrap.classList.add(
+    "show"
+  );
+
+
+  hiddenTabs.forEach(
+    element => {
+
+      const file =
+        element.dataset.file;
+
+      const tab =
+        tabs.find(
+          item =>
+            item.file === file
+        );
+
+
+      if (!tab) {
+        return;
+      }
+
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+      item.className =
+        "admin-workspace-more-item";
+
+
+      if (
+        tab.file === currentPage
+      ) {
+
+        item.classList.add(
+          "active"
+        );
+
+      }
+
+
+      const name =
+        document.createElement(
+          "button"
+        );
+
+      name.type =
+        "button";
+
+      name.className =
+        "admin-workspace-more-name";
+
+      name.textContent =
+        tab.name;
+
+
+      const actions =
+        document.createElement(
+          "span"
+        );
+
+      actions.className =
+        "admin-workspace-more-actions";
+
+
+      const refresh =
+        document.createElement(
+          "button"
+        );
+
+      refresh.type =
+        "button";
+
+      refresh.className =
+        "admin-workspace-more-refresh";
+
+      refresh.innerHTML =
+        ADMIN_TAB_REFRESH_ICON;
+
+      refresh.title =
+        "Refresh";
+
+
+      const close =
+        document.createElement(
+          "button"
+        );
+
+      close.type =
+        "button";
+
+      close.className =
+        "admin-workspace-more-close";
+
+      close.innerHTML =
+        ADMIN_TAB_CLOSE_ICON;
+
+      close.title =
+        "Close";
+
+
+      name.addEventListener(
+        "click",
+        () => {
+
+          navigateToTab(
+            tab
+          );
+
+        }
+      );
+
+
+      refresh.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+          if (
+            tab.file ===
+            currentPage
+          ) {
+
+            window.location.reload();
+            return;
+
+          }
+
+          navigateToTab(
+            tab
+          );
+
+        }
+      );
+
+
+      close.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+          const currentTabs =
+            getAdminWorkspaceTabs();
+
+          const index =
+            currentTabs.findIndex(
+              current =>
+                current.file ===
+                tab.file
+            );
+
+
+          if (index === -1) {
+            return;
+          }
+
+
+          const wasActive =
+            tab.file ===
+            currentPage;
+
+
+          currentTabs.splice(
+            index,
+            1
+          );
+
+
+          saveAdminWorkspaceTabs(
+            currentTabs
+          );
+
+
+          if (!wasActive) {
+
+            tabs =
+              currentTabs;
+
+            renderTabs();
+
+            return;
+
+          }
+
+
+          if (
+            currentTabs.length === 0
+          ) {
+
+            tabs = [];
+
+            renderTabs();
+
+            showNoData();
+
+            return;
+
+          }
+
+
+          const nextTab =
+            currentTabs[
+              Math.min(
+                index,
+                currentTabs.length - 1
+              )
+            ];
+
+
+          navigateToTab(
+            nextTab
+          );
+
+        }
+      );
+
+
+      actions.appendChild(
+        refresh
+      );
+
+      actions.appendChild(
+        close
+      );
+
+
+      item.appendChild(
+        name
+      );
+
+      item.appendChild(
+        actions
+      );
+
+
+      moreList.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+moreWrap.addEventListener(
+  "mouseenter",
+  () => {
+
+    updateMoreTabs();
+
+    moreWrap.classList.add(
+      "open"
+    );
+
+  }
+);
+
+
+moreWrap.addEventListener(
+  "mouseleave",
+  () => {
+
+    moreWrap.classList.remove(
+      "open"
+    );
+
+  }
+);
+
+
+moreButton.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+    updateMoreTabs();
+
+    moreWrap.classList.toggle(
+      "open"
+    );
+
+  }
+);
 /* =========================================
    INITIALIZE EXISTING SHARED DROPDOWN
 ========================================= */
@@ -2105,7 +2524,31 @@ list.addEventListener(
     passive:false
   }
 );
+list.addEventListener(
+  "scroll",
+  () => {
 
+    requestAnimationFrame(
+      updateMoreTabs
+    );
+
+  },
+  {
+    passive:true
+  }
+);
+
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    requestAnimationFrame(
+      updateMoreTabs
+    );
+
+  }
+);
 function navigateToTab(
   tab
 ) {
@@ -2470,7 +2913,9 @@ if (
 
 initTabDrag();
 
-
+requestAnimationFrame(
+  updateMoreTabs
+);
 requestAnimationFrame(
   () => {
 

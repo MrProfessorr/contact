@@ -2427,3 +2427,96 @@ padding:0 12px;
   }
 
 }
+/* =========================================================
+   ADMIN CONTENT WORKSPACE
+========================================================= */
+
+.admin-content-workspace {
+  position: fixed;
+
+  top:
+    calc(
+      var(--admin-nav-height, 60px) +
+      44px
+    );
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: none;
+
+  background: #0a0a0a;
+
+  z-index: 20;
+}
+
+
+.admin-content-workspace.show {
+  display: block;
+}
+
+
+.admin-content-frame {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  border: 0;
+
+  background: #0a0a0a;
+}
+
+
+.admin-content-loading {
+  position: absolute;
+
+  inset: 0;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #0a0a0a;
+
+  z-index: 10;
+}
+
+
+.admin-content-loading.show {
+  display: flex;
+}
+
+
+/* =========================================================
+   PAGE INSIDE WORKSPACE
+========================================================= */
+
+.admin-workspace-frame-page
+.admin-nav {
+  display: none !important;
+}
+
+
+.admin-workspace-frame-page
+.admin-workspace-tabs {
+  display: none !important;
+}
+
+
+.admin-workspace-frame-page
+#adminSidebar,
+
+.admin-workspace-frame-page
+#adminSidebarBackdrop {
+  display: none !important;
+}
+
+
+.admin-workspace-frame-page
+.admin-container {
+  margin-top: 0 !important;
+  padding-top: 20px !important;
+}

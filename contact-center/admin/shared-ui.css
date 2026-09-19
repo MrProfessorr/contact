@@ -1795,29 +1795,24 @@ padding:0 12px;
 
 /* DROPDOWN */
 
-.admin-workspace-more-panel {
-  position:absolute;
+/* =========================================================
+   MORE TABS - USE SHARED CUSTOM PANEL
+========================================================= */
 
+.admin-workspace-more-panel {
   top:calc(100% + 4px);
+
+  left:auto;
   right:0;
 
-  z-index:10020;
-
   width:182px;
+  min-width:182px;
 
-  display:none;
-
-  padding:4px;
-
-  border-radius:8px;
-
-  background:var(--dropdown-bg);
-
-  box-shadow:
-    0 6px 16px rgba(0,0,0,.18),
-    0 9px 28px rgba(0,0,0,.22);
+  z-index:10020;
 }
 
+
+/* OPEN MORE PANEL */
 
 .admin-workspace-more.open
 .admin-workspace-more-panel {

@@ -617,7 +617,18 @@ setupLogout();
 // LOADING MASA BUKA / REFRESH PAGE
 showAdminLoading();
 
+let skinInitialLoaded = false;
 
+function finishSkinInitialLoad() {
+
+  if (skinInitialLoaded) {
+    return;
+  }
+
+  skinInitialLoaded = true;
+
+  hideAdminLoading();
+}
 
 /* =====================================================
    CLOUDINARY
@@ -1256,8 +1267,8 @@ updateActiveText();
 
 updatePreview();
 
-// FIREBASE BERJAYA LOAD
-hideAdminLoading();
+// INITIAL FIREBASE LOAD SELESAI
+finishSkinInitialLoad();
 
 },
 
@@ -1275,7 +1286,7 @@ error => {
     "skin-save-message error";
 
   // FIREBASE ERROR PUN LOADING TETAP TUTUP
-  hideAdminLoading();
+ finishSkinInitialLoad();
 
 }
 

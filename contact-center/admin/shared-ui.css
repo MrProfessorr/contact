@@ -1776,7 +1776,7 @@ padding:0 12px;
   outline:0;
 
   color:var(--text);
-  background:red;
+  background:transparent;
 
   font-family:inherit;
   font-size:14px;

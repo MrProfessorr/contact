@@ -2079,8 +2079,11 @@ list.addEventListener(
     event.preventDefault();
 
 
+    const speed = 1.8;
+
+
     list.scrollLeft +=
-      delta;
+      delta * speed;
 
   },
   {

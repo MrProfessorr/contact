@@ -1743,7 +1743,9 @@ padding:0 12px;
 
   align-self:flex-end;
 
-  z-index:10;
+  z-index:10020;
+
+  overflow:visible;
 }
 
 
@@ -1800,15 +1802,20 @@ padding:0 12px;
 ========================================================= */
 
 .admin-workspace-more-panel {
-  top:calc(100% + 4px);
+  position:absolute;
 
-  left:auto;
+  top:100%;
   right:0;
+  left:auto;
 
   width:182px;
   min-width:182px;
 
+  margin-top:4px;
+
   z-index:10020;
+
+  transform:none;
 }
 
 

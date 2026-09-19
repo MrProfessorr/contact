@@ -1691,16 +1691,32 @@ if (document.readyState === "loading") {
 
 /* HIDE AFTER PAGE FULLY LOADED */
 
+const adminLoadingStartedAt =
+  performance.now();
+
+
 window.addEventListener(
   "load",
   () => {
 
-    requestAnimationFrame(
+    const elapsed =
+      performance.now() -
+      adminLoadingStartedAt;
+
+    const remaining =
+      Math.max(
+        0,
+        300 - elapsed
+      );
+
+
+    setTimeout(
       () => {
 
         hideAdminPageLoading();
 
-      }
+      },
+      remaining
     );
 
   },

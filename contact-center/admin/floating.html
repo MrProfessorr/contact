@@ -641,6 +641,10 @@ import {
 requireAdmin();
 
 setupLogout();
+
+// LOADING MASA BUKA / REFRESH PAGE
+showAdminLoading();
+
 initSharedDropdowns();
 
 
@@ -1416,8 +1420,6 @@ previewImage.addEventListener(
 /* =====================================================
    LOAD FIREBASE
 ===================================================== */
-  showAdminLoading();
-
 let floatingInitialLoaded =
   false;
 onValue(

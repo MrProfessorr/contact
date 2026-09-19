@@ -901,7 +901,47 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 /* =========================================================
    ADMIN SIDEBAR NAVIGATION
 ========================================================= */
+/* =========================================================
+   ADMIN HEADER TIME
+========================================================= */
 
+.admin-header-time {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  flex:0 0 auto;
+
+  margin-right:12px;
+
+  padding-left:2px;
+  padding-right:2px;
+
+  color:#ffffff;
+
+  line-height:1.2;
+
+  white-space:nowrap;
+
+  user-select:none;
+}
+
+
+.admin-header-time-city {
+  font-size:12.8px;
+
+  opacity:.8;
+}
+
+
+.admin-header-time-value {
+  font-size:19.2px;
+  font-weight:700;
+
+  font-variant-numeric:
+    tabular-nums;
+}
 /* =========================================================
    ADMIN USER
 ========================================================= */

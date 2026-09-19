@@ -1802,25 +1802,366 @@ if (currentItem) {
     "admin-workspace-tabs";
 
 
-  const list =
-    document.createElement(
-      "div"
-    );
-
-
-  list.className =
-    "admin-workspace-tabs-list";
-
-
-  bar.appendChild(
-    list
+const searchWrap =
+  document.createElement(
+    "div"
   );
+
+searchWrap.className =
+  "admin-workspace-search";
+
+
+const searchButton =
+  document.createElement(
+    "button"
+  );
+
+searchButton.type =
+  "button";
+
+searchButton.className =
+  "admin-workspace-search-btn";
+
+searchButton.title =
+  "Search module";
+
+searchButton.setAttribute(
+  "aria-label",
+  "Search module"
+);
+
+
+const SEARCH_ICON = `
+  <svg
+    viewBox="0 0 1024 1024"
+    aria-hidden="true"
+  >
+    <path
+      d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"
+      fill="currentColor"
+    />
+  </svg>
+`;
+
+searchButton.innerHTML =
+  SEARCH_ICON;
+
+
+const searchInput =
+  document.createElement(
+    "input"
+  );
+
+searchInput.type =
+  "text";
+
+searchInput.className =
+  "admin-workspace-search-input";
+
+searchInput.placeholder =
+  "Search module...";
+
+searchInput.autocomplete =
+  "off";
+
+
+const searchInputIcon =
+  document.createElement(
+    "span"
+  );
+
+searchInputIcon.className =
+  "admin-workspace-search-input-icon";
+
+searchInputIcon.innerHTML =
+  SEARCH_ICON;
+
+
+const searchResults =
+  document.createElement(
+    "div"
+  );
+
+searchResults.className =
+  "admin-workspace-search-results";
+
+
+searchWrap.appendChild(
+  searchButton
+);
+
+searchWrap.appendChild(
+  searchInput
+);
+
+searchWrap.appendChild(
+  searchInputIcon
+);
+
+searchWrap.appendChild(
+  searchResults
+);
+
+
+const list =
+  document.createElement(
+    "div"
+  );
+
+list.className =
+  "admin-workspace-tabs-list";
+
+
+bar.appendChild(
+  searchWrap
+);
+
+bar.appendChild(
+  list
+);
 
 
   adminNav.insertAdjacentElement(
     "afterend",
     bar
   );
+function renderSearchResults(
+  keyword = ""
+) {
+
+  const query =
+    keyword
+      .trim()
+      .toLowerCase();
+
+
+  const results =
+    menuItems.filter(
+      item =>
+        !query ||
+        item.name
+          .toLowerCase()
+          .includes(query)
+    );
+
+
+  searchResults.innerHTML =
+    "";
+
+
+  if (results.length === 0) {
+
+    const empty =
+      document.createElement(
+        "div"
+      );
+
+    empty.className =
+      "admin-workspace-search-empty";
+
+    empty.textContent =
+      "No data";
+
+    searchResults.appendChild(
+      empty
+    );
+
+    searchResults.classList.add(
+      "show"
+    );
+
+    return;
+  }
+
+
+  results.forEach(
+    item => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.type =
+        "button";
+
+      button.className =
+        "admin-workspace-search-item";
+
+      button.textContent =
+        item.name;
+
+
+      button.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+
+          let currentTabs =
+            getAdminWorkspaceTabs();
+
+
+          if (
+            !currentTabs.some(
+              tab =>
+                tab.file ===
+                item.file
+            )
+          ) {
+
+            currentTabs.push({
+              file:item.file,
+              name:item.name
+            });
+
+
+            saveAdminWorkspaceTabs(
+              currentTabs
+            );
+
+          }
+
+
+          localStorage.setItem(
+            ADMIN_WORKSPACE_ACTIVE_KEY,
+            item.file
+          );
+
+
+          window.location.href =
+            `./${item.file}`;
+
+        }
+      );
+
+
+      searchResults.appendChild(
+        button
+      );
+
+    }
+  );
+
+
+  searchResults.classList.add(
+    "show"
+  );
+
+}
+
+
+function openWorkspaceSearch() {
+
+  searchWrap.classList.add(
+    "open"
+  );
+
+  renderSearchResults("");
+
+  requestAnimationFrame(
+    () => {
+      searchInput.focus();
+    }
+  );
+
+}
+
+
+function closeWorkspaceSearch() {
+
+  searchWrap.classList.remove(
+    "open"
+  );
+
+  searchResults.classList.remove(
+    "show"
+  );
+
+  searchInput.value =
+    "";
+
+}
+
+
+searchButton.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+    openWorkspaceSearch();
+
+  }
+);
+
+
+searchInput.addEventListener(
+  "input",
+  () => {
+
+    renderSearchResults(
+      searchInput.value
+    );
+
+  }
+);
+
+
+searchInput.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+  }
+);
+
+
+searchResults.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+  }
+);
+
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      !searchWrap.contains(
+        event.target
+      )
+    ) {
+
+      closeWorkspaceSearch();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+
+      closeWorkspaceSearch();
+
+    }
+
+  }
+);
 /*
   MOUSE WHEEL
   VERTICAL WHEEL -> HORIZONTAL TAB SCROLL

@@ -341,13 +341,18 @@ import {
   set,
   onValue,
   requireAdmin,
-  setupLogout
+  setupLogout,
+  showAdminLoading,
+  hideAdminLoading
 } from "./admin.js";
 
 
 requireAdmin();
 
 setupLogout();
+
+showAdminLoading();
+
 initSharedDropdowns();
 
 const enabledInput =
@@ -675,15 +680,15 @@ onValue(
 
 if (!data) {
 
-  enabledInput.checked =
-    true;
+  enabledInput.checked = true;
 
   updateMarqueeActiveText();
 
   updatePreview();
 
-  return;
+  hideAdminLoading();
 
+  return;
 }
 
 
@@ -768,9 +773,11 @@ pauseHoverInput.dispatchEvent(
   )
 );
 
-    updatePreview();
+updatePreview();
 
-  },
+hideAdminLoading();
+
+},
 
   error => {
 

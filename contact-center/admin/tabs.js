@@ -27,13 +27,24 @@ setupLogout();
 
 showAdminLoading();
 
-let initialLoadsRemaining = 3;
+const initialLoadDone = {
+  footerStyle: false,
+  sidebar: false,
+  tabs: false
+};
 
-function finishInitialLoad() {
+function finishInitialLoad(key) {
 
-  initialLoadsRemaining--;
+  if (initialLoadDone[key]) {
+    return;
+  }
 
-  if (initialLoadsRemaining <= 0) {
+  initialLoadDone[key] = true;
+
+  if (
+    Object.values(initialLoadDone)
+      .every(Boolean)
+  ) {
 
     hideAdminLoading();
 
@@ -1598,7 +1609,7 @@ onValue(
     updateFooterNavBackgroundPreview();
 
     // FOOTER STYLE SELESAI LOAD
-    finishInitialLoad();
+   finishInitialLoad("footerStyle");
 
   },
 
@@ -1610,7 +1621,7 @@ onValue(
     );
 
     // ERROR PUN DIKIRA SELESAI
-    finishInitialLoad();
+    finishInitialLoad("footerStyle");
 
   }
 );
@@ -1641,7 +1652,7 @@ onValue(
     updateSidebarPreview();
 
     // SIDEBAR SELESAI LOAD
-    finishInitialLoad();
+    finishInitialLoad("sidebar");
 
   },
 
@@ -1653,8 +1664,7 @@ onValue(
     );
 
     // ERROR PUN DIKIRA SELESAI
-    finishInitialLoad();
-
+finishInitialLoad("sidebar");
   }
 );
 
@@ -1703,7 +1713,7 @@ onValue(
         tabs.length + 1;
 
     }
-finishInitialLoad();
+finishInitialLoad("tabs");
   },
 
   error => {
@@ -1720,6 +1730,6 @@ finishInitialLoad();
           Failed to load tabs.
         </div>
       `;
-finishInitialLoad();
+finishInitialLoad("tabs");
   }
 );

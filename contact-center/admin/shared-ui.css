@@ -1736,16 +1736,15 @@ padding:0 12px;
 .admin-workspace-tab {
   position:relative;
 
-  height:36px;
   box-sizing:border-box;
-   margin-top:1px;
+
   display:inline-flex;
   align-items:center;
+  justify-content:center;
 
   flex:0 0 auto;
-  padding:
-    0 8px
-    0 16px;
+
+  padding:8px 16px;
 
   border:
     1px solid #303030;
@@ -1767,11 +1766,11 @@ padding:0 12px;
   font-family:inherit;
   font-size:14px;
   font-weight:400;
+  line-height:1;
 
   white-space:nowrap;
 
   cursor:pointer;
-
   user-select:none;
   touch-action:none;
 
@@ -1788,7 +1787,6 @@ padding:0 12px;
 
   will-change:transform;
 }
-
 
 .admin-workspace-tab:hover {
   background:
@@ -1945,16 +1943,12 @@ padding:0 12px;
 ========================================================= */
 
 @media(max-width:650px) {
+
   .admin-workspace-tab {
-    height:36px;
-
-    padding:
-      0 6px
-      0 12px;
-
-    font-size:13px;
+    padding:8px 16px;
+    font-size:14px;
+    line-height:1;
   }
-
 
   .admin-workspace-tab-actions {
     margin-left:6px;

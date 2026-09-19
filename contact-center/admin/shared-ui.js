@@ -1665,6 +1665,51 @@ function hideAdminPageLoading() {
 
 }
 /* =======================================================
+   ADMIN CONTENT LOADING
+======================================================= */
+
+function getAdminContent() {
+  return document.querySelector(
+    "#adminContent"
+  );
+}
+
+
+function showAdminContentLoading() {
+
+  const content =
+    getAdminContent();
+
+  if (!content) {
+    return;
+  }
+
+  content.classList.add(
+    "admin-content-loading"
+  );
+
+  content.innerHTML =
+    createLoadingState(
+      "Please wait while fetching...",
+      "large"
+    );
+}
+
+
+function hideAdminContentLoading() {
+
+  const content =
+    getAdminContent();
+
+  if (!content) {
+    return;
+  }
+
+  content.classList.remove(
+    "admin-content-loading"
+  );
+}
+/* =======================================================
    SHOW LOADING ON PAGE LOAD / BROWSER REFRESH
 ======================================================= */
 
@@ -2340,46 +2385,47 @@ function updateMoreTabs() {
       );
 
 
-      refresh.addEventListener(
-        "click",
-        event => {
+refresh.addEventListener(
+  "click",
+  event => {
 
-          event.stopPropagation();
+    event.stopPropagation();
 
-if (
-  tab.file ===
-  currentPage
-) {
+    localStorage.setItem(
+      ADMIN_WORKSPACE_ACTIVE_KEY,
+      tab.file
+    );
 
-  showAdminPageLoading();
+    if (
+      tab.file !==
+      window.location.pathname
+        .split("/")
+        .pop()
+    ) {
 
+      showAdminPageLoading();
 
-  requestAnimationFrame(
-    () => {
+      window.location.href =
+        `./${tab.file}`;
 
-      requestAnimationFrame(
-        () => {
-
-          window.location.reload();
-
-        }
-      );
-
+      return;
     }
-  );
 
 
-  return;
+    showAdminPageLoading();
 
-}
+    requestAnimationFrame(() => {
 
+      requestAnimationFrame(() => {
 
-navigateToTab(
-  tab
+        window.location.reload();
+
+      });
+
+    });
+
+  }
 );
-
-        }
-      );
 
 
       close.addEventListener(
@@ -2718,10 +2764,11 @@ window.addEventListener(
 
   }
 );
-function navigateToTab(
-  tab,
-  showLoading = true
-) {
+async function navigateToTab(tab) {
+
+  if (!tab?.file) {
+    return;
+  }
 
   localStorage.setItem(
     ADMIN_WORKSPACE_ACTIVE_KEY,
@@ -2729,27 +2776,135 @@ function navigateToTab(
   );
 
 
-  if (showLoading) {
+  /* =========================================
+     SAME PAGE
+  ========================================= */
 
-    showAdminPageLoading();
+  const currentFile =
+    window.location.pathname
+      .split("/")
+      .pop();
 
+  if (currentFile === tab.file) {
+    return;
   }
 
 
-  requestAnimationFrame(
-    () => {
+  /* =========================================
+     CONTENT LOADING ONLY
+  ========================================= */
 
-      requestAnimationFrame(
-        () => {
+  showAdminContentLoading();
 
-          window.location.href =
-            `./${tab.file}`;
 
+  try {
+
+    const response =
+      await fetch(
+        `./${tab.file}`,
+        {
+          cache:"no-store"
         }
       );
 
+
+    if (!response.ok) {
+
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+
     }
-  );
+
+
+    const html =
+      await response.text();
+
+
+    const parser =
+      new DOMParser();
+
+
+    const newDocument =
+      parser.parseFromString(
+        html,
+        "text/html"
+      );
+
+
+    const newContent =
+      newDocument.querySelector(
+        "#adminContent"
+      );
+
+
+    const currentContent =
+      getAdminContent();
+
+
+    if (
+      !newContent ||
+      !currentContent
+    ) {
+
+      throw new Error(
+        "#adminContent not found"
+      );
+
+    }
+
+
+    /* =========================================
+       REPLACE CONTENT ONLY
+    ========================================= */
+
+    currentContent.innerHTML =
+      newContent.innerHTML;
+
+
+    /* =========================================
+       UPDATE URL WITHOUT PAGE RELOAD
+    ========================================= */
+
+    history.pushState(
+      {
+        file:tab.file
+      },
+      "",
+      `./${tab.file}`
+    );
+
+
+    /* =========================================
+       RE-INIT SHARED COMPONENTS
+    ========================================= */
+
+    initSharedDropdowns(
+      currentContent
+    );
+
+
+    hideAdminContentLoading();
+
+  }
+  catch (error) {
+
+    console.error(
+      "Admin navigation failed:",
+      error
+    );
+
+
+    /*
+      Fallback kalau AJAX gagal.
+    */
+
+    showAdminPageLoading();
+
+    window.location.href =
+      `./${tab.file}`;
+
+  }
 
 }
 
@@ -2926,54 +3081,31 @@ function navigateToTab(
             event.stopPropagation()
         );
 
+refresh.addEventListener(
+  "click",
+  event => {
 
-        refresh.addEventListener(
-          "click",
-          event => {
+    event.stopPropagation();
 
-            event.stopPropagation();
+    localStorage.setItem(
+      ADMIN_WORKSPACE_ACTIVE_KEY,
+      tab.file
+    );
 
+    showAdminPageLoading();
 
-if (
-  tab.file ===
-  currentPage
-) {
+    requestAnimationFrame(() => {
 
-  localStorage.setItem(
-    ADMIN_WORKSPACE_ACTIVE_KEY,
-    tab.file
-  );
+      requestAnimationFrame(() => {
 
+        window.location.reload();
 
-  showAdminPageLoading();
+      });
 
+    });
 
-  requestAnimationFrame(
-    () => {
-
-      requestAnimationFrame(
-        () => {
-
-          window.location.reload();
-
-        }
-      );
-
-    }
-  );
-
-
-  return;
-
-}
-
-
-            navigateToTab(
-              tab
-            );
-
-          }
-        );
+  }
+);
 
 
         close.addEventListener(

@@ -10,7 +10,10 @@ import {
 
   requireAdmin,
   setupLogout,
-  safe
+  safe,
+
+  showAdminLoading,
+  hideAdminLoading
 
 } from "./admin.js";
 
@@ -18,7 +21,25 @@ import {
 requireAdmin();
 setupLogout();
 
+// ==========================================
+// PAGE LOADING
+// ==========================================
 
+showAdminLoading();
+
+let initialLoadsRemaining = 3;
+
+function finishInitialLoad() {
+
+  initialLoadsRemaining--;
+
+  if (initialLoadsRemaining <= 0) {
+
+    hideAdminLoading();
+
+  }
+
+}
 if (
   typeof initSharedUI ===
   "function"
@@ -1566,18 +1587,18 @@ onValue(
     const data =
       snapshot.val() || {};
 
-
     footerNavColor.value =
       data.backgroundColor ||
       "#171717";
-
 
     footerNavBackgroundUrl =
       data.backgroundImageUrl ||
       "";
 
-
     updateFooterNavBackgroundPreview();
+
+    // FOOTER STYLE SELESAI LOAD
+    finishInitialLoad();
 
   },
 
@@ -1587,6 +1608,9 @@ onValue(
       "Footer navigation style error:",
       error
     );
+
+    // ERROR PUN DIKIRA SELESAI
+    finishInitialLoad();
 
   }
 );
@@ -1605,7 +1629,6 @@ onValue(
     const data =
       snapshot.val() || {};
 
-
     sidebarEnabled.checked =
       data.enabled !== false;
 
@@ -1617,6 +1640,9 @@ onValue(
 
     updateSidebarPreview();
 
+    // SIDEBAR SELESAI LOAD
+    finishInitialLoad();
+
   },
 
   error => {
@@ -1625,6 +1651,9 @@ onValue(
       "Sidebar settings error:",
       error
     );
+
+    // ERROR PUN DIKIRA SELESAI
+    finishInitialLoad();
 
   }
 );
@@ -1674,7 +1703,7 @@ onValue(
         tabs.length + 1;
 
     }
-
+finishInitialLoad();
   },
 
   error => {
@@ -1691,6 +1720,6 @@ onValue(
           Failed to load tabs.
         </div>
       `;
-
+finishInitialLoad();
   }
 );

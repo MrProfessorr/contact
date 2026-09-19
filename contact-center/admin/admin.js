@@ -53,7 +53,104 @@ export const auth =
 export const db =
   getDatabase(app);
 
+/* =====================================================
+   ADMIN CONTENT LOADING
+===================================================== */
 
+let adminLoadingTimer = null;
+
+
+export function showAdminLoading(
+  text = "Please wait while fetching..."
+) {
+
+  let overlay =
+    document.getElementById(
+      "adminContentLoading"
+    );
+
+
+  if (!overlay) {
+
+    overlay =
+      document.createElement(
+        "div"
+      );
+
+    overlay.id =
+      "adminContentLoading";
+
+    overlay.className =
+      "admin-content-loading";
+
+
+    overlay.innerHTML = `
+      <div class="admin-content-loading-inner">
+
+        <div class="admin-content-loading-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="admin-content-loading-text"></div>
+
+      </div>
+    `;
+
+
+    document.body.appendChild(
+      overlay
+    );
+
+  }
+
+
+  const loadingText =
+    overlay.querySelector(
+      ".admin-content-loading-text"
+    );
+
+
+  if (loadingText) {
+
+    loadingText.textContent =
+      text;
+
+  }
+
+
+  clearTimeout(
+    adminLoadingTimer
+  );
+
+
+  overlay.classList.add(
+    "show"
+  );
+
+}
+
+
+export function hideAdminLoading() {
+
+  const overlay =
+    document.getElementById(
+      "adminContentLoading"
+    );
+
+
+  if (!overlay) {
+    return;
+  }
+
+
+  overlay.classList.remove(
+    "show"
+  );
+
+}
 /* AUTH GUARD */
 
 export function requireAdmin() {

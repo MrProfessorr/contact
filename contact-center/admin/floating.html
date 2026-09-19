@@ -629,8 +629,8 @@ import {
   onValue,
   requireAdmin,
   setupLogout,
-  showAdminContentLoading,
-  hideAdminContentLoading
+  showAdminLoading,
+  hideAdminLoading
 } from "./admin.js";
 
 
@@ -1416,7 +1416,7 @@ previewImage.addEventListener(
 /* =====================================================
    LOAD FIREBASE
 ===================================================== */
-showAdminContentLoading();
+  showAdminLoading();
 
 let floatingInitialLoaded =
   false;
@@ -1452,7 +1452,7 @@ if (!data) {
     floatingInitialLoaded =
       true;
 
-    hideAdminContentLoading();
+  hideAdminLoading();
 
   }
 
@@ -1604,7 +1604,7 @@ if (
   floatingInitialLoaded =
     true;
 
-  hideAdminContentLoading();
+  hideAdminLoading();
 
 }
 
@@ -1626,7 +1626,7 @@ error => {
     floatingInitialLoaded =
       true;
 
-    hideAdminContentLoading();
+  hideAdminLoading();
 
   }
 

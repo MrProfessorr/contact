@@ -1071,7 +1071,7 @@ async function(id) {
 
 
 /* LIST */
-
+showAdminLoading();
 onValue(
   ref(
     db,
@@ -1393,7 +1393,7 @@ items.forEach(item => {
 });
   }
 );
-showAdminLoading();
+hideAdminLoading();
 </script>
 </body>
 </html>

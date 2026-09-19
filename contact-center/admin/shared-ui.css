@@ -1731,6 +1731,246 @@ padding:0 12px;
   display:none;
 }
 /* =========================================================
+   ADMIN WORKSPACE MORE TABS
+========================================================= */
+
+.admin-workspace-more {
+  position:relative;
+
+  display:none;
+
+  flex:0 0 auto;
+
+  align-self:flex-end;
+
+  z-index:10;
+}
+
+
+.admin-workspace-more.show {
+  display:block;
+}
+
+
+/* MORE BUTTON */
+
+.admin-workspace-more-btn {
+  position:relative;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:8px 16px;
+
+  border:0;
+  outline:0;
+
+  color:rgba(255,255,255,.85);
+
+  background:transparent;
+
+  font-family:inherit;
+
+  cursor:pointer;
+}
+
+
+.admin-workspace-more-btn:hover {
+  color:#ffffff;
+}
+
+
+.admin-workspace-more-btn svg {
+  display:block;
+
+  width:14px;
+  height:14px;
+
+  fill:currentColor;
+
+  pointer-events:none;
+}
+
+
+/* DROPDOWN */
+
+.admin-workspace-more-panel {
+  position:absolute;
+
+  top:calc(100% + 4px);
+  right:0;
+
+  z-index:10020;
+
+  width:182px;
+
+  display:none;
+
+  padding:4px;
+
+  border-radius:8px;
+
+  background:var(--dropdown-bg);
+
+  box-shadow:
+    0 6px 16px rgba(0,0,0,.18),
+    0 9px 28px rgba(0,0,0,.22);
+}
+
+
+.admin-workspace-more.open
+.admin-workspace-more-panel {
+  display:block;
+}
+
+
+/* MAX 6 ROWS */
+
+.admin-workspace-more-list {
+  max-height:216px;
+
+  overflow-y:auto;
+  overflow-x:hidden;
+
+  overscroll-behavior:contain;
+
+  scrollbar-width:thin;
+
+  scrollbar-color:
+    rgba(143,155,172,.30)
+    transparent;
+}
+
+
+.admin-workspace-more-list::-webkit-scrollbar {
+  width:5px;
+}
+
+
+.admin-workspace-more-list::-webkit-scrollbar-track {
+  background:transparent;
+}
+
+
+.admin-workspace-more-list::-webkit-scrollbar-thumb {
+  border-radius:999px;
+
+  background:
+    rgba(143,155,172,.30);
+}
+
+
+/* EACH TAB */
+
+.admin-workspace-more-item {
+  width:100%;
+  min-height:36px;
+
+  display:flex;
+  align-items:center;
+
+  border-radius:4px;
+
+  color:rgba(255,255,255,.85);
+
+  background:transparent;
+}
+
+
+.admin-workspace-more-item:hover {
+  background:
+    rgba(255,255,255,.08);
+}
+
+
+.admin-workspace-more-item.active {
+  color:var(--input-line-focus);
+}
+
+
+/* TAB NAME */
+
+.admin-workspace-more-name {
+  min-width:0;
+
+  flex:1 1 auto;
+
+  padding:7px 8px;
+
+  overflow:hidden;
+
+  border:0;
+  outline:0;
+
+  color:inherit;
+
+  background:transparent;
+
+  font-family:inherit;
+  font-size:14px;
+
+  text-align:left;
+
+  text-overflow:ellipsis;
+  white-space:nowrap;
+
+  cursor:pointer;
+}
+
+
+/* RIGHT ACTIONS */
+
+.admin-workspace-more-actions {
+  display:flex;
+  align-items:center;
+
+  gap:8px;
+
+  flex:none;
+
+  padding-right:8px;
+}
+
+
+.admin-workspace-more-refresh,
+.admin-workspace-more-close {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+  outline:0;
+
+  color:rgba(255,255,255,.45);
+
+  background:transparent;
+
+  cursor:pointer;
+}
+
+
+.admin-workspace-more-refresh:hover,
+.admin-workspace-more-close:hover {
+  color:rgba(255,255,255,.85);
+}
+
+
+.admin-workspace-more-refresh svg,
+.admin-workspace-more-close svg {
+  display:block;
+
+  width:12px;
+  height:12px;
+
+  fill:currentColor;
+
+  pointer-events:none;
+}
+/* =========================================================
    TAB
 ========================================================= */
 

@@ -3414,11 +3414,15 @@ function updateAdminTime() {
       )?.value || "";
 
 
-  adminTimeValue.textContent =
-    `${getPart("hour")}:` +
-    `${getPart("minute")}:` +
-    `${getPart("month")} ` +
-    `${getPart("day")}`;
+adminTimeValue.innerHTML = `
+  <span class="admin-header-clock">
+    ${getPart("hour")}:${getPart("minute")}
+  </span>
+
+  <span class="admin-header-date">
+    ${getPart("month")} ${getPart("day")}
+  </span>
+`;
 
 }
 

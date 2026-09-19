@@ -6,7 +6,10 @@ import {
   set,
   remove,
   requireAdmin,
-  setupLogout
+  setupLogout,
+
+  showAdminLoading,
+  hideAdminLoading
 
 } from "./admin.js";
 
@@ -14,6 +17,27 @@ import {
 await requireAdmin();
 
 setupLogout();
+
+
+// ==========================================
+// PAGE INITIAL LOADING
+// ==========================================
+
+showAdminLoading();
+
+let initialLoadsRemaining = 5;
+
+function finishInitialLoad() {
+
+  initialLoadsRemaining--;
+
+  if (initialLoadsRemaining <= 0) {
+
+    hideAdminLoading();
+
+  }
+
+}
 
 
 /* =========================================================
@@ -3087,11 +3111,13 @@ onValue(
 
     /* FIREBASE FINISHED */
 
-    visitorsLoaded =
-      true;
+visitorsLoaded =
+  true;
 
 
-    renderAll();
+renderAll();
+
+finishInitialLoad();
 
   },
 
@@ -3105,11 +3131,13 @@ onValue(
 
     /* STOP LOADING EVEN IF FIREBASE FAILS */
 
-    visitorsLoaded =
-      true;
+visitorsLoaded =
+  true;
 
 
-    renderVisitors();
+renderVisitors();
+
+finishInitialLoad();
 
   }
 
@@ -3130,6 +3158,19 @@ onValue(
 
     renderAll();
 
+    finishInitialLoad();
+
+  },
+
+  error => {
+
+    console.error(
+      "Presence load error:",
+      error
+    );
+
+    finishInitialLoad();
+
   }
 
 );
@@ -3148,6 +3189,19 @@ onValue(
       snapshot.val() || {};
 
     renderClicks();
+
+    finishInitialLoad();
+
+  },
+
+  error => {
+
+    console.error(
+      "Clicks load error:",
+      error
+    );
+
+    finishInitialLoad();
 
   }
 
@@ -3194,6 +3248,19 @@ onValue(
 
     }
 
+    finishInitialLoad();
+
+  },
+
+  error => {
+
+    console.error(
+      "Blocked visitors load error:",
+      error
+    );
+
+    finishInitialLoad();
+
   }
 
 );
@@ -3224,6 +3291,7 @@ renderSources();
 renderClicks();
 
 renderVisitorTrafficChart();
+    finishInitialLoad();
 
   },
 
@@ -3233,7 +3301,7 @@ renderVisitorTrafficChart();
       "Daily analytics chart error:",
       error
     );
-
+  finishInitialLoad();
   }
 
 );

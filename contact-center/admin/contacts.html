@@ -379,6 +379,22 @@ import {
 requireAdmin();
 
 setupLogout();
+
+// LOADING MASA BUKA / REFRESH PAGE
+showAdminLoading();
+let contactInitialLoaded = false;
+
+function finishContactInitialLoad() {
+
+  if (contactInitialLoaded) {
+    return;
+  }
+
+  contactInitialLoaded = true;
+
+  hideAdminLoading();
+}
+  
 initSharedDropdowns();
 
 const form =
@@ -1071,7 +1087,6 @@ async function(id) {
 
 
 /* LIST */
-showAdminLoading();
 onValue(
   ref(
     db,
@@ -1112,7 +1127,7 @@ onValue(
           No contacts yet.
         </div>
       `;
-      hideAdminLoading();
+     finishContactInitialLoad();
       return;
     }
 
@@ -1391,8 +1406,29 @@ items.forEach(item => {
   );
 
 });
-hideAdminLoading();
-  }
+// FIREBASE BERJAYA LOAD
+finishContactInitialLoad();
+
+},
+
+error => {
+
+  console.error(
+    "Contacts load error:",
+    error
+  );
+
+  list.innerHTML = `
+    <div class="empty">
+      Failed to load contacts.
+    </div>
+  `;
+
+  // FIREBASE ERROR PUN LOADING TETAP TUTUP
+  finishContactInitialLoad();
+
+}
+
 );
 
 </script>

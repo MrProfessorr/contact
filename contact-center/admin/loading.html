@@ -433,7 +433,9 @@ import {
   set,
   onValue,
   requireAdmin,
-  setupLogout
+  setupLogout,
+  showAdminLoading,
+  hideAdminLoading
 } from "./admin.js";
 
 
@@ -444,7 +446,7 @@ import {
 requireAdmin();
 
 setupLogout();
-
+showAdminLoading();
 
 
 /* =========================================================
@@ -1315,22 +1317,20 @@ onValue(
 
   snapshot => {
 
-    const data =
-      snapshot.val();
-
+    const data = snapshot.val();
 
     if (!data) {
 
-      applyForm(
-        DEFAULT_LOADING
-      );
+      applyForm(DEFAULT_LOADING);
 
-      return;
+    } else {
+
+      applyForm(data);
 
     }
 
-
-    applyForm(data);
+    // FIREBASE SUDAH SELESAI LOAD
+    hideAdminLoading();
 
   },
 
@@ -1341,11 +1341,13 @@ onValue(
       error
     );
 
-
     showMessage(
       "Failed to load loading settings.",
       "error"
     );
+
+    // ERROR PUN LOADING TETAP DITUTUP
+    hideAdminLoading();
 
   }
 );

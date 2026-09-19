@@ -1601,7 +1601,68 @@ padding:0 12px;
   display:none;
 }
 
+/* =========================================================
+   WORKSPACE SEARCH - SHARED DROPDOWN
+========================================================= */
 
+.admin-workspace-search > .shared-dropdown {
+  display:none;
+  width:100%;
+  min-width:0;
+}
+
+
+/* SHOW SHARED DROPDOWN WHEN SEARCH OPEN */
+
+.admin-workspace-search.open > .shared-dropdown {
+  display:block;
+}
+
+
+/* SEARCH FIELD */
+
+.admin-workspace-search
+.shared-dropdown-trigger {
+  width:100%;
+  height:32px;
+}
+
+
+/* SEARCH INPUT */
+
+.admin-workspace-search
+.shared-dropdown-input {
+  height:30px;
+  padding:
+    0 30px
+    0 11px;
+}
+
+
+/* RIGHT ICON */
+
+.admin-workspace-search
+.shared-dropdown-icon {
+  right:10px;
+}
+
+
+/* DROPDOWN RESULT */
+
+.admin-workspace-search
+.shared-dropdown-panel {
+  z-index:10010;
+  width:100%;
+  min-width:150px;
+}
+
+
+/* RESULT LIST */
+
+.admin-workspace-search
+.shared-dropdown-options {
+  max-height:260px;
+}
 /* INPUT */
 .admin-workspace-tabs {
   position:relative;

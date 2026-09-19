@@ -2083,9 +2083,12 @@ function openWorkspaceSearch() {
 
       searchInput.focus();
 
+      const length =
+        searchInput.value.length;
+
       searchInput.setSelectionRange(
-        0,
-        searchInput.value.length
+        length,
+        length
       );
 
     }

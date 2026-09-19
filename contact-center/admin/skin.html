@@ -602,7 +602,10 @@ import {
 
   ref,
   set,
-  onValue
+  onValue,
+
+  showAdminLoading,
+  hideAdminLoading
 
 } from "./admin.js";
 
@@ -610,6 +613,9 @@ import {
 requireAdmin();
 
 setupLogout();
+
+// LOADING MASA BUKA / REFRESH PAGE
+showAdminLoading();
 
 
 
@@ -1246,14 +1252,35 @@ bodyTextColor.value =
       "Current footer image"
     );
 
+updateActiveText();
 
-    updateActiveText();
+updatePreview();
 
-    updatePreview();
+// FIREBASE BERJAYA LOAD
+hideAdminLoading();
 
-  }
+},
+
+error => {
+
+  console.error(
+    "Skin settings load error:",
+    error
+  );
+
+  saveMessage.textContent =
+    "Failed to load skin settings.";
+
+  saveMessage.className =
+    "skin-save-message error";
+
+  // FIREBASE ERROR PUN LOADING TETAP TUTUP
+  hideAdminLoading();
+
+}
 
 );
+
 
 
 
@@ -1702,7 +1729,6 @@ resetSkinBtn.addEventListener(
 
     updatePreview();
 
-
     try {
 
       await set(
@@ -1736,7 +1762,7 @@ resetSkinBtn.addEventListener(
 
       saveMessage.className =
         "skin-save-message error";
-
+   
     }
 
   }

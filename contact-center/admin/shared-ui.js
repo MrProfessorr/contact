@@ -2037,10 +2037,25 @@ document.addEventListener(
       return;
     }
 
+    searchWrap.classList.add(
+      "closing"
+    );
 
     searchWrap.classList.remove(
       "open"
     );
+
+    requestAnimationFrame(() => {
+
+      requestAnimationFrame(() => {
+
+        searchWrap.classList.remove(
+          "closing"
+        );
+
+      });
+
+    });
 
   }
 );

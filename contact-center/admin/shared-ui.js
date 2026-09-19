@@ -1591,7 +1591,7 @@ const ADMIN_WORKSPACE_ACTIVE_KEY =
 
 const ADMIN_DEFAULT_TAB = {
   file:"visitors.html",
-  name:"Visitors"
+  name:"Dashboard"
 };
 
 
@@ -3672,7 +3672,7 @@ adminNavInner.appendChild(
   const menuItems = [
     {
       file: "visitors.html",
-      name: "Visitors"
+      name: "Dashboard"
     },
      
     {
@@ -3682,17 +3682,17 @@ adminNavInner.appendChild(
 
     {
       file: "contacts.html",
-      name: "Contacts"
+      name: "Contacts Manage"
     },
 
     {
       file: "notices.html",
-      name: "Notices"
+      name: "Notices Message"
     },
 
     {
       file: "marquee.html",
-      name: "Marquee"
+      name: "Marquee Text"
     },
 
     {
@@ -3702,7 +3702,7 @@ adminNavInner.appendChild(
 
     {
       file: "loading.html",
-      name: "Loading"
+      name: "Loading Config"
     },
 
     {
@@ -3712,7 +3712,7 @@ adminNavInner.appendChild(
 
     {
       file: "welcome.html",
-      name: "Welcome"
+      name: "Welcome Popup"
     }
 
   ];

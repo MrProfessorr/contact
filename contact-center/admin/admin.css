@@ -8708,3 +8708,134 @@ button.active {
 
   cursor: pointer;
 }
+/* =========================================================
+   ADMIN CONTENT LOADING
+========================================================= */
+
+.admin-content-loading {
+  position:fixed;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  /*
+    64px header
+    + kira-kira 50px workspace tabbar
+  */
+  top:114px;
+
+  z-index:9999;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#000;
+
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+
+  transition:
+    opacity .12s ease,
+    visibility .12s ease;
+}
+
+
+.admin-content-loading.show {
+  opacity:1;
+  visibility:visible;
+  pointer-events:all;
+}
+
+
+.admin-content-loading-inner {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  gap:10px;
+}
+
+
+/* 4 DOT */
+
+.admin-content-loading-dots {
+  position:relative;
+
+  width:26px;
+  height:26px;
+
+  animation:
+    adminContentLoadingRotate
+    1s
+    linear
+    infinite;
+}
+
+
+.admin-content-loading-dots span {
+  position:absolute;
+
+  width:6px;
+  height:6px;
+
+  border-radius:50%;
+
+  background:#ffffff;
+}
+
+
+.admin-content-loading-dots span:nth-child(1) {
+  top:0;
+  left:10px;
+
+  opacity:1;
+}
+
+
+.admin-content-loading-dots span:nth-child(2) {
+  top:10px;
+  right:0;
+
+  opacity:.75;
+}
+
+
+.admin-content-loading-dots span:nth-child(3) {
+  bottom:0;
+  left:10px;
+
+  opacity:.5;
+}
+
+
+.admin-content-loading-dots span:nth-child(4) {
+  top:10px;
+  left:0;
+
+  opacity:.25;
+}
+
+
+@keyframes adminContentLoadingRotate {
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+
+}
+
+
+.admin-content-loading-text {
+  color:rgba(255,255,255,.85);
+
+  font-size:12px;
+  font-weight:400;
+  line-height:1.5;
+
+  white-space:nowrap;
+}

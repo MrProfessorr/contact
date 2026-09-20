@@ -454,54 +454,101 @@
   </div>
 
 
-  <div class="form-group">
+<div class="form-group">
 
-    <label>
-      Footer Text Image
-    </label>
-
-
-    <div class="tabs-icon-preview-wrap">
-
-      <div
-        id="footerTextImagePreview"
-        class="tabs-footer-text-preview"
-      >
-        No Image
-      </div>
-
-    </div>
+  <label>
+    Footer Text Image
+  </label>
 
 
-    <input
-      id="footerTextImageFile"
-      type="file"
-      accept="image/*"
-      hidden
+  <!-- SAVED IMAGE -->
+
+  <div class="tabs-icon-preview-wrap">
+
+    <div
+      id="footerTextImagePreview"
+      class="tabs-icon-preview"
     >
-
-
-    <div class="tabs-form-actions">
-
-      <button
-        id="footerTextImageUploadBtn"
-        class="btn btn-dark"
-        type="button"
-      >
-        Upload Text Image
-      </button>
-
-      <button
-        id="footerTextImageRemoveBtn"
-        class="btn btn-dark"
-        type="button"
-      >
-        Remove
-      </button>
-
+      🖼️
     </div>
 
   </div>
+
+
+  <!-- FILE INPUT -->
+
+  <input
+    id="footerTextImageFile"
+    type="file"
+    accept="image/*"
+    hidden
+  >
+
+
+  <!-- UPLOAD BUTTON -->
+
+  <button
+    id="footerTextImageUploadBtn"
+    class="floating-upload-btn"
+    type="button"
+  >
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <path d="M12 16V4"></path>
+      <path d="M7 9l5-5 5 5"></path>
+      <path d="M5 20h14"></path>
+    </svg>
+
+    Upload Image
+
+  </button>
+
+
+  <!-- PENDING IMAGE -->
+
+  <div
+    id="footerTextImagePending"
+    class="floating-upload-preview hidden"
+  >
+
+    <img
+      id="footerTextImagePendingImage"
+      src=""
+      alt=""
+    >
+
+    <div class="floating-upload-file-info">
+
+      <strong>
+        Pending image
+      </strong>
+
+      <span>
+        Click Save to apply
+      </span>
+
+    </div>
+
+
+    <button
+      id="footerTextImagePendingRemove"
+      class="floating-upload-remove"
+      type="button"
+      title="Cancel pending image"
+      aria-label="Cancel pending image"
+    >
+      ✕
+    </button>
+
+  </div>
+
+</div>
 
 
   <div class="form-group">

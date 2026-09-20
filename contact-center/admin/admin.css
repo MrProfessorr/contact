@@ -9046,3 +9046,124 @@ input:checked
   padding-left: 5px;
   padding-right: 21px;
 }
+/* =========================================================
+   CURRENT TABS ACTIVE SWITCH
+========================================================= */
+
+.tabs-list-toggle {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  width: 74px;
+  height: 24px;
+
+  margin: 0;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+
+.tabs-list-toggle input {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+.tabs-list-toggle-slider {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+
+  border-radius: 999px;
+
+  background: #666666;
+
+  transition: .2s ease;
+}
+
+
+/* WHITE DOT */
+
+.tabs-list-toggle-slider::before {
+  content: "";
+
+  position: absolute;
+
+  left: 4px;
+  top: 50%;
+
+  width: 16px;
+  height: 16px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  transform: translateY(-50%);
+
+  transition: .2s ease;
+}
+
+
+/* TEXT */
+
+.tabs-list-toggle-text {
+  width: 100%;
+
+  padding-left: 23px;
+  padding-right: 5px;
+
+  color: #ffffff;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  text-align: center;
+
+  white-space: nowrap;
+
+  transition: .2s ease;
+}
+
+
+/* ACTIVE */
+
+.tabs-list-toggle
+input:checked
++
+.tabs-list-toggle-slider {
+  background: #2677e8;
+}
+
+
+/* MOVE DOT RIGHT */
+
+.tabs-list-toggle
+input:checked
++
+.tabs-list-toggle-slider::before {
+  left: calc(100% - 20px);
+}
+
+
+/* ACTIVE TEXT MOVE LEFT */
+
+.tabs-list-toggle
+input:checked
++
+.tabs-list-toggle-slider
+.tabs-list-toggle-text {
+  padding-left: 5px;
+  padding-right: 23px;
+}

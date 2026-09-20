@@ -9047,3 +9047,32 @@ input:checked
   padding-right: 21px;
 }
 
+/* =========================================================
+   CURRENT TAB URL
+========================================================= */
+
+.tabs-admin-item-url {
+  display: block;
+
+  width: 100%;
+  max-width: 220px;
+
+  margin-top: 4px;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: #8fa4bf;
+
+  font-size: 10px;
+  line-height: 1.35;
+
+  text-decoration: none;
+}
+
+
+.tabs-admin-item-url:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}

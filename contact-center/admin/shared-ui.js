@@ -1603,7 +1603,9 @@ function navigateToTab(
     return;
   }
 
-
+sessionStorage.removeItem(
+  "adminWorkspaceClosedTab"
+);
   addAdminWorkspaceTab(
     tab
   );
@@ -1818,10 +1820,20 @@ if (tabs.length === 0) {
 /*
   MAKE SURE CURRENT PAGE EXISTS
   INSIDE WORKSPACE
+
+  TAPI JANGAN RESTORE TAB
+  YANG BARU SAHAJA DITUTUP
 */
+
+const recentlyClosedTab =
+  sessionStorage.getItem(
+    "adminWorkspaceClosedTab"
+  );
+
 
 if (
   currentItem &&
+  currentPage !== recentlyClosedTab &&
   !tabs.some(
     item =>
       item.file ===
@@ -2286,7 +2298,11 @@ refresh.addEventListener(
         event => {
 
           event.stopPropagation();
-
+           
+         sessionStorage.setItem(
+  "adminWorkspaceClosedTab",
+  tab.file
+);
           const currentTabs =
             getAdminWorkspaceTabs();
 

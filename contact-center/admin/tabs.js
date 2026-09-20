@@ -172,6 +172,20 @@ const sidebarIconPreview =
     "sidebarIconPreview"
   );
 
+const sidebarIconPending =
+  document.getElementById(
+    "sidebarIconPending"
+  );
+
+const sidebarIconPendingImage =
+  document.getElementById(
+    "sidebarIconPendingImage"
+  );
+
+const sidebarIconPendingRemove =
+  document.getElementById(
+    "sidebarIconPendingRemove"
+  );
 
 /*
   FOOTER NAVIGATION BACKGROUND
@@ -192,7 +206,20 @@ const footerNavBackgroundPreview =
   document.getElementById(
     "footerNavBackgroundPreview"
   );
+const footerBackgroundPending =
+  document.getElementById(
+    "footerBackgroundPending"
+  );
 
+const footerBackgroundPendingImage =
+  document.getElementById(
+    "footerBackgroundPendingImage"
+  );
+
+const footerBackgroundPendingRemove =
+  document.getElementById(
+    "footerBackgroundPendingRemove"
+  );
 const editingTabId =
   document.getElementById(
     "editingTabId"
@@ -299,11 +326,27 @@ let tabs = [];
 let sidebarIconUrl =
   "";
 
+let pendingSidebarIconFile =
+  null;
+
+let pendingSidebarIconPreviewUrl =
+  "";
+
+
 let tabIconUrl =
   "";
+
 let footerTextImageUrl =
   "";
+
+
 let footerNavBackgroundUrl =
+  "";
+
+let pendingFooterBackgroundFile =
+  null;
+
+let pendingFooterBackgroundPreviewUrl =
   "";
 /* =========================================================
    HELPERS
@@ -338,33 +381,6 @@ function updateFooterNavBackgroundPreview() {
 
 }
 
-  /* ==========================================
-     ADA IMAGE
-  ========================================== */
-
-  footerNavBackgroundPreview.style.display =
-    "grid";
-
-
-  if (image) {
-
-    image.src =
-      footerNavBackgroundUrl;
-
-    image.style.display =
-      "block";
-
-  }
-
-
-  if (status) {
-
-    status.textContent =
-      "Ready";
-
-  }
-
-}
 function showMessage(
   message,
   isError = false
@@ -502,58 +518,53 @@ sidebarIconUploadBtn
 sidebarIconFile
   .addEventListener(
     "change",
-    async () => {
+    () => {
 
       const file =
         sidebarIconFile.files?.[0];
-
 
       if (!file) {
         return;
       }
 
 
-      try {
+      /* REMOVE PENDING PREVIEW LAMA */
 
-        sidebarIconUploadBtn.disabled =
-          true;
+      if (
+        pendingSidebarIconPreviewUrl
+      ) {
 
-        sidebarIconUploadBtn.textContent =
-          "Uploading...";
-
-
-        sidebarIconUrl =
-          await uploadNavigationImage(
-            file
-          );
-
-
-        updateSidebarPreview();
-
-      }
-      catch (error) {
-
-        console.error(error);
-
-        showMessage(
-          "Sidebar icon upload failed.",
-          true
+        URL.revokeObjectURL(
+          pendingSidebarIconPreviewUrl
         );
 
       }
-      finally {
 
-        sidebarIconUploadBtn.disabled =
-          false;
 
-        sidebarIconUploadBtn.textContent =
-          "Upload Icon";
+      /* SIMPAN FILE SEBAGAI PENDING */
 
-      }
+      pendingSidebarIconFile =
+        file;
+
+      pendingSidebarIconPreviewUrl =
+        URL.createObjectURL(
+          file
+        );
+
+
+      /* TAMPIL PENDING PREVIEW */
+
+      sidebarIconPendingImage.src =
+        pendingSidebarIconPreviewUrl;
+
+      sidebarIconPending
+        .classList
+        .remove(
+          "hidden"
+        );
 
     }
   );
-
 
 sidebarIconEmoji
   .addEventListener(
@@ -597,54 +608,126 @@ footerNavBackgroundUploadBtn
 footerNavBackgroundFile
   ?.addEventListener(
     "change",
-    async () => {
+    () => {
 
       const file =
         footerNavBackgroundFile
           .files?.[0];
-
 
       if (!file) {
         return;
       }
 
 
-try {
+      if (
+        pendingFooterBackgroundPreviewUrl
+      ) {
 
-  footerNavBackgroundUploadBtn.disabled =
-    true;
-
-
-  footerNavBackgroundUrl =
-    await uploadNavigationImage(
-      file
-    );
-
-
-  updateFooterNavBackgroundPreview();
-
-}
-      catch (error) {
-
-        console.error(error);
-
-        showMessage(
-          "Footer background upload failed.",
-          true
+        URL.revokeObjectURL(
+          pendingFooterBackgroundPreviewUrl
         );
 
       }
-finally {
 
-  footerNavBackgroundUploadBtn.disabled =
-    false;
 
-}
+      pendingFooterBackgroundFile =
+        file;
+
+      pendingFooterBackgroundPreviewUrl =
+        URL.createObjectURL(
+          file
+        );
+
+
+      footerBackgroundPendingImage.src =
+        pendingFooterBackgroundPreviewUrl;
+
+      footerBackgroundPending
+        .classList
+        .remove(
+          "hidden"
+        );
 
     }
   );
+sidebarIconPendingRemove
+  ?.addEventListener(
+    "click",
+    () => {
+
+      pendingSidebarIconFile =
+        null;
+
+      sidebarIconFile.value =
+        "";
 
 
+      if (
+        pendingSidebarIconPreviewUrl
+      ) {
+
+        URL.revokeObjectURL(
+          pendingSidebarIconPreviewUrl
+        );
+
+      }
+
+
+      pendingSidebarIconPreviewUrl =
+        "";
+
+      sidebarIconPendingImage
+        .removeAttribute(
+          "src"
+        );
+
+      sidebarIconPending
+        .classList
+        .add(
+          "hidden"
+        );
+
+    }
+  );
+footerBackgroundPendingRemove
+  ?.addEventListener(
+    "click",
+    () => {
+
+      pendingFooterBackgroundFile =
+        null;
+
+      footerNavBackgroundFile.value =
+        "";
+
+
+      if (
+        pendingFooterBackgroundPreviewUrl
+      ) {
+
+        URL.revokeObjectURL(
+          pendingFooterBackgroundPreviewUrl
+        );
+
+      }
+
+
+      pendingFooterBackgroundPreviewUrl =
+        "";
+
+      footerBackgroundPendingImage
+        .removeAttribute(
+          "src"
+        );
+
+      footerBackgroundPending
+        .classList
+        .add(
+          "hidden"
+        );
+
+    }
+  );
 /* =========================================================
    TAB ICON
 ========================================================= */
@@ -942,7 +1025,28 @@ saveAllSettingsBtn
         saveAllSettingsBtn.textContent =
           "Saving...";
 
+/* =============================================
+   UPLOAD PENDING IMAGES
+============================================= */
 
+if (pendingSidebarIconFile) {
+
+  sidebarIconUrl =
+    await uploadNavigationImage(
+      pendingSidebarIconFile
+    );
+
+}
+
+
+if (pendingFooterBackgroundFile) {
+
+  footerNavBackgroundUrl =
+    await uploadNavigationImage(
+      pendingFooterBackgroundFile
+    );
+
+}
         /* =============================================
            1. SAVE SIDEBAR
         ============================================= */
@@ -1077,7 +1181,78 @@ await set(
 
         }
 
+/* =============================================
+   APPLY SAVED IMAGE PREVIEWS
+============================================= */
 
+updateSidebarPreview();
+updateFooterNavBackgroundPreview();
+
+
+/* CLEAR SIDEBAR PENDING */
+
+pendingSidebarIconFile =
+  null;
+
+sidebarIconFile.value =
+  "";
+
+if (
+  pendingSidebarIconPreviewUrl
+) {
+
+  URL.revokeObjectURL(
+    pendingSidebarIconPreviewUrl
+  );
+
+}
+
+pendingSidebarIconPreviewUrl =
+  "";
+
+sidebarIconPendingImage
+  .removeAttribute(
+    "src"
+  );
+
+sidebarIconPending
+  .classList
+  .add(
+    "hidden"
+  );
+
+
+/* CLEAR FOOTER BACKGROUND PENDING */
+
+pendingFooterBackgroundFile =
+  null;
+
+footerNavBackgroundFile.value =
+  "";
+
+if (
+  pendingFooterBackgroundPreviewUrl
+) {
+
+  URL.revokeObjectURL(
+    pendingFooterBackgroundPreviewUrl
+  );
+
+}
+
+pendingFooterBackgroundPreviewUrl =
+  "";
+
+footerBackgroundPendingImage
+  .removeAttribute(
+    "src"
+  );
+
+footerBackgroundPending
+  .classList
+  .add(
+    "hidden"
+  );
         showMessage(
           hasTabData
             ? "All settings and tab saved."

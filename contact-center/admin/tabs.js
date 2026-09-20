@@ -331,37 +331,61 @@ function updateFooterNavBackgroundPreview() {
       "[data-footer-bg-status]"
     );
 
-  if (footerNavBackgroundUrl) {
+
+  /* ==========================================
+     TIADA IMAGE
+  ========================================== */
+
+  if (!footerNavBackgroundUrl) {
+
+    footerNavBackgroundPreview.style.display =
+      "none";
 
     if (image) {
-      image.src =
-        footerNavBackgroundUrl;
 
-      image.style.display =
-        "block";
-    }
-
-    if (status) {
-      status.textContent =
-        "Ready";
-    }
-
-  }
-  else {
-
-    if (image) {
       image.removeAttribute(
         "src"
       );
 
       image.style.display =
         "none";
+
     }
 
     if (status) {
+
       status.textContent =
         "No image";
+
     }
+
+    return;
+  }
+
+
+  /* ==========================================
+     ADA IMAGE
+  ========================================== */
+
+  footerNavBackgroundPreview.style.display =
+    "grid";
+
+
+  if (image) {
+
+    image.src =
+      footerNavBackgroundUrl;
+
+    image.style.display =
+      "block";
+
+  }
+
+
+  if (status) {
+
+    status.textContent =
+      "Ready";
 
   }
 
@@ -666,24 +690,21 @@ footerNavBackgroundFile
       }
 
 
-      try {
+try {
 
-        footerNavBackgroundUploadBtn.disabled =
-          true;
-
-        footerNavBackgroundUploadBtn.textContent =
-          "Uploading...";
+  footerNavBackgroundUploadBtn.disabled =
+    true;
 
 
-        footerNavBackgroundUrl =
-          await uploadNavigationImage(
-            file
-          );
+  footerNavBackgroundUrl =
+    await uploadNavigationImage(
+      file
+    );
 
 
-        updateFooterNavBackgroundPreview();
+  updateFooterNavBackgroundPreview();
 
-      }
+}
       catch (error) {
 
         console.error(error);

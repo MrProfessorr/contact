@@ -1404,7 +1404,7 @@ await set(
 
 updateSidebarPreview();
 updateFooterNavBackgroundPreview();
-
+updateFooterTextImagePreview();
 
 /* CLEAR SIDEBAR PENDING */
 
@@ -1466,11 +1466,52 @@ footerBackgroundPendingImage
   );
 
 footerBackgroundPending
-  .classList
+  ?.classList
   .add(
     "hidden"
   );
-        showMessage(
+
+
+/* =============================================
+   CLEAR FOOTER TEXT IMAGE PENDING
+============================================= */
+
+pendingFooterTextImageFile =
+  null;
+
+footerTextImageFile.value =
+  "";
+
+
+if (
+  pendingFooterTextImagePreviewUrl
+) {
+
+  URL.revokeObjectURL(
+    pendingFooterTextImagePreviewUrl
+  );
+
+}
+
+
+pendingFooterTextImagePreviewUrl =
+  "";
+
+
+footerTextImagePendingImage
+  ?.removeAttribute(
+    "src"
+  );
+
+
+footerTextImagePending
+  ?.classList
+  .add(
+    "hidden"
+  );
+
+
+showMessage(
           hasTabData
             ? "All settings and tab saved."
             : "All settings saved."

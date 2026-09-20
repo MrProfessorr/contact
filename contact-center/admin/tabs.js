@@ -172,10 +172,7 @@ const sidebarIconPreview =
     "sidebarIconPreview"
   );
 
-const saveSidebarBtn =
-  document.getElementById(
-    "saveSidebarBtn"
-  );
+
 /*
   FOOTER NAVIGATION BACKGROUND
 */
@@ -207,12 +204,6 @@ const footerNavBackgroundRemoveBtn =
 const footerNavBackgroundPreview =
   document.getElementById(
     "footerNavBackgroundPreview"
-  );
-
-
-const saveFooterNavBtn =
-  document.getElementById(
-    "saveFooterNavBtn"
   );
 
 const editingTabId =
@@ -292,12 +283,10 @@ const tabFooter =
   document.getElementById(
     "tabFooter"
   );
-
-const saveTabBtn =
+const saveAllSettingsBtn =
   document.getElementById(
-    "saveTabBtn"
+    "saveAllSettingsBtn"
   );
-
 const cancelEditTabBtn =
   document.getElementById(
     "cancelEditTabBtn"
@@ -563,68 +552,6 @@ sidebarIconEmoji
     }
   );
 
-
-/* =========================================================
-   SAVE SIDEBAR
-========================================================= */
-
-saveSidebarBtn
-  .addEventListener(
-    "click",
-    async () => {
-
-      try {
-
-        saveSidebarBtn.disabled =
-          true;
-
-
-        await set(
-          ref(
-            db,
-            "navigation_settings/sidebar"
-          ),
-          {
-            enabled:
-              sidebarEnabled.checked,
-
-            iconUrl:
-              sidebarIconUrl,
-
-            iconEmoji:
-              sidebarIconEmoji
-                .value
-                .trim() ||
-              "☰"
-          }
-        );
-
-
-        showMessage(
-          "Sidebar saved."
-        );
-
-      }
-      catch (error) {
-
-        console.error(error);
-
-        showMessage(
-          "Failed to save sidebar.",
-          true
-        );
-
-      }
-      finally {
-
-        saveSidebarBtn.disabled =
-          false;
-
-      }
-
-    }
-  );
-
 /* =========================================================
    FOOTER NAVIGATION BACKGROUND
 ========================================================= */
@@ -721,66 +648,6 @@ footerNavColor
   );
 
 
-saveFooterNavBtn
-  ?.addEventListener(
-    "click",
-    async () => {
-
-      try {
-
-        saveFooterNavBtn.disabled =
-          true;
-
-        saveFooterNavBtn.textContent =
-          "Saving...";
-
-
-        await set(
-          ref(
-            db,
-            "navigation_settings/footerStyle"
-          ),
-          {
-            backgroundColor:
-              footerNavColor.value ||
-              "#171717",
-
-            backgroundImageUrl:
-              footerNavBackgroundUrl,
-
-            updatedAt:
-              Date.now()
-          }
-        );
-
-
-        showMessage(
-          "Footer background saved."
-        );
-
-      }
-      catch (error) {
-
-        console.error(error);
-
-        showMessage(
-          "Failed to save footer background.",
-          true
-        );
-
-      }
-      finally {
-
-        saveFooterNavBtn.disabled =
-          false;
-
-        saveFooterNavBtn.textContent =
-          "Save Footer Background";
-
-      }
-
-    }
-  );
 /* =========================================================
    TAB ICON
 ========================================================= */
@@ -1010,13 +877,11 @@ updateFooterTextImagePreview();
   updateTabPreview();
 
 }
-
-
 /* =========================================================
-   SAVE TAB
+   SAVE ALL SETTINGS
 ========================================================= */
 
-saveTabBtn
+saveAllSettingsBtn
   .addEventListener(
     "click",
     async () => {
@@ -1027,8 +892,23 @@ saveTabBtn
       const url =
         tabUrl.value.trim();
 
+      const hasTabData =
+        Boolean(
+          name ||
+          url ||
+          editingTabId.value
+        );
 
-      if (!name) {
+
+      /*
+        Kalau user mula isi tab,
+        Name + URL mesti lengkap.
+      */
+
+      if (
+        hasTabData &&
+        !name
+      ) {
 
         showMessage(
           "Please enter tab name.",
@@ -1038,11 +918,13 @@ saveTabBtn
         tabName.focus();
 
         return;
-
       }
 
 
-      if (!url) {
+      if (
+        hasTabData &&
+        !url
+      ) {
 
         showMessage(
           "Please enter tab URL.",
@@ -1052,127 +934,189 @@ saveTabBtn
         tabUrl.focus();
 
         return;
-
       }
-
-
-      const data = {
-
-        name,
-
-        url,
-
-iconUrl:
-  tabIconUrl,
-
-iconEmoji:
-  tabIconEmoji
-    .value
-    .trim(),
-
-footerTextImageUrl:
-  footerTextImageUrl,
-
-enabled:
-  tabEnabled.checked,
-
-        sidebar:
-          tabSidebar.checked,
-
-        footer:
-          tabFooter.checked,
-
-        sort:
-          Math.max(
-            1,
-            Number(
-              tabSort.value
-            ) || 1
-          ),
-
-        updatedAt:
-          Date.now()
-
-      };
 
 
       try {
 
-        saveTabBtn.disabled =
+        saveAllSettingsBtn.disabled =
           true;
 
+        saveAllSettingsBtn.textContent =
+          "Saving...";
 
-        const id =
-          editingTabId.value;
+
+        /* =============================================
+           1. SAVE SIDEBAR
+        ============================================= */
+
+        await set(
+          ref(
+            db,
+            "navigation_settings/sidebar"
+          ),
+          {
+            enabled:
+              sidebarEnabled.checked,
+
+            iconUrl:
+              sidebarIconUrl,
+
+            iconEmoji:
+              sidebarIconEmoji
+                .value
+                .trim() ||
+              "☰"
+          }
+        );
 
 
-        if (id) {
+        /* =============================================
+           2. SAVE FOOTER BACKGROUND
+        ============================================= */
 
-          await update(
-            ref(
-              db,
-              `navigation_settings/tabs/${id}`
-            ),
-            data
-          );
+        await set(
+          ref(
+            db,
+            "navigation_settings/footerStyle"
+          ),
+          {
+            backgroundColor:
+              footerNavColor.value ||
+              "#171717",
 
-          showMessage(
-            "Tab updated."
-          );
+            backgroundImageUrl:
+              footerNavBackgroundUrl,
 
-        }
-        else {
+            updatedAt:
+              Date.now()
+          }
+        );
 
-          const newRef =
-            push(
+
+        /* =============================================
+           3. SAVE TAB
+           HANYA JIKA FORM TAB DIGUNAKAN
+        ============================================= */
+
+        if (hasTabData) {
+
+          const data = {
+
+            name,
+
+            url,
+
+            iconUrl:
+              tabIconUrl,
+
+            iconEmoji:
+              tabIconEmoji
+                .value
+                .trim(),
+
+            footerTextImageUrl:
+              footerTextImageUrl,
+
+            enabled:
+              tabEnabled.checked,
+
+            sidebar:
+              tabSidebar.checked,
+
+            footer:
+              tabFooter.checked,
+
+            sort:
+              Math.max(
+                1,
+                Number(
+                  tabSort.value
+                ) || 1
+              ),
+
+            updatedAt:
+              Date.now()
+
+          };
+
+
+          const id =
+            editingTabId.value;
+
+
+          if (id) {
+
+            await update(
               ref(
                 db,
-                "navigation_settings/tabs"
-              )
+                `navigation_settings/tabs/${id}`
+              ),
+              data
             );
 
+          }
+          else {
 
-          await set(
-            newRef,
-            {
-              ...data,
-              createdAt:
-                Date.now()
-            }
-          );
+            const newRef =
+              push(
+                ref(
+                  db,
+                  "navigation_settings/tabs"
+                )
+              );
 
 
-          showMessage(
-            "Tab added."
-          );
+            await set(
+              newRef,
+              {
+                ...data,
+
+                createdAt:
+                  Date.now()
+              }
+            );
+
+          }
+
+
+          resetTabForm();
 
         }
 
 
-        resetTabForm();
+        showMessage(
+          hasTabData
+            ? "All settings and tab saved."
+            : "All settings saved."
+        );
 
       }
       catch (error) {
 
-        console.error(error);
+        console.error(
+          "Save all settings error:",
+          error
+        );
 
         showMessage(
-          "Failed to save tab.",
+          "Failed to save settings.",
           true
         );
 
       }
       finally {
 
-        saveTabBtn.disabled =
+        saveAllSettingsBtn.disabled =
           false;
+
+        saveAllSettingsBtn.textContent =
+          "Save All Settings";
 
       }
 
     }
   );
-
-
 /* =========================================================
    EDIT TAB
 ========================================================= */

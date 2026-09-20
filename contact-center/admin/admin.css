@@ -8500,7 +8500,7 @@ button.active {
   display:grid;
   grid-template-columns:
     450px minmax(0,1fr);
-  gap:18px;
+  gap:10px;
   align-items:start;
 }
 
@@ -8541,25 +8541,17 @@ button.active {
 
 
 .tabs-icon-preview {
-  width:48px;
-  height:48px;
-
+  width:55px;
+  height:55px;
   display:flex;
   align-items:center;
   justify-content:center;
-
   overflow:hidden;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:10px;
-
-  background:
-    var(--panel2);
-
-  font-size:25px;
+  border:1px solidvar(--line);
+  border-radius:8px;
+  background:var(--input);
+  font-size:20px;
+  padding:8px;
 }
 
 
@@ -8567,9 +8559,7 @@ button.active {
 .tabs-preview-image {
   width:100%;
   height:100%;
-
   display:block;
-
   object-fit:contain;
 }
 
@@ -8602,23 +8592,18 @@ button.active {
 
 
 .tabs-admin-item-icon {
-  flex:0 0 38px;
-
-  width:38px;
-  height:38px;
-
+  flex:0 0 55px;
+  width:55px;
+  height:55px;
   display:flex;
   align-items:center;
   justify-content:center;
-
   overflow:hidden;
-
   border-radius:8px;
-
-  background:
-    rgba(255,255,255,.04);
-
-  font-size:21px;
+  background:var(--input);
+  font-size:20px;
+  border: 1px solid var(--line);
+  padding:8px;
 }
 
 

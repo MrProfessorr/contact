@@ -8765,8 +8765,8 @@ button.active {
 .admin-content-loading-dots {
   position:relative;
 
-  width:26px;
-  height:26px;
+  width:34px;
+  height:34px;
 
   animation:
     adminContentLoadingRotate
@@ -8779,8 +8779,8 @@ button.active {
 .admin-content-loading-dots span {
   position:absolute;
 
-  width:6px;
-  height:6px;
+  width:8px;
+  height:8px;
 
   border-radius:50%;
 
@@ -8790,32 +8790,25 @@ button.active {
 
 .admin-content-loading-dots span:nth-child(1) {
   top:0;
-  left:10px;
-
+  left:13px;
   opacity:1;
 }
 
-
 .admin-content-loading-dots span:nth-child(2) {
-  top:10px;
+  top:13px;
   right:0;
-
   opacity:.75;
 }
 
-
 .admin-content-loading-dots span:nth-child(3) {
   bottom:0;
-  left:10px;
-
+  left:13px;
   opacity:.5;
 }
 
-
 .admin-content-loading-dots span:nth-child(4) {
-  top:10px;
+  top:13px;
   left:0;
-
   opacity:.25;
 }
 

@@ -1410,7 +1410,7 @@ function renderTabs() {
 
 
 <label
-  class="tabs-list-toggle"
+  class="tabs-text-switch"
   data-action="toggle"
 >
 
@@ -1423,9 +1423,9 @@ function renderTabs() {
     }
   >
 
-  <span class="tabs-list-toggle-slider">
+  <span class="tabs-text-slider">
 
-    <span class="tabs-list-toggle-text">
+    <span class="tabs-text-label">
       ${
         item.enabled !== false
           ? "Active"

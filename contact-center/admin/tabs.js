@@ -188,13 +188,6 @@ const footerNavBackgroundUploadBtn =
     "footerNavBackgroundUploadBtn"
   );
 
-
-const footerNavBackgroundRemoveBtn =
-  document.getElementById(
-    "footerNavBackgroundRemoveBtn"
-  );
-
-
 const footerNavBackgroundPreview =
   document.getElementById(
     "footerNavBackgroundPreview"
@@ -321,47 +314,29 @@ function updateFooterNavBackgroundPreview() {
     return;
   }
 
-  const image =
-    footerNavBackgroundPreview.querySelector(
-      "[data-footer-bg-image]"
-    );
 
-  const status =
-    footerNavBackgroundPreview.querySelector(
-      "[data-footer-bg-status]"
-    );
+  /* ADA IMAGE */
 
+  if (footerNavBackgroundUrl) {
 
-  /* ==========================================
-     TIADA IMAGE
-  ========================================== */
-
-  if (!footerNavBackgroundUrl) {
-
-    footerNavBackgroundPreview.style.display =
-      "none";
-
-    if (image) {
-
-      image.removeAttribute(
-        "src"
-      );
-
-      image.style.display =
-        "none";
-
-    }
-
-    if (status) {
-
-      status.textContent =
-        "No image";
-
-    }
+    footerNavBackgroundPreview.innerHTML = `
+      <img
+        class="tabs-preview-image"
+        src="${safe(footerNavBackgroundUrl)}"
+        alt=""
+      >
+    `;
 
     return;
   }
 
+
+  /* TIADA IMAGE */
+
+  footerNavBackgroundPreview.textContent =
+    "🖼️";
+
+}
 
   /* ==========================================
      ADA IMAGE
@@ -443,66 +418,28 @@ function updateSidebarPreview() {
   }
 
 
-  /* ==========================================
-     TIADA IMAGE = SEMBUNYIKAN PREVIEW
-  ========================================== */
+  /* ADA IMAGE */
 
-  if (!sidebarIconUrl) {
+  if (sidebarIconUrl) {
 
-    sidebarIconPreview.style.display =
-      "none";
+    sidebarIconPreview.innerHTML =
+      iconHtml(
+        sidebarIconUrl,
+        "",
+        "tabs-preview-image"
+      );
 
     return;
   }
 
 
-  /* ==========================================
-     ADA IMAGE = TAMPILKAN PREVIEW
-  ========================================== */
+  /* TIADA IMAGE = GUNA EMOJI */
 
-  sidebarIconPreview.style.display =
-    "grid";
-
-
-  sidebarIconPreview.innerHTML = `
-
-    <div class="sidebar-preview-image">
-
-      <img
-        src="${safe(sidebarIconUrl)}"
-        alt=""
-      >
-
-    </div>
-
-
-    <div class="sidebar-preview-info">
-
-      <strong>
-        Current sidebar image
-      </strong>
-
-      <span>
-        Ready
-      </span>
-
-    </div>
-
-
-    <button
-      class="sidebar-upload-remove"
-      type="button"
-      data-sidebar-remove
-      title="Remove icon"
-      aria-label="Remove sidebar icon"
-    >
-      🗑
-    </button>
-
-  `;
+  sidebarIconPreview.textContent =
+    sidebarIconEmoji.value.trim() ||
+    "☰";
 
 }
-
 function updateTabPreview() {
 
   if (tabIconUrl) {
@@ -641,37 +578,7 @@ sidebarIconEmoji
 
     }
   );
-/* =========================================================
-   REMOVE SIDEBAR ICON
-========================================================= */
 
-sidebarIconPreview
-  .addEventListener(
-    "click",
-    event => {
-
-      const removeBtn =
-        event.target.closest(
-          "[data-sidebar-remove]"
-        );
-
-      if (!removeBtn) {
-        return;
-      }
-
-      sidebarIconUrl =
-        "";
-
-      sidebarIconFile.value =
-        "";
-
-      sidebarIconEmoji.value =
-        "";
-
-      updateSidebarPreview();
-
-    }
-  );
 /* =========================================================
    FOOTER NAVIGATION BACKGROUND
 ========================================================= */
@@ -737,22 +644,6 @@ finally {
     }
   );
 
-
-footerNavBackgroundRemoveBtn
-  ?.addEventListener(
-    "click",
-    () => {
-
-      footerNavBackgroundUrl =
-        "";
-
-      footerNavBackgroundFile.value =
-        "";
-
-      updateFooterNavBackgroundPreview();
-
-    }
-  );
 
 /* =========================================================
    TAB ICON

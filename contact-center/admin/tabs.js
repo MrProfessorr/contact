@@ -283,14 +283,24 @@ const footerTextImageUploadBtn =
     "footerTextImageUploadBtn"
   );
 
-const footerTextImageRemoveBtn =
-  document.getElementById(
-    "footerTextImageRemoveBtn"
-  );
-
 const footerTextImagePreview =
   document.getElementById(
     "footerTextImagePreview"
+  );
+
+const footerTextImagePending =
+  document.getElementById(
+    "footerTextImagePending"
+  );
+
+const footerTextImagePendingImage =
+  document.getElementById(
+    "footerTextImagePendingImage"
+  );
+
+const footerTextImagePendingRemove =
+  document.getElementById(
+    "footerTextImagePendingRemove"
   );
 const tabSort =
   document.getElementById(
@@ -356,7 +366,11 @@ let pendingTabIconPreviewUrl =
   "";
 let footerTextImageUrl =
   "";
+let pendingFooterTextImageFile =
+  null;
 
+let pendingFooterTextImagePreviewUrl =
+  "";
 
 let footerNavBackgroundUrl =
   "";
@@ -506,6 +520,7 @@ function updateFooterTextImagePreview() {
 
     footerTextImagePreview.innerHTML = `
       <img
+        class="tabs-preview-image"
         src="${safe(footerTextImageUrl)}"
         alt=""
       >
@@ -515,7 +530,7 @@ function updateFooterTextImagePreview() {
   }
 
   footerTextImagePreview.textContent =
-    "No Image";
+    "🖼️";
 
 }
 /* =========================================================
@@ -921,7 +936,7 @@ tabIconEmoji
 ========================================================= */
 
 footerTextImageUploadBtn
-  .addEventListener(
+  ?.addEventListener(
     "click",
     () => {
 
@@ -932,69 +947,94 @@ footerTextImageUploadBtn
 
 
 footerTextImageFile
-  .addEventListener(
+  ?.addEventListener(
     "change",
-    async () => {
+    () => {
 
       const file =
-        footerTextImageFile.files?.[0];
+        footerTextImageFile
+          .files?.[0];
 
       if (!file) {
         return;
       }
 
-      try {
 
-        footerTextImageUploadBtn.disabled =
-          true;
+      /* BUANG PENDING PREVIEW LAMA */
 
-        footerTextImageUploadBtn.textContent =
-          "Uploading...";
+      if (
+        pendingFooterTextImagePreviewUrl
+      ) {
 
-        footerTextImageUrl =
-          await uploadNavigationImage(
-            file
-          );
-
-        updateFooterTextImagePreview();
-
-      }
-      catch (error) {
-
-        console.error(error);
-
-        showMessage(
-          "Footer text image upload failed.",
-          true
+        URL.revokeObjectURL(
+          pendingFooterTextImagePreviewUrl
         );
 
       }
-      finally {
 
-        footerTextImageUploadBtn.disabled =
-          false;
 
-        footerTextImageUploadBtn.textContent =
-          "Upload Text Image";
+      /* SIMPAN FILE SEBAGAI PENDING */
 
-      }
+      pendingFooterTextImageFile =
+        file;
+
+      pendingFooterTextImagePreviewUrl =
+        URL.createObjectURL(
+          file
+        );
+
+
+      /* TAMPIL PENDING PREVIEW */
+
+      footerTextImagePendingImage.src =
+        pendingFooterTextImagePreviewUrl;
+
+      footerTextImagePending
+        .classList
+        .remove(
+          "hidden"
+        );
 
     }
   );
 
 
-footerTextImageRemoveBtn
-  .addEventListener(
+footerTextImagePendingRemove
+  ?.addEventListener(
     "click",
     () => {
 
-      footerTextImageUrl =
-        "";
+      pendingFooterTextImageFile =
+        null;
 
       footerTextImageFile.value =
         "";
 
-      updateFooterTextImagePreview();
+
+      if (
+        pendingFooterTextImagePreviewUrl
+      ) {
+
+        URL.revokeObjectURL(
+          pendingFooterTextImagePreviewUrl
+        );
+
+      }
+
+
+      pendingFooterTextImagePreviewUrl =
+        "";
+
+      footerTextImagePendingImage
+        .removeAttribute(
+          "src"
+        );
+
+      footerTextImagePending
+        .classList
+        .add(
+          "hidden"
+        );
 
     }
   );
@@ -1057,8 +1097,40 @@ tabIconPending
 footerTextImageUrl =
   "";
 
+pendingFooterTextImageFile =
+  null;
+
 footerTextImageFile.value =
   "";
+
+
+if (
+  pendingFooterTextImagePreviewUrl
+) {
+
+  URL.revokeObjectURL(
+    pendingFooterTextImagePreviewUrl
+  );
+
+}
+
+
+pendingFooterTextImagePreviewUrl =
+  "";
+
+
+footerTextImagePendingImage
+  ?.removeAttribute(
+    "src"
+  );
+
+
+footerTextImagePending
+  ?.classList
+  .add(
+    "hidden"
+  );
+
 
 updateFooterTextImagePreview();
   tabSort.value =
@@ -1173,7 +1245,17 @@ if (
     );
 
 }
+if (
+  pendingFooterTextImageFile &&
+  hasTabData
+) {
 
+  footerTextImageUrl =
+    await uploadNavigationImage(
+      pendingFooterTextImageFile
+    );
+
+}
 if (pendingFooterBackgroundFile) {
 
   footerNavBackgroundUrl =
@@ -1489,8 +1571,43 @@ tabIconPending
     "hidden"
   );
   
-  footerTextImageUrl =
+footerTextImageUrl =
   item.footerTextImageUrl || "";
+
+pendingFooterTextImageFile =
+  null;
+
+footerTextImageFile.value =
+  "";
+
+
+if (
+  pendingFooterTextImagePreviewUrl
+) {
+
+  URL.revokeObjectURL(
+    pendingFooterTextImagePreviewUrl
+  );
+
+}
+
+
+pendingFooterTextImagePreviewUrl =
+  "";
+
+
+footerTextImagePendingImage
+  ?.removeAttribute(
+    "src"
+  );
+
+
+footerTextImagePending
+  ?.classList
+  .add(
+    "hidden"
+  );
+
 
 updateFooterTextImagePreview();
 

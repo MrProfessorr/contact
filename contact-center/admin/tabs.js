@@ -259,6 +259,20 @@ const tabIconPreview =
   document.getElementById(
     "tabIconPreview"
   );
+const tabIconPending =
+  document.getElementById(
+    "tabIconPending"
+  );
+
+const tabIconPendingImage =
+  document.getElementById(
+    "tabIconPendingImage"
+  );
+
+const tabIconPendingRemove =
+  document.getElementById(
+    "tabIconPendingRemove"
+  );
 const footerTextImageFile =
   document.getElementById(
     "footerTextImageFile"
@@ -335,7 +349,11 @@ let pendingSidebarIconPreviewUrl =
 
 let tabIconUrl =
   "";
+let pendingTabIconFile =
+  null;
 
+let pendingTabIconPreviewUrl =
+  "";
 let footerTextImageUrl =
   "";
 
@@ -742,63 +760,101 @@ tabIconUploadBtn
     }
   );
 
-
 tabIconFile
   .addEventListener(
     "change",
-    async () => {
+    () => {
 
       const file =
         tabIconFile.files?.[0];
-
 
       if (!file) {
         return;
       }
 
 
-      try {
+      /* BUANG PREVIEW PENDING LAMA */
 
-        tabIconUploadBtn.disabled =
-          true;
+      if (
+        pendingTabIconPreviewUrl
+      ) {
 
-        tabIconUploadBtn.textContent =
-          "Uploading...";
-
-
-        tabIconUrl =
-          await uploadNavigationImage(
-            file
-          );
-
-
-        updateTabPreview();
-
-      }
-      catch (error) {
-
-        console.error(error);
-
-        showMessage(
-          "Tab icon upload failed.",
-          true
+        URL.revokeObjectURL(
+          pendingTabIconPreviewUrl
         );
 
       }
-      finally {
 
-        tabIconUploadBtn.disabled =
-          false;
 
-        tabIconUploadBtn.textContent =
-          "Upload Icon";
+      /* SIMPAN FILE PENDING */
 
-      }
+      pendingTabIconFile =
+        file;
+
+
+      pendingTabIconPreviewUrl =
+        URL.createObjectURL(
+          file
+        );
+
+
+      /* TAMPIL PENDING PREVIEW */
+
+      tabIconPendingImage.src =
+        pendingTabIconPreviewUrl;
+
+
+      tabIconPending
+        .classList
+        .remove(
+          "hidden"
+        );
 
     }
   );
 
 
+tabIconPendingRemove
+  ?.addEventListener(
+    "click",
+    () => {
+
+      pendingTabIconFile =
+        null;
+
+      tabIconFile.value =
+        "";
+
+
+      if (
+        pendingTabIconPreviewUrl
+      ) {
+
+        URL.revokeObjectURL(
+          pendingTabIconPreviewUrl
+        );
+
+      }
+
+
+      pendingTabIconPreviewUrl =
+        "";
+
+
+      tabIconPendingImage
+        .removeAttribute(
+          "src"
+        );
+
+
+      tabIconPending
+        .classList
+        .add(
+          "hidden"
+        );
+
+    }
+  );
 tabIconEmoji
   .addEventListener(
     "input",
@@ -810,8 +866,47 @@ tabIconEmoji
           .trim()
       ) {
 
+        /* IMAGE SAVED TAK DIGUNA */
+
         tabIconUrl =
           "";
+
+
+        /* CANCEL PENDING IMAGE */
+
+        pendingTabIconFile =
+          null;
+
+        tabIconFile.value =
+          "";
+
+
+        if (
+          pendingTabIconPreviewUrl
+        ) {
+
+          URL.revokeObjectURL(
+            pendingTabIconPreviewUrl
+          );
+
+        }
+
+
+        pendingTabIconPreviewUrl =
+          "";
+
+
+        tabIconPendingImage
+          .removeAttribute(
+            "src"
+          );
+
+
+        tabIconPending
+          .classList
+          .add(
+            "hidden"
+          );
 
       }
 
@@ -929,6 +1024,36 @@ function resetTabForm() {
 
   tabIconUrl =
     "";
+  pendingTabIconFile =
+  null;
+
+
+if (
+  pendingTabIconPreviewUrl
+) {
+
+  URL.revokeObjectURL(
+    pendingTabIconPreviewUrl
+  );
+
+}
+
+
+pendingTabIconPreviewUrl =
+  "";
+
+
+tabIconPendingImage
+  ?.removeAttribute(
+    "src"
+  );
+
+
+tabIconPending
+  ?.classList
+  .add(
+    "hidden"
+  );
 footerTextImageUrl =
   "";
 
@@ -1037,7 +1162,17 @@ if (pendingSidebarIconFile) {
     );
 
 }
+if (
+  pendingTabIconFile &&
+  hasTabData
+) {
 
+  tabIconUrl =
+    await uploadNavigationImage(
+      pendingTabIconFile
+    );
+
+}
 
 if (pendingFooterBackgroundFile) {
 
@@ -1320,6 +1455,40 @@ function editTab(id) {
 
   tabIconUrl =
     item.iconUrl || "";
+  pendingTabIconFile =
+  null;
+
+tabIconFile.value =
+  "";
+
+
+if (
+  pendingTabIconPreviewUrl
+) {
+
+  URL.revokeObjectURL(
+    pendingTabIconPreviewUrl
+  );
+
+}
+
+
+pendingTabIconPreviewUrl =
+  "";
+
+
+tabIconPendingImage
+  ?.removeAttribute(
+    "src"
+  );
+
+
+tabIconPending
+  ?.classList
+  .add(
+    "hidden"
+  );
+  
   footerTextImageUrl =
   item.footerTextImageUrl || "";
 

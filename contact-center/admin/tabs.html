@@ -56,185 +56,512 @@
 
     <div>
 
- <section class="card tabs-settings-card">
-<!-- SIDEBAR ICON UPLOAD -->
-<div class="form-group sidebar-icon-upload-section">
+<section class="card tabs-settings-card">
 
-  <label>
-    Sidebar Icon
-  </label>
+  <!-- =====================================================
+       SIDEBAR SETTINGS
+  ====================================================== -->
 
-  <input
-    id="sidebarIconFile"
-    type="file"
-    accept="image/*"
-    hidden
-  >
+  <h3>
+    Sidebar Settings
+  </h3>
 
 
-  <button
-    id="sidebarIconUploadBtn"
-    class="sidebar-upload-btn"
-    type="button"
-  >
+  <!-- EMOJI -->
 
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-    >
-      <path d="M12 16V4"></path>
-      <path d="M7 9l5-5 5 5"></path>
-      <path d="M5 20h14"></path>
-    </svg>
+  <div class="form-group">
 
-    Upload Image
-
-  </button>
-
-</div>
-
-
-<!-- SIDEBAR ACTIVE -->
-
-<div class="tabs-switch-row sidebar-active-row">
-
-  <span>
-    Customer Sidebar
-  </span>
-
-  <label class="tabs-text-switch">
+    <label for="sidebarIconEmoji">
+      Or Emoji
+    </label>
 
     <input
-      id="sidebarEnabled"
-      type="checkbox"
-      checked
+      id="sidebarIconEmoji"
+      class="shared-input"
+      type="text"
+      maxlength="10"
+      autocomplete="off"
+      placeholder="☰"
     >
 
-    <span class="tabs-text-slider">
-
-      <span class="tabs-text-label">
-        Sidebar
-      </span>
-
-    </span>
-
-  </label>
-
-</div>
-
-
-<!-- SIDEBAR ICON PREVIEW -->
-
-<div
-  id="sidebarIconPreview"
-  class="sidebar-upload-preview"
->
-
-  <div class="sidebar-preview-image">
-    ☰
   </div>
 
-  <div class="sidebar-preview-info">
 
-    <strong>
-      Current sidebar icon
-    </strong>
+  <!-- SIDEBAR ICON -->
+
+  <div class="form-group sidebar-icon-upload-section">
+
+    <label>
+      Sidebar Icon
+    </label>
+
+    <input
+      id="sidebarIconFile"
+      type="file"
+      accept="image/*"
+      hidden
+    >
+
+
+    <button
+      id="sidebarIconUploadBtn"
+      class="sidebar-upload-btn"
+      type="button"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <path d="M12 16V4"></path>
+        <path d="M7 9l5-5 5 5"></path>
+        <path d="M5 20h14"></path>
+      </svg>
+
+      Upload Image
+
+    </button>
+
+  </div>
+
+
+  <!-- SIDEBAR ACTIVE -->
+
+  <div class="tabs-switch-row sidebar-active-row">
 
     <span>
-      Ready
+      Customer Sidebar
     </span>
+
+    <label class="tabs-text-switch">
+
+      <input
+        id="sidebarEnabled"
+        type="checkbox"
+        checked
+      >
+
+      <span class="tabs-text-slider">
+
+        <span class="tabs-text-label">
+          Sidebar
+        </span>
+
+      </span>
+
+    </label>
 
   </div>
 
-<button
-  class="sidebar-upload-remove"
-  type="button"
-  data-sidebar-remove
-  title="Remove icon"
->
-  🗑
-</button>
 
-</div>
+  <!-- SIDEBAR IMAGE PREVIEW -->
 
-<label class="tabs-text-switch">
-
-  <input
-    id="sidebarEnabled"
-    type="checkbox"
-    checked
+  <div
+    id="sidebarIconPreview"
+    class="sidebar-upload-preview"
   >
 
-  <span class="tabs-text-slider">
-    <span class="tabs-text-label">
-      Sidebar
+    <div class="sidebar-preview-image">
+      ☰
+    </div>
+
+    <div class="sidebar-preview-info">
+
+      <strong>
+        Current sidebar icon
+      </strong>
+
+      <span>
+        Ready
+      </span>
+
+    </div>
+
+    <button
+      class="sidebar-upload-remove"
+      type="button"
+      data-sidebar-remove
+      title="Remove icon"
+      aria-label="Remove sidebar icon"
+    >
+      🗑
+    </button>
+
+  </div>
+
+
+  <div class="tabs-settings-divider"></div>
+
+
+  <!-- =====================================================
+       FOOTER NAVIGATION SETTINGS
+  ====================================================== -->
+
+  <h3>
+    Footer Navigation Background
+  </h3>
+
+
+  <div class="form-group">
+
+    <label>
+      Background Color
+    </label>
+
+    <input
+      id="footerNavColor"
+      class="tabs-footer-color-input"
+      type="color"
+      value="#171717"
+    >
+
+    <div class="help-text">
+      Used when no background image is uploaded.
+    </div>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+      Background Image
+    </label>
+
+
+    <div
+      id="footerNavBackgroundPreview"
+      class="tabs-footer-background-preview"
+    ></div>
+
+
+    <input
+      id="footerNavBackgroundFile"
+      type="file"
+      accept="image/*"
+      hidden
+    >
+
+
+    <div class="tabs-form-actions">
+
+      <button
+        id="footerNavBackgroundUploadBtn"
+        class="btn btn-dark"
+        type="button"
+      >
+        Upload Background
+      </button>
+
+      <button
+        id="footerNavBackgroundRemoveBtn"
+        class="btn btn-dark"
+        type="button"
+      >
+        Remove Image
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="tabs-settings-divider"></div>
+
+
+  <!-- =====================================================
+       ADD TAB
+  ====================================================== -->
+
+  <h3 id="tabFormTitle">
+    Add Tab
+  </h3>
+
+
+  <input
+    id="editingTabId"
+    type="hidden"
+  >
+
+
+  <div class="form-group">
+
+    <label for="tabName">
+      Tab Name
+    </label>
+
+    <input
+      id="tabName"
+      class="shared-input"
+      type="text"
+      autocomplete="off"
+      placeholder="Example: Home"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label for="tabUrl">
+      Link / URL
+    </label>
+
+    <input
+      id="tabUrl"
+      class="shared-input"
+      type="url"
+      autocomplete="off"
+      placeholder="https://..."
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+      Tab Icon
+    </label>
+
+
+    <div class="tabs-icon-preview-wrap">
+
+      <div
+        id="tabIconPreview"
+        class="tabs-icon-preview"
+      >
+        🔗
+      </div>
+
+    </div>
+
+
+    <input
+      id="tabIconFile"
+      type="file"
+      accept="image/*"
+      hidden
+    >
+
+
+    <button
+      id="tabIconUploadBtn"
+      class="btn btn-dark"
+      type="button"
+    >
+      Upload Icon
+    </button>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label for="tabIconEmoji">
+      Or Emoji
+    </label>
+
+    <input
+      id="tabIconEmoji"
+      class="shared-input"
+      type="text"
+      maxlength="10"
+      autocomplete="off"
+      placeholder="🏠"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+      Footer Text Image
+    </label>
+
+
+    <div class="tabs-icon-preview-wrap">
+
+      <div
+        id="footerTextImagePreview"
+        class="tabs-footer-text-preview"
+      >
+        No Image
+      </div>
+
+    </div>
+
+
+    <input
+      id="footerTextImageFile"
+      type="file"
+      accept="image/*"
+      hidden
+    >
+
+
+    <div class="tabs-form-actions">
+
+      <button
+        id="footerTextImageUploadBtn"
+        class="btn btn-dark"
+        type="button"
+      >
+        Upload Text Image
+      </button>
+
+      <button
+        id="footerTextImageRemoveBtn"
+        class="btn btn-dark"
+        type="button"
+      >
+        Remove
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label for="tabSort">
+      Sort Position
+    </label>
+
+    <input
+      id="tabSort"
+      class="shared-input"
+      type="number"
+      min="1"
+      step="1"
+      value="1"
+    >
+
+  </div>
+
+
+  <!-- ACTIVE -->
+
+  <div class="tabs-switch-row">
+
+    <span>
+      Active
     </span>
-  </span>
 
-</label>
+    <label class="tabs-text-switch">
 
-          </div>
+      <input
+        id="tabEnabled"
+        type="checkbox"
+        checked
+      >
 
-        </div>
-        
-        <div class="form-group">
+      <span class="tabs-text-slider">
 
-          <label>
-            Sidebar Icon
-          </label>
+        <span class="tabs-text-label">
+          Active
+        </span>
 
+      </span>
 
-          <div class="tabs-icon-preview-wrap">
+    </label>
 
-            <div
-              id="sidebarIconPreview"
-              class="tabs-icon-preview"
-            >
-              ☰
-            </div>
-
-          </div>
+  </div>
 
 
-          <input
-            id="sidebarIconFile"
-            type="file"
-            accept="image/*"
-            hidden
-          >
+  <!-- SHOW SIDEBAR -->
+
+  <div class="tabs-switch-row">
+
+    <span>
+      Show In Sidebar
+    </span>
+
+    <label class="tabs-text-switch">
+
+      <input
+        id="tabSidebar"
+        type="checkbox"
+        checked
+      >
+
+      <span class="tabs-text-slider">
+
+        <span class="tabs-text-label">
+          Sidebar
+        </span>
+
+      </span>
+
+    </label>
+
+  </div>
 
 
-          <button
-            id="sidebarIconUploadBtn"
-            class="btn btn-dark"
-            type="button"
-          >
-            Upload Icon
-          </button>
+  <!-- SHOW FOOTER -->
 
-        </div>
+  <div class="tabs-switch-row">
+
+    <span>
+      Show In Footer
+    </span>
+
+    <label class="tabs-text-switch">
+
+      <input
+        id="tabFooter"
+        type="checkbox"
+        checked
+      >
+
+      <span class="tabs-text-slider">
+
+        <span class="tabs-text-label">
+          Footer
+        </span>
+
+      </span>
+
+    </label>
+
+  </div>
 
 
-        <div class="form-group">
+  <!-- SAVE -->
 
-          <label>
-            Or Emoji
-          </label>
+  <div class="tabs-form-actions">
 
-          <input
-            id="sidebarIconEmoji"
-            class="shared-input"
-            type="text"
-            maxlength="10"
-            autocomplete="off"
-            placeholder="☰"
-          >
+    <button
+      id="saveAllSettingsBtn"
+      class="btn btn-primary full"
+      type="button"
+    >
+      Save
+    </button>
 
-        </div>
 
-<div class="tabs-settings-divider"></div>
+    <button
+      id="cancelEditTabBtn"
+      class="btn btn-dark hidden"
+      type="button"
+    >
+      Cancel
+    </button>
+
+  </div>
+
+
+  <div
+    id="tabsSaveMessage"
+    class="help-text"
+  ></div>
+
+</section>
 <!-- FOOTER NAVIGATION SETTINGS -->
   <h3>
     Footer Navigation Background

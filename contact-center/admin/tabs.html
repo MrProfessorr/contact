@@ -215,48 +215,97 @@
   </div>
 
 
-  <div class="form-group">
+<div class="form-group footer-bg-upload-section">
 
-    <label>
-      Background Image
-    </label>
+  <label>
+    Background Image
+  </label>
+
+  <input
+    id="footerNavBackgroundFile"
+    type="file"
+    accept="image/*"
+    hidden
+  >
 
 
-    <div
-      id="footerNavBackgroundPreview"
-      class="tabs-footer-background-preview"
-    ></div>
+  <!-- UPLOAD BUTTON -->
 
+  <button
+    id="footerNavBackgroundUploadBtn"
+    class="sidebar-upload-btn"
+    type="button"
+  >
 
-    <input
-      id="footerNavBackgroundFile"
-      type="file"
-      accept="image/*"
-      hidden
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
     >
+      <path d="M12 16V4"></path>
+      <path d="M7 9l5-5 5 5"></path>
+      <path d="M5 20h14"></path>
+    </svg>
+
+    Upload Image
+
+  </button>
 
 
-    <div class="tabs-form-actions">
+  <!-- BACKGROUND IMAGE PREVIEW -->
 
-      <button
-        id="footerNavBackgroundUploadBtn"
-        class="btn btn-dark"
-        type="button"
-      >
-        Upload Background
-      </button>
+  <div
+    id="footerNavBackgroundPreview"
+    class="footer-bg-upload-preview"
+  >
 
-      <button
-        id="footerNavBackgroundRemoveBtn"
-        class="btn btn-dark"
-        type="button"
-      >
-        Remove Image
-      </button>
+    <div class="footer-bg-preview-image">
+      No Image
+    </div>
+
+    <div class="footer-bg-preview-info">
+
+      <strong>
+        Current background image
+      </strong>
+
+      <span>
+        No image
+      </span>
 
     </div>
 
+    <button
+      id="footerNavBackgroundRemoveBtn"
+      class="footer-bg-upload-remove"
+      type="button"
+      title="Remove background image"
+      aria-label="Remove background image"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M3 6h18"></path>
+        <path d="M8 6V4h8v2"></path>
+        <path d="M19 6l-1 14H6L5 6"></path>
+        <path d="M10 11v5"></path>
+        <path d="M14 11v5"></path>
+      </svg>
+
+    </button>
+
   </div>
+
+</div>
 
 
   <div class="tabs-settings-divider"></div>

@@ -442,36 +442,44 @@ function updateSidebarPreview() {
     return;
   }
 
-  const emoji =
-    sidebarIconEmoji.value.trim() ||
-    "☰";
+
+  /* ==========================================
+     TIADA IMAGE = SEMBUNYIKAN PREVIEW
+  ========================================== */
+
+  if (!sidebarIconUrl) {
+
+    sidebarIconPreview.style.display =
+      "none";
+
+    return;
+  }
 
 
-  const previewContent =
-    sidebarIconUrl
-      ? `
-          <img
-            src="${safe(sidebarIconUrl)}"
-            alt=""
-          >
-        `
-      : safe(emoji);
+  /* ==========================================
+     ADA IMAGE = TAMPILKAN PREVIEW
+  ========================================== */
+
+  sidebarIconPreview.style.display =
+    "grid";
 
 
   sidebarIconPreview.innerHTML = `
 
     <div class="sidebar-preview-image">
-      ${previewContent}
+
+      <img
+        src="${safe(sidebarIconUrl)}"
+        alt=""
+      >
+
     </div>
+
 
     <div class="sidebar-preview-info">
 
       <strong>
-        ${
-          sidebarIconUrl
-            ? "Current sidebar image"
-            : "Current sidebar emoji"
-        }
+        Current sidebar image
       </strong>
 
       <span>
@@ -480,11 +488,13 @@ function updateSidebarPreview() {
 
     </div>
 
+
     <button
       class="sidebar-upload-remove"
       type="button"
       data-sidebar-remove
       title="Remove icon"
+      aria-label="Remove sidebar icon"
     >
       🗑
     </button>
@@ -492,7 +502,6 @@ function updateSidebarPreview() {
   `;
 
 }
-
 
 function updateTabPreview() {
 
@@ -621,6 +630,9 @@ sidebarIconEmoji
       ) {
 
         sidebarIconUrl =
+          "";
+
+        sidebarIconFile.value =
           "";
 
       }

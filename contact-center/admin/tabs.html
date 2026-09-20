@@ -339,42 +339,101 @@
   </div>
 
 
-  <div class="form-group">
+<div class="form-group">
 
-    <label>
-      Tab Icon
-    </label>
+  <label>
+    Tab Icon
+  </label>
 
 
-    <div class="tabs-icon-preview-wrap">
+  <!-- SAVED TAB ICON -->
 
-      <div
-        id="tabIconPreview"
-        class="tabs-icon-preview"
-      >
-        🔗
-      </div>
+  <div class="tabs-icon-preview-wrap">
+
+    <div
+      id="tabIconPreview"
+      class="tabs-icon-preview"
+    >
+      🔗
+    </div>
+
+  </div>
+
+
+  <!-- FILE INPUT -->
+
+  <input
+    id="tabIconFile"
+    type="file"
+    accept="image/*"
+    hidden
+  >
+
+
+  <!-- UPLOAD BUTTON -->
+
+  <button
+    id="tabIconUploadBtn"
+    class="floating-upload-btn"
+    type="button"
+  >
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <path d="M12 16V4"></path>
+      <path d="M7 9l5-5 5 5"></path>
+      <path d="M5 20h14"></path>
+    </svg>
+
+    Upload Image
+
+  </button>
+
+
+  <!-- PENDING TAB ICON -->
+
+  <div
+    id="tabIconPending"
+    class="floating-upload-preview hidden"
+  >
+
+    <img
+      id="tabIconPendingImage"
+      src=""
+      alt=""
+    >
+
+    <div class="floating-upload-file-info">
+
+      <strong>
+        Pending image
+      </strong>
+
+      <span>
+        Click Save to apply
+      </span>
 
     </div>
 
 
-    <input
-      id="tabIconFile"
-      type="file"
-      accept="image/*"
-      hidden
-    >
-
-
     <button
-      id="tabIconUploadBtn"
-      class="btn btn-dark"
+      id="tabIconPendingRemove"
+      class="floating-upload-remove"
       type="button"
+      title="Cancel pending image"
+      aria-label="Cancel pending image"
     >
-      Upload Icon
+      ✕
     </button>
 
   </div>
+
+</div>
 
 
   <div class="form-group">

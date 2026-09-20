@@ -395,23 +395,58 @@ function iconHtml(
 
 function updateSidebarPreview() {
 
-  if (sidebarIconUrl) {
-
-    sidebarIconPreview.innerHTML =
-      iconHtml(
-        sidebarIconUrl,
-        "",
-        "tabs-preview-image"
-      );
-
+  if (!sidebarIconPreview) {
     return;
-
   }
 
-
-  sidebarIconPreview.textContent =
+  const emoji =
     sidebarIconEmoji.value.trim() ||
     "☰";
+
+
+  const previewContent =
+    sidebarIconUrl
+      ? `
+          <img
+            src="${safe(sidebarIconUrl)}"
+            alt=""
+          >
+        `
+      : safe(emoji);
+
+
+  sidebarIconPreview.innerHTML = `
+
+    <div class="sidebar-preview-image">
+      ${previewContent}
+    </div>
+
+    <div class="sidebar-preview-info">
+
+      <strong>
+        ${
+          sidebarIconUrl
+            ? "Current sidebar image"
+            : "Current sidebar emoji"
+        }
+      </strong>
+
+      <span>
+        Ready
+      </span>
+
+    </div>
+
+    <button
+      class="sidebar-upload-remove"
+      type="button"
+      data-sidebar-remove
+      title="Remove icon"
+    >
+      🗑
+    </button>
+
+  `;
 
 }
 
@@ -551,7 +586,37 @@ sidebarIconEmoji
 
     }
   );
+/* =========================================================
+   REMOVE SIDEBAR ICON
+========================================================= */
 
+sidebarIconPreview
+  .addEventListener(
+    "click",
+    event => {
+
+      const removeBtn =
+        event.target.closest(
+          "[data-sidebar-remove]"
+        );
+
+      if (!removeBtn) {
+        return;
+      }
+
+      sidebarIconUrl =
+        "";
+
+      sidebarIconFile.value =
+        "";
+
+      sidebarIconEmoji.value =
+        "";
+
+      updateSidebarPreview();
+
+    }
+  );
 /* =========================================================
    FOOTER NAVIGATION BACKGROUND
 ========================================================= */

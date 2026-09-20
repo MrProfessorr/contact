@@ -61,27 +61,128 @@
 
       <section class="card tabs-settings-card">
 
-        <h3>
-          Sidebar Settings
-        </h3>
+<!-- SIDEBAR EMOJI -->
+
+<div class="form-group">
+
+  <label for="sidebarIconEmoji">
+    Or Emoji
+  </label>
+
+  <input
+    id="sidebarIconEmoji"
+    class="shared-input"
+    type="text"
+    maxlength="10"
+    autocomplete="off"
+    placeholder="☰"
+  >
+
+</div>
 
 
-        <div class="form-group">
+<!-- SIDEBAR ICON UPLOAD -->
 
-          <div class="tabs-switch-row">
+<div class="form-group sidebar-icon-upload-section">
 
-            <div>
+  <label>
+    Sidebar Icon
+  </label>
 
-              <label>
-                Customer Sidebar
-              </label>
+  <input
+    id="sidebarIconFile"
+    type="file"
+    accept="image/*"
+    hidden
+  >
 
-              <div class="help-text">
-                Show or hide the sidebar menu.
-              </div>
 
-            </div>
+  <button
+    id="sidebarIconUploadBtn"
+    class="sidebar-upload-btn"
+    type="button"
+  >
 
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path d="M12 16V4"></path>
+      <path d="M7 9l5-5 5 5"></path>
+      <path d="M5 20h14"></path>
+    </svg>
+
+    Upload Image
+
+  </button>
+
+</div>
+
+
+<!-- SIDEBAR ACTIVE -->
+
+<div class="tabs-switch-row sidebar-active-row">
+
+  <span>
+    Customer Sidebar
+  </span>
+
+  <label class="tabs-text-switch">
+
+    <input
+      id="sidebarEnabled"
+      type="checkbox"
+      checked
+    >
+
+    <span class="tabs-text-slider">
+
+      <span class="tabs-text-label">
+        Sidebar
+      </span>
+
+    </span>
+
+  </label>
+
+</div>
+
+
+<!-- SIDEBAR ICON PREVIEW -->
+
+<div
+  id="sidebarIconPreview"
+  class="sidebar-upload-preview"
+>
+
+  <div class="sidebar-preview-image">
+    ☰
+  </div>
+
+  <div class="sidebar-preview-info">
+
+    <strong>
+      Current sidebar icon
+    </strong>
+
+    <span>
+      Ready
+    </span>
+
+  </div>
+
+  <button
+    id="sidebarIconRemoveBtn"
+    class="sidebar-upload-remove"
+    type="button"
+    title="Remove icon"
+  >
+    🗑
+  </button>
+
+</div>
 
 <label class="tabs-text-switch">
 

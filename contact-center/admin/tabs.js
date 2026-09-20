@@ -177,12 +177,6 @@ const sidebarIconPreview =
   FOOTER NAVIGATION BACKGROUND
 */
 
-const footerNavColor =
-  document.getElementById(
-    "footerNavColor"
-  );
-
-
 const footerNavBackgroundFile =
   document.getElementById(
     "footerNavBackgroundFile"
@@ -327,22 +321,47 @@ function updateFooterNavBackgroundPreview() {
     return;
   }
 
+  const image =
+    footerNavBackgroundPreview.querySelector(
+      "[data-footer-bg-image]"
+    );
 
-  footerNavBackgroundPreview.style.backgroundColor =
-    footerNavColor?.value ||
-    "#171717";
-
+  const status =
+    footerNavBackgroundPreview.querySelector(
+      "[data-footer-bg-status]"
+    );
 
   if (footerNavBackgroundUrl) {
 
-    footerNavBackgroundPreview.style.backgroundImage =
-      `url("${footerNavBackgroundUrl}")`;
+    if (image) {
+      image.src =
+        footerNavBackgroundUrl;
+
+      image.style.display =
+        "block";
+    }
+
+    if (status) {
+      status.textContent =
+        "Ready";
+    }
 
   }
   else {
 
-    footerNavBackgroundPreview.style.backgroundImage =
-      "none";
+    if (image) {
+      image.removeAttribute(
+        "src"
+      );
+
+      image.style.display =
+        "none";
+    }
+
+    if (status) {
+      status.textContent =
+        "No image";
+    }
 
   }
 
@@ -680,8 +699,20 @@ footerNavBackgroundFile
         footerNavBackgroundUploadBtn.disabled =
           false;
 
-        footerNavBackgroundUploadBtn.textContent =
-          "Upload Background";
+footerNavBackgroundUploadBtn.innerHTML = `
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    aria-hidden="true"
+  >
+    <path d="M12 16V4"></path>
+    <path d="M7 9l5-5 5 5"></path>
+    <path d="M5 20h14"></path>
+  </svg>
+  Upload Image
+`;
 
       }
 
@@ -704,14 +735,6 @@ footerNavBackgroundRemoveBtn
 
     }
   );
-
-
-footerNavColor
-  ?.addEventListener(
-    "input",
-    updateFooterNavBackgroundPreview
-  );
-
 
 /* =========================================================
    TAB ICON
@@ -1040,23 +1063,19 @@ saveAllSettingsBtn
            2. SAVE FOOTER BACKGROUND
         ============================================= */
 
-        await set(
-          ref(
-            db,
-            "navigation_settings/footerStyle"
-          ),
-          {
-            backgroundColor:
-              footerNavColor.value ||
-              "#171717",
+await set(
+  ref(
+    db,
+    "navigation_settings/footerStyle"
+  ),
+  {
+    backgroundImageUrl:
+      footerNavBackgroundUrl,
 
-            backgroundImageUrl:
-              footerNavBackgroundUrl,
-
-            updatedAt:
-              Date.now()
-          }
-        );
+    updatedAt:
+      Date.now()
+  }
+);
 
 
         /* =============================================
@@ -1618,18 +1637,15 @@ onValue(
     const data =
       snapshot.val() || {};
 
-    footerNavColor.value =
-      data.backgroundColor ||
-      "#171717";
-
     footerNavBackgroundUrl =
       data.backgroundImageUrl ||
       "";
 
     updateFooterNavBackgroundPreview();
 
-    // FOOTER STYLE SELESAI LOAD
-   finishInitialLoad("footerStyle");
+    finishInitialLoad(
+      "footerStyle"
+    );
 
   },
 
@@ -1640,8 +1656,9 @@ onValue(
       error
     );
 
-    // ERROR PUN DIKIRA SELESAI
-    finishInitialLoad("footerStyle");
+    finishInitialLoad(
+      "footerStyle"
+    );
 
   }
 );

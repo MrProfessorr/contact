@@ -1409,17 +1409,33 @@ function renderTabs() {
                 </button>
 
 
-                <button
-                  class="action-btn btn-dark"
-                  type="button"
-                  data-action="toggle"
-                >
-                  ${
-                    item.enabled !== false
-                      ? "Inactive"
-                      : "Active"
-                  }
-                </button>
+<label
+  class="tabs-list-toggle"
+  data-action="toggle"
+>
+
+  <input
+    type="checkbox"
+    ${
+      item.enabled !== false
+        ? "checked"
+        : ""
+    }
+  >
+
+  <span class="tabs-list-toggle-slider">
+
+    <span class="tabs-list-toggle-text">
+      ${
+        item.enabled !== false
+          ? "Active"
+          : "Inactive"
+      }
+    </span>
+
+  </span>
+
+</label>
 
 
                 <button
@@ -1451,21 +1467,20 @@ tabsList
     "click",
     event => {
 
-      const button =
-        event.target.closest(
-          "[data-action]"
-        );
+const actionElement =
+  event.target.closest(
+    "[data-action]"
+  );
+
+if (!actionElement) {
+  return;
+}
 
 
-      if (!button) {
-        return;
-      }
-
-
-      const item =
-        button.closest(
-          "[data-id]"
-        );
+const item =
+  actionElement.closest(
+    "[data-id]"
+  );
 
 
       if (!item) {
@@ -1489,7 +1504,7 @@ tabsList
 
 
       switch (
-        button.dataset.action
+        actionElement.dataset.action
       ) {
 
         case "edit":

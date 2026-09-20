@@ -1379,19 +1379,15 @@ function renderTabs() {
                     ${safe(item.sort || 1)}
                   </small>
 
-                  <span
-                    class="${
-                      item.enabled !== false
-                        ? "active-status"
-                        : "closed-status"
-                    } status"
-                  >
-                    ${
-                      item.enabled !== false
-                        ? "ACTIVE"
-                        : "INACTIVE"
-                    }
-                  </span>
+<a
+  class="tabs-admin-item-url"
+  href="${safe(item.url || "#")}"
+  target="_blank"
+  rel="noopener noreferrer"
+  title="${safe(item.url || "")}"
+>
+  ${safe(item.url || "No URL")}
+</a>
 
                 </div>
 

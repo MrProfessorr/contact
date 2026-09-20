@@ -79,43 +79,53 @@
 
   <!-- SIDEBAR ICON -->
 
-  <div class="form-group sidebar-icon-upload-section">
+<div class="form-group">
 
-    <label>
-      Sidebar Icon
-    </label>
+  <label>
+    Sidebar Icon
+  </label>
 
-    <input
-      id="sidebarIconFile"
-      type="file"
-      accept="image/*"
-      hidden
+  <div class="tabs-icon-preview-wrap">
+
+    <div
+      id="sidebarIconPreview"
+      class="tabs-icon-preview"
     >
-
-
-    <button
-      id="sidebarIconUploadBtn"
-      class="sidebar-upload-btn"
-      type="button"
-    >
-
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        aria-hidden="true"
-      >
-        <path d="M12 16V4"></path>
-        <path d="M7 9l5-5 5 5"></path>
-        <path d="M5 20h14"></path>
-      </svg>
-
-      Upload Image
-
-    </button>
+      ☰
+    </div>
 
   </div>
+
+  <input
+    id="sidebarIconFile"
+    type="file"
+    accept="image/*"
+    hidden
+  >
+
+  <button
+    id="sidebarIconUploadBtn"
+    class="floating-upload-btn"
+    type="button"
+  >
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <path d="M12 16V4"></path>
+      <path d="M7 9l5-5 5 5"></path>
+      <path d="M5 20h14"></path>
+    </svg>
+
+    Upload Image
+
+  </button>
+
+</div>
 
 
   <!-- SIDEBAR ACTIVE -->
@@ -149,40 +159,6 @@
 
   <!-- SIDEBAR IMAGE PREVIEW -->
 
-  <div
-    id="sidebarIconPreview"
-    class="sidebar-upload-preview"
-  >
-
-    <div class="sidebar-preview-image">
-      ☰
-    </div>
-
-    <div class="sidebar-preview-info">
-
-      <strong>
-        Current sidebar icon
-      </strong>
-
-      <span>
-        Ready
-      </span>
-
-    </div>
-
-    <button
-      class="sidebar-upload-remove"
-      type="button"
-      data-sidebar-remove
-      title="Remove icon"
-      aria-label="Remove sidebar icon"
-    >
-      🗑
-    </button>
-
-  </div>
-
-
   <div class="tabs-settings-divider"></div>
 
 
@@ -195,11 +171,22 @@
   </h3>
 
 
-<div class="form-group floating-upload-section">
+<div class="form-group">
 
   <label>
     Background Image
   </label>
+
+  <div class="tabs-icon-preview-wrap">
+
+    <div
+      id="footerNavBackgroundPreview"
+      class="tabs-icon-preview"
+    >
+      🖼️
+    </div>
+
+  </div>
 
   <input
     id="footerNavBackgroundFile"
@@ -207,7 +194,6 @@
     accept="image/*"
     hidden
   >
-
 
   <button
     id="footerNavBackgroundUploadBtn"
@@ -231,63 +217,7 @@
 
   </button>
 
-
-<div
-  id="footerNavBackgroundPreview"
-  class="floating-upload-preview"
-  style="display:none;"
->
-
-    <img
-      src=""
-      alt=""
-      data-footer-bg-image
-      style="display:none;"
-    >
-
-    <div class="floating-upload-file-info">
-
-      <strong>
-        Current background image
-      </strong>
-
-      <span data-footer-bg-status>
-        No image
-      </span>
-
-    </div>
-
-
-    <button
-      id="footerNavBackgroundRemoveBtn"
-      class="floating-upload-remove"
-      type="button"
-      title="Remove image"
-      aria-label="Remove image"
-    >
-
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M3 6h18"></path>
-        <path d="M8 6V4h8v2"></path>
-        <path d="M19 6l-1 14H6L5 6"></path>
-        <path d="M10 11v5"></path>
-        <path d="M14 11v5"></path>
-      </svg>
-
-    </button>
-
-  </div>
-
 </div>
-
 
   <div class="tabs-settings-divider"></div>
 

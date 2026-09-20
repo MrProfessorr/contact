@@ -8509,7 +8509,15 @@ button.active {
   margin-bottom:18px;
 }
 
+.tabs-settings-divider {
+  width: 100%;
+  height: 1px;
 
+  margin: 22px 0;
+
+  background:
+    rgba(255,255,255,.10);
+}
 .tabs-switch-row {
   display:flex;
   align-items:center;
@@ -8831,4 +8839,77 @@ button.active {
   line-height:1.5;
 
   white-space:nowrap;
+}
+/* =========================================================
+   TOGGLE SWITCH
+========================================================= */
+
+.tabs-switch-row .switch {
+  position: relative;
+
+  display: inline-block;
+
+  width: 42px;
+  height: 22px;
+
+  flex: 0 0 auto;
+
+  margin: 0;
+}
+
+
+.tabs-switch-row .switch input {
+  position: absolute;
+
+  width: 0;
+  height: 0;
+
+  opacity: 0;
+}
+
+
+.tabs-switch-row .switch .slider {
+  position: absolute;
+
+  inset: 0;
+
+  cursor: pointer;
+
+  border-radius: 999px;
+
+  background: #5f6670;
+
+  transition:
+    background .2s ease;
+}
+
+
+.tabs-switch-row .switch .slider::before {
+  content: "";
+
+  position: absolute;
+
+  width: 16px;
+  height: 16px;
+
+  left: 3px;
+  top: 3px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  transition:
+    transform .2s ease;
+}
+
+
+.tabs-switch-row .switch input:checked + .slider {
+  background: #1677ff;
+}
+
+
+.tabs-switch-row .switch input:checked + .slider::before {
+  transform:
+    translateX(20px);
 }

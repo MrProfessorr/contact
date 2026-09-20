@@ -8547,7 +8547,7 @@ button.active {
   align-items:center;
   justify-content:center;
   overflow:hidden;
-  border:1px solidvar(--line);
+  border:1px solid var(--line);
   border-radius:8px;
   background:var(--input);
   font-size:20px;

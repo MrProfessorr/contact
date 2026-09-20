@@ -195,27 +195,7 @@
   </h3>
 
 
-  <div class="form-group">
-
-    <label>
-      Background Color
-    </label>
-
-    <input
-      id="footerNavColor"
-      class="tabs-footer-color-input"
-      type="color"
-      value="#171717"
-    >
-
-    <div class="help-text">
-      Used when no background image is uploaded.
-    </div>
-
-  </div>
-
-
-<div class="form-group footer-bg-upload-section">
+<div class="form-group floating-upload-section">
 
   <label>
     Background Image
@@ -229,11 +209,9 @@
   >
 
 
-  <!-- UPLOAD BUTTON -->
-
   <button
     id="footerNavBackgroundUploadBtn"
-    class="sidebar-upload-btn"
+    class="floating-upload-btn"
     type="button"
   >
 
@@ -254,35 +232,37 @@
   </button>
 
 
-  <!-- BACKGROUND IMAGE PREVIEW -->
-
   <div
     id="footerNavBackgroundPreview"
-    class="footer-bg-upload-preview"
+    class="floating-upload-preview"
   >
 
-    <div class="footer-bg-preview-image">
-      No Image
-    </div>
+    <img
+      src=""
+      alt=""
+      data-footer-bg-image
+      style="display:none;"
+    >
 
-    <div class="footer-bg-preview-info">
+    <div class="floating-upload-file-info">
 
       <strong>
         Current background image
       </strong>
 
-      <span>
+      <span data-footer-bg-status>
         No image
       </span>
 
     </div>
 
+
     <button
       id="footerNavBackgroundRemoveBtn"
-      class="footer-bg-upload-remove"
+      class="floating-upload-remove"
       type="button"
-      title="Remove background image"
-      aria-label="Remove background image"
+      title="Remove image"
+      aria-label="Remove image"
     >
 
       <svg

@@ -715,27 +715,12 @@ try {
         );
 
       }
-      finally {
+finally {
 
-        footerNavBackgroundUploadBtn.disabled =
-          false;
+  footerNavBackgroundUploadBtn.disabled =
+    false;
 
-footerNavBackgroundUploadBtn.innerHTML = `
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    aria-hidden="true"
-  >
-    <path d="M12 16V4"></path>
-    <path d="M7 9l5-5 5 5"></path>
-    <path d="M5 20h14"></path>
-  </svg>
-  Upload Image
-`;
-
-      }
+}
 
     }
   );

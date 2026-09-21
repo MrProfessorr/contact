@@ -190,7 +190,12 @@ a {
 
 .admin-container {
   width: auto;
+  max-width: 100%;
+  min-width: 0;
+
   margin: 14px 12px 24px;
+
+  overflow-x: hidden;
 }
 
 .page-title {
@@ -9299,4 +9304,104 @@ input:checked
     min-width: 90px;
   }
 
+}
+/* =========================================================
+   ADMIN MOBILE RESPONSIVE FIX
+========================================================= */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.admin-container {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.card {
+  min-width: 0;
+  max-width: 100%;
+}
+
+
+/* WELCOME POPUP */
+
+.welcome-grid,
+.welcome-grid > *,
+.welcome-switch-grid,
+.welcome-switch-grid > *,
+.welcome-upload-group,
+.welcome-inline-preview,
+.welcome-admin-preview,
+.welcome-preview-modal {
+  min-width: 0;
+  max-width: 100%;
+}
+
+
+@media (max-width: 650px) {
+
+  .admin-container {
+    width: auto;
+    max-width: 100%;
+
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  .welcome-grid-4,
+  .welcome-grid-3,
+  .welcome-grid-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .welcome-grid .form-group {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .welcome-grid input,
+  .welcome-grid select,
+  .welcome-grid textarea,
+  .welcome-grid .shared-input {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .welcome-switch-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .welcome-admin-preview {
+    width: 100%;
+    max-width: 100%;
+    min-height: 280px;
+    padding: 10px;
+  }
+
+  .welcome-preview-modal {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .welcome-form-actions {
+    width: 100%;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .welcome-save-btn {
+    min-width: 0;
+  }
 }

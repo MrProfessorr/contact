@@ -14,12 +14,6 @@ import {
   increment
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
-
-
-/* =========================================================
-   FIREBASE
-========================================================= */
-
 const firebaseConfig = {
 
   apiKey:
@@ -51,20 +45,6 @@ const app =
 
 const db =
   getDatabase(app);
-
-
-
-/* =========================================================
-   LOADING SETTINGS
-
-   3000 = 3 seconds
-
-   Kalau mahu:
-   300ms  = 300
-   2 sec  = 2000
-   3 sec  = 3000
-   5 sec  = 5000
-========================================================= */
 
 let loaderMinMs =
   1500;
@@ -195,7 +175,7 @@ const modalImage =
     "modalImage"
   );
 /* =========================================================
-   CUSTOMER NAVIGATION DOM
+   CS NAVIGATION DOM
 ========================================================= */
 
 const customerSidebarOpen =
@@ -421,21 +401,13 @@ function hideLoader() {
 
 }
 
-
-
-/*
-  Safety:
-  kalau internet/Firebase terlalu lambat,
-  loader tidak terkunci selamanya.
-*/
-
 setTimeout(
   hideLoader,
   LOADER_MAX_MS
 );
 
 /* =========================================================
-   LOADING SETTINGS FROM FIREBASE
+   LOADING SETTINGS
 ========================================================= */
 function hexToRgba(
   hex,
@@ -476,11 +448,6 @@ function applyLoadingSettings(data = {}) {
     return;
   }
 
-
-  /*
-    ENABLE / DISABLE
-  */
-
 if (
   data.enabled === false
 ) {
@@ -490,10 +457,6 @@ if (
 }
 
 
-  /*
-    IMAGE / GIF
-  */
-
   if (
     loaderImage &&
     data.imageUrl
@@ -502,11 +465,6 @@ if (
     loaderImage.src =
       data.imageUrl;
   }
-
-
-  /*
-    TEXT
-  */
 
   if (loaderText) {
 
@@ -527,10 +485,6 @@ if (
   }
 
 
-  /*
-    IMAGE SIZE
-  */
-
   if (loaderImage) {
 
     const imageSize =
@@ -545,10 +499,6 @@ loaderImage.style.height =
   "auto";
   }
 
-
-  /*
-    BACKGROUND
-  */
 
 const backgroundColor =
   data.backgroundColor ||
@@ -573,10 +523,6 @@ pageLoader.style.background =
     backgroundOpacity
   );
 
-
-  /*
-    MINIMUM LOADING TIME
-  */
 
   const duration =
     Number(
@@ -635,7 +581,7 @@ error => {
 }
 );
 /* =========================================================
-   CUSTOMER SKIN SETTINGS
+   CS SKIN SETTINGS
 ========================================================= */
 
 function skinCssImage(
@@ -680,11 +626,6 @@ function applySkinSettings(
     document
       .documentElement;
 
-
-  /*
-    Kalau Skin OFF,
-    balik kepada default.
-  */
 
   if (
     data.enabled === false
@@ -759,9 +700,6 @@ root.style.setProperty(
     data.footer || {};
 
 
-
-  /* HEADER */
-
   root.style.setProperty(
     "--skin-header-color",
     header.color ||
@@ -782,9 +720,6 @@ root.style.setProperty(
   );
 
 
-
-  /* BODY */
-
   root.style.setProperty(
     "--skin-body-color",
     body.color ||
@@ -802,10 +737,6 @@ root.style.setProperty(
       body.imageUrl
     )
   );
-
-
-
-  /* FOOTER */
 
   root.style.setProperty(
     "--skin-footer-color",
@@ -826,10 +757,6 @@ root.style.setProperty(
   );
 
 }
-
-
-
-/* FIREBASE SKIN */
 
 onValue(
 
@@ -904,11 +831,9 @@ function safe(value = "") {
     );
 
 }
+
 /* =========================================================
-   CUSTOMER NAVIGATION
-========================================================= */
-/* =========================================================
-   CUSTOMER INTERNAL PAGE LOADER
+   CS INTERNAL PAGE LOADER
 ========================================================= */
 
 function showCustomerHome(
@@ -938,11 +863,6 @@ function showCustomerHome(
   currentCustomerTabUrl =
     "home";
 
-
-  /*
-    Tukar URL kembali ke
-    /contact/contact-center/
-  */
 
   if (updateHistory) {
 
@@ -979,10 +899,6 @@ async function loadCustomerInternalPage(
     ).trim();
 
 
-  /*
-    HOME
-  */
-
   if (
     !value ||
     value === "#" ||
@@ -1007,11 +923,6 @@ if (!customerDynamicView) {
   return;
 }
 
-
-/*
-  Batalkan navigation sebelumnya
-  kalau customer tekan tab cepat-cepat.
-*/
 
 customerPageRequestId++;
 
@@ -1079,12 +990,6 @@ const parser =
       );
 
 
-    /*
-      Ambil content BODY sahaja.
-      <head>, browser header dll
-      tidak dimasukkan.
-    */
-
     const body =
       doc.body;
 
@@ -1098,11 +1003,6 @@ const parser =
     }
 
 
-    /*
-      Masukkan STYLE daripada
-      page seperti term.html.
-    */
-
     const styles =
       Array.from(
         doc.querySelectorAll(
@@ -1114,13 +1014,6 @@ const parser =
             style.outerHTML
         )
         .join("\n");
-
-
-    /*
-      Jangan inject SCRIPT dengan
-      innerHTML kerana script tidak
-      execute secara automatik.
-    */
 
     const bodyClone =
       body.cloneNode(true);
@@ -1136,22 +1029,12 @@ const parser =
       );
 
 
-/*
-  Jangan render kalau user sudah
-  pindah ke tab lain.
-*/
-
 if (
   requestId !== customerPageRequestId
 ) {
   return;
 }
 
-
-/*
-  PAGE BARU SUDAH SIAP.
-  Sekarang baru swap content.
-*/
 
 if (customerHomeView) {
   customerHomeView.hidden =
@@ -1212,11 +1095,6 @@ if (updateHistory) {
 updateCustomerActiveTab();
 
 
-    /*
-      Jalankan script daripada
-      halaman dynamic.
-    */
-
     const scripts =
       Array.from(
         doc.querySelectorAll(
@@ -1274,11 +1152,6 @@ updateCustomerActiveTab();
   }
 catch (error) {
 
-  /*
-    Abort bukan error.
-    Ini berlaku apabila user tekan
-    tab lain dengan cepat.
-  */
 
   if (
     error?.name === "AbortError"
@@ -1295,7 +1168,7 @@ catch (error) {
 
 
   console.error(
-    "Customer internal page error:",
+    "CS internal page error:",
     error
   );
 
@@ -1322,9 +1195,6 @@ catch (error) {
 
 }
 
-/* =========================================================
-   BROWSER BACK / FORWARD
-========================================================= */
 
 window.addEventListener(
   "popstate",
@@ -1333,10 +1203,6 @@ window.addEventListener(
     const page =
       event.state?.customerPage;
 
-
-    /*
-      HOME
-    */
 
     if (
       !page ||
@@ -1350,11 +1216,6 @@ window.addEventListener(
       return;
     }
 
-
-    /*
-      INTERNAL PAGE
-    */
-
     loadCustomerInternalPage(
       page,
       false
@@ -1362,9 +1223,7 @@ window.addEventListener(
 
   }
 );
-/* =========================================================
-   ACTIVE NAV TAB
-========================================================= */
+
 
 function updateCustomerActiveTab() {
 
@@ -1520,9 +1379,6 @@ function renderCustomerNavigation(
   const sidebar =
     data.sidebar || {};
 
-  /*
-    FOOTER NAVIGATION STYLE
-  */
 
   const footerStyle =
     data.footerStyle || {};
@@ -1556,9 +1412,7 @@ function renderCustomerNavigation(
         ? `url("${footerBgImage}")`
         : "none"
     );
-  /*
-    SIDEBAR MAIN BUTTON
-  */
+
 
 const sidebarIsEnabled =
   sidebar.enabled === true;
@@ -1636,10 +1490,6 @@ if (!sidebarIsEnabled) {
   }
 
 
-  /*
-    ACTIVE TABS
-  */
-
   const tabs =
     Object.entries(
       data.tabs || {}
@@ -1660,10 +1510,6 @@ if (!sidebarIsEnabled) {
           Number(b.sort || 999)
       );
 
-
-  /*
-    SIDEBAR TABS
-  */
 
   const sidebarTabs =
     tabs.filter(
@@ -1727,10 +1573,6 @@ customerSidebarTabs
   );
   }
 
-
-  /*
-    BOTTOM NAVIGATION
-  */
 
   const footerTabs =
     tabs.filter(
@@ -1814,8 +1656,6 @@ updateCustomerActiveTab();
 }
 
 
-/* FIREBASE NAVIGATION */
-
 onValue(
 
   ref(
@@ -1832,13 +1672,6 @@ onValue(
 renderCustomerNavigation(
   data
 );
-
-
-/*
-  OPEN PAGE FROM URL
-  Example:
-  ?page=term
-*/
 
 const requestedPage =
   new URLSearchParams(
@@ -1922,9 +1755,6 @@ markReady(
   }
 
 );
-/* =========================================================
-   COPY CONTACT VALUE
-========================================================= */
 
 function copyButtonHtml(value = "") {
 
@@ -1948,10 +1778,6 @@ function copyButtonHtml(value = "") {
     </button>
   `;
 }
-
-/* =========================================================
-   SAFE URL
-========================================================= */
 
 function safeUrl(value = "") {
 
@@ -1996,11 +1822,6 @@ function safeUrl(value = "") {
 }
 
 
-
-/* =========================================================
-   CONTACT LINK
-========================================================= */
-
 function buildLink(contact) {
 
   const type =
@@ -2023,12 +1844,6 @@ function buildLink(contact) {
       contact.link || ""
     )
       .trim();
-
-
-
-  /*
-    CUSTOM LINK
-  */
 
   if (custom) {
 
@@ -2059,11 +1874,6 @@ function buildLink(contact) {
   }
 
 
-
-  /*
-    WHATSAPP
-  */
-
   if (
     type ===
     "whatsapp"
@@ -2088,11 +1898,6 @@ function buildLink(contact) {
 
   }
 
-
-
-  /*
-    TELEGRAM
-  */
 
   if (
     type ===
@@ -2130,11 +1935,6 @@ function buildLink(contact) {
   }
 
 
-
-  /*
-    OTHER WEBSITE
-  */
-
   if (
     type === "website" ||
     type === "facebook" ||
@@ -2169,12 +1969,6 @@ function buildLink(contact) {
   return "#";
 
 }
-
-
-
-/* =========================================================
-   CONTACT ICON
-========================================================= */
 
 function getContactIcon(type) {
 
@@ -2219,12 +2013,6 @@ function getContactIcon(type) {
   }
 
 }
-
-
-
-/* =========================================================
-   STATUS
-========================================================= */
 
 function statusText(status) {
 
@@ -2278,11 +2066,6 @@ function statusClass(status) {
 }
 
 
-
-/* =========================================================
-   COUNTERS
-========================================================= */
-
 function updateCounters() {
 
   document
@@ -2330,18 +2113,10 @@ function updateCounters() {
 
 }
 
-
-
-/* =========================================================
-   FILTER
-========================================================= */
-
 function getFilteredContacts() {
 
   return contacts.filter(
     item => {
-
-      /* STATUS FILTER */
 
       const matchesFilter =
 
@@ -2352,9 +2127,6 @@ function getFilteredContacts() {
 
         item.status ===
         currentFilter;
-
-
-      /* STATUS SEARCH */
 
       const haystack =
         [
@@ -2385,19 +2157,12 @@ function getFilteredContacts() {
     }
   );
 }
-/* =========================================================
-   ACTIVE CONTACTS FOR CONTACT OUR TEAM
-========================================================= */
 
 function getActiveContactResults() {
 
   return contacts.filter(
     item => {
 
-      /*
-        Contact Our Team
-        hanya ACTIVE.
-      */
 
       if (
         item.status !==
@@ -2429,18 +2194,13 @@ function getActiveContactResults() {
     }
   );
 }
-/* =========================================================
-   RENDER CONTACTS
-========================================================= */
+
 
 function renderContacts() {
 
-  /* LEFT - ikut filter + search status */
   const filtered =
     getFilteredContacts();
 
-
-  /* RIGHT - ACTIVE sahaja */
   const activeContacts =
     getActiveContactResults();
 
@@ -2451,14 +2211,6 @@ function renderContacts() {
 
   statusList.innerHTML =
     "";
-
-
-
-  /*
-    NO RESULTS
-  */
-
-/* RIGHT EMPTY */
 
 if (!activeContacts.length) {
 
@@ -2472,8 +2224,6 @@ if (!activeContacts.length) {
 }
 
 
-/* LEFT EMPTY */
-
 if (!filtered.length) {
 
   statusList.innerHTML =
@@ -2485,11 +2235,6 @@ if (!filtered.length) {
 
 }
 
-
-
-  /*
-    CONTACT CARDS
-  */
 
   activeContacts.forEach(
     item => {
@@ -2664,10 +2409,7 @@ if (!filtered.length) {
 
     }
   );
-/* =========================================================
-   LEFT STATUS LIST
-   SEMUA STATUS IKUT FILTER + SEARCH
-========================================================= */
+
 
 filtered.forEach(
   item => {
@@ -2720,9 +2462,6 @@ filtered.forEach(
 );
 }
 
-/* =========================================================
-   COPY CONTACT
-========================================================= */
 
 document.addEventListener(
   "click",
@@ -2802,9 +2541,6 @@ document.addEventListener(
   }
 );
 
-/* =========================================================
-   FIREBASE CONTACTS
-========================================================= */
 
 onValue(
 
@@ -2894,11 +2630,6 @@ onValue(
 );
 
 
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
 searchInput
   .addEventListener(
     "input",
@@ -2953,11 +2684,6 @@ clearSearch
   );
 
 
-
-/* =========================================================
-   STATUS FILTER
-========================================================= */
-
 document
   .querySelectorAll(
     ".filter-btn"
@@ -3009,9 +2735,6 @@ document
     }
   );
 
-/* =========================================================
-   NOTICE UNREAD SYSTEM
-========================================================= */
 
 const NOTICE_READ_STORAGE_KEY =
   "support_notice_read_keys";
@@ -3162,13 +2885,6 @@ function markCurrentNoticesRead() {
   }
 }
 
-/* =========================================================
-   FIREBASE NOTICES
-========================================================= */
-
-/* =========================================================
-   FIREBASE NOTICES - FIXED
-========================================================= */
 
 onValue(
   ref(db, "notices"),
@@ -3217,10 +2933,6 @@ if (noticeUnreadBadge) {
       }
 
 
-      /*
-        CONVERT FIREBASE OBJECT TO ARRAY
-      */
-
       let notices =
         Object.entries(rawData)
           .map(([id, data]) => {
@@ -3232,17 +2944,6 @@ if (noticeUnreadBadge) {
 
           });
 
-
-      /*
-        NORMALIZE ACTIVE VALUE
-
-        Support:
-        true
-        false
-        "true"
-        "false"
-        undefined
-      */
 
       notices =
         notices.filter(
@@ -3269,11 +2970,6 @@ if (noticeUnreadBadge) {
           }
         );
 
-
-      /*
-        PINNED FIRST
-        NEWEST SECOND
-      */
 
       notices.sort(
         (a, b) => {
@@ -3335,17 +3031,10 @@ if (noticeUnreadBadge) {
 updateNoticeUnreadBadge(
   notices
 );
-      /*
-        CLEAR LOADING
-      */
+
 
       noticeList.innerHTML =
         "";
-
-
-      /*
-        Kalau semua notice HIDDEN
-      */
 
       if (!notices.length) {
 
@@ -3373,19 +3062,11 @@ if (noticeUnreadBadge) {
       }
 
 
-
-      /*
-        RENDER EACH NOTICE
-      */
-
       notices.forEach(
         item => {
 
           try {
 
-            /*
-              ID
-            */
 
             const noticeId =
               String(item.id)
@@ -3394,25 +3075,12 @@ if (noticeUnreadBadge) {
                   ""
                 );
 
-
-            /*
-              TITLE
-            */
-
             const title =
               String(
                 item.title ||
                 "Notice"
               )
                 .trim();
-
-
-            /*
-              MESSAGE
-
-              Support juga kalau suatu masa
-              field admin dinamakan caption/text.
-            */
 
             const message =
               String(
@@ -3434,14 +3102,6 @@ if (noticeUnreadBadge) {
 
                 .trim();
 
-
-
-            /*
-              IMAGE
-
-              Support beberapa nama field
-            */
-
             const rawImage =
               item.imageUrl ||
               item.image ||
@@ -3455,21 +3115,9 @@ if (noticeUnreadBadge) {
                 rawImage
               );
 
-
-
-            /*
-              PIN
-            */
-
             const pinned =
               item.pinned === true ||
               item.pinned === "true";
-
-
-
-            /*
-              IMAGE HTML
-            */
 
             let imageHtml =
               "";
@@ -3504,11 +3152,6 @@ if (noticeUnreadBadge) {
 
             }
 
-
-
-            /*
-              DATE
-            */
 
             const timestamp =
               Number(
@@ -3555,11 +3198,6 @@ if (noticeUnreadBadge) {
 
             }
 
-
-
-            /*
-              CARD
-            */
 
             const html = `
 
@@ -3679,12 +3317,6 @@ if (noticeUnreadBadge) {
         }
       );
 
-
-
-      /*
-        SETUP AFTER HTML EXISTS
-      */
-
       setupNoticeButtons();
 
       setupImagePreview();
@@ -3750,11 +3382,6 @@ if (noticeUnreadBadge) {
 
 );
 
-
-/* =========================================================
-   READ MORE / SHOW LESS
-========================================================= */
-
 function setupNoticeButtons() {
 
   const COLLAPSED_HEIGHT_DESKTOP =
@@ -3798,11 +3425,6 @@ function setupNoticeButtons() {
         }
 
 
-        /*
-          Mula-mula biarkan caption terbuka supaya
-          browser boleh ukur tinggi sebenar.
-        */
-
         target.classList.remove(
           "collapsed",
           "expanded"
@@ -3813,10 +3435,6 @@ function setupNoticeButtons() {
           "show"
         );
 
-
-        /*
-          Tunggu browser selesai render.
-        */
 
         requestAnimationFrame(
           () => {
@@ -3830,12 +3448,6 @@ function setupNoticeButtons() {
 
                 const actualHeight =
                   target.scrollHeight;
-
-
-                /*
-                  Hanya collapse bila text benar-benar
-                  lebih tinggi daripada kawasan preview.
-                */
 
                 if (
                   actualHeight >
@@ -3861,10 +3473,6 @@ function setupNoticeButtons() {
 
                 } else {
 
-                  /*
-                    Caption pendek:
-                    tunjuk semuanya dan button tak perlu.
-                  */
 
                   target
                     .classList
@@ -3888,11 +3496,6 @@ function setupNoticeButtons() {
         );
 
 
-
-        /*
-          EXPAND / COLLAPSE
-        */
-
         button.addEventListener(
           "click",
           () => {
@@ -3906,10 +3509,6 @@ function setupNoticeButtons() {
 
 
             if (isCollapsed) {
-
-              /*
-                OPEN FULL CAPTION
-              */
 
               target
                 .classList
@@ -3929,10 +3528,6 @@ function setupNoticeButtons() {
                 "Collapse ↑";
 
             } else {
-
-              /*
-                COLLAPSE BACK
-              */
 
               target
                 .classList
@@ -3961,10 +3556,6 @@ function setupNoticeButtons() {
 
 }
 
-
-/* =========================================================
-   IMAGE PREVIEW
-========================================================= */
 
 function setupImagePreview() {
 
@@ -4006,8 +3597,6 @@ function setupImagePreview() {
 
 
 function openPreview(url) {
-
-  /* RESET ZOOM SETIAP KALI BUKA GAMBAR */
 
   imageZoom =
     1;
@@ -4099,9 +3688,6 @@ updateModalImageTransform();
 
 }
 
-/* =========================================================
-   IMAGE WHEEL ZOOM
-========================================================= */
 
 if (modalImage) {
 
@@ -4115,8 +3701,6 @@ if (modalImage) {
         0.18;
 
 
-      /* SCROLL UP = ZOOM IN */
-
       if (
         event.deltaY < 0
       ) {
@@ -4127,8 +3711,6 @@ if (modalImage) {
       }
 
 
-      /* SCROLL DOWN = ZOOM OUT */
-
       else {
 
         imageZoom -=
@@ -4136,8 +3718,6 @@ if (modalImage) {
 
       }
 
-
-      /* LIMIT 1x - 5x */
 
       imageZoom =
         Math.max(
@@ -4147,9 +3727,6 @@ if (modalImage) {
             5
           )
         );
-
-
-      /* RESET POSITION AT 1x */
 
       if (
         imageZoom === 1
@@ -4173,9 +3750,6 @@ if (modalImage) {
   );
 
 }
-/* =========================================================
-   IMAGE DRAG / PAN
-========================================================= */
 
 if (modalImage) {
 
@@ -4263,9 +3837,6 @@ if (modalImage) {
 
 }
 
-/* =========================================================
-   DOUBLE CLICK RESET
-========================================================= */
 
 if (modalImage) {
 
@@ -4315,8 +3886,6 @@ document.addEventListener(
     }
 
 
-    /* IMAGE PREVIEW */
-
     if (
       imageModal &&
       imageModal
@@ -4328,8 +3897,6 @@ document.addEventListener(
 
     }
 
-
-    /* NOTICE MODAL */
 
     if (
       noticeCenterModal &&
@@ -4344,9 +3911,6 @@ document.addEventListener(
 
   }
 );
-/* =========================================================
-   NOTICE CENTER MODAL
-========================================================= */
 
 function openNoticeCenter() {
 
@@ -4429,9 +3993,7 @@ if (noticeCenterBackdrop) {
     );
 
 }
-/* =========================================================
-   FLOATING PROMO IMAGE
-========================================================= */
+
 
 const floatingPromoPosition =
   document.getElementById(
@@ -4463,10 +4025,6 @@ let floatingCurrentSettings =
   null;
 
 
-/* =========================================================
-   ALLOWED VALUES
-========================================================= */
-
 const FLOATING_POSITIONS = [
   "left-top",
   "left-center",
@@ -4490,18 +4048,6 @@ const FLOATING_ANIMATIONS = [
   "soft"
 ];
 
-
-/* =========================================================
-   BOOLEAN HELPER
-
-   Support:
-   true
-   false
-   "true"
-   "false"
-   1
-   0
-========================================================= */
 
 function floatingBoolean(
   value,
@@ -4531,11 +4077,6 @@ function floatingBoolean(
   return defaultValue;
 }
 
-
-/* =========================================================
-   HIDE FLOATING
-========================================================= */
-
 function hideFloatingPromo() {
 
   if (!floatingPromoPosition) {
@@ -4563,11 +4104,6 @@ function hideFloatingPromo() {
       "true"
     );
 }
-
-
-/* =========================================================
-   CLEAR POSITION + ANIMATION CLASSES
-========================================================= */
 
 function clearFloatingClasses() {
 
@@ -4606,10 +4142,6 @@ function clearFloatingClasses() {
 }
 
 
-/* =========================================================
-   CHECK CUSTOMER CLOSED
-========================================================= */
-
 function floatingWasClosed(
   settings
 ) {
@@ -4623,8 +4155,6 @@ function floatingWasClosed(
       .trim();
 
 
-  /* SESSION */
-
   if (mode === "session") {
 
     return (
@@ -4635,8 +4165,6 @@ function floatingWasClosed(
 
   }
 
-
-  /* 24 HOURS */
 
   if (mode === "24h") {
 
@@ -4656,20 +4184,9 @@ function floatingWasClosed(
   }
 
 
-  /*
-    REFRESH
-
-    Tidak simpan apa-apa.
-    Refresh = muncul semula.
-  */
-
   return false;
 }
 
-
-/* =========================================================
-   DEVICE CHECK
-========================================================= */
 
 function floatingAllowedOnDevice(
   settings
@@ -4713,10 +4230,6 @@ function floatingAllowedOnDevice(
 }
 
 
-/* =========================================================
-   RENDER FLOATING PROMO
-========================================================= */
-
 function renderFloatingPromo(
   settings
 ) {
@@ -4743,11 +4256,6 @@ function renderFloatingPromo(
 
   clearFloatingClasses();
 
-
-  /* =====================================================
-     ENABLE / DISABLE
-  ===================================================== */
-
   const enabled =
     floatingBoolean(
       settings?.enabled,
@@ -4762,10 +4270,6 @@ function renderFloatingPromo(
     return;
   }
 
-
-  /* =====================================================
-     IMAGE URL
-  ===================================================== */
 
   const imageUrl =
     safeUrl(
@@ -4782,11 +4286,6 @@ function renderFloatingPromo(
     return;
   }
 
-
-  /* =====================================================
-     DEVICE
-  ===================================================== */
-
   if (
     !floatingAllowedOnDevice(
       settings
@@ -4797,11 +4296,6 @@ function renderFloatingPromo(
 
     return;
   }
-
-
-  /* =====================================================
-     CUSTOMER ALREADY CLOSED
-  ===================================================== */
 
   if (
     floatingWasClosed(
@@ -4814,10 +4308,6 @@ function renderFloatingPromo(
     return;
   }
 
-
-  /* =====================================================
-     IMAGE
-  ===================================================== */
 
   floatingPromoImage.src =
     imageUrl;
@@ -4833,11 +4323,6 @@ function renderFloatingPromo(
       hideFloatingPromo();
 
     };
-
-
-  /* =====================================================
-     CLICK URL
-  ===================================================== */
 
   const clickUrl =
     safeUrl(
@@ -4873,11 +4358,6 @@ function renderFloatingPromo(
 
   }
 
-
-  /* =====================================================
-     WIDTH DESKTOP
-  ===================================================== */
-
   let width =
     Number(
       settings?.width ??
@@ -4908,11 +4388,6 @@ function renderFloatingPromo(
       "--floating-width",
       `${width}px`
     );
-
-
-  /* =====================================================
-     WIDTH MOBILE
-  ===================================================== */
 
   let mobileWidth =
     Number(
@@ -4947,11 +4422,6 @@ function renderFloatingPromo(
       `${mobileWidth}px`
     );
 
-
-  /* =====================================================
-     SPEED
-  ===================================================== */
-
   let speed =
     Number(
       settings?.speed ??
@@ -4982,11 +4452,6 @@ function renderFloatingPromo(
       "--floating-speed",
       `${speed}s`
     );
-
-
-  /* =====================================================
-     MOVEMENT DISTANCE
-  ===================================================== */
 
   let distance =
     Number(
@@ -5021,17 +4486,6 @@ function renderFloatingPromo(
       `${distance}px`
     );
 
-
-  /* =====================================================
-     OPACITY
-
-     Firebase boleh simpan:
-     1
-     0.8
-     80
-     100
-  ===================================================== */
-
   let opacity =
     Number(
       settings?.opacity ??
@@ -5047,11 +4501,6 @@ function renderFloatingPromo(
     opacity = 1;
   }
 
-
-  /*
-    Kalau admin simpan 80,
-    convert kepada 0.8.
-  */
 
   if (opacity > 1) {
 
@@ -5077,11 +4526,6 @@ function renderFloatingPromo(
       "--floating-opacity",
       opacity
     );
-
-
-  /* =====================================================
-     POSITION
-  ===================================================== */
 
   let position =
     String(
@@ -5111,11 +4555,6 @@ function renderFloatingPromo(
       `floating-pos-${position}`
     );
 
-
-  /* =====================================================
-     ANIMATION
-  ===================================================== */
-
   let animation =
     String(
       settings?.animation ||
@@ -5144,11 +4583,6 @@ function renderFloatingPromo(
       `floating-anim-${animation}`
     );
 
-
-  /* =====================================================
-     CLOSE BUTTON
-  ===================================================== */
-
   const showClose =
     floatingBoolean(
       settings?.show_close,
@@ -5162,11 +4596,6 @@ function renderFloatingPromo(
       "hide",
       !showClose
     );
-
-
-  /* =====================================================
-     SHOW FLOATING
-  ===================================================== */
 
   floatingPromoPosition
     .classList
@@ -5189,10 +4618,6 @@ function renderFloatingPromo(
     );
 }
 
-
-/* =========================================================
-   CLOSE BUTTON
-========================================================= */
 
 if (floatingPromoClose) {
 
@@ -5220,7 +4645,6 @@ if (floatingPromoClose) {
             .trim();
 
 
-        /* SESSION */
 
         if (
           mode === "session"
@@ -5234,8 +4658,6 @@ if (floatingPromoClose) {
 
         }
 
-
-        /* 24 HOURS */
 
         if (
           mode === "24h"
@@ -5259,24 +4681,12 @@ if (floatingPromoClose) {
 
         }
 
-
-        /*
-          REFRESH:
-          tidak save storage.
-        */
-
-
         hideFloatingPromo();
 
       }
     );
 
 }
-
-
-/* =========================================================
-   DISABLE EMPTY LINK
-========================================================= */
 
 if (floatingPromoLink) {
 
@@ -5301,11 +4711,6 @@ if (floatingPromoLink) {
     );
 
 }
-
-
-/* =========================================================
-   FIREBASE FLOATING IMAGE
-========================================================= */
 
 onValue(
 
@@ -5367,11 +4772,6 @@ error => {
 
 );
 
-
-/* =========================================================
-   RESPONSIVE UPDATE
-========================================================= */
-
 let floatingResizeTimer =
   null;
 
@@ -5405,9 +4805,6 @@ window.addEventListener(
 
   }
 );
-/* =========================================================
-   CUSTOMER MARQUEE
-========================================================= */
 
 const marqueeTopMount =
   document.getElementById(
@@ -5435,12 +4832,6 @@ let marqueeTextOne =
 
 let marqueeTextTwo =
   null;
-
-
-
-/* =========================================================
-   CREATE ELEMENT
-========================================================= */
 
 function createSiteMarquee() {
 
@@ -5505,12 +4896,6 @@ function createSiteMarquee() {
 
 }
 
-
-
-/* =========================================================
-   BOOLEAN HELPER
-========================================================= */
-
 function marqueeBoolean(
   value,
   fallback = true
@@ -5543,12 +4928,6 @@ function marqueeBoolean(
   return fallback;
 }
 
-
-
-/* =========================================================
-   SAFE COLOR
-========================================================= */
-
 function marqueeColor(
   value,
   fallback
@@ -5558,12 +4937,6 @@ function marqueeColor(
     String(
       value || ""
     ).trim();
-
-
-  /*
-    Admin type=color akan simpan
-    format #RRGGBB.
-  */
 
   if (
     /^#[0-9a-f]{6}$/i.test(
@@ -5579,11 +4952,6 @@ function marqueeColor(
   return fallback;
 }
 
-
-
-/* =========================================================
-   RENDER MARQUEE
-========================================================= */
 
 function renderSiteMarquee(
   settings
@@ -5603,21 +4971,11 @@ function renderSiteMarquee(
 
   }
 
-
-  /* =====================================================
-     ENABLE
-  ===================================================== */
-
   const enabled =
     marqueeBoolean(
       settings?.enabled,
       false
     );
-
-
-  /* =====================================================
-     TEXT
-  ===================================================== */
 
   const text =
     String(
@@ -5647,24 +5005,12 @@ function renderSiteMarquee(
 
   }
 
-
-  /*
-    Duplicate text supaya movement
-    nampak continuous.
-  */
-
   marqueeTextOne.textContent =
     text;
 
 
   marqueeTextTwo.textContent =
     text;
-
-
-
-  /* =====================================================
-     POSITION
-  ===================================================== */
 
   const position =
     String(
@@ -5709,12 +5055,6 @@ function renderSiteMarquee(
 
   }
 
-
-
-  /* =====================================================
-     DIRECTION
-  ===================================================== */
-
   siteMarquee
     .classList
     .remove(
@@ -5753,12 +5093,6 @@ function renderSiteMarquee(
 
   }
 
-
-
-  /* =====================================================
-     SPEED
-  ===================================================== */
-
   let speed =
     Number(
       settings?.speed ??
@@ -5793,12 +5127,6 @@ function renderSiteMarquee(
       `${speed}s`
     );
 
-
-
-  /* =====================================================
-     FONT SIZE
-  ===================================================== */
-
   let fontSize =
     Number(
       settings?.font_size ??
@@ -5832,12 +5160,6 @@ function renderSiteMarquee(
       "--marquee-font-size",
       `${fontSize}px`
     );
-
-
-
-  /* =====================================================
-     COLORS
-  ===================================================== */
 
   const textColor =
     marqueeColor(
@@ -5880,12 +5202,6 @@ function renderSiteMarquee(
       backgroundColor
     );
 
-
-
-  /* =====================================================
-     PAUSE HOVER
-  ===================================================== */
-
   const pauseHover =
     marqueeBoolean(
       settings?.pause_hover,
@@ -5900,33 +5216,15 @@ function renderSiteMarquee(
       pauseHover
     );
 
-
-
-  /* =====================================================
-     RESTART ANIMATION
-
-     Penting apabila admin ubah direction/speed.
-  ===================================================== */
-
   siteMarqueeTrack.style.animation =
     "none";
 
-
-  /*
-    Force reflow
-  */
 
   void siteMarqueeTrack.offsetWidth;
 
 
   siteMarqueeTrack.style.animation =
     "";
-
-
-
-  /* =====================================================
-     SHOW
-  ===================================================== */
 
   siteMarquee
     .classList
@@ -5935,12 +5233,6 @@ function renderSiteMarquee(
     );
 
 }
-
-
-
-/* =========================================================
-   FIREBASE MARQUEE
-========================================================= */
 
 onValue(
 
@@ -5983,7 +5275,6 @@ onValue(
 
     }
 
-
     markReady(
       "marquee"
     );
@@ -6017,9 +5308,7 @@ onValue(
   }
 
 );
-/* =========================================================
-   CUSTOMER WELCOME POPUP
-========================================================= */
+
 
 const welcomePopup =
   document.getElementById(
@@ -6068,11 +5357,6 @@ let welcomeTimer =
 let welcomeOpened =
   false;
 
-
-
-/* =========================================================
-   HEX TO RGBA
-========================================================= */
 
 function welcomeHexToRgba(
   hex,
@@ -6127,21 +5411,10 @@ function welcomeHexToRgba(
 
 }
 
-
-
-/* =========================================================
-   STORAGE KEY
-========================================================= */
-
 function welcomeStorageKey(
   settings
 ) {
 
-  /*
-    updatedAt berubah setiap kali admin SAVE.
-    Jadi kalau admin tukar popup,
-    customer boleh nampak version baru.
-  */
 
   const version =
     Number(
@@ -6157,11 +5430,6 @@ function welcomeStorageKey(
 
 }
 
-
-
-/* =========================================================
-   SHOULD SHOW
-========================================================= */
 
 function canShowWelcome(
   settings
@@ -6200,8 +5468,6 @@ function canShowWelcome(
     );
 
 
-  /* EVERY REFRESH */
-
   if (
     mode === "refresh"
   ) {
@@ -6210,8 +5476,6 @@ function canShowWelcome(
 
   }
 
-
-  /* SESSION */
 
   if (
     mode === "session"
@@ -6225,8 +5489,6 @@ function canShowWelcome(
 
   }
 
-
-  /* ONCE PER DAY */
 
   if (
     mode === "day"
@@ -6251,8 +5513,6 @@ function canShowWelcome(
   }
 
 
-  /* 24 HOURS */
-
   if (
     mode === "24h"
   ) {
@@ -6276,12 +5536,6 @@ function canShowWelcome(
   return true;
 
 }
-
-
-
-/* =========================================================
-   SAVE CLOSED STATUS
-========================================================= */
 
 function saveWelcomeClosed(
   settings
@@ -6357,11 +5611,6 @@ function saveWelcomeClosed(
 
 }
 
-
-
-/* =========================================================
-   APPLY DESIGN
-========================================================= */
 
 function applyWelcomeSettings(
   settings
@@ -6602,11 +5851,6 @@ function applyWelcomeSettings(
 }
 
 
-
-/* =========================================================
-   OPEN
-========================================================= */
-
 function openWelcomePopup() {
 
   if (
@@ -6653,11 +5897,6 @@ function openWelcomePopup() {
 
   }
 
-
-  /*
-    Preload dahulu supaya popup
-    tidak muncul kosong.
-  */
 
   const preload =
     new Image();
@@ -6707,12 +5946,6 @@ function openWelcomePopup() {
 
 }
 
-
-
-/* =========================================================
-   CLOSE
-========================================================= */
-
 function closeWelcomePopup() {
 
   if (
@@ -6753,12 +5986,6 @@ function closeWelcomePopup() {
 
 }
 
-
-
-/* =========================================================
-   WAIT FOR PAGE LOADER
-========================================================= */
-
 function scheduleWelcomePopup() {
 
   clearTimeout(
@@ -6780,11 +6007,6 @@ function scheduleWelcomePopup() {
 
   const waitUntilReady =
     () => {
-
-      /*
-        Jangan buka ketika
-        customer loader masih aktif.
-      */
 
       if (
         document.body.classList.contains(
@@ -6829,11 +6051,6 @@ function scheduleWelcomePopup() {
 
 }
 
-
-
-/* =========================================================
-   CLOSE EVENTS
-========================================================= */
 
 if (
   welcomePopupClose
@@ -6928,11 +6145,6 @@ document.addEventListener(
 );
 
 
-
-/* =========================================================
-   FIREBASE WELCOME
-========================================================= */
-
 onValue(
 
   ref(
@@ -6977,12 +6189,6 @@ onValue(
       return;
 
     }
-
-
-    /*
-      Kalau admin update setting
-      ketika customer page sedang buka.
-    */
 
     if (
       welcomePopup
@@ -7031,9 +6237,7 @@ onValue(
   }
 
 );
-/* =========================================================
-   VISITOR ANALYTICS
-========================================================= */
+
 
 const VISITOR_ID_KEY =
   "support_center_visitor_id";
@@ -7127,11 +6331,6 @@ const visitorId =
 const visitorSessionId =
   getSessionId();
 
-
-/* =========================================================
-   LOCAL DATE KEY
-========================================================= */
-
 function getTrackingDateKey() {
 
   const now =
@@ -7154,10 +6353,6 @@ function getTrackingDateKey() {
 
 }
 
-
-/* =========================================================
-   TRAFFIC SOURCE
-========================================================= */
 
 function normalizeTrafficSource(
   value = ""
@@ -7286,11 +6481,6 @@ function getTrafficInfo() {
 
 }
 
-
-/* =========================================================
-   DEVICE / BROWSER
-========================================================= */
-
 function detectDeviceType() {
 
   const ua =
@@ -7313,9 +6503,6 @@ function detectDeviceType() {
 
 }
 
-/* =========================================================
-   OPERATING SYSTEM
-========================================================= */
 
 function detectOS() {
 
@@ -7325,19 +6512,11 @@ function detectOS() {
   const platform =
     navigator.platform || "";
 
-  /* iPhone / iPad / iPod */
-
   if (
     /iPhone|iPad|iPod/i.test(ua)
   ) {
     return "iOS";
   }
-
-
-  /*
-    iPadOS kadang-kadang report sebagai Mac.
-    Touch points membantu bezakan iPad dari Mac.
-  */
 
   if (
     platform === "MacIntel" &&
@@ -7347,16 +6526,12 @@ function detectOS() {
   }
 
 
-  /* Android */
-
   if (
     /Android/i.test(ua)
   ) {
     return "Android";
   }
 
-
-  /* Windows */
 
   if (
     /Windows NT/i.test(ua)
@@ -7365,8 +6540,6 @@ function detectOS() {
   }
 
 
-  /* macOS */
-
   if (
     /Macintosh|Mac OS X/i.test(ua)
   ) {
@@ -7374,16 +6547,12 @@ function detectOS() {
   }
 
 
-  /* ChromeOS */
-
   if (
     /CrOS/i.test(ua)
   ) {
     return "ChromeOS";
   }
 
-
-  /* Linux */
 
   if (
     /Linux/i.test(ua)
@@ -7434,10 +6603,6 @@ function detectBrowser() {
 }
 
 
-/* =========================================================
-   BLOCK SCREEN
-========================================================= */
-
 let visitorBlocked =
   false;
 
@@ -7468,7 +6633,7 @@ function showBlockedScreen() {
       width:min(420px,calc(100% - 32px));
       padding:30px 22px;
       border:1px solid #343d4d;
-      border-radius:18px;
+      border-radius:12px;
       background:#111720;
       color:#ffffff;
       text-align:center;
@@ -7567,10 +6732,6 @@ function removeBlockedScreen() {
 }
 
 
-/* =========================================================
-   BLOCK CHECK
-========================================================= */
-
 onValue(
 
   ref(
@@ -7618,10 +6779,6 @@ onValue(
 );
 
 
-/* =========================================================
-   VISITOR TRACKING
-========================================================= */
-
 async function startVisitorTracking() {
 
   try {
@@ -7644,8 +6801,6 @@ async function startVisitorTracking() {
         `analytics/presence/${visitorId}/${visitorSessionId}`
       );
 
-
-    /* VISITOR PROFILE */
 
     await update(
       visitorRef,
@@ -7694,8 +6849,6 @@ browser:
     );
 
 
-    /* FIRST SEEN */
-
     const firstSeenKey =
       `support_first_seen_${visitorId}`;
 
@@ -7721,8 +6874,6 @@ browser:
     }
 
 
-    /* DAILY UNIQUE VISITOR */
-
     await set(
 
       ref(
@@ -7734,8 +6885,6 @@ browser:
 
     );
 
-
-    /* DAILY PAGE VIEW */
 
     await update(
 
@@ -7754,8 +6903,6 @@ browser:
 
     );
 
-
-    /* ONLINE PRESENCE */
 
     await set(
       presenceRef,
@@ -7790,9 +6937,6 @@ browser:
       }
     );
 
-
-    /* KEEP LAST SEEN UPDATED */
-
     setInterval(
       () => {
 
@@ -7825,10 +6969,6 @@ browser:
 
 startVisitorTracking();
 
-
-/* =========================================================
-   TRACK CONTACT LINK CLICK
-========================================================= */
 
 document.addEventListener(
   "click",

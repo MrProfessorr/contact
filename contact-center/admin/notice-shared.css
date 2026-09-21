@@ -1,0 +1,531 @@
+/* =========================================================
+   SHARED NOTICE UI
+   CUSTOMER + ADMIN
+========================================================= */
+
+.notice-list {
+  min-width: 0;
+
+  display: grid;
+
+  gap: 14px;
+}
+
+
+/* =========================================================
+   NOTICE CARD
+========================================================= */
+
+.notice-card {
+  min-width: 0;
+
+  overflow: hidden;
+
+  border:
+    1px solid #f8dd76;
+
+  border-radius:
+    14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(19,33,52,.93),
+      rgba(12,22,36,.93)
+    );
+
+  transition:
+    border-color .2s ease,
+    transform .2s ease;
+}
+
+
+.notice-card:hover {
+  border-color:
+    #f9ff00;
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.notice-image-wrap {
+  position: relative;
+
+  width:
+    100%;
+
+  max-height:
+    360px;
+
+  overflow:
+    hidden;
+
+  cursor:
+    zoom-in;
+
+  background:
+    #0a0a0a;
+}
+
+
+.notice-img {
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    auto;
+
+  max-height:
+    360px;
+
+  object-fit:
+    contain;
+
+  object-position:
+    center;
+
+  margin:
+    auto;
+
+  padding:
+    10px;
+
+  transition:
+    transform .3s ease,
+    filter .3s ease;
+}
+
+
+.notice-image-wrap:hover
+.notice-img {
+  transform:
+    scale(1.015);
+
+  filter:
+    brightness(.85);
+}
+
+
+.preview-button {
+  position:
+    absolute;
+
+  right:
+    11px;
+
+  bottom:
+    11px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    5px;
+
+  padding:
+    6px 9px;
+
+  border:
+    1px solid rgba(255,255,255,.14);
+
+  border-radius:
+    8px;
+
+  color:
+    #ffffff;
+
+  background:
+    rgba(5,10,18,.70);
+
+  backdrop-filter:
+    blur(8px);
+
+  font-size:
+    8px;
+
+  font-weight:
+    800;
+
+  pointer-events:
+    none;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+.notice-body {
+  min-width:
+    0;
+
+  padding:
+    15px 16px 16px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #525252 0%,
+      #0a0a0a 100%
+    );
+}
+
+
+.notice-meta {
+  display:
+    flex;
+
+  flex-wrap:
+    wrap;
+
+  gap:
+    6px;
+
+  align-items:
+    center;
+
+  margin-bottom:
+    9px;
+}
+
+
+.notice-tag {
+  display:
+    inline-flex;
+
+  padding:
+    5px 7px;
+
+  border:
+    1px solid #f8dd76;
+
+  border-radius:
+    6px;
+
+  color:
+    #f8dd76;
+
+  background:
+    #18150b;
+
+  font-size:
+    7px;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    .5px;
+}
+
+
+.pinned-tag {
+  display:
+    inline-flex;
+
+  padding:
+    5px 7px;
+
+  border:
+    1px solid rgba(255,195,79,.10);
+
+  border-radius:
+    6px;
+
+  color:
+    #ff2020;
+
+  background:
+    rgba(255,195,79,.07);
+
+  font-size:
+    10px;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    .5px;
+}
+
+
+.notice-body h3 {
+  font-size:
+    14px;
+
+  line-height:
+    1.4;
+
+  overflow-wrap:
+    anywhere;
+
+  word-break:
+    break-word;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.notice-message {
+  position:
+    relative;
+
+  width:
+    100%;
+
+  color:
+    #cad5e5;
+
+  font-size:
+    14px;
+
+  white-space:
+    pre-line;
+
+  overflow-wrap:
+    anywhere;
+
+  word-break:
+    break-word;
+
+  transition:
+    max-height .35s ease;
+}
+
+
+.notice-message.collapsed {
+  max-height:
+    112px;
+
+  overflow:
+    hidden;
+}
+
+
+.notice-message.collapsed::after {
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  right:
+    0;
+
+  bottom:
+    0;
+
+  height:
+    28px;
+
+  pointer-events:
+    none;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(12,22,36,0),
+      rgba(12,22,36,.98)
+    );
+}
+
+
+.notice-message.expanded {
+  max-height:
+    none;
+
+  overflow:
+    visible;
+}
+
+
+.notice-message.expanded::after {
+  display:
+    none;
+}
+
+
+/* =========================================================
+   EXPAND BUTTON
+========================================================= */
+
+.notice-expand {
+  display:
+    none;
+
+  align-items:
+    center;
+
+  gap:
+    5px;
+
+  margin-top:
+    9px;
+
+  padding:
+    0;
+
+  border:
+    0;
+
+  outline:
+    0;
+
+  cursor:
+    pointer;
+
+  color:
+    #65a4ff;
+
+  background:
+    transparent;
+
+  font-size:
+    9px;
+
+  font-weight:
+    800;
+}
+
+
+.notice-expand.show {
+  display:
+    inline-flex;
+}
+
+
+.notice-expand:hover {
+  color:
+    #a3c8ff;
+
+  transform:
+    translateX(2px);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.notice-footer {
+  margin-top:
+    10px;
+
+  padding-top:
+    10px;
+
+  border-top:
+    1px solid #f8dd76;
+}
+
+
+.notice-date {
+  color:
+    #f8dd76;
+
+  font-size:
+    10px;
+}
+
+
+/* =========================================================
+   ADMIN ONLY ACTIONS
+========================================================= */
+
+.admin-notice-actions {
+  display:
+    flex;
+
+  gap:
+    7px;
+
+  margin-top:
+    12px;
+}
+
+
+.admin-notice-actions button {
+  padding:
+    7px 11px;
+
+  border:
+    none;
+
+  border-radius:
+    7px;
+
+  color:
+    #ffffff;
+
+  cursor:
+    pointer;
+
+  font-size:
+    10px;
+
+  font-weight:
+    700;
+}
+
+
+.admin-notice-edit {
+  background:
+    #2968cd;
+}
+
+
+.admin-notice-delete {
+  background:
+    #b73847;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:760px) {
+
+  .notice-image-wrap {
+    max-height:
+      290px;
+  }
+
+
+  .notice-img {
+    max-height:
+      290px;
+  }
+
+
+  .notice-body {
+    padding:
+      13px 13px 14px;
+  }
+
+
+  .notice-body h3 {
+    font-size:
+      13px;
+  }
+
+
+  .notice-message {
+    font-size:
+      10px;
+  }
+
+}

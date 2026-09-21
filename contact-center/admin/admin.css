@@ -9306,7 +9306,8 @@ input:checked
 
 }
 /* =========================================================
-   ADMIN MOBILE RESPONSIVE FIX
+   FINAL GLOBAL MOBILE RESPONSIVE FIX
+   LETAK PALING BAWAH ADMIN.CSS
 ========================================================= */
 
 html,
@@ -9317,91 +9318,134 @@ body {
 }
 
 .admin-container {
-  min-width: 0;
+  width: auto;
   max-width: 100%;
-}
-
-.card {
   min-width: 0;
-  max-width: 100%;
 }
 
 
-/* WELCOME POPUP */
+/* semua child boleh mengecil */
 
-.welcome-grid,
-.welcome-grid > *,
-.welcome-switch-grid,
-.welcome-switch-grid > *,
-.welcome-upload-group,
-.welcome-inline-preview,
-.welcome-admin-preview,
-.welcome-preview-modal {
+.admin-container *,
+.card,
+.form-group {
   min-width: 0;
-  max-width: 100%;
 }
 
 
-@media (max-width: 650px) {
+/* =========================================================
+   TABLET / MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
 
   .admin-container {
     width: auto;
     max-width: 100%;
-
-    margin-left: 8px;
-    margin-right: 8px;
+    margin: 12px 8px 20px;
   }
+
+
+  /* SEMUA LAYOUT UTAMA JADI 1 COLUMN */
+
+  .admin-grid,
+  .floating-admin-layout,
+  .marquee-admin-layout,
+  .loading-admin-layout,
+  .tabs-admin-layout {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    grid-template-columns:
+      minmax(0, 1fr) !important;
+  }
+
+
+  /* CARD JANGAN LEBIH BESAR DARI SCREEN */
 
   .card {
     width: 100%;
     max-width: 100%;
+    min-width: 0;
+  }
+
+}
+
+
+/* =========================================================
+   PHONE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .admin-container {
+    margin:
+      10px 8px 20px;
+  }
+
+
+  .card {
     padding: 12px;
   }
 
+
+  /* INPUT */
+
+  input,
+  select,
+  textarea,
+  .shared-input,
+  .search-input {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+
+  /* FORM GRID JADI 1 COLUMN */
+
+  .contact-form-row,
+  .notice-form-row,
+  .marquee-form-row,
+  .marquee-form-row-three,
+  .floating-form-row-three,
+  .floating-form-row-five,
+  .loading-input-row,
   .welcome-grid-4,
   .welcome-grid-3,
   .welcome-grid-2 {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .welcome-grid .form-group {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .welcome-grid input,
-  .welcome-grid select,
-  .welcome-grid textarea,
-  .welcome-grid .shared-input {
     width: 100%;
     max-width: 100%;
     min-width: 0;
-  }
 
-  .welcome-switch-grid {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      minmax(0, 1fr) !important;
   }
 
-  .welcome-admin-preview {
+
+  /* PREVIEW / UPLOAD */
+
+  .floating-upload-preview,
+  .contact-upload-preview,
+  .notice-upload-preview,
+  .sidebar-upload-preview {
     width: 100%;
     max-width: 100%;
-    min-height: 280px;
-    padding: 10px;
+    min-width: 0;
   }
 
-  .welcome-preview-modal {
-    width: 100%;
+
+  /* TEXT PANJANG JANGAN TOLAK CARD */
+
+  .admin-item,
+  .admin-item p,
+  .tabs-admin-item,
+  .tabs-admin-item-info,
+  .tabs-admin-item-url {
+    min-width: 0;
     max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
-  .welcome-form-actions {
-    width: 100%;
-    min-width: 0;
-    gap: 10px;
-  }
-
-  .welcome-save-btn {
-    min-width: 0;
-  }
 }

@@ -1382,8 +1382,15 @@ import {
 import {
   getAuth,
   signInWithEmailAndPassword,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  getDatabase,
+  ref,
+  get,
+  set
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
 const firebaseConfig = {
@@ -1418,7 +1425,8 @@ const auth =
   getAuth(app);
 
 
-
+const db =
+  getDatabase(app);
 /* =========================================================
    ELEMENTS
 ========================================================= */
@@ -1626,7 +1634,79 @@ function hideSecondError() {
 }
 
 
+/* =========================================================
+   AUTO CREATE SECOND AUTH ACCOUNT
+========================================================= */
 
+async function ensureSecondAuthAccount(user) {
+
+  if (!user) {
+    return null;
+  }
+
+
+  const accountRef =
+    ref(
+      db,
+      `admin_second_auth/${user.uid}`
+    );
+
+
+  const snapshot =
+    await get(accountRef);
+
+
+  /* SUDAH ADA - JANGAN TIMPA */
+
+  if (snapshot.exists()) {
+
+    return snapshot.val();
+
+  }
+
+
+  const email =
+    user.email || "";
+
+
+  const username =
+    user.displayName ||
+    email.split("@")[0] ||
+    "admin";
+
+
+  const newAccount = {
+
+    uid: user.uid,
+
+    username: username,
+
+    email: email,
+
+    enabled: false,
+
+    code: "",
+
+    createdAt: Date.now()
+
+  };
+
+
+  await set(
+    accountRef,
+    newAccount
+  );
+
+
+  console.log(
+    "Second auth created:",
+    username
+  );
+
+
+  return newAccount;
+
+}
 /* =========================================================
    SECOND STEP
 ========================================================= */
@@ -1697,7 +1777,7 @@ function showSecondStep(
 
 onAuthStateChanged(
   auth,
-  user => {
+  async user => {
 
     if (!user) {
 
@@ -1722,9 +1802,32 @@ onAuthStateChanged(
     }
 
 
-    showSecondStep(
-      user
-    );
+    try {
+
+      await ensureSecondAuthAccount(
+        user
+      );
+
+
+      showSecondStep(
+        user
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Second auth init error:",
+        error
+      );
+
+
+      showLoginError(
+        "Unable to initialize second verification."
+      );
+
+    }
 
   }
 );
@@ -1776,21 +1879,28 @@ loginForm.addEventListener(
 
     try {
 
-      const credential =
-        await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+const credential =
+  await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
 
 
-      pendingUser =
-        credential.user;
+pendingUser =
+  credential.user;
 
 
-      showSecondStep(
-        credential.user
-      );
+/* AUTO CREATE SECOND AUTH */
+
+await ensureSecondAuthAccount(
+  credential.user
+);
+
+
+showSecondStep(
+  credential.user
+);
 
     }
 

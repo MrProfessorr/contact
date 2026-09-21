@@ -1779,21 +1779,14 @@ onAuthStateChanged(
   auth,
   async user => {
 
-    if (!user) {
+    /* =============================================
+       SUDAH COMPLETE LOGIN + SECOND VERIFY
+    ============================================= */
 
-      verificationPassed =
-        false;
-
-      sessionStorage.removeItem(
-        "adminSecondVerified"
-      );
-
-      return;
-
-    }
-
-
-    if (verificationPassed) {
+    if (
+      user &&
+      verificationPassed
+    ) {
 
       redirectAdmin();
 
@@ -1802,32 +1795,74 @@ onAuthStateChanged(
     }
 
 
-    try {
+    /* =============================================
+       JIKA FIREBASE MASIH ADA SESSION
+       TAPI SECOND VERIFY BELUM LULUS
+       
+       JANGAN TERUS MASUK OTP.
+       LOGOUT DAN TAMPIL LOGIN FORM.
+    ============================================= */
 
-      await ensureSecondAuthAccount(
-        user
-      );
+    if (
+      user &&
+      !verificationPassed
+    ) {
 
+      try {
 
-      showSecondStep(
-        user
-      );
+        await signOut(auth);
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Session reset error:",
+          error
+        );
+
+      }
 
     }
 
-    catch (error) {
 
-      console.error(
-        "Second auth init error:",
-        error
-      );
+    /* =============================================
+       RESET LOGIN PAGE
+    ============================================= */
+
+    pendingUser =
+      null;
 
 
-      showLoginError(
-        "Unable to initialize second verification."
-      );
+    verificationPassed =
+      false;
 
-    }
+
+    sessionStorage.removeItem(
+      "adminSecondVerified"
+    );
+
+
+    secondStep.classList.add(
+      "hidden"
+    );
+
+
+    loginStep.classList.remove(
+      "hidden"
+    );
+
+
+    headerIcon.textContent =
+      "🔒";
+
+
+    headerTitle.textContent =
+      "Log in";
+
+
+    headerSubtitle.textContent =
+      "Welcome back! Please sign in to continue.";
 
   }
 );

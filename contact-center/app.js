@@ -6731,26 +6731,6 @@ function showBlockedScreen() {
 
 }
 
-4. Bahagian selepasnya JANGAN DIUBAH
-Selepas function baru tadi bro mesti masih ada:
-function removeBlockedScreen() {
-
-  visitorBlocked =
-    false;
-
-  document
-    .getElementById(
-      "visitorBlockedScreen"
-    )
-    ?.remove();
-
-  document.documentElement
-    .style
-    .overflow =
-      "";
-
-}
-
 function removeBlockedScreen() {
 
   visitorBlocked =

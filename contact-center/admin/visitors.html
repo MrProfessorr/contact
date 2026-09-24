@@ -4463,6 +4463,8 @@ let visitorTableSyncStartedAt =
 
 const VISITOR_SYNC_DURATION =
   700;
+const VISITOR_AUTO_SYNC_INTERVAL =
+  7000;
 let visitorSearchTimer =
   null;
 
@@ -7434,7 +7436,36 @@ function renderAll() {
 ========================================================= */
 
 renderVisitors();
+/* =========================================================
+   VISITOR TABLE AUTO SYNC
+========================================================= */
 
+setInterval(
+  () => {
+
+    /*
+     * START SYNC ANIMATION
+     */
+
+    startVisitorTableSync();
+
+
+    /*
+     * REFRESH TABLE
+     */
+
+    renderVisitors();
+
+
+    /*
+     * STOP AFTER SYNC DURATION
+     */
+
+    stopVisitorTableSync();
+
+  },
+  VISITOR_AUTO_SYNC_INTERVAL
+);
 /* =========================================================
    FIREBASE LISTENERS
 ========================================================= */

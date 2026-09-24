@@ -1,43 +1,15 @@
 import {
-
   db,
   ref,
   onValue,
   set,
   remove,
   requireAdmin,
-  setupLogout,
-
-  showAdminLoading,
-  hideAdminLoading
-
+  setupLogout
 } from "./admin.js";
 
-
 await requireAdmin();
-
 setupLogout();
-
-
-// ==========================================
-// PAGE INITIAL LOADING
-// ==========================================
-
-showAdminLoading();
-
-let initialLoadsRemaining = 5;
-
-function finishInitialLoad() {
-
-  initialLoadsRemaining--;
-
-  if (initialLoadsRemaining <= 0) {
-
-    hideAdminLoading();
-
-  }
-
-}
 
 
 /* =========================================================
@@ -3114,12 +3086,9 @@ onValue(
 visitorsLoaded =
   true;
 
-
 renderAll();
 
-finishInitialLoad();
-
-  },
+},
 
   error => {
 
@@ -3134,12 +3103,9 @@ finishInitialLoad();
 visitorsLoaded =
   true;
 
-
 renderVisitors();
 
-finishInitialLoad();
-
-  }
+}
 
 );
 
@@ -3153,25 +3119,21 @@ onValue(
 
   snapshot => {
 
-    presence =
-      snapshot.val() || {};
+presence =
+  snapshot.val() || {};
 
-    renderAll();
+renderAll();
 
-    finishInitialLoad();
+},
 
-  },
+error => {
 
-  error => {
+  console.error(
+    "Presence load error:",
+    error
+  );
 
-    console.error(
-      "Presence load error:",
-      error
-    );
-
-    finishInitialLoad();
-
-  }
+}
 
 );
 
@@ -3185,25 +3147,21 @@ onValue(
 
   snapshot => {
 
-    clicks =
-      snapshot.val() || {};
+clicks =
+  snapshot.val() || {};
 
-    renderClicks();
+renderClicks();
 
-    finishInitialLoad();
+},
 
-  },
+error => {
 
-  error => {
+  console.error(
+    "Clicks load error:",
+    error
+  );
 
-    console.error(
-      "Clicks load error:",
-      error
-    );
-
-    finishInitialLoad();
-
-  }
+}
 
 );
 
@@ -3248,20 +3206,16 @@ onValue(
 
     }
 
-    finishInitialLoad();
-
   },
 
-  error => {
+error => {
 
-    console.error(
-      "Blocked visitors load error:",
-      error
-    );
+  console.error(
+    "Blocked visitors load error:",
+    error
+  );
 
-    finishInitialLoad();
-
-  }
+}
 
 );
 
@@ -3291,18 +3245,17 @@ renderSources();
 renderClicks();
 
 renderVisitorTrafficChart();
-    finishInitialLoad();
 
-  },
+},
 
-  error => {
+error => {
 
-    console.error(
-      "Daily analytics chart error:",
-      error
-    );
-  finishInitialLoad();
-  }
+  console.error(
+    "Daily analytics chart error:",
+    error
+  );
+
+}
 
 );
 

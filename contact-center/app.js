@@ -6966,7 +6966,7 @@ setInterval(
     ).catch(() => {});
 
   },
-  7000
+  15000
 );
 
   } catch (error) {

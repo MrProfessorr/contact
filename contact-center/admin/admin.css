@@ -5443,12 +5443,6 @@ input:checked
   border-collapse: collapse;
   table-layout: fixed;
 }
-/* PREVENT VISITOR TABLE TEXT FROM WRAPPING */
-
-.visitor-table th,
-.visitor-table td {
-  white-space: nowrap;
-}
 /* VISITOR TABLE COLUMN WIDTH */
 
 .visitor-table th:nth-child(1),
@@ -7924,85 +7918,24 @@ span.flatpickr-weekday {
     width: 100%;
     min-width: 0;
     max-width: 100%;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .visitor-table-wrap {
     width: 100%;
     max-width: 100%;
     min-width: 0;
-
     overflow-x: auto;
-    overflow-y: hidden;
-
+    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
   }
 
   .visitor-table {
-    width: max-content;
-    min-width: 100%;
-    table-layout: auto;
+    width: 900px;
+    min-width: 900px;
+    table-layout: fixed;
   }
 
-  .visitor-table th,
-  .visitor-table td {
-    white-space: nowrap;
-    overflow: visible;
-    text-overflow: clip;
-  }
-
-  .visitor-table th:nth-child(1),
-  .visitor-table td:nth-child(1) {
-    min-width: 180px;
-  }
-
-  .visitor-table th:nth-child(2),
-  .visitor-table td:nth-child(2) {
-    min-width: 90px;
-  }
-
-  .visitor-table th:nth-child(3),
-  .visitor-table td:nth-child(3) {
-    min-width: 120px;
-  }
-
-  .visitor-table th:nth-child(4),
-  .visitor-table td:nth-child(4) {
-    min-width: 220px;
-  }
-
-  .visitor-table th:nth-child(5),
-  .visitor-table td:nth-child(5) {
-    min-width: 130px;
-  }
-
-  .visitor-table th:nth-child(6),
-  .visitor-table td:nth-child(6) {
-    min-width: 150px;
-  }
-
-  .visitor-table th:nth-child(7),
-  .visitor-table td:nth-child(7) {
-    min-width: 90px;
-  }
-
-  .visitor-table th:nth-child(8),
-  .visitor-table td:nth-child(8) {
-    min-width: 170px;
-  }
-
-}
-.visitor-table th:last-child,
-.visitor-table td:last-child {
-  white-space: nowrap;
-}
-
-.visitor-table td:last-child > div {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 6px;
-  white-space: nowrap;
 }
 /* THEAD - ROUND KIRI & KANAN ATAS */
 

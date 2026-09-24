@@ -1,5 +1,4 @@
 import {
-
   db,
   ref,
   push,
@@ -7,50 +6,15 @@ import {
   update,
   remove,
   onValue,
-
   requireAdmin,
   setupLogout,
-  safe,
-
-  showAdminLoading,
-  hideAdminLoading
-
+  safe
 } from "./admin.js";
 
 
 requireAdmin();
 setupLogout();
 
-// ==========================================
-// PAGE LOADING
-// ==========================================
-
-showAdminLoading();
-
-const initialLoadDone = {
-  footerStyle: false,
-  sidebar: false,
-  tabs: false
-};
-
-function finishInitialLoad(key) {
-
-  if (initialLoadDone[key]) {
-    return;
-  }
-
-  initialLoadDone[key] = true;
-
-  if (
-    Object.values(initialLoadDone)
-      .every(Boolean)
-  ) {
-
-    hideAdminLoading();
-
-  }
-
-}
 if (
   typeof initSharedUI ===
   "function"
@@ -2048,30 +2012,22 @@ onValue(
     const data =
       snapshot.val() || {};
 
-    footerNavBackgroundUrl =
-      data.backgroundImageUrl ||
-      "";
+footerNavBackgroundUrl =
+  data.backgroundImageUrl ||
+  "";
 
-    updateFooterNavBackgroundPreview();
+updateFooterNavBackgroundPreview();
 
-    finishInitialLoad(
-      "footerStyle"
-    );
+},
 
-  },
+error => {
 
-  error => {
+  console.error(
+    "Footer navigation style error:",
+    error
+  );
 
-    console.error(
-      "Footer navigation style error:",
-      error
-    );
-
-    finishInitialLoad(
-      "footerStyle"
-    );
-
-  }
+}
 );
 /* =========================================================
    FIREBASE SIDEBAR
@@ -2097,23 +2053,18 @@ onValue(
     sidebarIconEmoji.value =
       data.iconEmoji || "";
 
-    updateSidebarPreview();
+updateSidebarPreview();
 
-    // SIDEBAR SELESAI LOAD
-    finishInitialLoad("sidebar");
+},
 
-  },
+error => {
 
-  error => {
+  console.error(
+    "Sidebar settings error:",
+    error
+  );
 
-    console.error(
-      "Sidebar settings error:",
-      error
-    );
-
-    // ERROR PUN DIKIRA SELESAI
-finishInitialLoad("sidebar");
-  }
+}
 );
 
 
@@ -2153,16 +2104,16 @@ onValue(
     renderTabs();
 
 
-    if (
-      !editingTabId.value
-    ) {
+if (
+  !editingTabId.value
+) {
 
-      tabSort.value =
-        tabs.length + 1;
+  tabSort.value =
+    tabs.length + 1;
 
-    }
-finishInitialLoad("tabs");
-  },
+}
+
+},
 
   error => {
 
@@ -2172,12 +2123,11 @@ finishInitialLoad("tabs");
     );
 
 
-    tabsList.innerHTML =
-      `
-        <div class="help-text">
-          Failed to load tabs.
-        </div>
-      `;
-finishInitialLoad("tabs");
+tabsList.innerHTML =
+  `
+    <div class="help-text">
+      Failed to load tabs.
+    </div>
+  `;
   }
 );

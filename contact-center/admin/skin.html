@@ -10,6 +10,26 @@
 </head>
 <body>
 
+<div
+  id="skinPageLoading"
+  class="login-loading"
+>
+  <div class="loading-box">
+
+    <div class="loading-dots">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="loading-text">
+      Please wait while fetching...
+    </div>
+
+  </div>
+</div>
+
 <nav class="admin-nav">
 <div class="admin-nav-inner">
 <div class="admin-brand">
@@ -606,6 +626,24 @@ import {
 requireAdmin();
 
 setupLogout();
+/* =====================================================
+   SKIN PAGE LOADING
+===================================================== */
+
+const skinPageLoading =
+  document.getElementById(
+    "skinPageLoading"
+  );
+
+function hideSkinPageLoading() {
+
+  if (!skinPageLoading) {
+    return;
+  }
+
+  skinPageLoading.style.display =
+    "none";
+}
 /* =====================================================
    CLOUDINARY
 ===================================================== */
@@ -1242,7 +1280,7 @@ bodyTextColor.value =
 updateActiveText();
 
 updatePreview();
-
+hideSkinPageLoading();
 },
 
 error => {
@@ -1257,6 +1295,8 @@ error => {
 
   saveMessage.className =
     "skin-save-message error";
+
+  hideSkinPageLoading();
 
 }
 

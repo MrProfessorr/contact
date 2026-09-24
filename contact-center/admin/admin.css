@@ -7955,7 +7955,7 @@ span.flatpickr-weekday {
 
 .visitor-page-number,
 .visitor-page-nav {
-  min-width:32px;
+  min-width:32px !important;
   height:32px;
   display:inline-flex;
   align-items:center;

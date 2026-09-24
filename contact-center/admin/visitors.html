@@ -2565,7 +2565,352 @@
   width:max-content;
   margin-left:0;
 }
+/* =========================================================
+   VISITOR STATUS MULTI FILTER
+========================================================= */
 
+.visitor-status-filter {
+  position:relative;
+  width:300px;
+  flex:0 0 300px;
+}
+
+.visitor-status-select {
+  position:relative;
+  width:100%;
+}
+
+.visitor-status-selector {
+  position:relative;
+
+  width:100%;
+  min-height:32px;
+
+  display:flex;
+  align-items:center;
+
+  padding:
+    1px 32px 1px 3px;
+
+  border:
+    1px solid var(--input-line);
+
+  border-radius:6px;
+
+  background:
+    var(--input);
+
+  cursor:pointer;
+
+  transition:
+    border-color .2s ease;
+}
+
+.visitor-status-selector:hover {
+  border-color:
+    var(--input-line-hover);
+}
+
+.visitor-status-select.open
+.visitor-status-selector {
+  border-color:
+    var(--input-line-focus);
+}
+
+
+/* CHIP AREA */
+
+.visitor-status-overflow {
+  position:relative;
+
+  display:flex;
+  flex:1 1 auto;
+  flex-wrap:wrap;
+  align-items:center;
+
+  min-width:0;
+  max-width:100%;
+}
+
+
+/* CHIP */
+
+.visitor-status-chip {
+  display:flex;
+  align-self:center;
+  align-items:center;
+
+  flex:none;
+
+  max-width:100%;
+
+  height:24px;
+
+  margin:
+    2px 4px 2px 0;
+
+  padding:
+    0 4px 0 8px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:4px;
+
+  color:
+    var(--text);
+
+  background:
+    rgba(255,255,255,.08);
+
+  font-size:12px;
+
+  cursor:default;
+}
+
+.visitor-status-chip-content {
+  display:inline-block;
+
+  margin-right:4px;
+
+  overflow:hidden;
+
+  white-space:nowrap;
+
+  text-overflow:ellipsis;
+}
+
+
+/* CHIP X */
+
+.visitor-status-chip-remove {
+  width:14px;
+  height:14px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:none;
+
+  color:
+    rgba(255,255,255,.45);
+
+  background:transparent;
+
+  cursor:pointer;
+}
+
+.visitor-status-chip-remove:hover {
+  color:
+    rgba(255,255,255,.85);
+}
+
+.visitor-status-chip-remove svg {
+  width:10px;
+  height:10px;
+
+  display:block;
+
+  fill:currentColor;
+}
+
+
+/* PLACEHOLDER */
+
+.visitor-status-placeholder {
+  display:none;
+
+  padding-left:8px;
+
+  color:
+    var(--text2);
+
+  font-size:14px;
+}
+
+.visitor-status-overflow:empty
++ .visitor-status-placeholder {
+  display:block;
+}
+
+
+/* RIGHT ICON */
+
+.visitor-status-icon-btn {
+  position:absolute;
+
+  top:0;
+  right:0;
+
+  z-index:3;
+
+  width:32px;
+  height:100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:none;
+
+  color:
+    var(--text2);
+
+  background:transparent;
+
+  cursor:pointer;
+}
+
+.visitor-status-icon {
+  width:12px;
+  height:12px;
+
+  display:block;
+
+  fill:currentColor;
+}
+
+
+/* DEFAULT */
+
+.visitor-status-icon-search,
+.visitor-status-icon-clear {
+  display:none;
+}
+
+
+/* DROPDOWN OPEN:
+   ARROW -> SEARCH */
+
+.visitor-status-select.open
+.visitor-status-icon-arrow {
+  display:none;
+}
+
+.visitor-status-select.open
+.visitor-status-icon-search {
+  display:block;
+}
+
+
+/* HOVER WITH CHIP:
+   RIGHT ICON -> CLEAR */
+
+.visitor-status-select.has-value:not(.open):hover
+.visitor-status-icon-arrow {
+  display:none;
+}
+
+.visitor-status-select.has-value:not(.open):hover
+.visitor-status-icon-clear {
+  display:block;
+}
+
+
+/* DROPDOWN */
+
+.visitor-status-dropdown {
+  position:absolute;
+
+  top:calc(100% + 3px);
+  left:0;
+
+  z-index:100;
+
+  width:100%;
+
+  padding:4px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:8px;
+
+  background:
+    var(--panel);
+
+  box-shadow:
+    0 6px 16px rgba(0,0,0,.08),
+    0 3px 6px -4px rgba(0,0,0,.12),
+    0 9px 28px 8px rgba(0,0,0,.05);
+}
+
+.visitor-status-dropdown.hidden {
+  display:none;
+}
+
+
+/* OPTION */
+
+.visitor-status-option {
+  width:100%;
+  height:32px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:
+    0 10px;
+
+  border:none;
+  border-radius:4px;
+
+  color:
+    var(--text);
+
+  background:
+    transparent;
+
+  cursor:pointer;
+
+  font-size:12px;
+
+  text-align:left;
+}
+
+.visitor-status-option:hover {
+  background:
+    var(--tx-hover);
+}
+
+.visitor-status-option.active {
+  color:#1668dc;
+
+  background:
+    rgba(22,104,220,.10);
+}
+
+
+/* CHECK */
+
+.visitor-status-option-check {
+  display:none;
+
+  color:#1677ff;
+
+  font-size:14px;
+}
+
+.visitor-status-option.active
+.visitor-status-option-check {
+  display:block;
+}
+
+
+@media(max-width:850px) {
+
+  .visitor-status-filter {
+    width:100%;
+    flex:0 0 auto;
+  }
+
+}
 
 .visitor-date-input-wrap {
   position:relative;
@@ -3694,7 +4039,118 @@ button.active {
     </div>
 
   </div>
+<!-- VISITOR STATUS FILTER -->
 
+<div class="visitor-status-filter">
+
+  <div
+    id="visitorStatusSelect"
+    class="visitor-status-select has-value"
+  >
+
+    <div
+      id="visitorStatusSelector"
+      class="visitor-status-selector"
+      tabindex="0"
+    >
+
+      <div
+        id="visitorStatusChips"
+        class="visitor-status-overflow"
+      ></div>
+
+      <span class="visitor-status-placeholder">
+        Filter status
+      </span>
+
+
+      <button
+        id="visitorStatusIconButton"
+        class="visitor-status-icon-btn"
+        type="button"
+        aria-label="Status filter"
+      >
+
+        <!-- ARROW -->
+
+        <svg
+          class="visitor-status-icon visitor-status-icon-arrow"
+          viewBox="0 0 1024 1024"
+          aria-hidden="true"
+        >
+          <path
+            d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+          />
+        </svg>
+
+
+        <!-- SEARCH WHEN OPEN -->
+
+        <svg
+          class="visitor-status-icon visitor-status-icon-search"
+          viewBox="0 0 1024 1024"
+          aria-hidden="true"
+        >
+          <path
+            d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6z"
+          />
+        </svg>
+
+
+        <!-- CLEAR ALL WHEN HOVER -->
+
+        <svg
+          class="visitor-status-icon visitor-status-icon-clear"
+          viewBox="0 0 1024 1024"
+          aria-hidden="true"
+        >
+          <path
+            d="M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z"
+          />
+        </svg>
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="visitorStatusDropdown"
+      class="visitor-status-dropdown hidden"
+    >
+
+      <button
+        class="visitor-status-option active"
+        type="button"
+        data-status="all"
+      >
+        <span>All</span>
+        <span class="visitor-status-option-check">✓</span>
+      </button>
+
+      <button
+        class="visitor-status-option"
+        type="button"
+        data-status="active"
+      >
+        <span>Active</span>
+        <span class="visitor-status-option-check">✓</span>
+      </button>
+
+      <button
+        class="visitor-status-option"
+        type="button"
+        data-status="inactive"
+      >
+        <span>Inactive</span>
+        <span class="visitor-status-option-check">✓</span>
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 </div>
 
     <!-- =========================================================
@@ -4349,7 +4805,36 @@ const searchButton =
   document.getElementById(
     "visitorSearchButton"
   );
+const visitorStatusSelect =
+  document.getElementById(
+    "visitorStatusSelect"
+  );
 
+const visitorStatusSelector =
+  document.getElementById(
+    "visitorStatusSelector"
+  );
+
+const visitorStatusChips =
+  document.getElementById(
+    "visitorStatusChips"
+  );
+
+const visitorStatusDropdown =
+  document.getElementById(
+    "visitorStatusDropdown"
+  );
+
+const visitorStatusIconButton =
+  document.getElementById(
+    "visitorStatusIconButton"
+  );
+
+const visitorStatusOptions =
+  visitorStatusDropdown
+    ?.querySelectorAll(
+      ".visitor-status-option"
+    ) || [];
 const searchControl =
   searchInput
     ?.closest(
@@ -4591,6 +5076,10 @@ let visitorsLoaded =
   false;
 let searchText =
   "";
+let visitorStatusFilters =
+  new Set([
+    "all"
+  ]);
 let visitorCurrentPage =
   1;
 
@@ -6769,6 +7258,93 @@ if (
       .join("");
 
 }
+/* =========================================================
+   VISITOR STATUS FILTER
+========================================================= */
+
+const VISITOR_STATUS_LABELS = {
+  all: "All",
+  active: "Active",
+  inactive: "Inactive"
+};
+
+
+function renderVisitorStatusFilter() {
+
+  if (
+    !visitorStatusChips
+  ) {
+    return;
+  }
+
+
+  visitorStatusChips.innerHTML =
+    Array
+      .from(
+        visitorStatusFilters
+      )
+      .map(
+        status => `
+          <span
+            class="visitor-status-chip"
+            data-chip-status="${status}"
+          >
+
+            <span
+              class="visitor-status-chip-content"
+            >
+              ${VISITOR_STATUS_LABELS[status]}
+            </span>
+
+            <button
+              class="visitor-status-chip-remove"
+              type="button"
+              data-remove-status="${status}"
+              aria-label="Remove ${VISITOR_STATUS_LABELS[status]}"
+            >
+
+              <svg
+                viewBox="0 0 1024 1024"
+                aria-hidden="true"
+              >
+                <path
+                  d="M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z"
+                />
+              </svg>
+
+            </button>
+
+          </span>
+        `
+      )
+      .join("");
+
+
+  visitorStatusSelect
+    ?.classList.toggle(
+      "has-value",
+      visitorStatusFilters.size > 0
+    );
+
+
+  visitorStatusOptions
+    .forEach(
+      option => {
+
+        const status =
+          option.dataset.status;
+
+        option.classList.toggle(
+          "active",
+          visitorStatusFilters.has(
+            status
+          )
+        );
+
+      }
+    );
+
+}
 function renderVisitors() {
 
     /* SHOW LOADING UNTIL FIREBASE RETURNS */
@@ -6855,9 +7431,55 @@ const matchesSearch =
   );
 
 
+const online =
+  visitorIsOnline(
+    visitor.id
+  );
+
+
+let matchesStatus =
+  true;
+
+
+if (
+  visitorStatusFilters.size
+) {
+
+  if (
+    visitorStatusFilters.has(
+      "all"
+    )
+  ) {
+
+    matchesStatus =
+      true;
+
+  } else {
+
+    matchesStatus =
+      (
+        online &&
+        visitorStatusFilters.has(
+          "active"
+        )
+      )
+      ||
+      (
+        !online &&
+        visitorStatusFilters.has(
+          "inactive"
+        )
+      );
+
+  }
+
+}
+
+
 return (
   matchesDate &&
-  matchesSearch
+  matchesSearch &&
+  matchesStatus
 );
 
       }
@@ -8558,6 +9180,256 @@ if (preset) {
 setDatePreset(
   "today"
 );
+/* =========================================================
+   STATUS FILTER EVENTS
+========================================================= */
+
+function openVisitorStatusFilter() {
+
+  visitorStatusSelect
+    ?.classList.add(
+      "open"
+    );
+
+  visitorStatusDropdown
+    ?.classList.remove(
+      "hidden"
+    );
+
+}
+
+
+function closeVisitorStatusFilter() {
+
+  visitorStatusSelect
+    ?.classList.remove(
+      "open"
+    );
+
+  visitorStatusDropdown
+    ?.classList.add(
+      "hidden"
+    );
+
+}
+
+
+visitorStatusSelector
+  ?.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target.closest(
+          ".visitor-status-chip-remove"
+        )
+      ) {
+        return;
+      }
+
+      if (
+        visitorStatusSelect
+          ?.classList.contains(
+            "open"
+          )
+      ) {
+
+        closeVisitorStatusFilter();
+
+      } else {
+
+        openVisitorStatusFilter();
+
+      }
+
+    }
+  );
+
+
+visitorStatusOptions
+  .forEach(
+    option => {
+
+      option.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+          const status =
+            option.dataset.status;
+
+
+          if (
+            visitorStatusFilters.has(
+              status
+            )
+          ) {
+
+            visitorStatusFilters.delete(
+              status
+            );
+
+          } else {
+
+            /*
+             * ALL TIDAK DIGABUNG
+             * DENGAN ACTIVE / INACTIVE
+             */
+
+            if (
+              status === "all"
+            ) {
+
+              visitorStatusFilters.clear();
+
+              visitorStatusFilters.add(
+                "all"
+              );
+
+            } else {
+
+              visitorStatusFilters.delete(
+                "all"
+              );
+
+              visitorStatusFilters.add(
+                status
+              );
+
+            }
+
+          }
+
+
+          visitorCurrentPage =
+            1;
+
+          renderVisitorStatusFilter();
+
+          renderVisitors();
+
+        }
+      );
+
+    }
+  );
+
+
+visitorStatusChips
+  ?.addEventListener(
+    "click",
+    event => {
+
+      const removeButton =
+        event.target.closest(
+          "[data-remove-status]"
+        );
+
+      if (
+        !removeButton
+      ) {
+        return;
+      }
+
+      event.stopPropagation();
+
+      visitorStatusFilters.delete(
+        removeButton.dataset.removeStatus
+      );
+
+      visitorCurrentPage =
+        1;
+
+      renderVisitorStatusFilter();
+
+      renderVisitors();
+
+    }
+  );
+
+
+visitorStatusIconButton
+  ?.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+
+      /*
+       * HOVER + ADA CHIP =
+       * CLEAR ALL
+       */
+
+      if (
+        visitorStatusFilters.size &&
+        !visitorStatusSelect
+          ?.classList.contains(
+            "open"
+          ) &&
+        visitorStatusSelect
+          ?.matches(
+            ":hover"
+          )
+      ) {
+
+        visitorStatusFilters.clear();
+
+        visitorCurrentPage =
+          1;
+
+        renderVisitorStatusFilter();
+
+        renderVisitors();
+
+        return;
+      }
+
+
+      if (
+        visitorStatusSelect
+          ?.classList.contains(
+            "open"
+          )
+      ) {
+
+        closeVisitorStatusFilter();
+
+      } else {
+
+        openVisitorStatusFilter();
+
+      }
+
+    }
+  );
+
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      visitorStatusSelect
+        ?.contains(
+          event.target
+        )
+    ) {
+      return;
+    }
+
+    closeVisitorStatusFilter();
+
+  }
+);
+
+
+/*
+ * DEFAULT CHIP = ALL
+ */
+
+renderVisitorStatusFilter();
 /* =========================================================
    SEARCH
 ========================================================= */

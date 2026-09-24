@@ -4993,20 +4993,21 @@ function openVisitorDetail(
         </div>
 
 
-        <div class="visitor-detail-field">
+<div class="visitor-detail-field">
 
-          <span>
-            Device
-          </span>
+  <span>
+    Device
+  </span>
 
-          <strong>
-            ${safe(
-              visitor.device ||
-              "-"
-            )}
-          </strong>
+  <strong>
+    ${safe(
+      visitor.os ||
+      visitor.device ||
+      "-"
+    )}
+  </strong>
 
-        </div>
+</div>
 
 
         <div class="visitor-detail-field">

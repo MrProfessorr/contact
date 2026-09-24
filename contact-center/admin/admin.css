@@ -5339,7 +5339,7 @@ input:checked
   width:100%;
   min-width:0;
   max-width:100%;
-  overflow:visible;
+  overflow:hidden;
   padding:0;
 }
 /* HEAD */
@@ -5369,8 +5369,8 @@ input:checked
   max-width:100%;
   min-width:0;
   overflow-x:auto;
-  overflow-y:visible;
-  overscroll-behavior:contain;
+  overflow-y:hidden;
+  overscroll-behavior-x:contain;
   -webkit-overflow-scrolling:touch;
   padding:5px;
 }
@@ -5438,29 +5438,16 @@ input:checked
     rgba(143,155,172,.55);
 }
 .visitor-table {
-  width:
-    max-content;
-
-  min-width:
-    100%;
-
-  border-collapse:
-    collapse;
-
-  table-layout:
-    auto;
+  width:100%;
+  min-width:900px;
+  border-collapse:collapse;
+  table-layout:auto;
 }
 
 .visitor-table th:last-child,
 .visitor-table td:last-child {
-  width:
-    1%;
-
-  white-space:
-    nowrap;
-
-  padding-right:
-    10px;
+  white-space:nowrap;
+  padding-right:10px;
 }
 .visitor-table th:first-child,
 .visitor-table td:first-child {
@@ -7896,42 +7883,27 @@ span.flatpickr-weekday {
 
 
 .visitor-main-grid > .card {
-  width:
-    100%;
-
-  min-width:
-    0;
-
-  max-width:
-    100%;
-
-  overflow:
-    visible;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
 }
 
-  .visitor-table-wrap {
-    width:100%;
-
-    max-width:100%;
-
-    min-width:0;
-
-    overflow-x:auto;
-
-    overflow-y:auto;
-
-    -webkit-overflow-scrolling:
-      touch;
-  }
+.visitor-table-wrap {
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+}
 
 
-  .visitor-table {
-  width:
-    max-content;
-
-  min-width:
-    760px;
-  }
+.visitor-table {
+  width:100%;
+  min-width:900px;
+  table-layout:auto;
+}
 
 }
 /* THEAD - ROUND KIRI & KANAN ATAS */

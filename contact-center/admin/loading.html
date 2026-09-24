@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="icon" type="image/svg+xml" href="./logo.svg" />
   <meta name="viewport"content="width=device-width, initial-scale=1.0">
   <title>Back Office SC 🏢</title>
   <link rel="stylesheet"href="./admin.css">
@@ -433,9 +433,7 @@ import {
   set,
   onValue,
   requireAdmin,
-  setupLogout,
-  showAdminLoading,
-  hideAdminLoading
+  setupLogout
 } from "./admin.js";
 
 
@@ -446,19 +444,6 @@ import {
 requireAdmin();
 
 setupLogout();
-showAdminLoading();
-let loadingSettingsInitialLoaded = false;
-
-function finishLoadingSettingsInitialLoad() {
-
-  if (loadingSettingsInitialLoaded) {
-    return;
-  }
-
-  loadingSettingsInitialLoaded = true;
-
-  hideAdminLoading();
-}
 
 /* =========================================================
    DOM
@@ -1326,41 +1311,35 @@ onValue(
     "loading_settings"
   ),
 
-  snapshot => {
+snapshot => {
 
-    const data = snapshot.val();
+  const data = snapshot.val();
 
-    if (!data) {
+  if (!data) {
 
-      applyForm(DEFAULT_LOADING);
+    applyForm(DEFAULT_LOADING);
 
-    } else {
+  } else {
 
-      applyForm(data);
-
-    }
-
-    // FIREBASE SUDAH SELESAI LOAD
-    finishLoadingSettingsInitialLoad();
-
-  },
-
-  error => {
-
-    console.error(
-      "Loading settings read error:",
-      error
-    );
-
-    showMessage(
-      "Failed to load loading settings.",
-      "error"
-    );
-
-    // ERROR PUN LOADING TETAP DITUTUP
-    finishLoadingSettingsInitialLoad();
+    applyForm(data);
 
   }
+
+},
+
+error => {
+
+  console.error(
+    "Loading settings read error:",
+    error
+  );
+
+  showMessage(
+    "Failed to load loading settings.",
+    "error"
+  );
+
+}
 );
 
 

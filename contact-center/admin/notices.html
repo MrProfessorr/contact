@@ -10,6 +10,25 @@
 <link rel="stylesheet" href="./notice-shared.css">
 </head>
 <body>
+<div 
+  id="noticePageLoading" 
+  class="login-loading"
+>
+  <div class="loading-box">
+
+    <div class="loading-dots">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="loading-text">
+      Please wait while fetching...
+    </div>
+
+  </div>
+</div>
 
 <nav class="admin-nav">
 <div class="admin-nav-inner">
@@ -278,11 +297,6 @@ Add Notice
       id="noticeList"
       class="notice-list"
     >
-
-      <div class="empty">
-        Loading...
-      </div>
-
     </div>
 
   </div>
@@ -315,7 +329,24 @@ requireAdmin();
 setupLogout();
 
 initSharedDropdowns();
+/* =========================================================
+   NOTICE PAGE LOADING
+========================================================= */
 
+const noticePageLoading =
+  document.getElementById(
+    "noticePageLoading"
+  );
+
+function hideNoticePageLoading() {
+
+  if (!noticePageLoading) {
+    return;
+  }
+
+  noticePageLoading.style.display =
+    "none";
+}
 const form =
   document
     .getElementById(
@@ -1056,6 +1087,8 @@ if (!items.length) {
     </div>
   `;
 
+  hideNoticePageLoading();
+
   return;
 }
 
@@ -1247,6 +1280,8 @@ items.forEach(item => {
 );
 
 });
+    
+hideNoticePageLoading();
 },
 
 error => {
@@ -1261,6 +1296,8 @@ error => {
       Failed to load notices.
     </div>
   `;
+
+  hideNoticePageLoading();
 
 }
 

@@ -30,7 +30,131 @@
 .search-input:focus {
   border:1px solid var(--input-line-focus);
 }
+/* =========================================================
+   VISITOR SEARCH + SYNC BUTTON
+========================================================= */
 
+.visitor-search-control {
+  width:300px;
+  height:32px;
+  flex:0 0 300px;
+  display:flex;
+  align-items:stretch;
+}
+
+.visitor-search-control
+.visitor-search-input {
+  width:calc(100% - 34px);
+  min-width:0;
+  height:32px;
+
+  padding:
+    4px 11px;
+
+  border:
+    1px solid var(--input-line);
+
+  border-right:
+    none;
+
+  border-radius:
+    6px 0 0 6px;
+
+  background:
+    var(--input);
+
+  color:
+    var(--text);
+
+  outline:
+    none;
+}
+
+.visitor-search-button {
+  width:34px;
+  min-width:34px;
+  height:32px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:
+    1px solid var(--input-line);
+
+  border-radius:
+    0 6px 6px 0;
+
+  background:
+    var(--input);
+
+  color:
+    rgba(255,255,255,.45);
+
+  cursor:pointer;
+
+  transition:
+    border-color .2s ease,
+    color .2s ease,
+    background .2s ease;
+}
+
+.visitor-search-control:hover
+.visitor-search-input,
+
+.visitor-search-control:hover
+.visitor-search-button {
+  border-color:
+    var(--input-line-hover);
+}
+
+.visitor-search-control:focus-within
+.visitor-search-input,
+
+.visitor-search-control:focus-within
+.visitor-search-button {
+  border-color:
+    var(--input-line-focus);
+}
+
+.visitor-search-button:hover {
+  color:
+    rgba(255,255,255,.85);
+}
+
+.visitor-search-icon {
+  width:14px;
+  height:14px;
+
+  display:block;
+
+  fill:
+    currentColor;
+
+  transform-origin:
+    center;
+}
+.visitor-search-control.is-syncing
+.visitor-search-icon {
+  animation:
+    visitorSearchSpin .75s linear infinite;
+}
+
+@keyframes visitorSearchSpin {
+
+  from {
+    transform:
+      rotate(0deg);
+  }
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+
+}
 .visitor-admin-page {
   padding-bottom:
     40px;
@@ -90,11 +214,79 @@
   max-width:100%;
 }
 .visitor-main-grid > .card {
+  position:relative;
+
   width:100%;
   min-width:0;
   max-width:100%;
+
   overflow:hidden;
+
   padding:0;
+}
+    /* =========================================================
+   TABLE SYNC TOP LINE
+========================================================= */
+
+.visitor-table-sync-line {
+  position:absolute;
+
+  top:0;
+  left:0;
+
+  z-index:20;
+
+  width:100%;
+  height:2px;
+
+  overflow:hidden;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  transition:
+    opacity .15s ease;
+}
+
+.visitor-table-sync-line::before {
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-35%;
+
+  width:35%;
+  height:100%;
+
+  border-radius:
+    999px;
+
+  background:
+    #1677ff;
+}
+
+.visitor-table-sync-line.is-syncing {
+  opacity:1;
+}
+
+.visitor-table-sync-line.is-syncing::before {
+  animation:
+    visitorTableSyncLine
+    .9s ease-in-out infinite;
+}
+
+@keyframes visitorTableSyncLine {
+
+  from {
+    left:-35%;
+  }
+
+  to {
+    left:100%;
+  }
+
 }
 /* HEAD */
 
@@ -2255,13 +2447,19 @@
 /* SEARCH */
 
 #visitorSearch {
-  width:300px;
-  flex:0 0 300px;
-  padding:4px 11px;
-  font-size:14px;
-  max-width:300px;
+  width:calc(100% - 34px);
+  flex:1 1 auto;
+  max-width:none;
   height:32px;
-  border-radius: 6px;
+
+  padding:
+    4px 11px;
+
+  font-size:
+    14px;
+
+  border-radius:
+    6px 0 0 6px;
 }
 
 
@@ -2429,7 +2627,11 @@ button.active {
     flex:
       0 0 auto;
   }
-
+.visitor-search-control {
+  width:100%;
+  max-width:none;
+  flex:0 0 auto;
+}
 
   .visitor-date-filter {
     width:100%;
@@ -3254,12 +3456,37 @@ button.active {
 
   <div class="visitor-card-head visitor-card-head-search">
 
+<div class="visitor-search-control">
+
   <input
     id="visitorSearch"
-    class="search-input"
+    class="search-input visitor-search-input"
     type="search"
     placeholder="Search"
+    autocomplete="off"
   >
+
+  <button
+    id="visitorSearchButton"
+    class="visitor-search-button"
+    type="button"
+    aria-label="Search visitors"
+  >
+
+    <svg
+      id="visitorSearchIcon"
+      class="visitor-search-icon"
+      viewBox="64 64 896 896"
+      aria-hidden="true"
+    >
+      <path
+        d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"
+      />
+    </svg>
+
+  </button>
+
+</div>
 
 
   <div class="visitor-date-filter">
@@ -3603,7 +3830,10 @@ button.active {
 <div class="visitor-main-grid">
 
   <section class="card">
-    
+    <div
+  id="visitorTableSyncLine"
+  class="visitor-table-sync-line"
+></div>
 
     <div class="visitor-table-wrap">
 
@@ -4005,6 +4235,21 @@ const searchInput =
   document.getElementById(
     "visitorSearch"
   );
+const searchButton =
+  document.getElementById(
+    "visitorSearchButton"
+  );
+
+const searchControl =
+  searchInput
+    ?.closest(
+      ".visitor-search-control"
+    );
+
+const tableSyncLine =
+  document.getElementById(
+    "visitorTableSyncLine"
+  );
 const dateRangeInput =
   document.getElementById(
     "visitorDateRange"
@@ -4096,6 +4341,66 @@ const chartPeakDay =
   document.getElementById(
     "chartPeakDay"
   );
+/* =========================================================
+   VISITOR TABLE SYNC UI
+========================================================= */
+
+let visitorTableSyncTimer =
+  null;
+
+
+function startVisitorTableSync() {
+
+  clearTimeout(
+    visitorTableSyncTimer
+  );
+
+
+  searchControl
+    ?.classList
+    .add(
+      "is-syncing"
+    );
+
+
+  tableSyncLine
+    ?.classList
+    .add(
+      "is-syncing"
+    );
+
+}
+
+
+function stopVisitorTableSync() {
+
+  clearTimeout(
+    visitorTableSyncTimer
+  );
+
+
+  visitorTableSyncTimer =
+    setTimeout(
+      () => {
+
+        searchControl
+          ?.classList
+          .remove(
+            "is-syncing"
+          );
+
+
+        tableSyncLine
+          ?.classList
+          .remove(
+            "is-syncing"
+          );
+
+      },
+      250
+    );
+
+}
 /* =========================================================
    STATE
 ========================================================= */
@@ -6974,10 +7279,13 @@ onValue(
     "analytics/visitors"
   ),
 
-  snapshot => {
+snapshot => {
 
-    visitors =
-      snapshot.val() || {};
+  startVisitorTableSync();
+
+
+  visitors =
+    snapshot.val() || {};
 
 
     /* FIREBASE FINISHED */
@@ -6986,6 +7294,10 @@ visitorsLoaded =
   true;
 
 renderAll();
+
+
+stopVisitorTableSync();
+
 
 finishVisitorPageLoading(
   "visitors"
@@ -7007,7 +7319,7 @@ visitorsLoaded =
   true;
 
 renderVisitors();
-
+stopVisitorTableSync();
 finishVisitorPageLoading(
   "visitors"
 );
@@ -7150,7 +7462,30 @@ error => {
 
 );
 
+searchButton
+  ?.addEventListener(
+    "click",
+    () => {
 
+      searchInput
+        ?.focus();
+
+
+      searchText =
+        searchInput
+          ?.value
+          .trim()
+          .toLowerCase() || "";
+
+
+      visitorCurrentPage =
+        1;
+
+
+      renderVisitors();
+
+    }
+  );
 /* =========================================================
    DAILY ANALYTICS FOR CHART
 ========================================================= */

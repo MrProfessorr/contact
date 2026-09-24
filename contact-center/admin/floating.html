@@ -628,9 +628,7 @@ import {
   set,
   onValue,
   requireAdmin,
-  setupLogout,
-  showAdminLoading,
-  hideAdminLoading
+  setupLogout
 } from "./admin.js";
 
 
@@ -641,9 +639,6 @@ import {
 requireAdmin();
 
 setupLogout();
-
-// LOADING MASA BUKA / REFRESH PAGE
-showAdminLoading();
 
 initSharedDropdowns();
 
@@ -1420,8 +1415,6 @@ previewImage.addEventListener(
 /* =====================================================
    LOAD FIREBASE
 ===================================================== */
-let floatingInitialLoaded =
-  false;
 onValue(
 
   ref(
@@ -1440,24 +1433,9 @@ if (!data) {
   enabledInput.checked =
     true;
 
-
   updateFloatingActiveText();
 
-
   updatePreview();
-
-
-  if (
-    !floatingInitialLoaded
-  ) {
-
-    floatingInitialLoaded =
-      true;
-
-  hideAdminLoading();
-
-  }
-
 
   return;
 }
@@ -1598,19 +1576,6 @@ showMobileInput.value =
 
 updatePreview();
 
-
-if (
-  !floatingInitialLoaded
-) {
-
-  floatingInitialLoaded =
-    true;
-
-  hideAdminLoading();
-
-}
-
-
 },
 
 error => {
@@ -1620,22 +1585,8 @@ error => {
     error
   );
 
-
-  if (
-    !floatingInitialLoaded
-  ) {
-
-    floatingInitialLoaded =
-      true;
-
-  hideAdminLoading();
-
-  }
-
-
   statusMessage.textContent =
     "Unable to load floating settings.";
-
 
   statusMessage.className =
     "floating-save-message error";

@@ -341,9 +341,7 @@ import {
   set,
   onValue,
   requireAdmin,
-  setupLogout,
-  showAdminLoading,
-  hideAdminLoading
+  setupLogout
 } from "./admin.js";
 
 
@@ -351,20 +349,6 @@ requireAdmin();
 
 setupLogout();
 
-showAdminLoading();
-
-  let marqueeInitialLoaded = false;
-
-function finishMarqueeInitialLoad() {
-
-  if (marqueeInitialLoaded) {
-    return;
-  }
-
-  marqueeInitialLoaded = true;
-
-  hideAdminLoading();
-}
 initSharedDropdowns();
 
 const enabledInput =
@@ -698,8 +682,6 @@ if (!data) {
 
   updatePreview();
 
-  finishMarqueeInitialLoad();
-
   return;
 }
 
@@ -787,26 +769,22 @@ pauseHoverInput.dispatchEvent(
 
 updatePreview();
 
-finishMarqueeInitialLoad();
-
 },
 
-  error => {
+error => {
 
-    console.error(
-      "Marquee load error:",
-      error
-    );
+  console.error(
+    "Marquee load error:",
+    error
+  );
 
+  saveMessage.textContent =
+    "Unable to load marquee settings.";
 
-    saveMessage.textContent =
-      "Unable to load marquee settings.";
+  saveMessage.className =
+    "marquee-save-message error";
 
-
-    saveMessage.className =
-      "marquee-save-message error";
-finishMarqueeInitialLoad();
-  }
+}
 
 );
 

@@ -5448,8 +5448,6 @@ input:checked
 .visitor-table th,
 .visitor-table td {
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 /* VISITOR TABLE COLUMN WIDTH */
 
@@ -7941,67 +7939,66 @@ span.flatpickr-weekday {
   }
 
   .visitor-table {
-    width: 1120px;
-    min-width: 1120px;
-    table-layout: fixed;
+    width: max-content;
+    min-width: 100%;
+    table-layout: auto;
   }
 
   .visitor-table th,
   .visitor-table td {
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
+    text-overflow: clip;
   }
 
   .visitor-table th:nth-child(1),
   .visitor-table td:nth-child(1) {
-    width: 170px;
+    min-width: 180px;
   }
 
   .visitor-table th:nth-child(2),
   .visitor-table td:nth-child(2) {
-    width: 90px;
+    min-width: 90px;
   }
 
   .visitor-table th:nth-child(3),
   .visitor-table td:nth-child(3) {
-    width: 130px;
+    min-width: 120px;
   }
 
   .visitor-table th:nth-child(4),
   .visitor-table td:nth-child(4) {
-    width: 210px;
+    min-width: 220px;
   }
 
   .visitor-table th:nth-child(5),
   .visitor-table td:nth-child(5) {
-    width: 100px;
+    min-width: 130px;
   }
 
   .visitor-table th:nth-child(6),
   .visitor-table td:nth-child(6) {
-    width: 180px;
+    min-width: 150px;
   }
 
   .visitor-table th:nth-child(7),
   .visitor-table td:nth-child(7) {
-    width: 90px;
+    min-width: 90px;
   }
 
   .visitor-table th:nth-child(8),
   .visitor-table td:nth-child(8) {
-    width: 150px;
+    min-width: 170px;
   }
 
 }
 .visitor-table th:last-child,
 .visitor-table td:last-child {
-  overflow: visible;
-  text-overflow: clip;
   white-space: nowrap;
 }
+
 .visitor-table td:last-child > div {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   flex-wrap: nowrap;
   gap: 6px;

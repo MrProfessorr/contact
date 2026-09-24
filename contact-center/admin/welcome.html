@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="icon" type="image/svg+xml" href="./logo.svg" />
   <meta name="viewport"content="width=device-width, initial-scale=1.0">
   <title>Back Office SC 🏢</title>
   <link rel="stylesheet"href="./admin.css">
@@ -566,23 +566,17 @@
 <script type="module">
 
 import {
-
   db,
   ref,
   set,
   onValue,
   requireAdmin,
-  setupLogout,
-
-  showAdminLoading,
-  hideAdminLoading
-
+  setupLogout
 } from "./admin.js";
 
 
 requireAdmin();
 setupLogout();
-showAdminLoading();
 initSharedDropdowns();
 
 
@@ -1312,29 +1306,22 @@ if (imageUrl.value) {
 
 
     updatePreview();
-
-    // FIREBASE SUDAH SELESAI LOAD
-    hideAdminLoading();
-
   },
 
-  error => {
+error => {
 
-    console.error(
-      "Welcome settings load error:",
-      error
-    );
+  console.error(
+    "Welcome settings load error:",
+    error
+  );
 
-    saveMessage.textContent =
-      "Failed to load welcome settings.";
+  saveMessage.textContent =
+    "Failed to load welcome settings.";
 
-    saveMessage.className =
-      "welcome-save-message error";
+  saveMessage.className =
+    "welcome-save-message error";
 
-    // JANGAN BIARKAN LOADING TERUS BERPUTAR
-    hideAdminLoading();
-
-  }
+}
 
 );
 

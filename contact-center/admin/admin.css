@@ -5438,51 +5438,29 @@ input:checked
     rgba(143,155,172,.55);
 }
 .visitor-table {
-  width: 100%;
-  min-width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-/* VISITOR TABLE COLUMN WIDTH */
+  width:
+    max-content;
 
-.visitor-table th:nth-child(1),
-.visitor-table td:nth-child(1) {
-  width: 16%;
-}
+  min-width:
+    100%;
 
-.visitor-table th:nth-child(2),
-.visitor-table td:nth-child(2) {
-  width: 7%;
+  border-collapse:
+    collapse;
+
+  table-layout:
+    auto;
 }
 
-.visitor-table th:nth-child(3),
-.visitor-table td:nth-child(3) {
-  width: 10%;
-}
+.visitor-table th:last-child,
+.visitor-table td:last-child {
+  width:
+    1%;
 
-.visitor-table th:nth-child(4),
-.visitor-table td:nth-child(4) {
-  width: 22%;
-}
+  white-space:
+    nowrap;
 
-.visitor-table th:nth-child(5),
-.visitor-table td:nth-child(5) {
-  width: 8%;
-}
-
-.visitor-table th:nth-child(6),
-.visitor-table td:nth-child(6) {
-  width: 13%;
-}
-
-.visitor-table th:nth-child(7),
-.visitor-table td:nth-child(7) {
-  width: 7%;
-}
-
-.visitor-table th:nth-child(8),
-.visitor-table td:nth-child(8) {
-  width: 17%;
+  padding-right:
+    10px;
 }
 .visitor-table th:first-child,
 .visitor-table td:first-child {
@@ -7909,31 +7887,50 @@ span.flatpickr-weekday {
 @media(max-width:650px) {
 
   .visitor-main-grid {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
+    width:100%;
+
+    min-width:0;
+
+    max-width:100%;
   }
 
-  .visitor-main-grid > .card {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    overflow: visible;
-  }
+
+.visitor-main-grid > .card {
+  width:
+    100%;
+
+  min-width:
+    0;
+
+  max-width:
+    100%;
+
+  overflow:
+    visible;
+}
 
   .visitor-table-wrap {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
+    width:100%;
+
+    max-width:100%;
+
+    min-width:0;
+
+    overflow-x:auto;
+
+    overflow-y:auto;
+
+    -webkit-overflow-scrolling:
+      touch;
   }
 
+
   .visitor-table {
-    width: 900px;
-    min-width: 900px;
-    table-layout: fixed;
+  width:
+    max-content;
+
+  min-width:
+    760px;
   }
 
 }

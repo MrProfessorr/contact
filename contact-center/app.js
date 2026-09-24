@@ -6606,16 +6606,30 @@ function showBlockedScreen() {
     "visitorBlockedScreen";
 
 
-  const currentUrl =
-    window.location.href;
+const currentUrl =
+  window.location.href;
 
 
-  const referenceCode =
-    `#18.${String(visitorId)
-      .replace(/[^a-zA-Z0-9]/g, "")
-      .slice(0, 12)}.${Date.now()
-      .toString()
-      .slice(-10)}`;
+const now =
+  new Date();
+
+
+const pad2 =
+  value =>
+    String(value)
+      .padStart(2, "0");
+
+
+const accessDeniedTime =
+  pad2(now.getHours()) +
+  pad2(now.getMinutes()) +
+  pad2(now.getDate()) +
+  pad2(now.getMonth() + 1) +
+  now.getFullYear();
+
+
+const referenceCode =
+  `#18.${visitorId}.${accessDeniedTime}`;
 
 
   screen.innerHTML = `

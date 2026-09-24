@@ -6377,7 +6377,15 @@ function normalizeTrafficSource(
   );
 
 }
+function getCurrentPageUrl() {
 
+  return (
+    window.location.origin +
+    window.location.pathname +
+    window.location.search
+  );
+
+}
 
 function getTrafficInfo() {
 
@@ -6777,7 +6785,7 @@ async function startVisitorTracking() {
           serverTimestamp(),
 
         currentPage:
-          window.location.pathname,
+          getCurrentPageUrl(),
 
         pageTitle:
           document.title || "",
@@ -6870,22 +6878,20 @@ browser:
     );
 
 
-    await set(
-      presenceRef,
-      {
-        online:
-          true,
+await onDisconnect(
+  presenceRef
+).set(
+  {
+    online:
+      false,
 
-        page:
-          window.location.pathname,
+    page:
+      getCurrentPageUrl(),
 
-        connectedAt:
-          serverTimestamp(),
-
-        lastSeen:
-          serverTimestamp()
-      }
-    );
+    lastSeen:
+      serverTimestamp()
+  }
+);
 
 
     await onDisconnect(
@@ -6903,23 +6909,23 @@ browser:
       }
     );
 
-    setInterval(
-      () => {
+setInterval(
+  () => {
 
-        update(
-          visitorRef,
-          {
-            lastSeen:
-              serverTimestamp(),
+    update(
+      visitorRef,
+      {
+        lastSeen:
+          serverTimestamp(),
 
-            currentPage:
-              window.location.pathname
-          }
-        ).catch(() => {});
+        currentPage:
+          getCurrentPageUrl()
+      }
+    ).catch(() => {});
 
-      },
-      30000
-    );
+  },
+  30000
+);
 
   } catch (error) {
 
@@ -7011,10 +7017,10 @@ document.addEventListener(
           traffic.campaign,
 
         page:
-          window.location.pathname,
+  getCurrentPageUrl(),
 
-        timestamp:
-          serverTimestamp()
+timestamp:
+  serverTimestamp()
       }
     ).catch(
       error => {

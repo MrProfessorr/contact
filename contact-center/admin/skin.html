@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
- <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+ <link rel="icon" type="image/svg+xml" href="./logo.svg" />
 <meta name="viewport"content="width=device-width,initial-scale=1">
 <title>Back Office SC 🏢</title>
 <link rel="stylesheet"href="./admin.css">
@@ -593,43 +593,19 @@ Official Support Center
 <script src="./shared-ui.js"></script>
 <script type="module">
 
-
 import {
-
   db,
   requireAdmin,
   setupLogout,
-
   ref,
   set,
-  onValue,
-
-  showAdminLoading,
-  hideAdminLoading
-
+  onValue
 } from "./admin.js";
 
 
 requireAdmin();
 
 setupLogout();
-
-// LOADING MASA BUKA / REFRESH PAGE
-showAdminLoading();
-
-let skinInitialLoaded = false;
-
-function finishSkinInitialLoad() {
-
-  if (skinInitialLoaded) {
-    return;
-  }
-
-  skinInitialLoaded = true;
-
-  hideAdminLoading();
-}
-
 /* =====================================================
    CLOUDINARY
 ===================================================== */
@@ -1267,9 +1243,6 @@ updateActiveText();
 
 updatePreview();
 
-// INITIAL FIREBASE LOAD SELESAI
-finishSkinInitialLoad();
-
 },
 
 error => {
@@ -1284,9 +1257,6 @@ error => {
 
   saveMessage.className =
     "skin-save-message error";
-
-  // FIREBASE ERROR PUN LOADING TETAP TUTUP
- finishSkinInitialLoad();
 
 }
 

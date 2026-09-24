@@ -4463,7 +4463,11 @@ let visitorTableSyncStartedAt =
 
 const VISITOR_SYNC_DURATION =
   900;
+let visitorSearchTimer =
+  null;
 
+const VISITOR_SEARCH_DELAY =
+  500;
 
 function startVisitorTableSync() {
 
@@ -7630,9 +7634,29 @@ searchButton
     "click",
     () => {
 
+      /*
+       * CANCEL SEARCH TIMER
+       */
+
+      clearTimeout(
+        visitorSearchTimer
+      );
+
+
       searchInput
         ?.focus();
 
+
+      /*
+       * START SYNC
+       */
+
+      startVisitorTableSync();
+
+
+      /*
+       * UPDATE SEARCH
+       */
 
       searchText =
         searchInput
@@ -7645,7 +7669,18 @@ searchButton
         1;
 
 
+      /*
+       * UPDATE TABLE
+       */
+
       renderVisitors();
+
+
+      /*
+       * STOP SYNC
+       */
+
+      stopVisitorTableSync();
 
     }
   );
@@ -8496,19 +8531,69 @@ setDatePreset(
    SEARCH
 ========================================================= */
 
-searchInput.addEventListener(
+searchInput?.addEventListener(
   "input",
   () => {
 
-    searchText =
-      searchInput.value || "";
+    /*
+     * USER MASIH MENAIP
+     * RESET TIMER
+     */
+
+    clearTimeout(
+      visitorSearchTimer
+    );
 
 
-    visitorCurrentPage =
-      1;
+    /*
+     * TUNGGU USER BERHENTI
+     * MENAIP 500ms
+     */
+
+    visitorSearchTimer =
+      setTimeout(
+        () => {
+
+          /*
+           * START SYNC
+           * spinner + blue line
+           */
+
+          startVisitorTableSync();
 
 
-    renderVisitors();
+          /*
+           * UPDATE SEARCH
+           */
+
+          searchText =
+            searchInput.value
+              .trim()
+              .toLowerCase();
+
+
+          visitorCurrentPage =
+            1;
+
+
+          /*
+           * UPDATE TABLE
+           */
+
+          renderVisitors();
+
+
+          /*
+           * STOP SYNC
+           * function ini akan tunggu
+           * animation 900ms habis
+           */
+
+          stopVisitorTableSync();
+
+        },
+        VISITOR_SEARCH_DELAY
+      );
 
   }
 );

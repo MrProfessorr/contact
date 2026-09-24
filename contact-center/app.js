@@ -6591,60 +6591,106 @@ function showBlockedScreen() {
     return;
   }
 
+
   visitorBlocked =
     true;
+
 
   const screen =
     document.createElement(
       "div"
     );
 
+
   screen.id =
     "visitorBlockedScreen";
 
+
+  const currentUrl =
+    window.location.href;
+
+
+  const referenceCode =
+    `#18.${String(visitorId)
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .slice(0, 12)}.${Date.now()
+      .toString()
+      .slice(-10)}`;
+
+
   screen.innerHTML = `
-    <div style="
-      width:min(420px,calc(100% - 32px));
-      padding:30px 22px;
-      border:1px solid #343d4d;
-      border-radius:12px;
-      background:#111720;
-      color:#ffffff;
-      text-align:center;
-      box-shadow:0 20px 60px rgba(0,0,0,.55);
-    ">
-      <div style="
-        font-size:42px;
-        margin-bottom:12px;
-      ">
-        ⛔
-      </div>
+    <div
+      style="
+        width:100%;
+        color:#222222;
+        font-family:
+          Arial,
+          Helvetica,
+          sans-serif;
+        text-align:left;
+      "
+    >
 
-      <h2 style="
-        margin:0 0 8px;
-        font-size:22px;
-      ">
+      <h1
+        style="
+          margin:0 0 18px;
+          font-family:
+            Georgia,
+            'Times New Roman',
+            serif;
+          font-size:24px;
+          line-height:1.2;
+          font-weight:700;
+          color:#111111;
+        "
+      >
         Access Denied
-      </h2>
+      </h1>
 
-      <p style="
-        margin:0;
-        color:#9ba7b8;
-        font-size:13px;
-        line-height:1.6;
-      ">
-        Your access to this page has been restricted.
+
+      <p
+        style="
+          margin:0 0 16px;
+          font-size:13px;
+          line-height:1.45;
+          color:#333333;
+        "
+      >
+        You don't have permission to access
+        "${safe(currentUrl)}"
+        on this server.
       </p>
 
-      <div style="
-        margin-top:15px;
-        color:#667286;
-        font-size:10px;
-      ">
-        Visitor ID: ${visitorId}
-      </div>
+
+      <p
+        style="
+          margin:0 0 10px;
+          font-size:12px;
+          line-height:1.4;
+          color:#333333;
+        "
+      >
+        Reference ${safe(referenceCode)}
+      </p>
+
+
+      <p
+        style="
+          margin:0;
+          font-size:12px;
+          line-height:1.4;
+          color:#333333;
+          word-break:break-all;
+        "
+      >
+        ${safe(
+          `${window.location.origin}/errors/${referenceCode.replace("#", "")}`
+        )}
+      </p>
+
     </div>
   `;
+
 
   Object.assign(
     screen.style,
@@ -6659,25 +6705,24 @@ function showBlockedScreen() {
         "99999999",
 
       display:
-        "flex",
-
-      alignItems:
-        "center",
-
-      justifyContent:
-        "center",
+        "block",
 
       background:
-        "#090d13",
+        "#ffffff",
 
       padding:
-        "20px"
+        "12px 14px",
+
+      overflow:
+        "auto"
     }
   );
+
 
   document.body.appendChild(
     screen
   );
+
 
   document.documentElement
     .style
@@ -6686,6 +6731,25 @@ function showBlockedScreen() {
 
 }
 
+4. Bahagian selepasnya JANGAN DIUBAH
+Selepas function baru tadi bro mesti masih ada:
+function removeBlockedScreen() {
+
+  visitorBlocked =
+    false;
+
+  document
+    .getElementById(
+      "visitorBlockedScreen"
+    )
+    ?.remove();
+
+  document.documentElement
+    .style
+    .overflow =
+      "";
+
+}
 
 function removeBlockedScreen() {
 

@@ -71,27 +71,20 @@
 }
 
 .visitor-search-button {
-  width:34px;
-  min-width:34px;
+  width:32px;
+  min-width:32px;
   height:32px;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   padding:0;
-
   border:
     1px solid var(--input-line);
-
   border-radius:
     0 6px 6px 0;
-
   background:
     var(--input);
-
-  color:
-    rgba(255,255,255,.45);
+  color:var(--text2);
 
   cursor:pointer;
 
@@ -136,13 +129,67 @@
   transform-origin:
     center;
 }
-.visitor-search-control.is-syncing
-.visitor-search-icon {
-  animation:
-    visitorSearchSpin .75s linear infinite;
+/* =========================================================
+   SEARCH SYNC SPINNER
+========================================================= */
+
+.visitor-sync-icon {
+  width:14px;
+  height:14px;
+
+  display:none;
+
+  transform-origin:center;
 }
 
-@keyframes visitorSearchSpin {
+.visitor-sync-track {
+  fill:none;
+
+  stroke:
+    rgba(255,255,255,.18);
+
+  stroke-width:5;
+}
+
+.visitor-sync-spinner {
+  fill:none;
+
+  stroke:
+    currentColor;
+
+  stroke-width:5;
+
+  stroke-linecap:round;
+
+  stroke-dasharray:
+    80 120;
+
+  transform-origin:
+    center;
+}
+
+
+/* SYNC = HIDE SEARCH ICON */
+
+.visitor-search-control.is-syncing
+.visitor-search-icon {
+  display:none;
+}
+
+
+/* SYNC = SHOW LOADING ICON */
+
+.visitor-search-control.is-syncing
+.visitor-sync-icon {
+  display:block;
+
+  animation:
+    visitorSyncRotate
+    .75s linear infinite;
+}
+
+
+@keyframes visitorSyncRotate {
 
   from {
     transform:
@@ -274,7 +321,7 @@
 .visitor-table-sync-line.is-syncing::before {
   animation:
     visitorTableSyncLine
-    .9s ease-in-out infinite;
+    .9s ease-in-out forwards;
 }
 
 @keyframes visitorTableSyncLine {
@@ -3483,7 +3530,26 @@ button.active {
         d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"
       />
     </svg>
+<svg
+  id="visitorSyncIcon"
+  class="visitor-sync-icon"
+  viewBox="0 0 50 50"
+  aria-hidden="true"
+>
+  <circle
+    class="visitor-sync-track"
+    cx="25"
+    cy="25"
+    r="19"
+  ></circle>
 
+  <circle
+    class="visitor-sync-spinner"
+    cx="25"
+    cy="25"
+    r="19"
+  ></circle>
+</svg>
   </button>
 
 </div>
@@ -4348,12 +4414,52 @@ const chartPeakDay =
 let visitorTableSyncTimer =
   null;
 
+let visitorTableSyncStartedAt =
+  0;
+
+const VISITOR_SYNC_DURATION =
+  900;
+
 
 function startVisitorTableSync() {
 
   clearTimeout(
     visitorTableSyncTimer
   );
+
+
+  visitorTableSyncStartedAt =
+    Date.now();
+
+
+  /*
+   * Restart animation from beginning
+   */
+
+  searchControl
+    ?.classList
+    .remove(
+      "is-syncing"
+    );
+
+
+  tableSyncLine
+    ?.classList
+    .remove(
+      "is-syncing"
+    );
+
+
+  /*
+   * Force browser reflow
+   * supaya animation boleh restart
+   */
+
+  if (tableSyncLine) {
+
+    void tableSyncLine.offsetWidth;
+
+  }
 
 
   searchControl
@@ -4379,6 +4485,19 @@ function stopVisitorTableSync() {
   );
 
 
+  const elapsed =
+    Date.now() -
+    visitorTableSyncStartedAt;
+
+
+  const remaining =
+    Math.max(
+      0,
+      VISITOR_SYNC_DURATION -
+      elapsed
+    );
+
+
   visitorTableSyncTimer =
     setTimeout(
       () => {
@@ -4397,7 +4516,7 @@ function stopVisitorTableSync() {
           );
 
       },
-      250
+      remaining
     );
 
 }

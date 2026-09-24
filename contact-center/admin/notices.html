@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" type="image/svg+xml" href="/logo.svg" />
+<link rel="icon" type="image/svg+xml" href="./logo.svg" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Back Office SC 🏢</title>
 <link rel="stylesheet" href="./admin.css">
@@ -297,22 +297,16 @@ Add Notice
 <script type="module">
 
 import {
-
   db,
   requireAdmin,
   setupLogout,
   safe,
-
   ref,
   push,
   set,
   update,
   remove,
-  onValue,
-
-  showAdminLoading,
-  hideAdminLoading
-
+  onValue
 } from "./admin.js";
 
 
@@ -320,19 +314,6 @@ requireAdmin();
 
 setupLogout();
 
-showAdminLoading();
-let noticeInitialLoaded = false;
-
-function finishNoticeInitialLoad() {
-
-  if (noticeInitialLoaded) {
-    return;
-  }
-
-  noticeInitialLoaded = true;
-
-  hideAdminLoading();
-}
 initSharedDropdowns();
 
 const form =
@@ -1067,16 +1048,16 @@ onValue(
     list.innerHTML = "";
 
 
-    if (!items.length) {
+if (!items.length) {
 
-      list.innerHTML = `
-        <div class="empty">
-          No notices.
-        </div>
-      `;
- finishNoticeInitialLoad();
-      return;
-    }
+  list.innerHTML = `
+    <div class="empty">
+      No notices.
+    </div>
+  `;
+
+  return;
+}
 
 
 items.forEach(item => {
@@ -1266,11 +1247,6 @@ items.forEach(item => {
 );
 
 });
-
-
-// INITIAL FIREBASE LOAD SELESAI
-finishNoticeInitialLoad();
-
 },
 
 error => {
@@ -1285,9 +1261,6 @@ error => {
       Failed to load notices.
     </div>
   `;
-
-  // ERROR PUN INITIAL LOADING SELESAI
-  finishNoticeInitialLoad();
 
 }
 

@@ -7994,6 +7994,19 @@ span.flatpickr-weekday {
   }
 
 }
+.visitor-table th:last-child,
+.visitor-table td:last-child {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+.visitor-table td:last-child > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+  white-space: nowrap;
+}
 /* THEAD - ROUND KIRI & KANAN ATAS */
 
 .visitor-table thead th:first-child {

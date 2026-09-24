@@ -7431,9 +7431,11 @@ const matchesSearch =
   );
 
 
-const online =
-  visitorIsOnline(
-    visitor.id
+const isBlocked =
+  Boolean(
+    blockedVisitors[
+      visitor.id
+    ]
   );
 
 
@@ -7451,21 +7453,34 @@ if (
     )
   ) {
 
+    /*
+     * ALL =
+     * BLOCKED + UNBLOCKED
+     */
+
     matchesStatus =
       true;
 
   } else {
 
+    /*
+     * ACTIVE =
+     * NOT BLOCKED
+     *
+     * INACTIVE =
+     * BLOCKED
+     */
+
     matchesStatus =
       (
-        online &&
+        !isBlocked &&
         visitorStatusFilters.has(
           "active"
         )
       )
       ||
       (
-        !online &&
+        isBlocked &&
         visitorStatusFilters.has(
           "inactive"
         )

@@ -270,23 +270,6 @@ label {
   font-weight:600;
   color:var(--tx-muted);
 }
-.search-input {
-  width:100%;
-  border:1px solid var(--input-line);
-  border-radius:6px;
-  background:var(--input);
-  color:var(--text);
-  padding:4px 11px;
-  outline:none;
-  transition: all 0.2s;
-}
-.search-input:hover {
-  border:1px solid var(--input-line-hover);
-}
-.search-input:focus {
-  border:1px solid var(--input-line-focus);
-}
-
 .help-text {
   color:var(--muted);
   font-size:12px;

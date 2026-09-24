@@ -364,8 +364,6 @@ import {
   requireAdmin,
   setupLogout,
   safe,
-  showAdminLoading,
-  hideAdminLoading,
   ref,
   push,
   set,
@@ -380,21 +378,6 @@ requireAdmin();
 
 setupLogout();
 
-// LOADING MASA BUKA / REFRESH PAGE
-showAdminLoading();
-let contactInitialLoaded = false;
-
-function finishContactInitialLoad() {
-
-  if (contactInitialLoaded) {
-    return;
-  }
-
-  contactInitialLoaded = true;
-
-  hideAdminLoading();
-}
-  
 initSharedDropdowns();
 
 const form =
@@ -1120,16 +1103,16 @@ onValue(
     list.innerHTML = "";
 
 
-    if (!items.length) {
+if (!items.length) {
 
-      list.innerHTML = `
-        <div class="empty">
-          No contacts yet.
-        </div>
-      `;
-     finishContactInitialLoad();
-      return;
-    }
+  list.innerHTML = `
+    <div class="empty">
+      No contacts yet.
+    </div>
+  `;
+
+  return;
+}
 
 
 items.forEach(item => {
@@ -1406,9 +1389,6 @@ items.forEach(item => {
   );
 
 });
-// FIREBASE BERJAYA LOAD
-finishContactInitialLoad();
-
 },
 
 error => {
@@ -1423,9 +1403,6 @@ error => {
       Failed to load contacts.
     </div>
   `;
-
-  // FIREBASE ERROR PUN LOADING TETAP TUTUP
-  finishContactInitialLoad();
 
 }
 

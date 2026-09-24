@@ -6951,22 +6951,6 @@ await onDisconnect(
   }
 );
 
-
-    await onDisconnect(
-      presenceRef
-    ).set(
-      {
-        online:
-          false,
-
-        page:
-          window.location.pathname,
-
-        lastSeen:
-          serverTimestamp()
-      }
-    );
-
 setInterval(
   () => {
 
@@ -6982,7 +6966,7 @@ setInterval(
     ).catch(() => {});
 
   },
-  30000
+  15000
 );
 
   } catch (error) {

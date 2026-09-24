@@ -3007,60 +3007,61 @@ button.active {
 
   .visitor-card-head-search {
     width:100%;
-
     align-items:stretch;
-
     flex-direction:column;
-
     gap:6px;
   }
 
-
-  #visitorSearch {
-    width:100%;
-
-    max-width:none;
-
-    flex:
-      0 0 auto;
-  }
+#visitorSearch {
+  width:calc(100% - 32px);
+  min-width:0;
+  max-width:none;
+  flex:1 1 auto;
+}
 .visitor-search-control {
   width:100%;
-  max-width:none;
+  max-width:100%;
+  min-width:0;
   flex:0 0 auto;
+  display:flex;
+}
+.visitor-search-button {
+  flex:0 0 32px;
+  width:32px;
+  min-width:32px;
+}
+.visitor-date-filter {
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:3px;
+  margin-left:0;
 }
 
-  .visitor-date-filter {
-    width:100%;
 
-    display:flex;
-
-    gap:3px;
-
-    margin-left:0;
-  }
+.visitor-date-input-wrap {
+  width:0;
+  min-width:0;
+  max-width:100%;
+  flex:1 1 0;
+}
 
 
-  .visitor-date-input-wrap {
-    width:auto;
-
-    flex:
-      1 1 auto;
-  }
-
-
-  #visitorDateRange {
-    width:100%;
-  }
+#visitorDateRange {
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
 
 
-  .visitor-date-preset-toggle {
-    flex:
-      0 0 34px;
-
-    width:34px;
-  }
-
+.visitor-date-preset-toggle {
+  width:32px;
+  min-width:32px;
+  flex:0 0 32px;
+}
 
   .visitor-date-preset-panel {
     left:0;

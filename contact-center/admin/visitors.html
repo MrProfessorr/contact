@@ -2588,7 +2588,8 @@
 
   display:flex;
   align-items:center;
-
+  justify-content:flex-start;
+  text-align:left;
   padding:
     1px 32px 1px 3px;
 
@@ -2707,17 +2708,27 @@
 
 .visitor-status-placeholder {
   display:none;
-  flex:1 1 auto;
+
+  flex:1 1 0;
+  width:100%;
   min-width:0;
+
   padding-left:8px;
+
   color:var(--text2);
+
   font-size:14px;
+  line-height:30px;
+
   text-align:left;
+  justify-self:start;
 }
 
 .visitor-status-overflow:empty
 + .visitor-status-placeholder {
   display:block;
+  margin-right:auto;
+  text-align:left;
 }
 
 
@@ -3926,103 +3937,6 @@ button.active {
   </button>
 
 </div>
-
-
-  <div class="visitor-date-filter">
-
-    <div class="visitor-date-input-wrap">
-
-      <input
-        id="visitorDateRange"
-        type="text"
-        placeholder="Select date range..."
-        autocomplete="off"
-      >
-
-      <span class="visitor-date-calendar">
-        ▣
-      </span>
-
-    </div>
-
-
-<button
-  id="visitorDatePresetToggle"
-  class="visitor-date-preset-toggle"
-  type="button"
-  aria-expanded="false"
-  aria-label="Open date presets"
->
-
-  <svg
-    class="visitor-date-preset-icon"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path
-      d="M16.59 8.59L12 13.17L7.41 8.59L6 10l6 6l6-6z"
-    />
-  </svg>
-
-</button>
-
-
-    <div
-      id="visitorDatePresetPanel"
-      class="visitor-date-preset-panel hidden"
-    >
-
-      <button type="button" data-range-preset="today">
-        Today
-      </button>
-
-      <button type="button" data-range-preset="yesterday">
-        Yesterday
-      </button>
-
-      <button type="button" data-range-preset="this-week">
-        This Week
-      </button>
-
-      <button type="button" data-range-preset="last-week">
-        Last Week
-      </button>
-
-      <button type="button" data-range-preset="this-month">
-        This Month
-      </button>
-
-      <button type="button" data-range-preset="last-month">
-        Last Month
-      </button>
-
-      <button type="button" data-range-preset="last-7">
-        Last 7 days
-      </button>
-
-      <button type="button" data-range-preset="last-15">
-        Last 15 days
-      </button>
-
-      <button type="button" data-range-preset="last-30">
-        Last 30 days
-      </button>
-
-      <button type="button" data-range-preset="last-60">
-        Last 60 days
-      </button>
-
-      <button
-        type="button"
-        class="visitor-range-all"
-        data-range-preset="all"
-      >
-        All Time
-      </button>
-
-    </div>
-
-  </div>
 <!-- VISITOR STATUS FILTER -->
 
 <div class="visitor-status-filter">
@@ -4135,6 +4049,102 @@ button.active {
   </div>
 
 </div>
+
+  <div class="visitor-date-filter">
+
+    <div class="visitor-date-input-wrap">
+
+      <input
+        id="visitorDateRange"
+        type="text"
+        placeholder="Select date range..."
+        autocomplete="off"
+      >
+
+      <span class="visitor-date-calendar">
+        ▣
+      </span>
+
+    </div>
+
+
+<button
+  id="visitorDatePresetToggle"
+  class="visitor-date-preset-toggle"
+  type="button"
+  aria-expanded="false"
+  aria-label="Open date presets"
+>
+
+  <svg
+    class="visitor-date-preset-icon"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      d="M16.59 8.59L12 13.17L7.41 8.59L6 10l6 6l6-6z"
+    />
+  </svg>
+
+</button>
+
+
+    <div
+      id="visitorDatePresetPanel"
+      class="visitor-date-preset-panel hidden"
+    >
+
+      <button type="button" data-range-preset="today">
+        Today
+      </button>
+
+      <button type="button" data-range-preset="yesterday">
+        Yesterday
+      </button>
+
+      <button type="button" data-range-preset="this-week">
+        This Week
+      </button>
+
+      <button type="button" data-range-preset="last-week">
+        Last Week
+      </button>
+
+      <button type="button" data-range-preset="this-month">
+        This Month
+      </button>
+
+      <button type="button" data-range-preset="last-month">
+        Last Month
+      </button>
+
+      <button type="button" data-range-preset="last-7">
+        Last 7 days
+      </button>
+
+      <button type="button" data-range-preset="last-15">
+        Last 15 days
+      </button>
+
+      <button type="button" data-range-preset="last-30">
+        Last 30 days
+      </button>
+
+      <button type="button" data-range-preset="last-60">
+        Last 60 days
+      </button>
+
+      <button
+        type="button"
+        class="visitor-range-all"
+        data-range-preset="all"
+      >
+        All Time
+      </button>
+
+    </div>
+
+  </div>
 </div>
 
     <!-- =========================================================

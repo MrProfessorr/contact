@@ -9275,6 +9275,14 @@ visitorStatusOptions
             option.dataset.status;
 
 
+          /*
+           * MULTI SELECT
+           *
+           * Setiap pilihan berdiri sendiri.
+           * Jangan buang All bila pilih
+           * Active / Inactive.
+           */
+
           if (
             visitorStatusFilters.has(
               status
@@ -9287,32 +9295,9 @@ visitorStatusOptions
 
           } else {
 
-            /*
-             * ALL TIDAK DIGABUNG
-             * DENGAN ACTIVE / INACTIVE
-             */
-
-            if (
-              status === "all"
-            ) {
-
-              visitorStatusFilters.clear();
-
-              visitorStatusFilters.add(
-                "all"
-              );
-
-            } else {
-
-              visitorStatusFilters.delete(
-                "all"
-              );
-
-              visitorStatusFilters.add(
-                status
-              );
-
-            }
+            visitorStatusFilters.add(
+              status
+            );
 
           }
 

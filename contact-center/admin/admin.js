@@ -62,14 +62,58 @@ export function requireAdmin() {
     auth,
     user => {
 
+      /*
+        STEP 1:
+        Firebase login belum ada.
+      */
       if (!user) {
+
+        sessionStorage.removeItem(
+          "adminSecondVerifiedUid"
+        );
+
 
         location.replace(
           "./login.html"
         );
 
+
         return;
+
       }
+
+
+      /*
+        STEP 2:
+        Firebase login sudah ada,
+        tetapi 2nd Password
+        belum verified.
+      */
+      const verifiedUid =
+        sessionStorage.getItem(
+          "adminSecondVerifiedUid"
+        );
+
+
+      if (
+        verifiedUid !== user.uid
+      ) {
+
+        location.replace(
+          "./login.html"
+        );
+
+
+        return;
+
+      }
+
+
+      /*
+        STEP 3:
+        Firebase login +
+        2nd Password sudah lulus.
+      */
 
 
       /* FULL EMAIL */
@@ -78,6 +122,7 @@ export function requireAdmin() {
         document.getElementById(
           "adminEmail"
         );
+
 
       if (adminEmail) {
 
@@ -95,6 +140,7 @@ export function requireAdmin() {
           "adminUsername"
         );
 
+
       if (adminUsername) {
 
         const username =
@@ -102,6 +148,7 @@ export function requireAdmin() {
           user.email
             ?.split("@")[0] ||
           "Admin";
+
 
         adminUsername.textContent =
           username;
@@ -136,16 +183,19 @@ export function setupLogout() {
         "click",
         async () => {
 
-          try {
+ try {
 
-            await signOut(auth);
+  sessionStorage.removeItem(
+    "adminSecondVerifiedUid"
+  );
+  await signOut(auth);
+   
+  location.replace(
+    "./login.html"
+  );
 
-            location.replace(
-              "./login.html"
-            );
 
-          } catch (error) {
-
+} catch (error) {
             console.error(
               "Logout failed:",
               error

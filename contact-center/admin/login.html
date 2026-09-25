@@ -1697,25 +1697,10 @@ function autoSubmitSecondAuth() {
     return;
   }
 
+  otpAutoSubmitting = true;
 
-  setTimeout(
-    () => {
+  secondAuthForm.requestSubmit();
 
-      if (
-        getOtpCode().length !== 6 ||
-        secondAuthForm.classList.contains(
-          "hidden"
-        )
-      ) {
-        return;
-      }
-
-
-      secondAuthForm.requestSubmit();
-
-    },
-    800
-  );
 }
 function clearOtp() {
 

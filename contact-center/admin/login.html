@@ -39,6 +39,103 @@
 .turnstile-wrap .cf-turnstile {
   width:100%;
 }
+.second-auth-title {
+  margin-bottom:6px;
+  color:var(--text);
+  font-size:20px;
+  font-weight:700;
+  text-align:center;
+}
+
+.second-auth-subtitle {
+  margin-bottom:20px;
+  color:#9ca3af;
+  font-size:13px;
+  text-align:center;
+}
+
+.second-auth-user {
+  margin-bottom:20px;
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border:1px solid #303030;
+  border-radius:8px;
+  background:var(--input);
+}
+
+.second-auth-user-label {
+  margin-bottom:4px;
+  color:#9ca3af;
+  font-size:11px;
+}
+
+#secondAuthUsername {
+  display:block;
+  color:var(--text);
+  font-size:14px;
+}
+
+.second-auth-change {
+  padding:0;
+  border:0;
+  background:transparent;
+  color:#3b82f6;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.second-auth-label {
+  display:block;
+  margin-bottom:10px;
+}
+
+.otp-container {
+  width:100%;
+  margin-bottom:18px;
+  display:flex;
+  justify-content:center;
+  gap:7px;
+}
+
+.otp-input {
+  width:40px !important;
+  min-width:0;
+  height:46px !important;
+  padding:0 !important;
+  border:1px solid #303030 !important;
+  border-radius:7px !important;
+  background:var(--input) !important;
+  color:var(--text) !important;
+  font-size:20px !important;
+  font-weight:700;
+  text-align:center;
+}
+
+.otp-input:focus {
+  border-color:#1677ff !important;
+  box-shadow:
+    0 0 0 2px rgba(22,119,255,.15);
+}
+
+.otp-input.filled {
+  border-color:#1677ff !important;
+}
+
+@media(max-width:420px) {
+
+  .otp-container {
+    gap:5px;
+  }
+
+  .otp-input {
+    width:36px !important;
+    height:44px !important;
+  }
+
+}
   </style>
 
 <body class="login-page">
@@ -115,21 +212,98 @@
 <form
   id="secondAuthForm"
   class="hidden"
+  autocomplete="off"
 >
 
-  <div class="form-group">
+  <div class="second-auth-title">
+    Two-Factor Authentication
+  </div>
 
-    <label>
-      2nd Password
-    </label>
+  <div class="second-auth-subtitle">
+    Enter your second password to continue.
+  </div>
+
+
+  <div class="second-auth-user">
+
+    <div>
+      <div class="second-auth-user-label">
+        Signing in as
+      </div>
+
+      <strong id="secondAuthUsername">
+        -
+      </strong>
+    </div>
+
+    <button
+      type="button"
+      id="changeAccountBtn"
+      class="second-auth-change"
+    >
+      ← Change
+    </button>
+
+  </div>
+
+
+  <label class="second-auth-label">
+    Verification Code
+  </label>
+
+
+  <div
+    id="otpContainer"
+    class="otp-container"
+  >
 
     <input
+      class="otp-input"
       type="password"
-      id="secondPassword"
-      required
-      placeholder="Enter 2nd Password"
       inputmode="numeric"
+      maxlength="1"
       autocomplete="one-time-code"
+      aria-label="Digit 1"
+    >
+
+    <input
+      class="otp-input"
+      type="password"
+      inputmode="numeric"
+      maxlength="1"
+      aria-label="Digit 2"
+    >
+
+    <input
+      class="otp-input"
+      type="password"
+      inputmode="numeric"
+      maxlength="1"
+      aria-label="Digit 3"
+    >
+
+    <input
+      class="otp-input"
+      type="password"
+      inputmode="numeric"
+      maxlength="1"
+      aria-label="Digit 4"
+    >
+
+    <input
+      class="otp-input"
+      type="password"
+      inputmode="numeric"
+      maxlength="1"
+      aria-label="Digit 5"
+    >
+
+    <input
+      class="otp-input"
+      type="password"
+      inputmode="numeric"
+      maxlength="1"
+      aria-label="Digit 6"
     >
 
   </div>
@@ -159,7 +333,8 @@ import {
 import {
   getAuth,
   signInWithEmailAndPassword,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import {
   getDatabase,
@@ -214,9 +389,29 @@ const secondAuthForm =
     "secondAuthForm"
   );
 
-const secondPasswordInput =
+const secondAuthUsername =
   document.getElementById(
-    "secondPassword"
+    "secondAuthUsername"
+  );
+
+
+const changeAccountBtn =
+  document.getElementById(
+    "changeAccountBtn"
+  );
+
+
+const otpContainer =
+  document.getElementById(
+    "otpContainer"
+  );
+
+
+const otpInputs =
+  Array.from(
+    document.querySelectorAll(
+      ".otp-input"
+    )
   );
 
 
@@ -226,7 +421,196 @@ let pendingUser =
 
 let verificationPassed =
   false;
+function getOtpCode() {
 
+  return otpInputs
+    .map(
+      input =>
+        input.value
+          .replace(/\D/g, "")
+    )
+    .join("");
+
+}
+
+
+function clearOtp() {
+
+  otpInputs.forEach(
+    input => {
+
+      input.value = "";
+
+      input.classList.remove(
+        "filled"
+      );
+
+    }
+  );
+
+}
+
+
+otpInputs.forEach(
+  (input, index) => {
+
+    input.addEventListener(
+      "input",
+      () => {
+
+        input.value =
+          input.value
+            .replace(/\D/g, "")
+            .slice(0, 1);
+
+
+        input.classList.toggle(
+          "filled",
+          input.value !== ""
+        );
+
+
+        if (
+          input.value &&
+          index <
+            otpInputs.length - 1
+        ) {
+
+          otpInputs[
+            index + 1
+          ].focus();
+
+        }
+
+      }
+    );
+
+
+    input.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key ===
+            "Backspace" &&
+          !input.value &&
+          index > 0
+        ) {
+
+          otpInputs[
+            index - 1
+          ].focus();
+
+        }
+
+      }
+    );
+
+
+    input.addEventListener(
+      "paste",
+      event => {
+
+        event.preventDefault();
+
+
+        const digits =
+          event.clipboardData
+            .getData("text")
+            .replace(/\D/g, "")
+            .slice(0, 6);
+
+
+        if (!digits) {
+          return;
+        }
+
+
+        otpInputs.forEach(
+          (otpInput, otpIndex) => {
+
+            otpInput.value =
+              digits[otpIndex] || "";
+
+            otpInput
+              .classList
+              .toggle(
+                "filled",
+                otpInput.value !== ""
+              );
+
+          }
+        );
+
+changeAccountBtn
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      sessionStorage.removeItem(
+        "adminSecondVerifiedUid"
+      );
+
+
+      verificationPassed =
+        false;
+
+
+      pendingUser =
+        null;
+
+
+      await auth.signOut();
+
+
+      clearOtp();
+
+
+      errorBox
+        .classList
+        .add("hidden");
+
+
+      secondAuthForm
+        .classList
+        .add("hidden");
+
+
+      form
+        .classList
+        .remove("hidden");
+
+
+      document
+        .getElementById("email")
+        ?.focus();
+
+
+      window.turnstile
+        ?.reset();
+
+    }
+  );
+        const focusIndex =
+          Math.min(
+            digits.length,
+            otpInputs.length
+          ) - 1;
+
+
+        if (focusIndex >= 0) {
+
+          otpInputs[
+            focusIndex
+          ].focus();
+
+        }
+
+      }
+    );
+
+  }
+);
 function getLastAdminPage() {
 
   const lastPage =
@@ -248,17 +632,24 @@ onAuthStateChanged(
   auth,
   async user => {
 
-    if (!user) {
+if (!user) {
 
-      pendingUser =
-        null;
+  pendingUser =
+    null;
 
-      verificationPassed =
-        false;
 
-      return;
+  verificationPassed =
+    false;
 
-    }
+
+  sessionStorage.removeItem(
+    "adminSecondVerifiedUid"
+  );
+
+
+  return;
+
+}
 
 
     pendingUser =
@@ -431,18 +822,27 @@ if (!snapshot.exists()) {
         Semua OK.
         Tampilkan 2nd Password.
       */
-      form
-        .classList
-        .add("hidden");
+form
+  .classList
+  .add("hidden");
 
 
-      secondAuthForm
-        .classList
-        .remove("hidden");
+secondAuthUsername.textContent =
+  settings.username ||
+  user.email ||
+  "Admin";
 
 
-      secondPasswordInput
-        .focus();
+clearOtp();
+
+
+secondAuthForm
+  .classList
+  .remove("hidden");
+
+
+otpInputs[0]
+  ?.focus();
 
 
     } catch (error) {
@@ -577,10 +977,24 @@ secondAuthForm.addEventListener(
     }
 
 
-    const enteredCode =
-      secondPasswordInput
-        .value
-        .trim();
+const enteredCode =
+  getOtpCode();
+
+
+if (enteredCode.length !== 6) {
+
+  errorBox.textContent =
+    "Please enter the complete 6-digit 2nd Password.";
+
+
+  errorBox
+    .classList
+    .remove("hidden");
+
+
+  return;
+
+}
 
 
     try {
@@ -680,8 +1094,11 @@ secondAuthForm.addEventListener(
           .remove("hidden");
 
 
-        secondPasswordInput
-          .select();
+        clearOtp();
+
+
+otpInputs[0]
+  ?.focus();
 
 
         return;

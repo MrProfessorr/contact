@@ -112,7 +112,37 @@
     </button>
 
   </form>
+<form
+  id="secondAuthForm"
+  class="hidden"
+>
 
+  <div class="form-group">
+
+    <label>
+      2nd Password
+    </label>
+
+    <input
+      type="password"
+      id="secondPassword"
+      required
+      placeholder="Enter 2nd Password"
+      inputmode="numeric"
+      autocomplete="one-time-code"
+    >
+
+  </div>
+
+
+  <button
+    class="btn btn-primary full"
+    type="submit"
+  >
+    Verify
+  </button>
+
+</form>
 </div>
 
 <script
@@ -131,6 +161,11 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+  import {
+  getDatabase,
+  ref,
+  get
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
 const firebaseConfig = {
@@ -163,13 +198,35 @@ const app =
 
 const auth =
   getAuth(app);
-
+  
+const db =
+  getDatabase(app);
 
 const form =
   document.getElementById("loginForm");
 
 const errorBox =
   document.getElementById("loginError");
+
+const secondAuthForm =
+  document.getElementById(
+    "secondAuthForm"
+  );
+
+const secondPasswordInput =
+  document.getElementById(
+    "secondPassword"
+  );
+
+
+let pendingUser =
+  null;
+
+
+let verificationPassed =
+  sessionStorage.getItem(
+    "adminSecondVerified"
+  ) === "true";
   
 function getLastAdminPage() {
 
@@ -190,9 +247,30 @@ function getLastAdminPage() {
 
 onAuthStateChanged(
   auth,
-  user => {
+  async user => {
 
-    if (user) {
+    if (!user) {
+
+      pendingUser =
+        null;
+
+      verificationPassed =
+        false;
+
+      sessionStorage.removeItem(
+        "adminSecondVerified"
+      );
+
+      return;
+
+    }
+
+
+    pendingUser =
+      user;
+
+
+    if (verificationPassed) {
 
       const lastPage =
         getLastAdminPage();
@@ -201,6 +279,96 @@ onAuthStateChanged(
       location.replace(
         `./${lastPage}`
       );
+
+
+      return;
+
+    }
+
+
+    try {
+
+      const secondAuthRef =
+        ref(
+          db,
+          `admin_second_auth/${user.uid}`
+        );
+
+
+      const snapshot =
+        await get(
+          secondAuthRef
+        );
+
+
+      if (!snapshot.exists()) {
+
+        errorBox.textContent =
+          "2nd authentication is not configured.";
+
+        errorBox
+          .classList
+          .remove("hidden");
+
+        return;
+
+      }
+
+
+      const settings =
+        snapshot.val();
+
+
+      if (settings.enabled !== true) {
+
+        verificationPassed =
+          true;
+
+        sessionStorage.setItem(
+          "adminSecondVerified",
+          "true"
+        );
+
+
+        const lastPage =
+          getLastAdminPage();
+
+
+        location.replace(
+          `./${lastPage}`
+        );
+
+
+        return;
+
+      }
+
+
+      form
+        .classList
+        .add("hidden");
+
+
+      secondAuthForm
+        .classList
+        .remove("hidden");
+
+
+      secondPasswordInput
+        .focus();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+
+      errorBox.textContent =
+        "Unable to load 2nd authentication.";
+
+      errorBox
+        .classList
+        .remove("hidden");
 
     }
 
@@ -293,7 +461,128 @@ form.addEventListener(
 
   }
 );
+secondAuthForm.addEventListener(
+  "submit",
+  async event => {
 
+    event.preventDefault();
+
+
+    errorBox
+      .classList
+      .add("hidden");
+
+
+    if (!pendingUser) {
+
+      errorBox.textContent =
+        "Login session not found.";
+
+      errorBox
+        .classList
+        .remove("hidden");
+
+      return;
+
+    }
+
+
+    const enteredCode =
+      secondPasswordInput
+        .value
+        .trim();
+
+
+    try {
+
+      const secondAuthRef =
+        ref(
+          db,
+          `admin_second_auth/${pendingUser.uid}`
+        );
+
+
+      const snapshot =
+        await get(
+          secondAuthRef
+        );
+
+
+      if (!snapshot.exists()) {
+
+        errorBox.textContent =
+          "2nd authentication is not configured.";
+
+        errorBox
+          .classList
+          .remove("hidden");
+
+        return;
+
+      }
+
+
+      const settings =
+        snapshot.val();
+
+
+      if (
+        String(settings.code) !==
+        enteredCode
+      ) {
+
+        errorBox.textContent =
+          "2nd Password incorrect.";
+
+        errorBox
+          .classList
+          .remove("hidden");
+
+
+        secondPasswordInput
+          .select();
+
+
+        return;
+
+      }
+
+
+      verificationPassed =
+        true;
+
+
+      sessionStorage.setItem(
+        "adminSecondVerified",
+        "true"
+      );
+
+
+      const lastPage =
+        getLastAdminPage();
+
+
+      location.replace(
+        `./${lastPage}`
+      );
+
+
+    } catch (error) {
+
+      console.error(error);
+
+
+      errorBox.textContent =
+        "Unable to verify 2nd Password.";
+
+      errorBox
+        .classList
+        .remove("hidden");
+
+    }
+
+  }
+);
 </script>
 
 </body>

@@ -2863,16 +2863,6 @@
   display:block;
 }
 
-
-@media(max-width:850px) {
-
-  .visitor-status-filter {
-    width:100%;
-    flex:0 0 auto;
-  }
-
-}
-
 .visitor-date-input-wrap {
   position:relative;
   width:300px;
@@ -3003,15 +2993,21 @@ button.active {
   color:#78aaff !important;
 }
 
-@media(max-width:850px) {
+@media(max-width:1000px) {
 
   .visitor-card-head-search {
     width:100%;
+    max-width:100%;
+    min-width:0;
     align-items:stretch;
     flex-direction:column;
     gap:6px;
   }
-
+  
+  .visitor-status-filter {
+    width:100%;
+    flex:0 0 auto;
+  }
 #visitorSearch {
   width:calc(100% - 32px);
   min-width:0;
@@ -3079,9 +3075,7 @@ button.active {
 
   .visitor-main-grid {
     width:100%;
-
     min-width:0;
-
     max-width:100%;
   }
 

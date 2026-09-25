@@ -31,6 +31,14 @@
       transition: all 0.2s;
       width:100%;
     }
+    .turnstile-wrap {
+  width:100%;
+  margin:16px 0;
+}
+
+.turnstile-wrap .cf-turnstile {
+  width:100%;
+}
   </style>
 
 <body class="login-page">
@@ -83,6 +91,19 @@
     </div>
 
 
+    <div class="turnstile-wrap">
+
+      <div
+        class="cf-turnstile"
+        data-sitekey="0x4AAAAAAFC_Ns5c9Jbe9ZEx"
+        data-theme="dark"
+        data-size="flexible"
+        data-action="admin_login"
+      ></div>
+
+    </div>
+
+
     <button
       class="btn btn-primary full"
       type="submit"
@@ -94,7 +115,11 @@
 
 </div>
 
-
+<script
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer
+></script>
 <script type="module">
 
 import {
@@ -214,13 +239,63 @@ if (!email.includes("@")) {
 
 try {
 
+  const turnstileToken =
+    document.querySelector(
+      '[name="cf-turnstile-response"]'
+    )?.value;
+
+
+  if (!turnstileToken) {
+
+    errorBox.textContent =
+      "Please complete the security verification.";
+
+
+    errorBox
+      .classList
+      .remove("hidden");
+
+
+    return;
+  }
+
+
+  /*
+    IMPORTANT:
+    Turnstile token masih perlu
+    diverify oleh backend sebelum
+    Firebase login.
+
+    Kita akan sambungkan endpoint
+    verification selepas ini.
+  */
+
+
   await signInWithEmailAndPassword(
     auth,
     email,
     password
   );
 
+
 } catch (error) {
+
+  console.error(error);
+
+
+  errorBox.textContent =
+    "Email or password incorrect.";
+
+
+  errorBox
+    .classList
+    .remove("hidden");
+
+
+  window.turnstile
+    ?.reset();
+
+}
 
   console.error(error);
 

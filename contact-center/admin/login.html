@@ -2870,7 +2870,22 @@ sessionStorage.removeItem(
         "adminSecondVerifiedUid",
         pendingUser.uid
       );
+const loginTime =
+  Date.now();
 
+const expiresAt =
+  loginTime +
+  (24 * 60 * 60 * 1000);
+
+localStorage.setItem(
+  "adminLoginAt",
+  loginTime.toString()
+);
+
+localStorage.setItem(
+  "adminExpiresAt",
+  expiresAt.toString()
+);
 
       const lastPage =
         getLastAdminPage();

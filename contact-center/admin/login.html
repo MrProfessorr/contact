@@ -194,21 +194,34 @@
     backdrop-filter: blur(18px);
     background: linear-gradient(150deg, rgba(22, 119, 255, .22), transparent 42%), linear-gradient(330deg, rgba(240, 180, 41, .18), transparent 36%), #081626bd;
     }
-
+.command-panel:before {
+      content: "";
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    bottom: 18px;
+    left: 18px;
+    z-index: -1;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, .12), transparent 38%);
+    opacity: .55;
+}
     .eyebrow{
-      margin-bottom:48px;
-      color:var(--gold);
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:1.4px;
-      text-transform:uppercase;
+    display: block;
+    color: var(--login-accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
     }
 
     .command-title{
-      margin:0;
-      font-size:clamp(34px,4vw,48px);
-      line-height:1.08;
-      letter-spacing:-1px;
+    max-width: 680px;
+    margin: 8px 0 0;
+    color: var(--login-text);
+    font-size: clamp(34px, 4vw, 48px);
+    line-height: 1.02;
+    letter-spacing: 0;
     }
 
     .command-subtitle{

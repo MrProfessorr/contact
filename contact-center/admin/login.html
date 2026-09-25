@@ -220,15 +220,19 @@ form.addEventListener(
       .add("hidden");
 
 
-let email =
-  document
-    .getElementById("email")
-    .value
-    .trim();
+    let email =
+      document
+        .getElementById("email")
+        .value
+        .trim();
 
-if (!email.includes("@")) {
-  email = email + "@5g88.local";
-}
+
+    if (!email.includes("@")) {
+
+      email =
+        email + "@5g88.local";
+
+    }
 
 
     const password =
@@ -237,78 +241,55 @@ if (!email.includes("@")) {
         .value;
 
 
-try {
+    try {
 
-  const turnstileToken =
-    document.querySelector(
-      '[name="cf-turnstile-response"]'
-    )?.value;
-
-
-  if (!turnstileToken) {
-
-    errorBox.textContent =
-      "Please complete the security verification.";
+      const turnstileToken =
+        document.querySelector(
+          '[name="cf-turnstile-response"]'
+        )?.value;
 
 
-    errorBox
-      .classList
-      .remove("hidden");
+      if (!turnstileToken) {
+
+        errorBox.textContent =
+          "Please complete the security verification.";
 
 
-    return;
-  }
+        errorBox
+          .classList
+          .remove("hidden");
 
 
-  /*
-    IMPORTANT:
-    Turnstile token masih perlu
-    diverify oleh backend sebelum
-    Firebase login.
+        return;
 
-    Kita akan sambungkan endpoint
-    verification selepas ini.
-  */
+      }
 
 
-  await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
 
-} catch (error) {
+    } catch (error) {
 
-  console.error(error);
-
-
-  errorBox.textContent =
-    "Email or password incorrect.";
+      console.error(error);
 
 
-  errorBox
-    .classList
-    .remove("hidden");
+      errorBox.textContent =
+        "Email or password incorrect.";
 
 
-  window.turnstile
-    ?.reset();
-
-}
-
-  console.error(error);
+      errorBox
+        .classList
+        .remove("hidden");
 
 
-  errorBox.textContent =
-    "Email or password incorrect.";
+      window.turnstile
+        ?.reset();
 
-
-  errorBox
-    .classList
-    .remove("hidden");
-
-}
+    }
 
   }
 );

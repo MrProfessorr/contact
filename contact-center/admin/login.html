@@ -1703,21 +1703,6 @@ function autoSubmitSecondAuth() {
   }
 
 
-  otpAutoSubmitting =
-    true;
-
-
-  if (secondAuthVerifyBtn) {
-
-    secondAuthVerifyBtn.textContent =
-      "Verify...";
-
-    secondAuthVerifyBtn.disabled =
-      true;
-
-  }
-
-
   secondAuthForm.requestSubmit();
 }
 
@@ -2497,26 +2482,43 @@ secondAuthForm.addEventListener(
 
     event.preventDefault();
 
+if (otpAutoSubmitting) {
+  return;
+}
 
+
+otpAutoSubmitting =
+  true;
+
+
+if (secondAuthVerifyBtn) {
+
+  secondAuthVerifyBtn.textContent =
+    "Verify...";
+
+  secondAuthVerifyBtn.disabled =
+    true;
+
+}
     errorBox
       .classList
       .add("hidden");
 
 
-    if (!pendingUser) {
+if (!pendingUser) {
 
-      errorBox.textContent =
-        "Login session not found.";
-
-
-      errorBox
-        .classList
-        .remove("hidden");
+  clearOtp();
 
 
-      return;
+  errorBox.textContent =
+    "Login session not found.";
 
-    }
+  errorBox
+    .classList
+    .remove("hidden");
+
+  return;
+}
 
 
 const enteredCode =
@@ -2525,17 +2527,29 @@ const enteredCode =
 
 if (enteredCode.length !== 6) {
 
+  otpAutoSubmitting =
+    false;
+
+
+  if (secondAuthVerifyBtn) {
+
+    secondAuthVerifyBtn.textContent =
+      "Verify";
+
+    secondAuthVerifyBtn.disabled =
+      false;
+
+  }
+
+
   errorBox.textContent =
     "Please enter the complete 6-digit 2nd Password.";
-
 
   errorBox
     .classList
     .remove("hidden");
 
-
   return;
-
 }
 
 showLoginLoading();

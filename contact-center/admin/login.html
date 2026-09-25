@@ -1689,7 +1689,6 @@ let otpAutoSubmitting =
 function autoSubmitSecondAuth() {
 
   if (
-    otpAutoSubmitting ||
     getOtpCode().length !== 6 ||
     secondAuthForm.classList.contains(
       "hidden"
@@ -1697,8 +1696,6 @@ function autoSubmitSecondAuth() {
   ) {
     return;
   }
-
-  otpAutoSubmitting = true;
 
   secondAuthForm.requestSubmit();
 

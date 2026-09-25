@@ -164,8 +164,7 @@ import {
 import {
   getDatabase,
   ref,
-  get,
-  set
+  get
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
@@ -225,75 +224,8 @@ let pendingUser =
 
 
 let verificationPassed =
-  sessionStorage.getItem(
-    "adminSecondVerified"
-  ) === "true";
-async function getSecondAuthSettings(
-  user
-) {
+  false;
 
-  const secondAuthRef =
-    ref(
-      db,
-      `admin_second_auth/${user.uid}`
-    );
-
-
-  let snapshot =
-    await get(
-      secondAuthRef
-    );
-
-
-  /*
-    Kalau UID belum ada,
-    create default sekali sahaja.
-  */
-  if (!snapshot.exists()) {
-
-    const username =
-      user.email
-        ?.replace(
-          /@5g88\.local$/i,
-          ""
-        ) || "unknown";
-
-
-    const defaultSettings = {
-      username:
-        username,
-
-      enabled:
-        false,
-
-      code:
-        ""
-    };
-
-
-    await set(
-      secondAuthRef,
-      defaultSettings
-    );
-
-
-    snapshot =
-      await get(
-        secondAuthRef
-      );
-
-  }
-
-
-  return {
-    ref:
-      secondAuthRef,
-
-    settings:
-      snapshot.val()
-  };
-
-}  
 function getLastAdminPage() {
 
   const lastPage =
@@ -323,10 +255,6 @@ onAuthStateChanged(
       verificationPassed =
         false;
 
-      sessionStorage.removeItem(
-        "adminSecondVerified"
-      );
-
       return;
 
     }
@@ -334,6 +262,12 @@ onAuthStateChanged(
 
     pendingUser =
       user;
+
+
+    verificationPassed =
+      sessionStorage.getItem(
+        "adminSecondVerifiedUid"
+      ) === user.uid;
 
 
     if (verificationPassed) {
@@ -354,32 +288,58 @@ onAuthStateChanged(
 
     try {
 
-const {
-  settings
-} =
-  await getSecondAuthSettings(
-    user
-  );
-
-
-      if (settings.enabled !== true) {
-
-        verificationPassed =
-          true;
-
-        sessionStorage.setItem(
-          "adminSecondVerified",
-          "true"
+      const secondAuthRef =
+        ref(
+          db,
+          `admin_second_auth/${user.uid}`
         );
 
 
-        const lastPage =
-          getLastAdminPage();
-
-
-        location.replace(
-          `./${lastPage}`
+      const snapshot =
+        await get(
+          secondAuthRef
         );
+
+
+      /*
+        Admin belum create
+        2nd Password untuk user ini.
+      */
+      if (!snapshot.exists()) {
+
+        form
+          .classList
+          .add("hidden");
+
+
+        secondAuthForm
+          .classList
+          .add("hidden");
+
+
+        const username =
+          user.email
+            ?.replace(
+              /@5g88\.local$/i,
+              ""
+            ) || "Unknown";
+
+
+        errorBox.innerHTML = `
+          2nd Password is not activated.<br>
+          Please contact Admin.<br><br>
+
+          Username:
+          <strong>${username}</strong><br>
+
+          Reference:
+          <strong>${user.uid}</strong>
+        `;
+
+
+        errorBox
+          .classList
+          .remove("hidden");
 
 
         return;
@@ -387,6 +347,78 @@ const {
       }
 
 
+      const settings =
+        snapshot.val();
+
+
+      /*
+        Ada record tetapi Admin
+        belum enable.
+      */
+      if (settings.enabled !== true) {
+
+        form
+          .classList
+          .add("hidden");
+
+
+        secondAuthForm
+          .classList
+          .add("hidden");
+
+
+        errorBox.textContent =
+          "2nd Password is disabled. Please contact Admin.";
+
+
+        errorBox
+          .classList
+          .remove("hidden");
+
+
+        return;
+
+      }
+
+
+      /*
+        Enabled tetapi Admin
+        belum masukkan code.
+      */
+      if (
+        !settings.code ||
+        String(settings.code)
+          .trim() === ""
+      ) {
+
+        form
+          .classList
+          .add("hidden");
+
+
+        secondAuthForm
+          .classList
+          .add("hidden");
+
+
+        errorBox.textContent =
+          "2nd Password has not been set. Please contact Admin.";
+
+
+        errorBox
+          .classList
+          .remove("hidden");
+
+
+        return;
+
+      }
+
+
+      /*
+        Semua OK.
+        Tampilkan 2nd Password.
+      */
       form
         .classList
         .add("hidden");
@@ -408,6 +440,7 @@ const {
 
       errorBox.textContent =
         "Unable to load 2nd authentication.";
+
 
       errorBox
         .classList
@@ -521,9 +554,11 @@ secondAuthForm.addEventListener(
       errorBox.textContent =
         "Login session not found.";
 
+
       errorBox
         .classList
         .remove("hidden");
+
 
       return;
 
@@ -538,13 +573,87 @@ secondAuthForm.addEventListener(
 
     try {
 
-const {
-  settings
-} =
-  await getSecondAuthSettings(
-    pendingUser
-  );
+      const secondAuthRef =
+        ref(
+          db,
+          `admin_second_auth/${pendingUser.uid}`
+        );
 
+
+      const snapshot =
+        await get(
+          secondAuthRef
+        );
+
+
+      /*
+        Admin belum configure.
+      */
+      if (!snapshot.exists()) {
+
+        errorBox.textContent =
+          "2nd Password is not activated. Please contact Admin.";
+
+
+        errorBox
+          .classList
+          .remove("hidden");
+
+
+        return;
+
+      }
+
+
+      const settings =
+        snapshot.val();
+
+
+      /*
+        Admin disable.
+      */
+      if (settings.enabled !== true) {
+
+        errorBox.textContent =
+          "2nd Password is disabled. Please contact Admin.";
+
+
+        errorBox
+          .classList
+          .remove("hidden");
+
+
+        return;
+
+      }
+
+
+      /*
+        Tiada code.
+      */
+      if (
+        !settings.code ||
+        String(settings.code)
+          .trim() === ""
+      ) {
+
+        errorBox.textContent =
+          "2nd Password has not been set. Please contact Admin.";
+
+
+        errorBox
+          .classList
+          .remove("hidden");
+
+
+        return;
+
+      }
+
+
+      /*
+        Code salah.
+      */
       if (
         String(settings.code) !==
         enteredCode
@@ -552,6 +661,7 @@ const {
 
         errorBox.textContent =
           "2nd Password incorrect.";
+
 
         errorBox
           .classList
@@ -567,13 +677,16 @@ const {
       }
 
 
+      /*
+        Verification berjaya.
+      */
       verificationPassed =
         true;
 
 
       sessionStorage.setItem(
-        "adminSecondVerified",
-        "true"
+        "adminSecondVerifiedUid",
+        pendingUser.uid
       );
 
 
@@ -593,6 +706,7 @@ const {
 
       errorBox.textContent =
         "Unable to verify 2nd Password.";
+
 
       errorBox
         .classList

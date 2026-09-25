@@ -8786,7 +8786,11 @@ if (
           true,
 
         showMonths:
-          2,
+      window.matchMedia(
+       "(max-width:650px)"
+      ).matches
+        ? 1
+        : 2,
 
         monthSelectorType:
           "static",

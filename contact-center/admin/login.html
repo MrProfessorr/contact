@@ -814,88 +814,7 @@
     font-family: SimSun, sans-serif;
     line-height: 1;
 }
-.login-loading{
-  position:fixed;
-  inset:0;
-  z-index:999999;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,.20);
-}
 
-.login-loading.show{
-  display:flex;
-}
-
-.loading-box{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-  pointer-events:none;
-}
-
-.loading-dots{
-  position:relative;
-  width:32px;
-  height:32px;
-  animation:loadingRotate 1s linear infinite;
-}
-
-.loading-dots span{
-  position:absolute;
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:rgba(255,255,255,.9);
-  opacity:.25;
-  animation:dotPulse 1s linear infinite;
-}
-
-.loading-dots span:nth-child(1){ top:0; left:50%; transform:translateX(-50%); }
-.loading-dots span:nth-child(2){ right:0; top:50%; transform:translateY(-50%); animation-delay:.25s; }
-.loading-dots span:nth-child(3){ bottom:0; left:50%; transform:translateX(-50%); animation-delay:.5s; }
-.loading-dots span:nth-child(4){ left:0; top:50%; transform:translateY(-50%); animation-delay:.75s; }
-
-.loading-text{
-  color:#fff;
-  font-size:13px;
-  font-weight:600;
-  text-align:center;
-}
-
-@keyframes dotPulse{
-  0%{
-    opacity:.2;
-  }
-
-  25%{
-    opacity:1;
-  }
-
-  50%{
-    opacity:.4;
-  }
-
-  100%{
-    opacity:.2;
-  }
-}
-
-@keyframes loadingRotate{
-  from{
-    transform:rotate(0deg);
-  }
-
-  to{
-    transform:rotate(360deg);
-  }
-}
-
-body.page-loading{
-  overflow:hidden;
-}
 .verify {
         margin-top:14px;
       display:block;
@@ -1054,9 +973,114 @@ body.page-loading{
     padding:14px;
   }
 }
+.login-loading{ 
+  position:fixed; 
+  inset:0; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  background:rgba(0,0,0,.25); 
+  z-index:999999; 
+} 
+ 
+.loading-box{ 
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  gap:5px; 
+  pointer-events:none; 
+} 
+ 
+.loading-dots{ 
+  width:32px; 
+  height:32px; 
+  position:relative; 
+  margin:0 auto; 
+  animation:loadingRotate 1s linear infinite; 
+} 
+ 
+.loading-dots span{ 
+  position:absolute; 
+  width:10px; 
+  height:10px; 
+  border-radius:50%; 
+  background:rgba(255,255,255,.85); 
+  opacity:.25; 
+  animation:dotPulse 1s linear infinite; 
+} 
+ 
+.loading-dots span:nth-child(1){ 
+  top:0; 
+  left:50%; 
+  transform:translateX(-50%); 
+  animation-delay:0s; 
+} 
+ 
+.loading-dots span:nth-child(2){ 
+  right:0; 
+  top:50%; 
+  transform:translateY(-50%); 
+  animation-delay:.25s; 
+} 
+ 
+.loading-dots span:nth-child(3){ 
+  bottom:0; 
+  left:50%; 
+  transform:translateX(-50%); 
+  animation-delay:.5s; 
+} 
+ 
+.loading-dots span:nth-child(4){ 
+  left:0; 
+  top:50%; 
+  transform:translateY(-50%); 
+  animation-delay:.75s; 
+} 
+ 
+@keyframes dotPulse{ 
+  0%{ opacity:.2; } 
+  25%{ opacity:1; } 
+  50%{ opacity:.4; } 
+  100%{ opacity:.2; } 
+} 
+ 
+@keyframes loadingRotate{ 
+  from{ transform:rotate(0deg); } 
+  to{ transform:rotate(360deg); } 
+} 
+ 
+.loading-text{ 
+  color:#fff; 
+  font-size:14px; 
+  font-weight:400; 
+  text-align:center; 
+}
   </style>
 
 <body>
+
+<div 
+  id="loginPageLoading" 
+  class="login-loading"
+> 
+  <div class="loading-box"> 
+ 
+    <div class="loading-dots"> 
+      <span></span> 
+      <span></span> 
+      <span></span> 
+      <span></span> 
+    </div> 
+ 
+    <div
+      id="loginLoadingText"
+      class="loading-text"
+    > 
+      Please wait while fetching... 
+    </div> 
+ 
+  </div> 
+</div>
 
 <main class="login-page">
 
@@ -1544,6 +1568,45 @@ const form =
 
 const errorBox =
   document.getElementById("loginError");
+  const loginPageLoading =
+  document.getElementById(
+    "loginPageLoading"
+  );
+
+const loginLoadingText =
+  document.getElementById(
+    "loginLoadingText"
+  );
+
+
+function showLoginLoading(
+  text =
+    "Please wait while fetching..."
+) {
+
+  if (!loginPageLoading) {
+    return;
+  }
+
+  if (loginLoadingText) {
+    loginLoadingText.textContent =
+      text;
+  }
+
+  loginPageLoading.style.display =
+    "flex";
+}
+
+
+function hideLoginLoading() {
+
+  if (!loginPageLoading) {
+    return;
+  }
+
+  loginPageLoading.style.display =
+    "none";
+}
 const loginHeaderTitle =
   document.getElementById(
     "loginHeaderTitle"
@@ -1605,9 +1668,33 @@ function getOtpCode() {
     .join("");
 
 }
+function autoSubmitSecondAuth() {
 
+  if (
+    otpAutoSubmitting ||
+    getOtpCode().length !== 6 ||
+    secondAuthForm.classList.contains(
+      "hidden"
+    )
+  ) {
+    return;
+  }
+
+
+  otpAutoSubmitting =
+    true;
+
+
+  secondAuthForm.requestSubmit();
+}
 
 function clearOtp() {
+
+  function clearOtp() {
+
+  otpAutoSubmitting =
+    false;
+
 
   otpInputs.forEach(
     input => {
@@ -1672,7 +1759,15 @@ otpInputs.forEach(
           ].focus();
 
         }
+if (
+  index ===
+    otpInputs.length - 1 &&
+  input.value
+) {
 
+  autoSubmitSecondAuth();
+
+}
       }
     );
 
@@ -1746,7 +1841,11 @@ otpInputs.forEach(
           ].focus();
 
         }
+if (digits.length === 6) {
 
+  autoSubmitSecondAuth();
+
+}
       }
     );
 
@@ -1950,7 +2049,7 @@ if (!user) {
     .classList
     .add("hidden");
 showLoginHeader();
-
+hideLoginLoading();
   return;
 
 }
@@ -1999,6 +2098,58 @@ showLoginHeader();
 
 if (!snapshot.exists()) {
 
+  const username =
+    user.email
+      ?.replace(
+        /@5g88\.local$/i,
+        ""
+      ) || "Unknown";
+
+
+  await set(
+    secondAuthRef,
+    {
+      username:
+        username,
+
+      enabled:
+        false,
+
+      code:
+        ""
+    }
+  );
+
+
+  form
+    .classList
+    .add("hidden");
+
+
+  showSecondAuthHeader();
+
+
+  sessionStorage.setItem(
+    "adminSecondAuthPending",
+    "1"
+  );
+
+
+  secondAuthUsername.textContent =
+    username;
+
+
+  clearOtp();
+
+
+  secondAuthForm
+    .classList
+    .remove("hidden");
+
+
+  hideLoginLoading();
+
+
   errorBox.textContent =
     "2nd Password is not activated. Please contact Admin.";
 
@@ -2008,8 +2159,11 @@ if (!snapshot.exists()) {
     .remove("hidden");
 
 
-  return;
+  otpInputs[0]
+    ?.focus();
 
+
+  return;
 }
 
 
@@ -2048,13 +2202,16 @@ if (settings.enabled !== true) {
   clearOtp();
 
 
-  secondAuthForm
-    .classList
-    .remove("hidden");
+secondAuthForm
+  .classList
+  .remove("hidden");
 
 
-  errorBox.textContent =
-    "2nd Password is not activated. Please contact Admin.";
+hideLoginLoading();
+
+
+errorBox.textContent =
+  "2nd Password is not activated. Please contact Admin.";
 
 
   errorBox
@@ -2155,17 +2312,22 @@ secondAuthForm
   .remove("hidden");
 
 
+hideLoginLoading();
+
+
 otpInputs[0]
   ?.focus();
 
 
-    } catch (error) {
+} catch (error) {
 
-      console.error(error);
+  hideLoginLoading();
+
+  console.error(error);
 
 
-      errorBox.textContent =
-        "Unable to load 2nd authentication.";
+  errorBox.textContent =
+    "Unable to load 2nd authentication.";
 
 
       errorBox
@@ -2234,7 +2396,8 @@ form.addEventListener(
 
       }
 
-
+      showLoginLoading();
+      
       await signInWithEmailAndPassword(
         auth,
         email,
@@ -2242,13 +2405,15 @@ form.addEventListener(
       );
 
 
-    } catch (error) {
+} catch (error) {
 
-      console.error(error);
+  hideLoginLoading();
+
+  console.error(error);
 
 
-      errorBox.textContent =
-        "Email or password incorrect.";
+  errorBox.textContent =
+    "Email or password incorrect.";
 
 
       errorBox
@@ -2310,7 +2475,7 @@ if (enteredCode.length !== 6) {
 
 }
 
-
+showLoginLoading();
     try {
 
       const secondAuthRef =
@@ -2372,13 +2537,16 @@ const username =
   clearOtp();
 
 
-  secondAuthForm
-    .classList
-    .remove("hidden");
+secondAuthForm
+  .classList
+  .remove("hidden");
 
 
-  errorBox.textContent =
-    "2nd Password is not activated. Please contact Admin.";
+hideLoginLoading();
+
+
+errorBox.textContent =
+  "2nd Password is not activated. Please contact Admin.";
 
 
   errorBox
@@ -2403,7 +2571,7 @@ const username =
         Admin disable.
       */
       if (settings.enabled !== true) {
-
+        hideLoginLoading();
         errorBox.textContent =
           "2nd Password is disabled. Please contact Admin.";
 
@@ -2426,7 +2594,7 @@ const username =
         String(settings.code)
           .trim() === ""
       ) {
-
+        hideLoginLoading();
         errorBox.textContent =
           "2nd Password has not been set. Please contact Admin.";
 
@@ -2448,7 +2616,10 @@ const username =
         String(settings.code) !==
         enteredCode
       ) {
-
+        hideLoginLoading();
+          otpAutoSubmitting =
+          false;
+        
         errorBox.textContent =
           "2nd Password incorrect.";
 
@@ -2496,7 +2667,10 @@ sessionStorage.removeItem(
 
 
     } catch (error) {
+  hideLoginLoading();
 
+  otpAutoSubmitting =
+    false;
       console.error(error);
 
 

@@ -5375,7 +5375,64 @@ span.flatpickr-weekday {
     -ms-flex: 1;
     flex: 1;
 }
+/* =========================================================
+   FLATPICKR MOBILE - 2 MONTH VERTICAL
+========================================================= */
 
+@media (max-width:650px) {
+
+  .flatpickr-calendar.multiMonth {
+    width:calc(100vw - 20px) !important;
+    max-width:360px !important;
+  }
+
+  /* 2 BULAN JADI ATAS + BAWAH */
+  .flatpickr-calendar.multiMonth
+  .flatpickr-months {
+    display:grid !important;
+    grid-template-columns:1fr !important;
+  }
+
+  .flatpickr-calendar.multiMonth
+  .flatpickr-month {
+    width:100% !important;
+  }
+
+  .flatpickr-calendar.multiMonth
+  .flatpickr-innerContainer {
+    display:block !important;
+  }
+
+  .flatpickr-calendar.multiMonth
+  .flatpickr-rContainer {
+    width:100% !important;
+  }
+
+  .flatpickr-calendar.multiMonth
+  .flatpickr-weekdays {
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    width:100% !important;
+  }
+
+  .flatpickr-calendar.multiMonth
+  .flatpickr-weekdaycontainer {
+    width:100% !important;
+  }
+
+  .flatpickr-calendar.multiMonth
+  .flatpickr-days {
+    width:100% !important;
+  }
+
+  .flatpickr-calendar.multiMonth
+  .dayContainer {
+    width:100% !important;
+    min-width:100% !important;
+    max-width:100% !important;
+  }
+
+}
 /* =========================================================
    NAVIGATION TABS ADMIN
 ========================================================= */

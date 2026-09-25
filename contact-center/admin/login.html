@@ -1703,8 +1703,24 @@ function autoSubmitSecondAuth() {
   }
 
 
-  secondAuthForm.requestSubmit();
-}
+  setTimeout(
+    () => {
+
+      if (
+        getOtpCode().length !== 6 ||
+        secondAuthForm.classList.contains(
+          "hidden"
+        )
+      ) {
+        return;
+      }
+
+
+      secondAuthForm.requestSubmit();
+
+    },
+    800
+  );
 
 function clearOtp() {
 
@@ -2498,6 +2514,13 @@ if (secondAuthVerifyBtn) {
 
   secondAuthVerifyBtn.disabled =
     true;
+  await new Promise(
+  resolve =>
+    setTimeout(
+      resolve,
+      800
+    )
+);
 
 }
     errorBox

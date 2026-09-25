@@ -441,23 +441,23 @@
     }
 
     .login-features{
-      margin-bottom:24px;
+      margin-bottom:18px;
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:10px;
+      gap:8px;
     }
 
     .login-feature{
-      min-height:58px;
-      padding:12px;
+      min-height:44px;
+      padding:10px 12px;
       display:flex;
       align-items:center;
       gap:9px;
-      border:1px solid var(--border);
-      border-radius:10px;
-      background:rgba(255,255,255,.055);
-      color:rgba(255,255,255,.72);
-      font-size:11px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:12px;
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.64);
+      font-size:12px;
       font-weight:700;
     }
 
@@ -808,10 +808,6 @@
         padding:20px;
       }
 
-      .login-features{
-        grid-template-columns:1fr;
-      }
-
       .turnstile-wrap{
         justify-content:flex-start;
         transform-origin:left center;
@@ -1058,6 +1054,13 @@
   font-size:14px; 
   font-weight:400; 
   text-align:center; 
+}
+@media(max-width:640px){
+  .login-features{
+    grid-template-columns:1fr;
+    min-height: 40px;
+  }
+  
 }
   </style>
 

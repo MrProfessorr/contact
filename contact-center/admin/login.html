@@ -179,24 +179,20 @@
     /* LEFT PANEL */
 
     .command-panel{
-      min-width:0;
-      min-height:650px;
-      padding:28px;
-      display:flex;
-      flex-direction:column;
-      border:1px solid var(--border);
-      border-radius:18px;
-      background:
-        linear-gradient(
-          140deg,
-          rgba(30,64,110,.76),
-          rgba(5,20,37,.92) 56%,
-          rgba(52,47,22,.38)
-        );
-      box-shadow:
-        0 24px 70px rgba(0,0,0,.48),
-        inset 0 1px 0 rgba(255,255,255,.04);
-      backdrop-filter:blur(16px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 520px;
+    max-height: 760px;
+    padding: 30px;
+    overflow: hidden;
+    order: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 18px;
+    box-shadow: 0 24px 80px #0000003d;
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    background: linear-gradient(150deg, rgba(22, 119, 255, .22), transparent 42%), linear-gradient(330deg, rgba(240, 180, 41, .18), transparent 36%), #081626bd;
     }
 
     .eyebrow{

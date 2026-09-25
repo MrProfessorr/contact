@@ -53,7 +53,135 @@ export const auth =
 export const db =
   getDatabase(app);
 
+/* =========================
+   ADMIN SESSION 24 HOURS
+========================= */
 
+const ADMIN_SESSION_DURATION =
+  24 * 60 * 60 * 1000;
+
+let adminLogoutTimer =
+  null;
+
+
+function clearAdminSession() {
+
+  localStorage.removeItem(
+    "adminLoginAt"
+  );
+
+  localStorage.removeItem(
+    "adminExpiresAt"
+  );
+
+  sessionStorage.removeItem(
+    "adminSecondVerifiedUid"
+  );
+
+  sessionStorage.removeItem(
+    "adminSecondAuthPending"
+  );
+
+}
+
+
+async function forceAdminLogout() {
+
+  if (adminLogoutTimer) {
+
+    clearTimeout(
+      adminLogoutTimer
+    );
+
+    adminLogoutTimer =
+      null;
+
+  }
+
+
+  clearAdminSession();
+
+
+  try {
+
+    await signOut(auth);
+
+  } catch (error) {
+
+    console.error(
+      "Auto logout failed:",
+      error
+    );
+
+  }
+
+
+  location.replace(
+    "./login.html"
+  );
+
+}
+
+
+function startAdminSessionTimer() {
+
+  const expiresAt =
+    Number(
+      localStorage.getItem(
+        "adminExpiresAt"
+      )
+    );
+
+
+  /*
+    Tiada session time.
+    Jangan create masa baru di sini.
+  */
+  if (!expiresAt) {
+
+    forceAdminLogout();
+
+    return;
+
+  }
+
+
+  const remaining =
+    expiresAt -
+    Date.now();
+
+
+  /*
+    Sudah cukup / lebih 24 jam.
+  */
+  if (remaining <= 0) {
+
+    forceAdminLogout();
+
+    return;
+
+  }
+
+
+  if (adminLogoutTimer) {
+
+    clearTimeout(
+      adminLogoutTimer
+    );
+
+  }
+
+
+  /*
+    Logout tepat pada expiresAt.
+  */
+  adminLogoutTimer =
+    setTimeout(
+      forceAdminLogout,
+      remaining
+    );
+
+}
 /* AUTH GUARD */
 
 export function requireAdmin() {
@@ -114,7 +242,7 @@ export function requireAdmin() {
         Firebase login +
         2nd Password sudah lulus.
       */
-
+     startAdminSessionTimer();
 
       /* FULL EMAIL */
 
@@ -183,16 +311,39 @@ export function setupLogout() {
         "click",
         async () => {
 
- try {
+try {
 
-  sessionStorage.removeItem(
-    "adminSecondVerifiedUid"
-  );
+  if (adminLogoutTimer) {
+
+    clearTimeout(
+      adminLogoutTimer
+    );
+
+    adminLogoutTimer =
+      null;
+
+  }
+
+
+  clearAdminSession();
+
+
   await signOut(auth);
-   
+
+
   location.replace(
     "./login.html"
   );
+
+
+} catch (error) {
+
+  console.error(
+    "Logout failed:",
+    error
+  );
+
+}
 
 
 } catch (error) {

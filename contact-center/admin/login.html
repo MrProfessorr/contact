@@ -421,35 +421,10 @@ let pendingUser =
 
 let verificationPassed =
   false;
-const secondAuthWasPending =
+let forceFreshLogin =
   sessionStorage.getItem(
     "adminSecondAuthPending"
   ) === "1";
-
-
-if (secondAuthWasPending) {
-
-  sessionStorage.removeItem(
-    "adminSecondAuthPending"
-  );
-
-
-  sessionStorage.removeItem(
-    "adminSecondVerifiedUid"
-  );
-
-
-  signOut(auth)
-    .catch(
-      error => {
-        console.error(
-          "Refresh sign out failed:",
-          error
-        );
-      }
-    );
-
-}
 function getOtpCode() {
 
   return otpInputs
@@ -688,7 +663,76 @@ function getLastAdminPage() {
 onAuthStateChanged(
   auth,
   async user => {
+/*
+  REFRESH ketika sedang
+  menunggu 2nd Password.
+*/
+if (
+  user &&
+  forceFreshLogin
+) {
 
+  forceFreshLogin =
+    false;
+
+
+  sessionStorage.removeItem(
+    "adminSecondAuthPending"
+  );
+
+
+  sessionStorage.removeItem(
+    "adminSecondVerifiedUid"
+  );
+
+
+  pendingUser =
+    null;
+
+
+  verificationPassed =
+    false;
+
+
+  try {
+
+    await signOut(auth);
+
+  } catch (error) {
+
+    console.error(
+      "Refresh sign out failed:",
+      error
+    );
+
+  }
+
+
+  clearOtp();
+
+
+  secondAuthForm
+    .classList
+    .add("hidden");
+
+
+  form
+    .classList
+    .remove("hidden");
+
+
+  errorBox
+    .classList
+    .add("hidden");
+
+
+  window.turnstile
+    ?.reset();
+
+
+  return;
+
+}
 if (!user) {
 
   pendingUser =
@@ -775,6 +819,12 @@ if (!snapshot.exists()) {
       ) || "Unknown";
 
 
+  console.log(
+    "CREATE 2ND AUTH:",
+    user.uid
+  );
+
+
   await set(
     secondAuthRef,
     {
@@ -795,26 +845,35 @@ if (!snapshot.exists()) {
     .add("hidden");
 
 
+  sessionStorage.setItem(
+    "adminSecondAuthPending",
+    "1"
+  );
+
+
+  secondAuthUsername.textContent =
+    username;
+
+
+  clearOtp();
+
+
   secondAuthForm
     .classList
-    .add("hidden");
+    .remove("hidden");
 
 
-  errorBox.innerHTML = `
-    2nd Password is not activated.<br>
-    Please contact Admin.<br><br>
-
-    Username:
-    <strong>${username}</strong><br>
-
-    Reference:
-    <strong>${user.uid}</strong>
-  `;
+  errorBox.textContent =
+    "2nd Password is not activated. Please contact Admin.";
 
 
   errorBox
     .classList
     .remove("hidden");
+
+
+  otpInputs[0]
+    ?.focus();
 
 
   return;

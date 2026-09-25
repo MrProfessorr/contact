@@ -556,7 +556,16 @@
     .input-wrap input::placeholder{
       color:rgba(255,255,255,.25);
     }
+/* Hover icon show/hide → border input ikut hover */
+.input-wrap:has(.password-toggle:hover) input{
+  border-color:var(--blue-hover);
+}
 
+/* Focus / click icon show-hide → border input ikut focus */
+.input-wrap:has(.password-toggle:focus) input,
+.input-wrap:has(.password-toggle:focus-visible) input{
+  border-color:var(--blue);
+}
 .password-toggle{
   position:absolute;
   right:8px;
@@ -577,12 +586,12 @@
       transition: all 0.3s;
     }
     .password-toggle:hover{
-      color:#fff;
+      color:rgba(255,255,255,0.85);
     }
 
     .password-toggle svg{
-      width:18px;
-      height:18px;
+      width:16px;
+      height:16px;
       fill:currentColor;
     }
 

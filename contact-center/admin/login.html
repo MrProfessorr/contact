@@ -1605,8 +1605,15 @@ function hideLoginLoading() {
     return;
   }
 
-  loginPageLoading.style.display =
-    "none";
+  setTimeout(
+    () => {
+
+      loginPageLoading.style.display =
+        "none";
+
+    },
+    300
+  );
 }
 const loginHeaderTitle =
   document.getElementById(

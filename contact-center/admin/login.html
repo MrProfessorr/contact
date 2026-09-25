@@ -138,186 +138,429 @@
 }
   </style>
 
-<body class="login-page">
+<body>
 
+<main class="login-page">
 
-<div class="login-card">
+  <!-- LEFT PANEL -->
+  <section class="command-panel">
 
-  <div class="login-logo">
-    ⚡
-  </div>
-
-  <div
-    id="loginError"
-    class="error-box hidden"
-  ></div>
-
-
-  <form id="loginForm">
-
-    <div class="form-group">
-
-      <label>
-        Username
-      </label>
-
-<input
-  type="text"
-  id="email"
-  required
-  placeholder="Username"
-  autocomplete="username"
->
-
+    <div class="eyebrow">
+      Casino Operations
     </div>
 
+    <h1 class="command-title">
+      Backoffice Command Center
+    </h1>
 
-    <div class="form-group">
-
-      <label>
-        Password
-      </label>
-
-      <input
-        type="password"
-        id="password"
-        required
-        placeholder="Password"
-      >
-
-    </div>
+    <p class="command-subtitle">
+      Secure access for player operations,
+      finance monitoring, reporting,
+      and live support workflows.
+    </p>
 
 
-    <div class="turnstile-wrap">
+    <div class="security-summary">
 
-      <div
-        class="cf-turnstile"
-        data-sitekey="0x4AAAAAAFC_Ns5c9Jbe9ZEx"
-        data-theme="dark"
-        data-size="flexible"
-        data-action="admin_login"
-      ></div>
-
-    </div>
-
-
-    <button
-      class="btn btn-primary full"
-      type="submit"
-    >
-      Log in
-    </button>
-
-  </form>
-<form
-  id="secondAuthForm"
-  class="hidden"
-  autocomplete="off"
->
-
-  <div class="second-auth-title">
-    Two-Factor Authentication
-  </div>
-
-  <div class="second-auth-subtitle">
-    Enter your second password to continue.
-  </div>
-
-
-  <div class="second-auth-user">
-
-    <div>
-      <div class="second-auth-user-label">
-        Signing in as
+      <div class="online-badge">
+        <span class="online-dot"></span>
+        Online
       </div>
 
-      <strong id="secondAuthUsername">
-        -
-      </strong>
+      <div class="security-grid">
+
+        <div class="security-item">
+          <span>Role-Based Access</span>
+          <strong>Controlled</strong>
+        </div>
+
+        <div class="security-item">
+          <span>2FA Verification</span>
+          <strong>Required</strong>
+        </div>
+
+        <div class="security-item">
+          <span>Cloudflare Check</span>
+          <strong>Enabled</strong>
+        </div>
+
+      </div>
+
     </div>
 
-    <button
-      type="button"
-      id="changeAccountBtn"
-      class="second-auth-change"
+
+    <div class="operations-grid">
+
+      <div class="operation-card featured">
+
+        <div class="operation-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 19h16v2H2V3h2v16zm3-2V9h2v8H7zm4 0V5h2v12h-2zm4 0v-6h2v6h-2z"/>
+          </svg>
+        </div>
+
+        <div class="operation-text">
+          <strong>Real-time Reports</strong>
+          <span>Updated now</span>
+        </div>
+
+      </div>
+
+
+      <div class="operation-card">
+
+        <div class="operation-icon">
+          ⚡
+        </div>
+
+        <div class="operation-text">
+          <strong>Broadcast</strong>
+          <span>Message</span>
+        </div>
+
+      </div>
+
+
+      <div class="operation-card">
+
+        <div class="operation-icon">
+          👥
+        </div>
+
+        <div class="operation-text">
+          <strong>Player Ops</strong>
+          <span>Monitored</span>
+        </div>
+
+      </div>
+
+
+      <div class="operation-card">
+
+        <div class="operation-icon">
+          ▣
+        </div>
+
+        <div class="operation-text">
+          <strong>Audit Trail</strong>
+          <span>Immutable</span>
+        </div>
+
+      </div>
+
+
+      <div class="operation-card">
+
+        <div class="operation-icon">
+          ⚡
+        </div>
+
+        <div class="operation-text">
+          <strong>Risk Alerts</strong>
+          <span>Priority</span>
+        </div>
+
+      </div>
+
+
+      <div class="operation-card">
+
+        <div class="operation-icon">
+          ▣
+        </div>
+
+        <div class="operation-text">
+          <strong>Revenue Pulse</strong>
+          <span>Live</span>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="command-footer">
+
+      <div class="command-footer-box">
+
+        <div class="command-footer-item">
+          🛡 2FA secured
+        </div>
+
+        <div class="command-footer-item">
+          📊 Operator analytics ready
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- RIGHT LOGIN PANEL -->
+  <section class="login-panel">
+
+    <div
+      class="login-header"
+      id="loginHeader"
     >
-      ← Change
-    </button>
 
-  </div>
+      <div class="login-header-icon">
 
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M17 8h-1V6a4 4 0 0 0-8 0v2H7a2
+            2 0 0 0-2 2v9a2 2 0 0 0 2
+            2h10a2 2 0 0 0 2-2v-9a2
+            2 0 0 0-2-2zm-7-2a2 2 0
+            0 1 4 0v2h-4V6zm7
+            13H7v-9h10v9z"
+          />
+        </svg>
 
-  <label class="second-auth-label">
-    Verification Code
-  </label>
+      </div>
 
+      <div>
 
-  <div
-    id="otpContainer"
-    class="otp-container"
-  >
+        <h2 id="loginHeaderTitle">
+          Log in
+        </h2>
 
-    <input
-      class="otp-input"
-      type="password"
-      inputmode="numeric"
-      maxlength="1"
-      autocomplete="one-time-code"
-      aria-label="Digit 1"
-    >
+        <p id="loginHeaderSubtitle">
+          Welcome back. Please sign in to continue.
+        </p>
 
-    <input
-      class="otp-input"
-      type="password"
-      inputmode="numeric"
-      maxlength="1"
-      aria-label="Digit 2"
-    >
+      </div>
 
-    <input
-      class="otp-input"
-      type="password"
-      inputmode="numeric"
-      maxlength="1"
-      aria-label="Digit 3"
-    >
-
-    <input
-      class="otp-input"
-      type="password"
-      inputmode="numeric"
-      maxlength="1"
-      aria-label="Digit 4"
-    >
-
-    <input
-      class="otp-input"
-      type="password"
-      inputmode="numeric"
-      maxlength="1"
-      aria-label="Digit 5"
-    >
-
-    <input
-      class="otp-input"
-      type="password"
-      inputmode="numeric"
-      maxlength="1"
-      aria-label="Digit 6"
-    >
-
-  </div>
+    </div>
 
 
-  <button
-    class="btn btn-primary full"
-    type="submit"
-  >
-    Verify
-  </button>
+    <div class="login-body">
 
-</form>
-</div>
+
+      <!-- ERROR -->
+      <div
+        id="loginError"
+        class="error hidden"
+      ></div>
+
+
+      <!-- NORMAL LOGIN -->
+      <form id="loginForm">
+
+        <div class="login-features">
+
+          <div class="login-feature">
+            🛡 2FA protected
+          </div>
+
+          <div class="login-feature">
+            ⚡ Operator console
+          </div>
+
+        </div>
+
+
+        <div class="input-box">
+
+          <label class="label-required">
+            Username
+          </label>
+
+          <div class="input-wrap">
+
+            <svg
+              class="input-icon"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 12a4 4 0 1 0 0-8
+                4 4 0 0 0 0 8zm0 2c-4.4
+                0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"
+              />
+            </svg>
+
+            <input
+              type="text"
+              id="email"
+              required
+              placeholder="Username"
+              autocomplete="username"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="input-box">
+
+          <label class="label-required">
+            Password
+          </label>
+
+          <div class="input-wrap">
+
+            <svg
+              class="input-icon"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M17 8h-1V6a4 4 0 0 0-8
+                0v2H7a2 2 0 0 0-2
+                2v9a2 2 0 0 0 2
+                2h10a2 2 0 0 0 2-2v-9a2
+                2 0 0 0-2-2zm-7-2a2
+                2 0 0 1 4 0v2h-4V6z"
+              />
+            </svg>
+
+            <input
+              type="password"
+              id="password"
+              required
+              placeholder="Password"
+              autocomplete="current-password"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="turnstile-wrap">
+
+          <div
+            class="cf-turnstile"
+            data-sitekey="0x4AAAAAAFC_Ns5c9Jbe9ZEx"
+            data-theme="dark"
+            data-size="flexible"
+            data-action="admin_login"
+          ></div>
+
+        </div>
+
+
+        <button
+          class="login-btn"
+          type="submit"
+        >
+          Log in
+        </button>
+
+      </form>
+
+
+      <!-- SECOND PASSWORD -->
+      <form
+        id="secondAuthForm"
+        class="hidden"
+        autocomplete="off"
+      >
+
+        <div class="second-auth-features">
+
+          <div class="login-feature">
+            🛡 Authenticator required
+          </div>
+
+          <div class="login-feature">
+            ⚡ Session hardening
+          </div>
+
+        </div>
+
+
+        <div class="second-auth-user">
+
+          <div class="second-auth-user-left">
+
+            <svg
+              class="second-auth-user-icon"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 12a4 4 0 1 0 0-8
+                4 4 0 0 0 0 8zm0 2c-4.4
+                0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"
+              />
+            </svg>
+
+            <div>
+
+              <div class="second-auth-user-label">
+                Signing in as
+              </div>
+
+              <div
+                id="secondAuthUsername"
+                class="second-auth-username"
+              >
+                -
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <button
+            type="button"
+            id="changeAccountBtn"
+            class="second-auth-change"
+          >
+            ← Change
+          </button>
+
+        </div>
+
+
+        <label class="verification-label">
+          Verification Code
+        </label>
+
+
+        <div
+          id="otpContainer"
+          class="otp-container"
+        >
+
+          <input class="otp-input" type="password"
+            inputmode="numeric" maxlength="1">
+
+          <input class="otp-input" type="password"
+            inputmode="numeric" maxlength="1">
+
+          <input class="otp-input" type="password"
+            inputmode="numeric" maxlength="1">
+
+          <input class="otp-input" type="password"
+            inputmode="numeric" maxlength="1">
+
+          <input class="otp-input" type="password"
+            inputmode="numeric" maxlength="1">
+
+          <input class="otp-input" type="password"
+            inputmode="numeric" maxlength="1">
+
+        </div>
+
+
+        <button
+          class="login-btn"
+          type="submit"
+        >
+          Verify
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
+
+</main>
 
 <script
   src="https://challenges.cloudflare.com/turnstile/v0/api.js"
@@ -383,7 +626,15 @@ const form =
 
 const errorBox =
   document.getElementById("loginError");
+const loginHeaderTitle =
+  document.getElementById(
+    "loginHeaderTitle"
+  );
 
+const loginHeaderSubtitle =
+  document.getElementById(
+    "loginHeaderSubtitle"
+  );
 const secondAuthForm =
   document.getElementById(
     "secondAuthForm"
@@ -454,7 +705,26 @@ function clearOtp() {
 
 }
 
+function showLoginHeader() {
 
+  loginHeaderTitle.textContent =
+    "Log in";
+
+  loginHeaderSubtitle.textContent =
+    "Welcome back. Please sign in to continue.";
+
+}
+
+
+function showSecondAuthHeader() {
+
+  loginHeaderTitle.textContent =
+    "Two-Factor Authentication";
+
+  loginHeaderSubtitle.textContent =
+    "Enter your second password to continue.";
+
+}
 otpInputs.forEach(
   (input, index) => {
 
@@ -621,7 +891,7 @@ changeAccountBtn
       form
         .classList
         .remove("hidden");
-
+      showLoginHeader();
 
       document
         .getElementById("email")
@@ -761,7 +1031,7 @@ if (!user) {
   secondAuthForm
     .classList
     .add("hidden");
-
+showLoginHeader();
 
   return;
 
@@ -839,7 +1109,8 @@ if (settings.enabled !== true) {
     .classList
     .add("hidden");
 
-
+  showSecondAuthHeader();
+  
   sessionStorage.setItem(
     "adminSecondAuthPending",
     "1"

@@ -1489,12 +1489,13 @@
         </div>
 
 
-        <button
-          class="login-btn"
-          type="submit"
-        >
-          Verify
-        </button>
+<button
+  id="secondAuthVerifyBtn"
+  class="login-btn"
+  type="submit"
+>
+  Verify
+</button>
 
       </form>
 
@@ -1620,7 +1621,10 @@ const secondAuthForm =
   document.getElementById(
     "secondAuthForm"
   );
-
+const secondAuthVerifyBtn =
+  document.getElementById(
+    "secondAuthVerifyBtn"
+  );
 const secondAuthUsername =
   document.getElementById(
     "secondAuthUsername"
@@ -1687,13 +1691,35 @@ function autoSubmitSecondAuth() {
     true;
 
 
+  if (secondAuthVerifyBtn) {
+
+    secondAuthVerifyBtn.textContent =
+      "Verifying...";
+
+    secondAuthVerifyBtn.disabled =
+      true;
+
+  }
+
+
   secondAuthForm.requestSubmit();
 }
 
-  function clearOtp() {
+function clearOtp() {
 
   otpAutoSubmitting =
     false;
+
+
+  if (secondAuthVerifyBtn) {
+
+    secondAuthVerifyBtn.textContent =
+      "Verify";
+
+    secondAuthVerifyBtn.disabled =
+      false;
+
+  }
 
 
   otpInputs.forEach(
@@ -2571,7 +2597,15 @@ if (!snapshot.exists()) {
         hideLoginLoading();
           otpAutoSubmitting =
           false;
-        
+        if (secondAuthVerifyBtn) {
+
+  secondAuthVerifyBtn.textContent =
+    "Verify";
+
+  secondAuthVerifyBtn.disabled =
+    false;
+
+}
         errorBox.textContent =
           "2nd Password incorrect.";
 

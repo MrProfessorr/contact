@@ -212,7 +212,18 @@ body{
     backdrop-filter: blur(18px);
     background: linear-gradient(150deg, rgba(22, 119, 255, .22), transparent 42%), linear-gradient(330deg, rgba(240, 180, 41, .18), transparent 36%), #081626bd;
     }
-
+.command-panel:before {
+    content: "";
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    bottom: 18px;
+    left: 18px;
+    z-index: -1;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, .12), transparent 38%);
+    opacity: .55;
+}
 .eyebrow{
   margin-bottom:0;
   color:var(--gold);

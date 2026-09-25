@@ -166,15 +166,14 @@
     }
 
     .login-page{
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: minmax(620px, 1fr) minmax(360px, 420px);
-    align-items: stretch;
-    gap: 24px;
-    width: min(1240px, 100%);
-    min-height: min(760px, calc(100vh - 80px));
-    margin: 0 auto;
+      width:min(1220px,100%);
+      display:grid;
+      grid-template-columns:
+        minmax(0,1.35fr)
+        minmax(350px,430px);
+      gap:24px;
+      align-items:center;
+      padding:18px;
     }
 
     /* LEFT PANEL */
@@ -409,14 +408,14 @@
     /* LOGIN CARD */
 
     .login-panel{
-    border: 1px solid #ffffff1f;
-    border-radius: 18px;
-    box-shadow: 0 24px 80px #0000003d;
-    -webkit-backdrop-filter: blur(18px);
-    backdrop-filter: blur(18px);
-    align-self: center;
-    overflow: hidden;
-    background: #0c192bdb;
+      min-width:0;
+      overflow:hidden;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:#0a1c34;
+      box-shadow:
+        0 24px 70px rgba(0,0,0,.5),
+        inset 0 1px 0 rgba(255,255,255,.04);
     }
 
     .login-header{
@@ -789,11 +788,10 @@
       body::after{
         display:none;
       }
-      
+
       .login-page{
         width:100%;
         display:block;
-        padding: 72px 18px 26px;
       }
 
       .command-panel{

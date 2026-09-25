@@ -164,7 +164,8 @@ import {
 import {
   getDatabase,
   ref,
-  get
+  get,
+  set
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
@@ -301,50 +302,61 @@ onAuthStateChanged(
         );
 
 
-      /*
-        Admin belum create
-        2nd Password untuk user ini.
-      */
-      if (!snapshot.exists()) {
+if (!snapshot.exists()) {
 
-        form
-          .classList
-          .add("hidden");
-
-
-        secondAuthForm
-          .classList
-          .add("hidden");
+  const username =
+    user.email
+      ?.replace(
+        /@5g88\.local$/i,
+        ""
+      ) || "Unknown";
 
 
-        const username =
-          user.email
-            ?.replace(
-              /@5g88\.local$/i,
-              ""
-            ) || "Unknown";
+  await set(
+    secondAuthRef,
+    {
+      username:
+        username,
+
+      enabled:
+        false,
+
+      code:
+        ""
+    }
+  );
 
 
-        errorBox.innerHTML = `
-          2nd Password is not activated.<br>
-          Please contact Admin.<br><br>
-
-          Username:
-          <strong>${username}</strong><br>
-
-          Reference:
-          <strong>${user.uid}</strong>
-        `;
+  form
+    .classList
+    .add("hidden");
 
 
-        errorBox
-          .classList
-          .remove("hidden");
+  secondAuthForm
+    .classList
+    .add("hidden");
 
 
-        return;
+  errorBox.innerHTML = `
+    2nd Password is not activated.<br>
+    Please contact Admin.<br><br>
 
-      }
+    Username:
+    <strong>${username}</strong><br>
+
+    Reference:
+    <strong>${user.uid}</strong>
+  `;
+
+
+  errorBox
+    .classList
+    .remove("hidden");
+
+
+  return;
+
+}
 
 
       const settings =

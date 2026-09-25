@@ -811,58 +811,6 @@ if (!user) {
 
 if (!snapshot.exists()) {
 
-  const username =
-    user.email
-      ?.replace(
-        /@5g88\.local$/i,
-        ""
-      ) || "Unknown";
-
-
-  console.log(
-    "CREATE 2ND AUTH:",
-    user.uid
-  );
-
-
-  await set(
-    secondAuthRef,
-    {
-      username:
-        username,
-
-      enabled:
-        false,
-
-      code:
-        ""
-    }
-  );
-
-
-  form
-    .classList
-    .add("hidden");
-
-
-  sessionStorage.setItem(
-    "adminSecondAuthPending",
-    "1"
-  );
-
-
-  secondAuthUsername.textContent =
-    username;
-
-
-  clearOtp();
-
-
-  secondAuthForm
-    .classList
-    .remove("hidden");
-
-
   errorBox.textContent =
     "2nd Password is not activated. Please contact Admin.";
 
@@ -870,10 +818,6 @@ if (!snapshot.exists()) {
   errorBox
     .classList
     .remove("hidden");
-
-
-  otpInputs[0]
-    ?.focus();
 
 
   return;
@@ -1198,12 +1142,12 @@ if (enteredCode.length !== 6) {
       */
 if (!snapshot.exists()) {
 
-  const username =
-    user.email
-      ?.replace(
-        /@5g88\.local$/i,
-        ""
-      ) || "Unknown";
+const username =
+  pendingUser.email
+    ?.replace(
+      /@5g88\.local$/i,
+      ""
+    ) || "Unknown";
 
 
   await set(

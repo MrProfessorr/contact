@@ -161,10 +161,11 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-  import {
+import {
   getDatabase,
   ref,
-  get
+  get,
+  set
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
@@ -227,7 +228,72 @@ let verificationPassed =
   sessionStorage.getItem(
     "adminSecondVerified"
   ) === "true";
-  
+async function getSecondAuthSettings(
+  user
+) {
+
+  const secondAuthRef =
+    ref(
+      db,
+      `admin_second_auth/${user.uid}`
+    );
+
+
+  let snapshot =
+    await get(
+      secondAuthRef
+    );
+
+
+  /*
+    Kalau UID belum ada,
+    create default sekali sahaja.
+  */
+  if (!snapshot.exists()) {
+
+    const username =
+      user.email
+        ?.replace(
+          /@5g88\.local$/i,
+          ""
+        ) || "unknown";
+
+
+    const defaultSettings = {
+      username:
+        username,
+
+      enabled:
+        false,
+
+      code:
+        ""
+    };
+
+
+    await set(
+      secondAuthRef,
+      defaultSettings
+    );
+
+
+    snapshot =
+      await get(
+        secondAuthRef
+      );
+
+  }
+
+
+  return {
+    ref:
+      secondAuthRef,
+
+    settings:
+      snapshot.val()
+  };
+
+}  
 function getLastAdminPage() {
 
   const lastPage =
@@ -288,35 +354,12 @@ onAuthStateChanged(
 
     try {
 
-      const secondAuthRef =
-        ref(
-          db,
-          `admin_second_auth/${user.uid}`
-        );
-
-
-      const snapshot =
-        await get(
-          secondAuthRef
-        );
-
-
-      if (!snapshot.exists()) {
-
-        errorBox.textContent =
-          "2nd authentication is not configured.";
-
-        errorBox
-          .classList
-          .remove("hidden");
-
-        return;
-
-      }
-
-
-      const settings =
-        snapshot.val();
+const {
+  settings
+} =
+  await getSecondAuthSettings(
+    user
+  );
 
 
       if (settings.enabled !== true) {
@@ -495,36 +538,12 @@ secondAuthForm.addEventListener(
 
     try {
 
-      const secondAuthRef =
-        ref(
-          db,
-          `admin_second_auth/${pendingUser.uid}`
-        );
-
-
-      const snapshot =
-        await get(
-          secondAuthRef
-        );
-
-
-      if (!snapshot.exists()) {
-
-        errorBox.textContent =
-          "2nd authentication is not configured.";
-
-        errorBox
-          .classList
-          .remove("hidden");
-
-        return;
-
-      }
-
-
-      const settings =
-        snapshot.val();
-
+const {
+  settings
+} =
+  await getSecondAuthSettings(
+    pendingUser
+  );
 
       if (
         String(settings.code) !==

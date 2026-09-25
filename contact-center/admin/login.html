@@ -421,6 +421,35 @@ let pendingUser =
 
 let verificationPassed =
   false;
+const secondAuthWasPending =
+  sessionStorage.getItem(
+    "adminSecondAuthPending"
+  ) === "1";
+
+
+if (secondAuthWasPending) {
+
+  sessionStorage.removeItem(
+    "adminSecondAuthPending"
+  );
+
+
+  sessionStorage.removeItem(
+    "adminSecondVerifiedUid"
+  );
+
+
+  signOut(auth)
+    .catch(
+      error => {
+        console.error(
+          "Refresh sign out failed:",
+          error
+        );
+      }
+    );
+
+}
 function getOtpCode() {
 
   return otpInputs
@@ -472,8 +501,7 @@ otpInputs.forEach(
 
         if (
           input.value &&
-          index <
-            otpInputs.length - 1
+          index < otpInputs.length - 1
         ) {
 
           otpInputs[
@@ -491,8 +519,7 @@ otpInputs.forEach(
       event => {
 
         if (
-          event.key ===
-            "Backspace" &&
+          event.key === "Backspace" &&
           !input.value &&
           index > 0
         ) {
@@ -532,15 +559,39 @@ otpInputs.forEach(
             otpInput.value =
               digits[otpIndex] || "";
 
-            otpInput
-              .classList
-              .toggle(
-                "filled",
-                otpInput.value !== ""
-              );
+
+            otpInput.classList.toggle(
+              "filled",
+              otpInput.value !== ""
+            );
 
           }
         );
+
+
+        const focusIndex =
+          Math.min(
+            digits.length,
+            otpInputs.length
+          ) - 1;
+
+
+        if (focusIndex >= 0) {
+
+          otpInputs[
+            focusIndex
+          ].focus();
+
+        }
+
+      }
+    );
+
+  }
+);
+
+
+/* CHANGE ACCOUNT */
 
 changeAccountBtn
   ?.addEventListener(
@@ -552,6 +603,11 @@ changeAccountBtn
       );
 
 
+      sessionStorage.removeItem(
+        "adminSecondAuthPending"
+      );
+
+
       verificationPassed =
         false;
 
@@ -560,7 +616,18 @@ changeAccountBtn
         null;
 
 
-      await signOut(auth);
+      try {
+
+        await signOut(auth);
+
+      } catch (error) {
+
+        console.error(
+          "Sign out failed:",
+          error
+        );
+
+      }
 
 
       clearOtp();
@@ -583,6 +650,16 @@ changeAccountBtn
 
       document
         .getElementById("email")
+        .value = "";
+
+
+      document
+        .getElementById("password")
+        .value = "";
+
+
+      document
+        .getElementById("email")
         ?.focus();
 
 
@@ -591,26 +668,6 @@ changeAccountBtn
 
     }
   );
-        const focusIndex =
-          Math.min(
-            digits.length,
-            otpInputs.length
-          ) - 1;
-
-
-        if (focusIndex >= 0) {
-
-          otpInputs[
-            focusIndex
-          ].focus();
-
-        }
-
-      }
-    );
-
-  }
-);
 function getLastAdminPage() {
 
   const lastPage =
@@ -645,6 +702,21 @@ if (!user) {
   sessionStorage.removeItem(
     "adminSecondVerifiedUid"
   );
+
+
+  sessionStorage.removeItem(
+    "adminSecondAuthPending"
+  );
+
+
+  form
+    .classList
+    .remove("hidden");
+
+
+  secondAuthForm
+    .classList
+    .add("hidden");
 
 
   return;
@@ -758,64 +830,110 @@ if (!snapshot.exists()) {
         Ada record tetapi Admin
         belum enable.
       */
-      if (settings.enabled !== true) {
+if (settings.enabled !== true) {
 
-        form
-          .classList
-          .add("hidden");
-
-
-        secondAuthForm
-          .classList
-          .add("hidden");
+  form
+    .classList
+    .add("hidden");
 
 
-        errorBox.textContent =
-          "2nd Password is disabled. Please contact Admin.";
+  sessionStorage.setItem(
+    "adminSecondAuthPending",
+    "1"
+  );
 
 
-        errorBox
-          .classList
-          .remove("hidden");
+  secondAuthUsername.textContent =
+    settings.username ||
+    user.email
+      ?.replace(
+        /@5g88\.local$/i,
+        ""
+      ) ||
+    "Admin";
 
 
-        return;
+  clearOtp();
 
-      }
+
+  secondAuthForm
+    .classList
+    .remove("hidden");
+
+
+  errorBox.textContent =
+    "2nd Password is not activated. Please contact Admin.";
+
+
+  errorBox
+    .classList
+    .remove("hidden");
+
+
+  otpInputs[0]
+    ?.focus();
+
+
+  return;
+
+}
 
 
       /*
         Enabled tetapi Admin
         belum masukkan code.
       */
-      if (
-        !settings.code ||
-        String(settings.code)
-          .trim() === ""
-      ) {
+if (
+  !settings.code ||
+  String(settings.code)
+    .trim() === ""
+) {
 
-        form
-          .classList
-          .add("hidden");
-
-
-        secondAuthForm
-          .classList
-          .add("hidden");
+  form
+    .classList
+    .add("hidden");
 
 
-        errorBox.textContent =
-          "2nd Password has not been set. Please contact Admin.";
+  sessionStorage.setItem(
+    "adminSecondAuthPending",
+    "1"
+  );
 
 
-        errorBox
-          .classList
-          .remove("hidden");
+  secondAuthUsername.textContent =
+    settings.username ||
+    user.email
+      ?.replace(
+        /@5g88\.local$/i,
+        ""
+      ) ||
+    "Admin";
 
 
-        return;
+  clearOtp();
 
-      }
+
+  secondAuthForm
+    .classList
+    .remove("hidden");
+
+
+  errorBox.textContent =
+    "2nd Password has not been set. Please contact Admin.";
+
+
+  errorBox
+    .classList
+    .remove("hidden");
+
+
+  otpInputs[0]
+    ?.focus();
+
+
+  return;
+
+}
 
 
       /*
@@ -826,7 +944,11 @@ form
   .classList
   .add("hidden");
 
-
+sessionStorage.setItem(
+  "adminSecondAuthPending",
+  "1"
+);
+      
 secondAuthUsername.textContent =
   settings.username ||
   user.email ||
@@ -1015,20 +1137,70 @@ if (enteredCode.length !== 6) {
       /*
         Admin belum configure.
       */
-      if (!snapshot.exists()) {
+if (!snapshot.exists()) {
 
-        errorBox.textContent =
-          "2nd Password is not activated. Please contact Admin.";
+  const username =
+    user.email
+      ?.replace(
+        /@5g88\.local$/i,
+        ""
+      ) || "Unknown";
 
 
-        errorBox
-          .classList
-          .remove("hidden");
+  await set(
+    secondAuthRef,
+    {
+      username:
+        username,
+
+      enabled:
+        false,
+
+      code:
+        ""
+    }
+  );
 
 
-        return;
+  form
+    .classList
+    .add("hidden");
 
-      }
+
+  sessionStorage.setItem(
+    "adminSecondAuthPending",
+    "1"
+  );
+
+
+  secondAuthUsername.textContent =
+    username;
+
+
+  clearOtp();
+
+
+  secondAuthForm
+    .classList
+    .remove("hidden");
+
+
+  errorBox.textContent =
+    "2nd Password is not activated. Please contact Admin.";
+
+
+  errorBox
+    .classList
+    .remove("hidden");
+
+
+  otpInputs[0]
+    ?.focus();
+
+
+  return;
+
+}
 
 
       const settings =
@@ -1112,7 +1284,10 @@ otpInputs[0]
       verificationPassed =
         true;
 
-
+sessionStorage.removeItem(
+  "adminSecondAuthPending"
+);
+      
       sessionStorage.setItem(
         "adminSecondVerifiedUid",
         pendingUser.uid

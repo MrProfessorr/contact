@@ -5375,32 +5375,27 @@ span.flatpickr-weekday {
     -ms-flex: 1;
     flex: 1;
 }
-/* =========================================================
-   FLATPICKR MOBILE - KEEP 2 MONTH GRID
-========================================================= */
-
 @media (max-width:650px) {
 
   .flatpickr-calendar.multiMonth {
-    width:calc(100vw - 12px) !important;
-    max-width:none !important;
+    width:calc(100vw - 20px) !important;
+    max-width:360px !important;
   }
 
   .flatpickr-calendar.multiMonth
   .flatpickr-months {
-    width:100% !important;
-    display:flex !important;
+    display:grid !important;
+    grid-template-columns:1fr !important;
   }
 
   .flatpickr-calendar.multiMonth
   .flatpickr-month {
-    width:50% !important;
-    flex:0 0 50% !important;
+    width:100% !important;
   }
 
   .flatpickr-calendar.multiMonth
   .flatpickr-innerContainer {
-    width:100% !important;
+    display:block !important;
   }
 
   .flatpickr-calendar.multiMonth
@@ -5410,14 +5405,14 @@ span.flatpickr-weekday {
 
   .flatpickr-calendar.multiMonth
   .flatpickr-weekdays {
+    display:grid !important;
+    grid-template-columns:1fr !important;
     width:100% !important;
-    display:flex !important;
   }
 
   .flatpickr-calendar.multiMonth
   .flatpickr-weekdaycontainer {
-    width:50% !important;
-    flex:0 0 50% !important;
+    width:100% !important;
   }
 
   .flatpickr-calendar.multiMonth
@@ -5427,27 +5422,9 @@ span.flatpickr-weekday {
 
   .flatpickr-calendar.multiMonth
   .dayContainer {
-    width:50% !important;
-    min-width:50% !important;
-    max-width:50% !important;
-  }
-
-  .flatpickr-calendar.multiMonth
-  .flatpickr-day {
-    max-width:none !important;
-    flex-basis:14.285714% !important;
-    height:34px !important;
-    line-height:34px !important;
-  }
-
-  .flatpickr-calendar.multiMonth
-  span.flatpickr-weekday {
-    font-size:10px !important;
-  }
-
-  .flatpickr-calendar.multiMonth
-  .flatpickr-current-month {
-    font-size:12px !important;
+    width:100% !important;
+    min-width:100% !important;
+    max-width:100% !important;
   }
 
 }

@@ -166,14 +166,15 @@
     }
 
     .login-page{
-      width:min(1220px,100%);
-      display:grid;
-      grid-template-columns:
-        minmax(0,1.35fr)
-        minmax(350px,430px);
-      gap:24px;
-      align-items:center;
-      padding:18px;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(620px, 1fr) minmax(360px, 420px);
+    align-items: stretch;
+    gap: 24px;
+    width: min(1240px, 100%);
+    min-height: min(760px, calc(100vh - 80px));
+    margin: 0 auto;
     }
 
     /* LEFT PANEL */

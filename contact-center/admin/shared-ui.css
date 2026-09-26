@@ -2894,3 +2894,76 @@ padding:0 12px;
 .admin-password-eye:focus{
   outline:none;
 }
+/* =========================================================
+   ADMIN HEADER BACKGROUND COLOR
+========================================================= */
+
+.admin-header-color-btn {
+  grid-template-columns:
+    24px
+    minmax(0, 1fr)
+    0 !important;
+}
+
+
+/* COLOR SQUARE */
+
+.admin-header-color-swatch {
+  grid-column:1;
+
+  width:22px;
+  height:22px;
+
+  display:block;
+
+  border:
+    1px solid
+    #424242;
+
+  border-radius:4px;
+
+  background:#001528;
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(255,255,255,.03);
+
+  pointer-events:none;
+}
+
+
+/* TEXT */
+
+.admin-header-color-text {
+  grid-column:2;
+
+  overflow:hidden;
+
+  color:inherit;
+
+  text-align:center;
+
+  text-overflow:ellipsis;
+  white-space:nowrap;
+
+  pointer-events:none;
+}
+
+
+/* REAL COLOR INPUT - HIDDEN */
+
+.admin-header-color-input {
+  position:absolute !important;
+
+  width:1px !important;
+  height:1px !important;
+
+  padding:0 !important;
+  margin:0 !important;
+
+  border:0 !important;
+
+  opacity:0 !important;
+
+  pointer-events:none !important;
+}

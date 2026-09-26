@@ -16,7 +16,10 @@
   rel="stylesheet"
   href="./admin.css"
 >
-
+<link
+  rel="stylesheet"
+  href="./shared-ui.css"
+>
 </head>
   <style>
     :root{
@@ -1603,6 +1606,7 @@ body{
   async
   defer
 ></script>
+<script src="./shared-ui.js"></script>
 <script type="module">
 
 import {
@@ -1662,6 +1666,25 @@ const form =
 
 const errorBox =
   document.getElementById("loginError");
+  function showLoginError(
+  message
+) {
+
+  errorBox.textContent =
+    message;
+
+  errorBox
+    .classList
+    .remove("hidden");
+
+
+  window.showToast(
+    message,
+    "error",
+    5000
+  );
+
+}
   const passwordInput =
   document.getElementById(
     "password"
@@ -2547,13 +2570,9 @@ otpInputs[0]
   console.error(error);
 
 
-  errorBox.textContent =
-    "Unable to load 2nd authentication.";
-
-
-      errorBox
-        .classList
-        .remove("hidden");
+showLoginError(
+  "Unable to load 2nd authentication."
+);
 
     }
 
@@ -2602,20 +2621,15 @@ form.addEventListener(
         )?.value;
 
 
-      if (!turnstileToken) {
+if (!turnstileToken) {
 
-        errorBox.textContent =
-          "Please complete the security verification.";
+  showLoginError(
+    "Please complete the security verification."
+  );
 
+  return;
 
-        errorBox
-          .classList
-          .remove("hidden");
-
-
-        return;
-
-      }
+}
 
       showLoginLoading();
       
@@ -2626,26 +2640,22 @@ form.addEventListener(
       );
 
 
-} catch (error) {
+catch (error) {
 
   hideLoginLoading();
 
   console.error(error);
 
 
-  errorBox.textContent =
-    "Email or password incorrect.";
+  showLoginError(
+    "Email or password incorrect."
+  );
 
 
-      errorBox
-        .classList
-        .remove("hidden");
+  window.turnstile
+    ?.reset();
 
-
-      window.turnstile
-        ?.reset();
-
-    }
+}
 
   }
 );
@@ -2691,12 +2701,9 @@ if (!pendingUser) {
   clearOtp();
 
 
-  errorBox.textContent =
-    "Login session not found.";
-
-  errorBox
-    .classList
-    .remove("hidden");
+showLoginError(
+  "Login session not found."
+);
 
   return;
 }
@@ -2723,12 +2730,9 @@ if (enteredCode.length !== 6) {
   }
 
 
-  errorBox.textContent =
-    "Please enter the complete 6-digit 2nd Password.";
-
-  errorBox
-    .classList
-    .remove("hidden");
+showLoginError(
+  "Please enter the complete 6-digit 2nd Password."
+);
 
   return;
 }
@@ -2759,12 +2763,9 @@ if (!snapshot.exists()) {
   otpAutoSubmitting =
     false;
 
-  errorBox.textContent =
-    "2nd Password is not activated. Please contact Admin.";
-
-  errorBox
-    .classList
-    .remove("hidden");
+showLoginError(
+  "2nd Password is not activated. Please contact Admin."
+);
 
   return;
 }
@@ -2779,13 +2780,9 @@ if (!snapshot.exists()) {
       */
       if (settings.enabled !== true) {
         hideLoginLoading();
-        errorBox.textContent =
-          "2nd Password is disabled. Please contact Admin.";
-
-
-        errorBox
-          .classList
-          .remove("hidden");
+showLoginError(
+  "2nd Password is disabled. Please contact Admin."
+);
 
 
         return;
@@ -2802,13 +2799,9 @@ if (!snapshot.exists()) {
           .trim() === ""
       ) {
         hideLoginLoading();
-        errorBox.textContent =
-          "2nd Password has not been set. Please contact Admin.";
-
-
-        errorBox
-          .classList
-          .remove("hidden");
+showLoginError(
+  "2nd Password has not been set. Please contact Admin."
+);
 
 
         return;
@@ -2835,13 +2828,9 @@ if (!snapshot.exists()) {
     false;
 
 }
-        errorBox.textContent =
-          "2nd Password incorrect.";
-
-
-        errorBox
-          .classList
-          .remove("hidden");
+showLoginError(
+  "2nd Password incorrect."
+);
 
 
         clearOtp();
@@ -2904,13 +2893,9 @@ localStorage.setItem(
       console.error(error);
 
 
-      errorBox.textContent =
-        "Unable to verify 2nd Password.";
-
-
-      errorBox
-        .classList
-        .remove("hidden");
+showLoginError(
+  "Unable to verify 2nd Password."
+);
 
     }
 

@@ -2900,40 +2900,29 @@ padding:0 12px;
 
 .admin-header-color-btn {
   position:relative !important;
-
   width:100%;
   height:32px;
-
   display:flex !important;
   align-items:center !important;
   justify-content:center !important;
-
   padding:0 30px !important;
-
   text-align:center !important;
-   backgroud:var(--dropdown-bg);
+   background:var(--dropdown-bg);
 }
 
 /* COLOR SQUARE */
 
 .admin-header-color-swatch {
   position:absolute !important;
-
   left:3px;
   top:50%;
-
   width:20px;
   height:20px;
-
   display:block;
-
   margin:0 !important;
-
   border:1px solid #424242;
   border-radius:4px;
-
   transform:translateY(-50%) !important;
-
   pointer-events:none;
 }
 
@@ -2942,26 +2931,17 @@ padding:0 12px;
 
 .admin-header-color-text {
   display:block;
-
   width:100% !important;
   min-width:0;
-
   margin:0 !important;
   padding:0 !important;
-
   overflow:hidden;
-
   color:inherit;
-
   font-size:14px;
   font-weight:400;
   line-height:1.5715;
-
   text-align:center !important;
-
-  text-overflow:ellipsis;
   white-space:nowrap;
-
   pointer-events:none;
 }
 

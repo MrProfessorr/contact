@@ -656,21 +656,22 @@ contactImageFile
       }
 
 
-      if (
-        !file.type.startsWith(
-          "image/"
-        )
-      ) {
+if (
+  !file.type.startsWith(
+    "image/"
+  )
+) {
 
-        alert(
-          "Please select an image."
-        );
+  window.showToast(
+    "Please select a valid image.",
+    "warning"
+  );
 
-        contactImageFile.value =
-          "";
+  contactImageFile.value =
+    "";
 
-        return;
-      }
+  return;
+}
 
 
       if (
@@ -885,63 +886,80 @@ form.addEventListener(
       };
 
 
-      if (
-        editId.value
-      ) {
+if (
+  editId.value
+) {
 
-        await update(
+  await update(
 
-          ref(
-            db,
-            "contacts/" +
-            editId.value
-          ),
+    ref(
+      db,
+      "contacts/" +
+      editId.value
+    ),
 
-          data
+    data
 
-        );
-
-      } else {
-
-        const newRef =
-          push(
-            ref(
-              db,
-              "contacts"
-            )
-          );
+  );
 
 
-        await set(
-          newRef,
-          {
-            ...data,
+  window.showToast(
+    "Contact updated successfully.",
+    "success"
+  );
 
-            createdAt:
-              Date.now()
-          }
-        );
+} else {
 
-      }
-
-
-      resetForm();
-
-
-    } catch (error) {
-
-      console.error(
-        error
-      );
+  const newRef =
+    push(
+      ref(
+        db,
+        "contacts"
+      )
+    );
 
 
-      alert(
-        "Failed: " +
-        error.message
-      );
+  await set(
+    newRef,
+    {
+      ...data,
+
+      createdAt:
+        Date.now()
+    }
+  );
 
 
-    } finally {
+  window.showToast(
+    "Contact added successfully.",
+    "success"
+  );
+
+}
+
+
+resetForm();
+
+
+} catch (error) {
+
+  console.error(
+    error
+  );
+
+
+  window.showToast(
+    "Failed to save contact: " +
+      (
+        error?.message ||
+        "Unknown error"
+      ),
+    "error",
+    5000
+  );
+
+
+} finally {
 
       submitBtn.disabled =
         false;
@@ -1177,12 +1195,36 @@ async function(id) {
   }
 
 
-  await remove(
-    ref(
-      db,
-      "contacts/" + id
-    )
-  );
+  try {
+
+    await remove(
+      ref(
+        db,
+        "contacts/" + id
+      )
+    );
+
+
+    window.showToast(
+      "Contact deleted successfully.",
+      "success"
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Delete contact error:",
+      error
+    );
+
+
+    window.showToast(
+      "Failed to delete contact.",
+      "error"
+    );
+
+  }
 
 };
 

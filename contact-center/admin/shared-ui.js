@@ -3731,7 +3731,6 @@ adminPasswordModal.innerHTML = `
          </span>
         </label>
 
-        <input
 <input
   id="adminCurrentPassword"
   class="shared-input"
@@ -3961,11 +3960,17 @@ function openAdminPasswordModal(
     subtitle.textContent =
       "Update your 6-digit second password.";
 
-    currentLabel.textContent =
-      "Current 2nd Password";
+currentLabel.innerHTML = `
+  <span class="label-required">
+    Current 2nd Password
+  </span>
+`;
 
-    newLabel.textContent =
-      "New 2nd Password";
+newLabel.innerHTML = `
+  <span class="label-required">
+    New 2nd Password
+  </span>
+`;
 
     saveButton.textContent =
       "Change 2nd Password";
@@ -3978,11 +3983,17 @@ function openAdminPasswordModal(
     subtitle.textContent =
       "Update your account password.";
 
-    currentLabel.textContent =
-      "Current Password";
+currentLabel.innerHTML = `
+  <span class="label-required">
+    Current Password
+  </span>
+`;
 
-    newLabel.textContent =
-      "New Password";
+newLabel.innerHTML = `
+  <span class="label-required">
+    New Password
+  </span>
+`;
 
     saveButton.textContent =
       "Change Password";

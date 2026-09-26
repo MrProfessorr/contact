@@ -3614,10 +3614,6 @@ userDropdown.innerHTML = `
     </span>
   </button>
 
-
-  <div class="admin-user-menu-divider"></div>
-
-
   <button
     type="button"
     id="adminUserLogoutBtn"

@@ -618,13 +618,6 @@ Active
 
 </div>
 
-
-<div
-  id="skinSaveMessage"
-  class="skin-save-message"
-></div>
-
-
 </section>
 
 
@@ -887,11 +880,6 @@ const resetSkinBtn =
   document.getElementById(
     "resetSkinBtn"
   );
-const saveMessage =
-  document.getElementById(
-    "skinSaveMessage"
-  );
-
 
 const previewHeader =
   document.getElementById(
@@ -1076,7 +1064,21 @@ function setupUpload(
         return;
       }
 
+if (
+  !file.type.startsWith(
+    "image/"
+  )
+) {
 
+  window.showToast(
+    "Please select a valid image.",
+    "warning"
+  );
+
+  input.value = "";
+
+  return;
+}
       const oldUrl =
         getObjectUrl();
 
@@ -1374,11 +1376,13 @@ error => {
     error
   );
 
-  saveMessage.textContent =
-    "Failed to load skin settings.";
 
-  saveMessage.className =
-    "skin-save-message error";
+  window.showToast(
+    "Failed to load skin settings.",
+    "error",
+    5000
+  );
+
 
   hideSkinPageLoading();
 
@@ -1603,31 +1607,28 @@ footer: {
         finalFooterImage;
 
 
-      saveMessage.textContent =
-        "Skin saved successfully.";
+window.showToast(
+  "Skin saved successfully.",
+  "success"
+);
 
 
-      saveMessage.className =
-        "skin-save-message success";
+} catch (error) {
+
+  console.error(
+    error
+  );
 
 
-    } catch (error) {
-
-      console.error(
-        error
-      );
-
-
-      saveMessage.textContent =
-        error.message ||
-        "Failed to save skin.";
+  window.showToast(
+    error?.message ||
+    "Failed to save skin.",
+    "error",
+    5000
+  );
 
 
-      saveMessage.className =
-        "skin-save-message error";
-
-
-    } finally {
+} finally {
 
       saveSkinBtn.disabled =
         false;
@@ -1845,30 +1846,28 @@ resetSkinBtn.addEventListener(
       );
 
 
-      saveMessage.textContent =
-        "Skin reset to default.";
+window.showToast(
+  "Skin reset to default successfully.",
+  "success"
+);
 
 
-      saveMessage.className =
-        "skin-save-message success";
+} catch (error) {
+
+  console.error(
+    "Reset skin error:",
+    error
+  );
 
 
-    } catch (error) {
+  window.showToast(
+    error?.message ||
+    "Failed to reset skin.",
+    "error",
+    5000
+  );
 
-      console.error(
-        "Reset skin error:",
-        error
-      );
-
-
-      saveMessage.textContent =
-        "Failed to reset skin.";
-
-
-      saveMessage.className =
-        "skin-save-message error";
-   
-    }
+}
 
   }
 );

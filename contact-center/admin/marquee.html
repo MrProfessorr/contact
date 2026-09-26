@@ -374,12 +374,6 @@
 
   </div>
 
-
-  <div
-    id="marqueeSaveMessage"
-    class="marquee-save-message"
-  ></div>
-
 </section>
 
     <!-- PREVIEW -->
@@ -529,11 +523,6 @@ const pauseHoverInput =
 const saveBtn =
   document.getElementById(
     "saveMarqueeBtn"
-  );
-
-const saveMessage =
-  document.getElementById(
-    "marqueeSaveMessage"
   );
 
 const preview =
@@ -903,11 +892,11 @@ error => {
     error
   );
 
-  saveMessage.textContent =
-    "Unable to load marquee settings.";
-
-  saveMessage.className =
-    "marquee-save-message error";
+  window.showToast(
+    "Unable to load marquee settings.",
+    "error",
+    5000
+  );
 
   hideMarqueePageLoading();
 
@@ -924,22 +913,19 @@ saveBtn.addEventListener(
       getMarqueeData();
 
 
-    if (
-      data.enabled &&
-      !data.text
-    ) {
+if (
+  data.enabled &&
+  !data.text
+) {
 
-      saveMessage.textContent =
-        "Please enter marquee text.";
+  window.showToast(
+    "Please enter marquee text.",
+    "warning"
+  );
 
+  return;
 
-      saveMessage.className =
-        "marquee-save-message error";
-
-
-      return;
-
-    }
+}
 
 
     saveBtn.disabled =
@@ -961,30 +947,27 @@ saveBtn.addEventListener(
       );
 
 
-      saveMessage.textContent =
-        "Marquee saved successfully.";
+      window.showToast(
+  "Marquee saved successfully.",
+  "success"
+);
 
 
-      saveMessage.className =
-        "marquee-save-message success";
+} catch (error) {
 
+  console.error(
+    "Marquee save error:",
+    error
+  );
 
-    } catch (error) {
+  window.showToast(
+    error?.message ||
+    "Failed to save marquee.",
+    "error",
+    5000
+  );
 
-      console.error(
-        "Marquee save error:",
-        error
-      );
-
-
-      saveMessage.textContent =
-        "Failed to save marquee.";
-
-
-      saveMessage.className =
-        "marquee-save-message error";
-
-    }
+}
 
 
     saveBtn.disabled =

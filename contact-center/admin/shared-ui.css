@@ -998,7 +998,6 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   white-space:nowrap;
   cursor:pointer;
   user-select:none;
-  margin-bottom:10px;
   transition:
     all .2s
     cubic-bezier(
@@ -1445,10 +1444,8 @@ padding:0 12px;
 
   background:#141414;
 
-  box-shadow:
-    0 2px 0
-    rgba(255,255,255,.04);
-
+  box-shadow:0 2px 0rgba(255,255,255,.04);
+  margin-bottom:10px;
   font-family:inherit;
   font-size:14px;
   font-weight:400;
@@ -1469,14 +1466,13 @@ padding:0 12px;
 
 
 .admin-user-logout:hover {
-  color:#ffffff;
-
-  border-color:#555;
-
-  background:
-    rgba(255,255,255,.08);
+  color:var(--input-line-hover);
+  border-color:var(--input-line-hover);
 }
-
+.admin-user-logout:active {
+  color:var(--input-line-active);
+  border-color:var(--input-line-active);
+}
 
 /* LOGOUT SVG */
 

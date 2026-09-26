@@ -1221,6 +1221,287 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   background:
     rgba(255,255,255,.10);
 }
+/* =========================================================
+   ADMIN PASSWORD MODAL
+========================================================= */
+
+.admin-password-modal {
+  position:fixed;
+  inset:0;
+
+  z-index:20000;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:
+    opacity .18s ease,
+    visibility .18s ease;
+}
+
+
+.admin-password-modal.show {
+  opacity:1;
+  visibility:visible;
+}
+
+
+.admin-password-modal-backdrop {
+  position:absolute;
+  inset:0;
+
+  background:
+    rgba(0,0,0,.65);
+
+  backdrop-filter:
+    blur(2px);
+}
+
+
+.admin-password-dialog {
+  position:relative;
+  z-index:1;
+
+  width:min(430px,100%);
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    rgba(255,255,255,.12);
+
+  border-radius:10px;
+
+  color:
+    rgba(255,255,255,.85);
+
+  background:#1f1f1f;
+
+  box-shadow:
+    0 18px 60px
+    rgba(0,0,0,.45);
+
+  transform:
+    translateY(-8px)
+    scale(.98);
+
+  transition:
+    transform .18s ease;
+}
+
+
+.admin-password-modal.show
+.admin-password-dialog {
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+
+.admin-password-header {
+  min-height:70px;
+
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+
+  gap:20px;
+
+  padding:18px 20px;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.10);
+}
+
+
+.admin-password-header h3 {
+  margin:0 0 4px;
+
+  color:#ffffff;
+
+  font-size:16px;
+  font-weight:600;
+}
+
+
+.admin-password-header p {
+  margin:0;
+
+  color:
+    rgba(255,255,255,.45);
+
+  font-size:12px;
+  line-height:1.5;
+}
+
+
+.admin-password-close {
+  width:30px;
+  height:30px;
+
+  flex:none;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:0;
+  border-radius:6px;
+
+  color:
+    rgba(255,255,255,.45);
+
+  background:transparent;
+
+  cursor:pointer;
+
+  transition:
+    color .2s ease,
+    background .2s ease;
+}
+
+
+.admin-password-close:hover {
+  color:#ffffff;
+
+  background:
+    rgba(255,255,255,.08);
+}
+
+
+.admin-password-close svg {
+  width:14px;
+  height:14px;
+
+  display:block;
+
+  fill:currentColor;
+}
+
+
+.admin-password-form {
+  padding:20px;
+}
+
+
+.admin-password-field {
+  margin-bottom:16px;
+}
+
+
+.admin-password-field label {
+  display:block;
+
+  margin-bottom:7px;
+
+  color:
+    rgba(255,255,255,.65);
+
+  font-size:13px;
+  font-weight:500;
+}
+
+
+.admin-password-error {
+  min-height:18px;
+
+  margin-top:2px;
+
+  color:#ff7875;
+
+  font-size:12px;
+}
+
+
+.admin-password-actions {
+  display:flex;
+  justify-content:flex-end;
+
+  gap:8px;
+
+  margin-top:16px;
+}
+
+
+.admin-password-cancel,
+.admin-password-save {
+  min-width:90px;
+  height:34px;
+
+  padding:0 14px;
+
+  border-radius:6px;
+
+  font-family:inherit;
+  font-size:13px;
+
+  cursor:pointer;
+
+  transition:
+    all .2s ease;
+}
+
+
+.admin-password-cancel {
+  border:
+    1px solid
+    #424242;
+
+  color:
+    rgba(255,255,255,.85);
+
+  background:#141414;
+}
+
+
+.admin-password-cancel:hover {
+  border-color:#555;
+
+  background:
+    rgba(255,255,255,.08);
+}
+
+
+.admin-password-save {
+  border:
+    1px solid
+    #1668dc;
+
+  color:#ffffff;
+
+  background:#1668dc;
+}
+
+
+.admin-password-save:hover {
+  background:#3c89e8;
+}
+
+
+@media(max-width:480px) {
+
+  .admin-password-modal {
+    padding:14px;
+  }
+
+  .admin-password-header {
+    padding:16px;
+  }
+
+  .admin-password-form {
+    padding:16px;
+  }
+
+}
 /* LOGOUT BUTTON */
 
 .admin-user-logout {

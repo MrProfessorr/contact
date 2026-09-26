@@ -626,7 +626,26 @@ body{
     .input-wrap input:focus{
       border-color:var(--blue);
     }
+.input-wrap input.login-input-error {
+  border-color:#dc4446 !important;
+}
+.input-wrap input.login-input-error:hover {
+  border-color:#7e2e2f !important;
+}
+.input-wrap input.login-input-error:focus {
+  border-color:#dc4446 !important;
+}
 
+.credential-error {
+  margin-top:6px;
+  color:#dc4446;
+  font-size:12px;
+  line-height:1.4;
+}
+
+.credential-error.hidden {
+  display:none;
+}
     .input-wrap input::placeholder{
       color:rgba(255,255,255,.25);
     }
@@ -1465,8 +1484,12 @@ body{
   </svg>
 </button>
           </div>
-
-        </div>
+  <div
+    id="credentialError"
+    class="credential-error hidden"
+  ></div>
+          
+  </div>
 
 
         <div class="turnstile-wrap">
@@ -1689,7 +1712,55 @@ const errorBox =
   document.getElementById(
     "password"
   );
+const usernameInput =
+  document.getElementById(
+    "email"
+  );
 
+const credentialError =
+  document.getElementById(
+    "credentialError"
+  );
+function showCredentialError(
+  message
+) {
+
+  usernameInput.classList.add(
+    "login-input-error"
+  );
+
+  passwordInput.classList.add(
+    "login-input-error"
+  );
+
+  credentialError.textContent =
+    message;
+
+  credentialError.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+function hideCredentialError() {
+
+  usernameInput.classList.remove(
+    "login-input-error"
+  );
+
+  passwordInput.classList.remove(
+    "login-input-error"
+  );
+
+  credentialError.textContent =
+    "";
+
+  credentialError.classList.add(
+    "hidden"
+  );
+
+}
 const passwordToggle =
   document.getElementById(
     "passwordToggle"
@@ -2590,7 +2661,7 @@ form.addEventListener(
     errorBox
       .classList
       .add("hidden");
-
+hideCredentialError();
 
     let email =
       document
@@ -2646,11 +2717,15 @@ catch (error) {
 
   console.error(error);
 
-
-  showLoginError(
-    "Email or password incorrect."
+  showCredentialError(
+    "Username/Password is incorrect."
   );
 
+  window.showToast(
+    "Username/Password is incorrect.",
+    "error",
+    5000
+  );
 
   window.turnstile
     ?.reset();

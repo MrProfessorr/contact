@@ -3590,8 +3590,6 @@ userDropdown.innerHTML = `
     >
       Header Background Color (#001528)
     </span>
-
-    <span></span>
   </button>
 
   <input

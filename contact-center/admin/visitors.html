@@ -4638,6 +4638,15 @@ const visitorInitialLoad = {
   daily: false
 };
 
+
+let visitorInitialLoadHasError =
+  false;
+
+
+let visitorInitialErrorToastShown =
+  false;
+
+
 function finishVisitorPageLoading(
   key
 ) {
@@ -4645,21 +4654,43 @@ function finishVisitorPageLoading(
   visitorInitialLoad[key] =
     true;
 
+
   const allLoaded =
     Object.values(
       visitorInitialLoad
     ).every(Boolean);
 
+
   if (!allLoaded) {
     return;
   }
 
-  if (!visitorPageLoading) {
-    return;
+
+  if (visitorPageLoading) {
+
+    visitorPageLoading.style.display =
+      "none";
+
   }
 
-  visitorPageLoading.style.display =
-    "none";
+
+  if (
+    visitorInitialLoadHasError &&
+    !visitorInitialErrorToastShown
+  ) {
+
+    visitorInitialErrorToastShown =
+      true;
+
+
+    window.showToast(
+      "Failed to load some Visitor Analytics data.",
+      "error",
+      5000
+    );
+
+  }
+
 }
 /* =========================================================
    DOM
@@ -8110,6 +8141,10 @@ visitorsLoaded =
 
 renderVisitors();
 stopVisitorTableSync();
+
+visitorInitialLoadHasError =
+  true;
+
 finishVisitorPageLoading(
   "visitors"
 );
@@ -8145,7 +8180,10 @@ error => {
     "Presence load error:",
     error
   );
-
+  
+visitorInitialLoadHasError =
+  true;
+  
   finishVisitorPageLoading(
     "presence"
   );
@@ -8182,6 +8220,9 @@ error => {
     error
   );
 
+visitorInitialLoadHasError =
+  true;
+  
   finishVisitorPageLoading(
     "clicks"
   );
@@ -8244,6 +8285,9 @@ error => {
     error
   );
 
+visitorInitialLoadHasError =
+  true;
+  
   finishVisitorPageLoading(
     "blocked"
   );
@@ -8346,6 +8390,9 @@ error => {
     error
   );
 
+visitorInitialLoadHasError =
+  true;
+  
   finishVisitorPageLoading(
     "daily"
   );
@@ -9995,7 +10042,10 @@ document.addEventListener(
           }
 
         );
-
+window.showToast(
+  "Visitor blocked successfully.",
+  "success"
+);
       } catch (error) {
 
         console.error(
@@ -10003,9 +10053,12 @@ document.addEventListener(
           error
         );
 
-        alert(
-          "Failed to block visitor."
-        );
+window.showToast(
+  error?.message ||
+  "Failed to block visitor.",
+  "error",
+  5000
+);
 
       }
 
@@ -10036,7 +10089,10 @@ document.addEventListener(
           )
 
         );
-
+window.showToast(
+  "Visitor unblocked successfully.",
+  "success"
+);
       } catch (error) {
 
         console.error(
@@ -10044,9 +10100,12 @@ document.addEventListener(
           error
         );
 
-        alert(
-          "Failed to unblock visitor."
-        );
+window.showToast(
+  error?.message ||
+  "Failed to unblock visitor.",
+  "error",
+  5000
+);
 
       }
 

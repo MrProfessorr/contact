@@ -631,9 +631,10 @@ noticeImageFile
         )
       ) {
 
-        alert(
-          "Please select an image."
-        );
+window.showToast(
+  "Please select a valid image.",
+  "warning"
+);
 
         noticeImageFile.value =
           "";
@@ -826,63 +827,78 @@ form.addEventListener(
       };
 
 
-      if (
-        editId.value
-      ) {
+if (
+  editId.value
+) {
 
-        await update(
+  await update(
 
-          ref(
-            db,
-            "notices/" +
-            editId.value
-          ),
+    ref(
+      db,
+      "notices/" +
+      editId.value
+    ),
 
-          data
+    data
 
-        );
-
-      } else {
-
-        const newRef =
-          push(
-            ref(
-              db,
-              "notices"
-            )
-          );
+  );
 
 
-        await set(
-          newRef,
-          {
-            ...data,
-
-            createdAt:
-              Date.now()
-          }
-        );
-
-      }
+  window.showToast(
+    "Notice updated successfully.",
+    "success"
+  );
 
 
-      resetForm();
+} else {
+
+  const newRef =
+    push(
+      ref(
+        db,
+        "notices"
+      )
+    );
 
 
-    } catch (error) {
+  await set(
+    newRef,
+    {
+      ...data,
 
-      console.error(
-        error
-      );
-
-
-      alert(
-        "Failed: " +
-        error.message
-      );
+      createdAt:
+        Date.now()
+    }
+  );
 
 
-    } finally {
+  window.showToast(
+    "Notice added successfully.",
+    "success"
+  );
+
+}
+
+
+resetForm();
+
+
+} catch (error) {
+
+  console.error(
+    error
+  );
+
+
+  window.showToast(
+    error?.message ||
+    "Failed to save notice.",
+    "error",
+    5000
+  );
+
+
+} finally {
 
       submitBtn.disabled =
         false;
@@ -1118,12 +1134,38 @@ async function(id) {
   }
 
 
-  await remove(
-    ref(
-      db,
-      "notices/" + id
-    )
-  );
+  try {
+
+    await remove(
+      ref(
+        db,
+        "notices/" + id
+      )
+    );
+
+
+    window.showToast(
+      "Notice deleted successfully.",
+      "success"
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Delete notice error:",
+      error
+    );
+
+
+    window.showToast(
+      error?.message ||
+      "Failed to delete notice.",
+      "error",
+      5000
+    );
+
+  }
 
 };
 
@@ -1380,6 +1422,14 @@ error => {
       Failed to load notices.
     </div>
   `;
+
+
+  window.showToast(
+    "Failed to load notices.",
+    "error",
+    5000
+  );
+
 
   hideNoticePageLoading();
 

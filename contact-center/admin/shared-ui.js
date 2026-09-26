@@ -3714,29 +3714,34 @@ function normalizeAdminHeaderColor(
 }
 
 
-const headerElements =
-  document.querySelectorAll(
-    ".admin-nav, .admin-nav-inner"
+function applyAdminHeaderColor(
+  color
+) {
+
+  const finalColor =
+    normalizeAdminHeaderColor(
+      color
+    );
+
+
+const header =
+  document.querySelector(
+    ".admin-nav"
   );
 
+if (header) {
+  header.style.setProperty(
+    "background",
+    finalColor,
+    "important"
+  );
 
-headerElements.forEach(
-  header => {
-
-    header.style.setProperty(
-      "background",
-      finalColor,
-      "important"
-    );
-
-    header.style.setProperty(
-      "background-color",
-      finalColor,
-      "important"
-    );
-
-  }
-);
+  header.style.setProperty(
+    "background-color",
+    finalColor,
+    "important"
+  );
+}
 
 
   if (adminHeaderColorSwatch) {

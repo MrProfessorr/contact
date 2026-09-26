@@ -3730,12 +3730,13 @@ adminPasswordModal.innerHTML = `
         </label>
 
         <input
-          id="adminCurrentPassword"
-          class="shared-input"
-          type="password"
-          autocomplete="current-password"
-          required
-        >
+<input
+  id="adminCurrentPassword"
+  class="shared-input"
+  type="text"
+  autocomplete="off"
+  required
+>
       </div>
 
 

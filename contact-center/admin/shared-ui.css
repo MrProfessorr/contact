@@ -2605,7 +2605,7 @@ padding:0 12px;
   align-items: center;
   justify-content: center;
 
-  color: #8c8c8c;
+  color:rgba(255,255,255,0.85);
 
   pointer-events: none;
 
@@ -2616,7 +2616,7 @@ padding:0 12px;
   display: block;
   width: 14px;
   height: 14px;
-  fill: rgba(255,255,255,0.85);
+  fill: currentColor;
 }
 
 .admin-password-icon-input {

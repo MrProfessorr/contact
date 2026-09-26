@@ -4243,54 +4243,6 @@ document.addEventListener(
 );
 
 
-/* LIVE PREVIEW */
-
-adminHeaderColorInput
-  ?.addEventListener(
-    "input",
-    () => {
-
-      const color =
-        normalizeAdminHeaderColor(
-          adminHeaderColorInput.value
-        );
-
-      applyAdminHeaderColor(
-        color
-      );
-
-      localStorage.setItem(
-        ADMIN_HEADER_COLOR_KEY,
-        color
-      );
-
-    }
-  );
-
-
-/* FINAL SAVE */
-
-adminHeaderColorInput
-  ?.addEventListener(
-    "change",
-    () => {
-
-      const color =
-        normalizeAdminHeaderColor(
-          adminHeaderColorInput.value
-        );
-
-      applyAdminHeaderColor(
-        color
-      );
-
-      localStorage.setItem(
-        ADMIN_HEADER_COLOR_KEY,
-        color
-      );
-
-    }
-  );
 
 userWrapper.appendChild(
   userButton

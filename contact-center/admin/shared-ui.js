@@ -3733,6 +3733,7 @@ adminPasswordModal.innerHTML = `
 <input
   id="adminCurrentPassword"
   class="shared-input"
+  placeholder="Enter current password"
   type="text"
   autocomplete="off"
   required
@@ -3774,6 +3775,7 @@ adminPasswordModal.innerHTML = `
       id="adminNewPassword"
       class="shared-input admin-password-icon-input"
       type="password"
+      placeholder="Enter new password"
       autocomplete="new-password"
       required
     >
@@ -3814,6 +3816,7 @@ adminPasswordModal.innerHTML = `
       id="adminConfirmPassword"
       class="shared-input admin-password-icon-input"
       type="password"
+      placeholder="Confirm new password"
       autocomplete="new-password"
       required
     >

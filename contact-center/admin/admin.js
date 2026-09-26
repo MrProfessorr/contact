@@ -5,7 +5,10 @@ import {
 import {
   getAuth,
   onAuthStateChanged,
-  signOut
+  signOut,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
@@ -15,7 +18,8 @@ import {
   set,
   update,
   remove,
-  onValue
+  onValue,
+  get
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
@@ -288,7 +292,165 @@ export function requireAdmin() {
 
 }
 
+/* =========================
+   CHANGE ADMIN PASSWORD
+========================= */
 
+export async function changeAdminPassword(
+  currentPassword,
+  newPassword
+) {
+
+  const user =
+    auth.currentUser;
+
+
+  if (
+    !user ||
+    !user.email
+  ) {
+
+    throw new Error(
+      "NO_AUTH_USER"
+    );
+
+  }
+
+
+  /* =========================
+     VERIFY CURRENT PASSWORD
+  ========================= */
+
+  const credential =
+    EmailAuthProvider.credential(
+      user.email,
+      currentPassword
+    );
+
+
+  await reauthenticateWithCredential(
+    user,
+    credential
+  );
+
+
+  /* =========================
+     UPDATE FIREBASE PASSWORD
+  ========================= */
+
+  await updatePassword(
+    user,
+    newPassword
+  );
+
+}
+
+
+/*
+  shared-ui.js bukan module,
+  jadi expose function ke window.
+*/
+
+window.changeAdminPassword =
+  changeAdminPassword;
+/* =========================
+   CHANGE 2ND PASSWORD
+========================= */
+
+export async function changeAdminSecondPassword(
+  currentCode,
+  newCode
+) {
+
+  const user =
+    auth.currentUser;
+
+
+  if (!user) {
+
+    throw new Error(
+      "NO_AUTH_USER"
+    );
+
+  }
+
+
+  /* Hanya 6 digit */
+
+  if (
+    !/^\d{6}$/.test(
+      currentCode
+    ) ||
+    !/^\d{6}$/.test(
+      newCode
+    )
+  ) {
+
+    throw new Error(
+      "SECOND_CODE_FORMAT"
+    );
+
+  }
+
+
+  const secondAuthRef =
+    ref(
+      db,
+      `admin_second_auth/${user.uid}`
+    );
+
+
+  /* Ambil data UID sendiri */
+
+  const snapshot =
+    await get(
+      secondAuthRef
+    );
+
+
+  if (!snapshot.exists()) {
+
+    throw new Error(
+      "SECOND_AUTH_NOT_FOUND"
+    );
+
+  }
+
+
+  const data =
+    snapshot.val();
+
+
+  /* Check 2nd password lama */
+
+  if (
+    String(
+      data?.code || ""
+    ) !== currentCode
+  ) {
+
+    throw new Error(
+      "SECOND_CODE_WRONG"
+    );
+
+  }
+
+
+  /* Tukar code sahaja */
+
+  await update(
+    secondAuthRef,
+    {
+      code:
+        newCode
+    }
+  );
+
+}
+
+
+window.changeAdminSecondPassword =
+  changeAdminSecondPassword;
 /* LOGOUT */
 
 export function setupLogout() {

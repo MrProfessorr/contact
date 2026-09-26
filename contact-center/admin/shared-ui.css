@@ -1170,12 +1170,8 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 .admin-password-modal-backdrop {
   position:absolute;
   inset:0;
-
   background:
-    rgba(0,0,0,.65);
-
-  backdrop-filter:
-    blur(2px);
+    rgba(0,0,0,.45);
 }
 
 

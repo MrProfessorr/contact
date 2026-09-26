@@ -4034,6 +4034,32 @@ function closeAdminPasswordModal() {
    CHANGE PASSWORD / 2ND PASSWORD SUBMIT
 ======================================================= */
 
+function showAdminPasswordError(
+  errorBox,
+  message
+) {
+
+  if (errorBox) {
+
+    errorBox.classList.remove(
+      "success"
+    );
+
+    errorBox.textContent =
+      message;
+
+  }
+
+
+  window.showToast(
+    message,
+    "error",
+    5000
+  );
+
+}
+
+
 adminPasswordForm
   ?.addEventListener(
     "submit",
@@ -4101,68 +4127,57 @@ adminPasswordForm
          EMPTY VALIDATION
       ========================= */
 
-      if (
-        !currentPassword ||
-        !newPassword ||
-        !confirmPassword
-      ) {
+if (
+  !currentPassword ||
+  !newPassword ||
+  !confirmPassword
+) {
 
-        if (errorBox) {
+  showAdminPasswordError(
+    errorBox,
+    "Please complete all fields."
+  );
 
-          errorBox.textContent =
-            "Please complete all fields.";
+  return;
 
-        }
-
-        return;
-
-      }
+}
 
 
       /* =========================
          CONFIRM VALIDATION
       ========================= */
 
-      if (
-        newPassword !==
-        confirmPassword
-      ) {
+if (
+  newPassword !==
+  confirmPassword
+) {
 
-        if (errorBox) {
+  showAdminPasswordError(
+    errorBox,
+    "New password and confirm password do not match."
+  );
 
-          errorBox.textContent =
-            "New password and confirm password do not match.";
+  return;
 
-        }
-
-        return;
-
-      }
+}
 
 
       /* ==================================================
          NORMAL FIREBASE PASSWORD
       ================================================== */
 
-      if (
-        adminPasswordMode ===
-        "password"
-      ) {
+if (
+  newPassword.length < 6
+) {
 
-        if (
-          newPassword.length < 6
-        ) {
+  showAdminPasswordError(
+    errorBox,
+    "New password must be at least 6 characters."
+  );
 
-          if (errorBox) {
+  return;
 
-            errorBox.textContent =
-              "New password must be at least 6 characters.";
-
-          }
-
-          return;
-
-        }
+}
 
 
         try {
@@ -4217,69 +4232,64 @@ window.showToast(
           );
 
         }
-        catch (error) {
+catch (error) {
 
-          console.error(
-            "Change password error:",
-            error
-          );
-
-
-          if (errorBox) {
-
-            errorBox.classList.remove(
-              "success"
-            );
+  console.error(
+    "Change password error:",
+    error
+  );
 
 
-            if (
-              error.code ===
-                "auth/invalid-credential" ||
-              error.code ===
-                "auth/wrong-password"
-            ) {
+  let message =
+    "Unable to change password.";
 
-              errorBox.textContent =
-                "Current password is incorrect.";
 
-            }
-            else if (
-              error.code ===
-              "auth/weak-password"
-            ) {
+  if (
+    error.code ===
+      "auth/invalid-credential" ||
+    error.code ===
+      "auth/wrong-password"
+  ) {
 
-              errorBox.textContent =
-                "New password is too weak.";
+    message =
+      "Current password is incorrect.";
 
-            }
-            else if (
-              error.code ===
-              "auth/too-many-requests"
-            ) {
+  }
+  else if (
+    error.code ===
+    "auth/weak-password"
+  ) {
 
-              errorBox.textContent =
-                "Too many attempts. Please try again later.";
+    message =
+      "New password is too weak.";
 
-            }
-            else if (
-              error.message ===
-              "CHANGE_PASSWORD_NOT_READY"
-            ) {
+  }
+  else if (
+    error.code ===
+    "auth/too-many-requests"
+  ) {
 
-              errorBox.textContent =
-                "Password service is not ready.";
+    message =
+      "Too many attempts. Please try again later.";
 
-            }
-            else {
+  }
+  else if (
+    error.message ===
+    "CHANGE_PASSWORD_NOT_READY"
+  ) {
 
-              errorBox.textContent =
-                "Unable to change password.";
+    message =
+      "Password service is not ready.";
 
-            }
+  }
 
-          }
 
-        }
+  showAdminPasswordError(
+    errorBox,
+    message
+  );
+
+}
         finally {
 
           if (saveButton) {
@@ -4311,42 +4321,38 @@ window.showToast(
 
         /* CURRENT CODE = 6 DIGIT */
 
-        if (
-          !/^\d{6}$/.test(
-            currentPassword
-          )
-        ) {
+if (
+  !/^\d{6}$/.test(
+    currentPassword
+  )
+) {
 
-          if (errorBox) {
+  showAdminPasswordError(
+    errorBox,
+    "Current 2nd Password must be exactly 6 digits."
+  );
 
-            errorBox.textContent =
-              "Current 2nd Password must be exactly 6 digits.";
+  return;
 
-          }
-
-          return;
-
-        }
+}
 
 
         /* NEW CODE = 6 DIGIT */
 
-        if (
-          !/^\d{6}$/.test(
-            newPassword
-          )
-        ) {
+if (
+  !/^\d{6}$/.test(
+    newPassword
+  )
+) {
 
-          if (errorBox) {
+  showAdminPasswordError(
+    errorBox,
+    "New 2nd Password must be exactly 6 digits."
+  );
 
-            errorBox.textContent =
-              "New 2nd Password must be exactly 6 digits.";
+  return;
 
-          }
-
-          return;
-
-        }
+}
 
 
         try {
@@ -4400,78 +4406,91 @@ window.showToast(
           );
 
         }
-        catch (error) {
+catch (error) {
 
-          console.error(
-            "Change 2nd Password error:",
-            error
-          );
-
-
-          if (errorBox) {
-
-            errorBox.classList.remove(
-              "success"
-            );
+  console.error(
+    "Change 2nd Password error:",
+    error
+  );
 
 
-            if (
-              error.message ===
-              "SECOND_CODE_WRONG"
-            ) {
+  let message =
+    "Unable to change 2nd Password.";
 
-              errorBox.textContent =
-                "Current 2nd Password is incorrect.";
 
-            }
-            else if (
-              error.message ===
-              "SECOND_CODE_FORMAT"
-            ) {
+  if (
+    error.message ===
+    "SECOND_CODE_WRONG"
+  ) {
 
-              errorBox.textContent =
-                "2nd Password must be exactly 6 digits.";
+    message =
+      "Current 2nd Password is incorrect.";
 
-            }
-            else if (
-              error.message ===
-              "SECOND_AUTH_NOT_FOUND"
-            ) {
+  }
+  else if (
+    error.message ===
+    "SECOND_CODE_FORMAT"
+  ) {
 
-              errorBox.textContent =
-                "2nd Password account was not found.";
+    message =
+      "2nd Password must be exactly 6 digits.";
 
-            }
-            else if (
-              error.message ===
-              "CHANGE_SECOND_PASSWORD_NOT_READY"
-            ) {
+  }
+  else if (
+    error.message ===
+    "SECOND_AUTH_NOT_FOUND"
+  ) {
 
-              errorBox.textContent =
-                "2nd Password service is not ready.";
+    message =
+      "2nd Password account was not found.";
 
-            }
-            else if (
-              error.code ===
-                "PERMISSION_DENIED" ||
-              error.code ===
-                "PERMISSION_DENIED".toLowerCase()
-            ) {
+  }
+  else if (
+    error.message ===
+    "SECOND_AUTH_DISABLED"
+  ) {
 
-              errorBox.textContent =
-                "Database permission denied.";
+    message =
+      "2nd Password is currently disabled.";
 
-            }
-            else {
+  }
+  else if (
+    error.message ===
+    "SECOND_CODE_NOT_SET"
+  ) {
 
-              errorBox.textContent =
-                "Unable to change 2nd Password.";
+    message =
+      "2nd Password has not been set.";
 
-            }
+  }
+  else if (
+    error.message ===
+    "CHANGE_SECOND_PASSWORD_NOT_READY"
+  ) {
 
-          }
+    message =
+      "2nd Password service is not ready.";
 
-        }
+  }
+  else if (
+    error.code ===
+      "PERMISSION_DENIED" ||
+    error.code ===
+      "permission_denied"
+  ) {
+
+    message =
+      "Database permission denied.";
+
+  }
+
+
+  showAdminPasswordError(
+    errorBox,
+    message
+  );
+
+}
         finally {
 
           if (saveButton) {

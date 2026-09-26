@@ -2982,3 +2982,230 @@ padding:0 12px;
 
   pointer-events:none !important;
 }
+/* =========================================================
+   ADMIN HEADER CUSTOM COLOR PICKER
+========================================================= */
+
+.admin-header-color-picker {
+  position:absolute;
+  top:calc(100% + 4px);
+  left:0;
+
+  z-index:10020;
+
+  width:258px;
+
+  padding:12px;
+
+  box-sizing:border-box;
+
+  border-radius:8px;
+
+  background:#1f1f1f;
+
+  box-shadow:
+    0 6px 16px 0 rgba(0,0,0,.08),
+    0 3px 6px -4px rgba(0,0,0,.12),
+    0 9px 28px 8px rgba(0,0,0,.05);
+
+  display:none;
+}
+
+.admin-header-color-picker.show {
+  display:block;
+}
+
+
+/* COLOR PALETTE */
+
+.admin-color-palette {
+  position:relative;
+
+  width:234px;
+  height:160px;
+
+  overflow:hidden;
+
+  border-radius:4px;
+
+  cursor:crosshair;
+
+  background:red;
+}
+
+.admin-color-palette-white,
+.admin-color-palette-black {
+  position:absolute;
+  inset:0;
+
+  pointer-events:none;
+}
+
+.admin-color-palette-white {
+  background:
+    linear-gradient(
+      to right,
+      #fff,
+      rgba(255,255,255,0)
+    );
+}
+
+.admin-color-palette-black {
+  background:
+    linear-gradient(
+      to top,
+      #000,
+      rgba(0,0,0,0)
+    );
+}
+
+
+/* PALETTE HANDLE */
+
+.admin-color-palette-handle {
+  position:absolute;
+
+  width:12px;
+  height:12px;
+
+  border:2px solid #fff;
+  border-radius:50%;
+
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.35);
+
+  transform:translate(-50%,-50%);
+
+  pointer-events:none;
+}
+
+
+/* SLIDER ROW */
+
+.admin-color-slider-row {
+  display:flex;
+  align-items:center;
+
+  gap:8px;
+
+  margin-top:12px;
+}
+
+
+/* CURRENT COLOR */
+
+.admin-color-current {
+  width:28px;
+  height:28px;
+
+  flex:0 0 28px;
+
+  border-radius:4px;
+
+  box-shadow:
+    inset 0 0 1px
+    rgba(255,255,255,.25);
+}
+
+
+/* HUE */
+
+.admin-color-hue {
+  width:100%;
+  height:8px;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+  border-radius:4px;
+
+  outline:0;
+
+  appearance:none;
+  -webkit-appearance:none;
+
+  background:
+    linear-gradient(
+      to right,
+      #f00 0%,
+      #ff0 16.66%,
+      #0f0 33.33%,
+      #0ff 50%,
+      #00f 66.66%,
+      #f0f 83.33%,
+      #f00 100%
+    );
+
+  cursor:pointer;
+}
+
+
+/* HUE HANDLE */
+
+.admin-color-hue::-webkit-slider-thumb {
+  width:12px;
+  height:12px;
+
+  appearance:none;
+  -webkit-appearance:none;
+
+  border:2px solid #1f1f1f;
+  border-radius:50%;
+
+  background:transparent;
+
+  box-shadow:
+    0 0 0 1px
+    rgba(255,255,255,.35);
+
+  cursor:pointer;
+}
+
+
+/* BOTTOM INPUTS */
+
+.admin-color-input-row {
+  display:flex;
+  align-items:center;
+
+  gap:4px;
+
+  margin-top:12px;
+}
+
+.admin-color-format {
+  flex:0 0 42px;
+
+  color:rgba(255,255,255,.45);
+
+  font-size:12px;
+}
+
+.admin-color-hex {
+  flex:1;
+  min-width:0;
+
+  height:32px;
+
+  padding:4px 11px;
+
+  border:1px solid #424242;
+  border-radius:6px;
+
+  outline:0;
+
+  color:rgba(255,255,255,.85);
+  background:#141414;
+
+  font-family:inherit;
+  font-size:13px;
+}
+
+.admin-color-hex:hover {
+  border-color:#3c89e8;
+}
+
+.admin-color-hex:focus {
+  border-color:#1668dc;
+}

@@ -311,42 +311,33 @@ export function setupLogout() {
         "click",
         async () => {
 
-try {
+          try {
 
-  if (adminLogoutTimer) {
+            if (adminLogoutTimer) {
 
-    clearTimeout(
-      adminLogoutTimer
-    );
+              clearTimeout(
+                adminLogoutTimer
+              );
 
-    adminLogoutTimer =
-      null;
+              adminLogoutTimer =
+                null;
 
-  }
-
-
-  clearAdminSession();
+            }
 
 
-  await signOut(auth);
+            clearAdminSession();
 
 
-  location.replace(
-    "./login.html"
-  );
+            await signOut(auth);
 
 
-} catch (error) {
-
-  console.error(
-    "Logout failed:",
-    error
-  );
-
-}
+            location.replace(
+              "./login.html"
+            );
 
 
-} catch (error) {
+          } catch (error) {
+
             console.error(
               "Logout failed:",
               error
@@ -357,6 +348,10 @@ try {
         }
       );
 
+    }
+  );
+
+}
 
 /* SAFE */
 

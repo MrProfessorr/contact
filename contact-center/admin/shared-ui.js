@@ -5121,4 +5121,345 @@ initAdminSidebar();
 
   window.initSharedDropdowns =
     initSharedDropdowns;
+
+   /* =========================================================
+   GLOBAL CUSTOM TOAST
+========================================================= */
+
+function getToastContainer() {
+
+  let container =
+    document.getElementById(
+      "globalToastContainer"
+    );
+
+
+  if (!container) {
+
+    container =
+      document.createElement(
+        "div"
+      );
+
+
+    container.id =
+      "globalToastContainer";
+
+
+    document.body.appendChild(
+      container
+    );
+
+  }
+
+
+  return container;
+
+}
+
+
+/* =========================================================
+   TOAST ICONS
+========================================================= */
+
+const toastIcons = {
+
+  success: `
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z"
+      />
+    </svg>
+  `,
+
+  error: `
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm127 576.8L576.8 703 512 638.2 447.2 703 385 640.8l64.8-64.8-64.8-64.8 62.2-62.2 64.8 64.8 64.8-64.8 62.2 62.2-64.8 64.8 64.8 64.8z"
+      />
+    </svg>
+  `,
+
+  warning: `
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-40 240h80v288h-80V304zm40 432a48 48 0 110-96 48 48 0 010 96z"
+      />
+    </svg>
+  `,
+
+  info: `
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm40 672h-80V448h80v288zm-40-368a48 48 0 110-96 48 48 0 010 96z"
+      />
+    </svg>
+  `
+
+};
+
+
+/* =========================================================
+   REMOVE TOAST
+========================================================= */
+
+function removeToast(
+  toast
+) {
+
+  if (
+    !toast ||
+    toast.dataset.removing ===
+      "true"
+  ) {
+
+    return;
+
+  }
+
+
+  toast.dataset.removing =
+    "true";
+
+
+  toast.classList.remove(
+    "show"
+  );
+
+
+  toast.classList.add(
+    "hide"
+  );
+
+
+  setTimeout(
+    () => {
+
+      toast.remove();
+
+    },
+    300
+  );
+
+}
+
+
+/* =========================================================
+   SHOW TOAST
+========================================================= */
+
+function showToast(
+  message,
+  type = "success",
+  duration = 3500
+) {
+
+  const allowedTypes = [
+    "success",
+    "error",
+    "warning",
+    "info"
+  ];
+
+
+  if (
+    !allowedTypes.includes(
+      type
+    )
+  ) {
+
+    type =
+      "success";
+
+  }
+
+
+  const container =
+    getToastContainer();
+
+
+  const toast =
+    document.createElement(
+      "div"
+    );
+
+
+  toast.className =
+    `custom-toast ${type}`;
+
+
+  /* ICON */
+
+  const icon =
+    document.createElement(
+      "span"
+    );
+
+
+  icon.className =
+    "custom-toast-icon";
+
+
+  icon.innerHTML =
+    toastIcons[type];
+
+
+  /* MESSAGE */
+
+  const messageElement =
+    document.createElement(
+      "div"
+    );
+
+
+  messageElement.className =
+    "custom-toast-message";
+
+
+  /*
+    textContent digunakan supaya
+    message tidak inject HTML.
+  */
+
+  messageElement.textContent =
+    String(message ?? "");
+
+
+  /* CLOSE */
+
+  const closeButton =
+    document.createElement(
+      "button"
+    );
+
+
+  closeButton.type =
+    "button";
+
+
+  closeButton.className =
+    "custom-toast-close";
+
+
+  closeButton.setAttribute(
+    "aria-label",
+    "Close notification"
+  );
+
+
+  closeButton.innerHTML = `
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        d="M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z"
+      />
+    </svg>
+  `;
+
+
+  closeButton.addEventListener(
+    "click",
+    () => {
+
+      removeToast(
+        toast
+      );
+
+    }
+  );
+
+
+  toast.appendChild(
+    icon
+  );
+
+
+  toast.appendChild(
+    messageElement
+  );
+
+
+  toast.appendChild(
+    closeButton
+  );
+
+
+  container.appendChild(
+    toast
+  );
+
+
+  /*
+    Trigger enter animation.
+  */
+
+  requestAnimationFrame(
+    () => {
+
+      requestAnimationFrame(
+        () => {
+
+          toast.classList.add(
+            "show"
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  /*
+    AUTO CLOSE
+  */
+
+  if (
+    duration > 0
+  ) {
+
+    setTimeout(
+      () => {
+
+        removeToast(
+          toast
+        );
+
+      },
+      duration
+    );
+
+  }
+
+
+  return toast;
+
+}
+
+
+/* =========================================================
+   GLOBAL ACCESS
+========================================================= */
+
+window.showToast =
+  showToast;
 })();

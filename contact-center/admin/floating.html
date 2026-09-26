@@ -1048,21 +1048,22 @@ floatingImageFile.addEventListener(
     }
 
 
-    if (
-      !file.type.startsWith(
-        "image/"
-      )
-    ) {
+if (
+  !file.type.startsWith(
+    "image/"
+  )
+) {
 
-      alert(
-        "Please select an image."
-      );
+  window.showToast(
+    "Please select a valid image.",
+    "warning"
+  );
 
-      floatingImageFile.value =
-        "";
+  floatingImageFile.value =
+    "";
 
-      return;
-    }
+  return;
+}
 
 
     if (
@@ -1712,6 +1713,14 @@ error => {
   statusMessage.className =
     "floating-save-message error";
 
+
+  window.showToast(
+    "Unable to load floating settings.",
+    "error",
+    5000
+  );
+
+
   hideFloatingPageLoading();
 
 }
@@ -1831,35 +1840,52 @@ saveBtn.addEventListener(
       }
 
 
-      statusMessage.textContent =
-        "Floating image saved successfully.";
+statusMessage.textContent =
+  "Floating image saved successfully.";
 
 
-      statusMessage.className =
-        "floating-save-message success";
+statusMessage.className =
+  "floating-save-message success";
 
 
-      updatePreview();
+window.showToast(
+  "Floating image saved successfully.",
+  "success"
+);
 
 
-    } catch (error) {
-
-      console.error(
-        "Floating save error:",
-        error
-      );
+updatePreview();
 
 
-      statusMessage.textContent =
-        error.message ||
-        "Failed to save floating image.";
+} catch (error) {
+
+  console.error(
+    "Floating save error:",
+    error
+  );
 
 
-      statusMessage.className =
-        "floating-save-message error";
+  const errorMessage =
+    error.message ||
+    "Failed to save floating image.";
 
 
-    } finally {
+  statusMessage.textContent =
+    errorMessage;
+
+
+  statusMessage.className =
+    "floating-save-message error";
+
+
+  window.showToast(
+    errorMessage,
+    "error",
+    5000
+  );
+
+
+} finally {
 
       saveBtn.disabled =
         false;

@@ -3011,7 +3011,7 @@ padding:0 12px;
   display:none;
 }
 
-.admin-header-color-picker.show {
+.admin-header-color-picker.open {
   display:block;
 }
 

@@ -4191,23 +4191,17 @@ adminPasswordForm
           }
 
 
-          await window
-            .changeAdminPassword(
-              currentPassword,
-              newPassword
-            );
+await window
+  .changeAdminPassword(
+    currentPassword,
+    newPassword
+  );
 
 
-          if (errorBox) {
-
-            errorBox.classList.add(
-              "success"
-            );
-
-            errorBox.textContent =
-              "Password changed successfully.";
-
-          }
+window.showToast(
+  "Password changed successfully.",
+  "success"
+);
 
 
           adminPasswordForm.reset();
@@ -4381,24 +4375,17 @@ adminPasswordForm
           }
 
 
-          await window
-            .changeAdminSecondPassword(
-              currentPassword,
-              newPassword
-            );
+await window
+  .changeAdminSecondPassword(
+    currentPassword,
+    newPassword
+  );
 
 
-          if (errorBox) {
-
-            errorBox.classList.add(
-              "success"
-            );
-
-            errorBox.textContent =
-              "2nd Password changed successfully.";
-
-          }
-
+window.showToast(
+  "2nd Password changed successfully.",
+  "success"
+);
 
           adminPasswordForm.reset();
 
@@ -4409,7 +4396,7 @@ adminPasswordForm
               closeAdminPasswordModal();
 
             },
-            1000
+            300
           );
 
         }

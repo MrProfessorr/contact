@@ -589,16 +589,10 @@
     class="btn btn-green welcome-save-btn"
     type="button"
   >
-    SAVE WELCOME
+    Save
   </button>
 
 </div>
-
-
-<div
-  id="welcomeSaveMessage"
-  class="welcome-save-message"
-></div>
 
     </section>
 
@@ -877,10 +871,6 @@ const closeOutside =
 const saveBtn =
   $("saveWelcomeBtn");
 
-const saveMessage =
-  $("welcomeSaveMessage");
-
-
 const preview =
   $("welcomeAdminPreview");
 
@@ -1073,6 +1063,31 @@ imageFile.addEventListener(
     if (!file) {
       return;
     }
+
+    const allowedImageTypes = [
+  "image/png",
+  "image/jpeg",
+  "image/webp",
+  "image/gif"
+];
+
+
+if (
+  !allowedImageTypes.includes(
+    file.type
+  )
+) {
+
+  window.showToast(
+    "Please select a valid PNG, JPG, WEBP or GIF image.",
+    "warning"
+  );
+
+  imageFile.value = "";
+
+  return;
+}
+    
    if (imageFileName) {
 
   imageFileName.textContent =
@@ -1114,23 +1129,34 @@ imageFile.addEventListener(
 uploadStatus.textContent =
   "Ready";
 
-
+window.showToast(
+  "Welcome image uploaded successfully.",
+  "success"
+);
       updatePreview();
 
 
-    } catch (error) {
+} catch (error) {
 
-      console.error(
-        error
-      );
-
-
-      uploadStatus.textContent =
-        error.message ||
-        "Upload failed.";
+  console.error(
+    error
+  );
 
 
-    } finally {
+  uploadStatus.textContent =
+    error.message ||
+    "Upload failed.";
+
+
+  window.showToast(
+    error?.message ||
+    "Failed to upload welcome image.",
+    "error",
+    5000
+  );
+
+
+} finally {
 
       uploadBtn.disabled =
         false;
@@ -1145,7 +1171,6 @@ uploadStatus.textContent =
 
   }
 );
-
 
 removeImage.addEventListener(
   "click",
@@ -1170,7 +1195,11 @@ uploadStatus.textContent =
     imagePreview.classList.add(
       "hidden"
     );
-
+window.showToast(
+  "Welcome image removed. Press SAVE WELCOME to apply.",
+  "info",
+  4500
+);
 
     updatePreview();
 
@@ -1437,11 +1466,11 @@ error => {
     error
   );
 
-  saveMessage.textContent =
-    "Failed to load welcome settings.";
-
-  saveMessage.className =
-    "welcome-save-message error";
+window.showToast(
+  "Failed to load welcome settings.",
+  "error",
+  5000
+);
 
   hideWelcomePageLoading();
 
@@ -1458,15 +1487,6 @@ error => {
 saveBtn.addEventListener(
   "click",
   async () => {
-
-    saveMessage.className =
-      "welcome-save-message";
-
-
-    /*
-      Safety:
-      jangan sampai semua cara close OFF.
-    */
 
     if (
       !closeX.checked &&
@@ -1593,28 +1613,28 @@ saveBtn.addEventListener(
       );
 
 
-      saveMessage.textContent =
-        "Welcome settings saved.";
-
-      saveMessage.className =
-        "welcome-save-message success";
-
-
-    } catch (error) {
-
-      console.error(
-        error
-      );
+window.showToast(
+  "Welcome settings saved successfully.",
+  "success"
+);
 
 
-      saveMessage.textContent =
-        "Failed to save settings.";
+} catch (error) {
 
-      saveMessage.className =
-        "welcome-save-message error";
+  console.error(
+    error
+  );
 
 
-    } finally {
+  window.showToast(
+    error?.message ||
+    "Failed to save welcome settings.",
+    "error",
+    5000
+  );
+
+
+} finally {
 
       saveBtn.disabled =
         false;

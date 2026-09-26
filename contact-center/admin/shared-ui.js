@@ -3592,13 +3592,64 @@ userDropdown.innerHTML = `
     </span>
   </button>
 
-  <input
-    type="color"
-    id="adminHeaderColorInput"
-    class="admin-header-color-input"
-    value="#001528"
-    aria-label="Header Background Color"
+<div
+  id="adminHeaderColorPicker"
+  class="admin-header-color-picker"
+>
+  <div
+    id="adminHeaderColorPalette"
+    class="admin-header-color-palette"
   >
+    <span
+      id="adminHeaderColorPaletteHandle"
+      class="admin-header-color-palette-handle"
+    ></span>
+  </div>
+
+  <div class="admin-header-color-controls">
+
+    <div
+      id="adminHeaderColorPreview"
+      class="admin-header-color-preview"
+    ></div>
+
+    <div class="admin-header-color-sliders">
+
+      <div
+        id="adminHeaderHueSlider"
+        class="admin-header-hue-slider"
+      >
+        <span
+          id="adminHeaderHueHandle"
+          class="admin-header-hue-handle"
+        ></span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="admin-header-color-input-row">
+
+    <span class="admin-header-color-format">
+      HEX
+    </span>
+
+    <input
+      type="text"
+      id="adminHeaderHexInput"
+      class="admin-header-hex-input"
+      value="#001528"
+      maxlength="7"
+      spellcheck="false"
+    >
+
+    <span class="admin-header-color-alpha">
+      100%
+    </span>
+
+  </div>
+</div>
 
   <!-- RESET 2ND PASSWORD - PALING ATAS -->
   <button
@@ -3681,12 +3732,44 @@ const adminHeaderColorBtn =
   userDropdown.querySelector(
     "#adminHeaderColorBtn"
   );
-
-const adminHeaderColorInput =
+const adminHeaderColorPicker =
   userDropdown.querySelector(
-    "#adminHeaderColorInput"
+    "#adminHeaderColorPicker"
   );
 
+const adminHeaderColorPalette =
+  userDropdown.querySelector(
+    "#adminHeaderColorPalette"
+  );
+
+const adminHeaderColorPaletteHandle =
+  userDropdown.querySelector(
+    "#adminHeaderColorPaletteHandle"
+  );
+
+const adminHeaderHueSlider =
+  userDropdown.querySelector(
+    "#adminHeaderHueSlider"
+  );
+
+const adminHeaderHueHandle =
+  userDropdown.querySelector(
+    "#adminHeaderHueHandle"
+  );
+
+const adminHeaderColorPreview =
+  userDropdown.querySelector(
+    "#adminHeaderColorPreview"
+  );
+
+const adminHeaderHexInput =
+  userDropdown.querySelector(
+    "#adminHeaderHexInput"
+  );
+
+let adminHeaderHue = 210;
+let adminHeaderSaturation = 100;
+let adminHeaderValue = 16;
 const adminHeaderColorSwatch =
   userDropdown.querySelector(
     "#adminHeaderColorSwatch"
@@ -3763,12 +3846,15 @@ if (header) {
   }
 
 
-  if (adminHeaderColorInput) {
+if (adminHeaderHexInput) {
+  adminHeaderHexInput.value =
+    finalColor;
+}
 
-    adminHeaderColorInput.value =
-      finalColor.toLowerCase();
-
-  }
+if (adminHeaderColorPreview) {
+  adminHeaderColorPreview.style.background =
+    finalColor;
+}
 
 }
 
@@ -3787,7 +3873,197 @@ applyAdminHeaderColor(
 );
 
 
-/* OPEN COLOR PICKER */
+/* =======================================================
+   CUSTOM HEADER COLOR PICKER
+======================================================= */
+
+function hsvToHex(
+  h,
+  s,
+  v
+) {
+
+  s /= 100;
+  v /= 100;
+
+  const c = v * s;
+  const x =
+    c *
+    (
+      1 -
+      Math.abs(
+        ((h / 60) % 2) - 1
+      )
+    );
+
+  const m = v - c;
+
+  let r = 0;
+  let g = 0;
+  let b = 0;
+
+  if (h < 60) {
+    r = c;
+    g = x;
+  } else if (h < 120) {
+    r = x;
+    g = c;
+  } else if (h < 180) {
+    g = c;
+    b = x;
+  } else if (h < 240) {
+    g = x;
+    b = c;
+  } else if (h < 300) {
+    r = x;
+    b = c;
+  } else {
+    r = c;
+    b = x;
+  }
+
+  const toHex =
+    value =>
+      Math.round(
+        (value + m) * 255
+      )
+        .toString(16)
+        .padStart(2, "0");
+
+  return (
+    "#" +
+    toHex(r) +
+    toHex(g) +
+    toHex(b)
+  ).toUpperCase();
+
+}
+
+
+function updateCustomHeaderColor() {
+
+  const color =
+    hsvToHex(
+      adminHeaderHue,
+      adminHeaderSaturation,
+      adminHeaderValue
+    );
+
+  applyAdminHeaderColor(
+    color
+  );
+
+  localStorage.setItem(
+    ADMIN_HEADER_COLOR_KEY,
+    color
+  );
+
+  if (adminHeaderColorPalette) {
+
+    adminHeaderColorPalette
+      .style
+      .setProperty(
+        "--picker-hue",
+        `hsl(${adminHeaderHue}, 100%, 50%)`
+      );
+
+  }
+
+  if (adminHeaderColorPreview) {
+
+    adminHeaderColorPreview
+      .style
+      .background =
+        color;
+
+  }
+
+}
+
+
+function updatePaletteFromPointer(
+  event
+) {
+
+  if (!adminHeaderColorPalette) {
+    return;
+  }
+
+  const rect =
+    adminHeaderColorPalette
+      .getBoundingClientRect();
+
+  const x =
+    Math.max(
+      0,
+      Math.min(
+        rect.width,
+        event.clientX - rect.left
+      )
+    );
+
+  const y =
+    Math.max(
+      0,
+      Math.min(
+        rect.height,
+        event.clientY - rect.top
+      )
+    );
+
+  adminHeaderSaturation =
+    (x / rect.width) * 100;
+
+  adminHeaderValue =
+    100 -
+    (y / rect.height) * 100;
+
+  adminHeaderColorPaletteHandle
+    .style.left =
+      `${adminHeaderSaturation}%`;
+
+  adminHeaderColorPaletteHandle
+    .style.top =
+      `${100 - adminHeaderValue}%`;
+
+  updateCustomHeaderColor();
+
+}
+
+
+function updateHueFromPointer(
+  event
+) {
+
+  if (!adminHeaderHueSlider) {
+    return;
+  }
+
+  const rect =
+    adminHeaderHueSlider
+      .getBoundingClientRect();
+
+  const x =
+    Math.max(
+      0,
+      Math.min(
+        rect.width,
+        event.clientX - rect.left
+      )
+    );
+
+  adminHeaderHue =
+    (x / rect.width) * 360;
+
+  adminHeaderHueHandle.style.left =
+    `${(adminHeaderHue / 360) * 100}%`;
+
+  updateCustomHeaderColor();
+
+}
+
+
+/* OPEN / CLOSE */
 
 adminHeaderColorBtn
   ?.addEventListener(
@@ -3796,11 +4072,175 @@ adminHeaderColorBtn
 
       event.stopPropagation();
 
-      adminHeaderColorInput
-        ?.click();
+      adminHeaderColorPicker
+        ?.classList
+        .toggle("open");
 
     }
   );
+
+
+adminHeaderColorPicker
+  ?.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+    }
+  );
+
+
+/* PALETTE DRAG */
+
+adminHeaderColorPalette
+  ?.addEventListener(
+    "pointerdown",
+    event => {
+
+      event.preventDefault();
+
+      adminHeaderColorPalette
+        .setPointerCapture(
+          event.pointerId
+        );
+
+      updatePaletteFromPointer(
+        event
+      );
+
+    }
+  );
+
+
+adminHeaderColorPalette
+  ?.addEventListener(
+    "pointermove",
+    event => {
+
+      if (
+        !adminHeaderColorPalette
+          .hasPointerCapture(
+            event.pointerId
+          )
+      ) {
+        return;
+      }
+
+      updatePaletteFromPointer(
+        event
+      );
+
+    }
+  );
+
+
+/* HUE DRAG */
+
+adminHeaderHueSlider
+  ?.addEventListener(
+    "pointerdown",
+    event => {
+
+      event.preventDefault();
+
+      adminHeaderHueSlider
+        .setPointerCapture(
+          event.pointerId
+        );
+
+      updateHueFromPointer(
+        event
+      );
+
+    }
+  );
+
+
+adminHeaderHueSlider
+  ?.addEventListener(
+    "pointermove",
+    event => {
+
+      if (
+        !adminHeaderHueSlider
+          .hasPointerCapture(
+            event.pointerId
+          )
+      ) {
+        return;
+      }
+
+      updateHueFromPointer(
+        event
+      );
+
+    }
+  );
+
+
+/* MANUAL HEX */
+
+adminHeaderHexInput
+  ?.addEventListener(
+    "change",
+    () => {
+
+      const value =
+        adminHeaderHexInput
+          .value
+          .trim()
+          .toUpperCase();
+
+      if (
+        !/^#[0-9A-F]{6}$/.test(
+          value
+        )
+      ) {
+
+        adminHeaderHexInput.value =
+          localStorage.getItem(
+            ADMIN_HEADER_COLOR_KEY
+          ) ||
+          ADMIN_HEADER_DEFAULT_COLOR;
+
+        return;
+
+      }
+
+      applyAdminHeaderColor(
+        value
+      );
+
+      localStorage.setItem(
+        ADMIN_HEADER_COLOR_KEY,
+        value
+      );
+
+    }
+  );
+
+
+/* CLOSE OUTSIDE */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      !userDropdown.contains(
+        event.target
+      )
+    ) {
+
+      adminHeaderColorPicker
+        ?.classList
+        .remove("open");
+
+    }
+
+  }
+);
 
 
 /* LIVE PREVIEW */

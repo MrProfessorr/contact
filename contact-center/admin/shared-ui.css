@@ -2862,23 +2862,18 @@ padding:0 12px;
   top:50%;
   right:12px;
   transform:translateY(-50%);
-
   width:20px;
   height:20px;
   padding:0;
   margin:0;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   border:0;
   outline:0;
   background:transparent;
-
-  color:#8c8c8c;
+  color:var(--text2);
   cursor:pointer;
-
   z-index:3;
 }
 
@@ -2889,7 +2884,7 @@ padding:0 12px;
 }
 
 .admin-password-eye:hover{
-  color:#1677ff;
+  color:var(--text);
 }
 
 .admin-password-eye:focus{

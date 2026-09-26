@@ -3968,7 +3968,479 @@ function closeAdminPasswordModal() {
   adminPasswordForm.reset();
 
 }
+/* =======================================================
+   CHANGE PASSWORD / 2ND PASSWORD SUBMIT
+======================================================= */
 
+adminPasswordForm
+  ?.addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+
+      const currentPassword =
+        adminPasswordModal
+          .querySelector(
+            "#adminCurrentPassword"
+          )
+          ?.value
+          .trim() || "";
+
+
+      const newPassword =
+        adminPasswordModal
+          .querySelector(
+            "#adminNewPassword"
+          )
+          ?.value
+          .trim() || "";
+
+
+      const confirmPassword =
+        adminPasswordModal
+          .querySelector(
+            "#adminConfirmPassword"
+          )
+          ?.value
+          .trim() || "";
+
+
+      const errorBox =
+        adminPasswordModal
+          .querySelector(
+            "#adminPasswordError"
+          );
+
+
+      const saveButton =
+        adminPasswordModal
+          .querySelector(
+            "#adminPasswordSave"
+          );
+
+
+      /* RESET MESSAGE */
+
+      if (errorBox) {
+
+        errorBox.textContent =
+          "";
+
+        errorBox.classList.remove(
+          "success"
+        );
+
+      }
+
+
+      /* =========================
+         EMPTY VALIDATION
+      ========================= */
+
+      if (
+        !currentPassword ||
+        !newPassword ||
+        !confirmPassword
+      ) {
+
+        if (errorBox) {
+
+          errorBox.textContent =
+            "Please complete all fields.";
+
+        }
+
+        return;
+
+      }
+
+
+      /* =========================
+         CONFIRM VALIDATION
+      ========================= */
+
+      if (
+        newPassword !==
+        confirmPassword
+      ) {
+
+        if (errorBox) {
+
+          errorBox.textContent =
+            "New password and confirm password do not match.";
+
+        }
+
+        return;
+
+      }
+
+
+      /* ==================================================
+         NORMAL FIREBASE PASSWORD
+      ================================================== */
+
+      if (
+        adminPasswordMode ===
+        "password"
+      ) {
+
+        if (
+          newPassword.length < 6
+        ) {
+
+          if (errorBox) {
+
+            errorBox.textContent =
+              "New password must be at least 6 characters.";
+
+          }
+
+          return;
+
+        }
+
+
+        try {
+
+          if (saveButton) {
+
+            saveButton.disabled =
+              true;
+
+            saveButton.textContent =
+              "Changing...";
+
+          }
+
+
+          if (
+            typeof window
+              .changeAdminPassword !==
+            "function"
+          ) {
+
+            throw new Error(
+              "CHANGE_PASSWORD_NOT_READY"
+            );
+
+          }
+
+
+          await window
+            .changeAdminPassword(
+              currentPassword,
+              newPassword
+            );
+
+
+          if (errorBox) {
+
+            errorBox.classList.add(
+              "success"
+            );
+
+            errorBox.textContent =
+              "Password changed successfully.";
+
+          }
+
+
+          adminPasswordForm.reset();
+
+
+          setTimeout(
+            () => {
+
+              closeAdminPasswordModal();
+
+            },
+            1000
+          );
+
+        }
+        catch (error) {
+
+          console.error(
+            "Change password error:",
+            error
+          );
+
+
+          if (errorBox) {
+
+            errorBox.classList.remove(
+              "success"
+            );
+
+
+            if (
+              error.code ===
+                "auth/invalid-credential" ||
+              error.code ===
+                "auth/wrong-password"
+            ) {
+
+              errorBox.textContent =
+                "Current password is incorrect.";
+
+            }
+            else if (
+              error.code ===
+              "auth/weak-password"
+            ) {
+
+              errorBox.textContent =
+                "New password is too weak.";
+
+            }
+            else if (
+              error.code ===
+              "auth/too-many-requests"
+            ) {
+
+              errorBox.textContent =
+                "Too many attempts. Please try again later.";
+
+            }
+            else if (
+              error.message ===
+              "CHANGE_PASSWORD_NOT_READY"
+            ) {
+
+              errorBox.textContent =
+                "Password service is not ready.";
+
+            }
+            else {
+
+              errorBox.textContent =
+                "Unable to change password.";
+
+            }
+
+          }
+
+        }
+        finally {
+
+          if (saveButton) {
+
+            saveButton.disabled =
+              false;
+
+            saveButton.textContent =
+              "Change Password";
+
+          }
+
+        }
+
+
+        return;
+
+      }
+
+
+      /* ==================================================
+         2ND PASSWORD
+      ================================================== */
+
+      if (
+        adminPasswordMode ===
+        "second"
+      ) {
+
+        /* CURRENT CODE = 6 DIGIT */
+
+        if (
+          !/^\d{6}$/.test(
+            currentPassword
+          )
+        ) {
+
+          if (errorBox) {
+
+            errorBox.textContent =
+              "Current 2nd Password must be exactly 6 digits.";
+
+          }
+
+          return;
+
+        }
+
+
+        /* NEW CODE = 6 DIGIT */
+
+        if (
+          !/^\d{6}$/.test(
+            newPassword
+          )
+        ) {
+
+          if (errorBox) {
+
+            errorBox.textContent =
+              "New 2nd Password must be exactly 6 digits.";
+
+          }
+
+          return;
+
+        }
+
+
+        try {
+
+          if (saveButton) {
+
+            saveButton.disabled =
+              true;
+
+            saveButton.textContent =
+              "Changing...";
+
+          }
+
+
+          if (
+            typeof window
+              .changeAdminSecondPassword !==
+            "function"
+          ) {
+
+            throw new Error(
+              "CHANGE_SECOND_PASSWORD_NOT_READY"
+            );
+
+          }
+
+
+          await window
+            .changeAdminSecondPassword(
+              currentPassword,
+              newPassword
+            );
+
+
+          if (errorBox) {
+
+            errorBox.classList.add(
+              "success"
+            );
+
+            errorBox.textContent =
+              "2nd Password changed successfully.";
+
+          }
+
+
+          adminPasswordForm.reset();
+
+
+          setTimeout(
+            () => {
+
+              closeAdminPasswordModal();
+
+            },
+            1000
+          );
+
+        }
+        catch (error) {
+
+          console.error(
+            "Change 2nd Password error:",
+            error
+          );
+
+
+          if (errorBox) {
+
+            errorBox.classList.remove(
+              "success"
+            );
+
+
+            if (
+              error.message ===
+              "SECOND_CODE_WRONG"
+            ) {
+
+              errorBox.textContent =
+                "Current 2nd Password is incorrect.";
+
+            }
+            else if (
+              error.message ===
+              "SECOND_CODE_FORMAT"
+            ) {
+
+              errorBox.textContent =
+                "2nd Password must be exactly 6 digits.";
+
+            }
+            else if (
+              error.message ===
+              "SECOND_AUTH_NOT_FOUND"
+            ) {
+
+              errorBox.textContent =
+                "2nd Password account was not found.";
+
+            }
+            else if (
+              error.message ===
+              "CHANGE_SECOND_PASSWORD_NOT_READY"
+            ) {
+
+              errorBox.textContent =
+                "2nd Password service is not ready.";
+
+            }
+            else if (
+              error.code ===
+                "PERMISSION_DENIED" ||
+              error.code ===
+                "PERMISSION_DENIED".toLowerCase()
+            ) {
+
+              errorBox.textContent =
+                "Database permission denied.";
+
+            }
+            else {
+
+              errorBox.textContent =
+                "Unable to change 2nd Password.";
+
+            }
+
+          }
+
+        }
+        finally {
+
+          if (saveButton) {
+
+            saveButton.disabled =
+              false;
+
+            saveButton.textContent =
+              "Change 2nd Password";
+
+          }
+
+        }
+
+      }
+
+    }
+  );
 
 adminChangePasswordBtn
   ?.addEventListener(

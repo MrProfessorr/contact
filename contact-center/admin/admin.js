@@ -428,7 +428,31 @@ export async function changeAdminSecondPassword(
       data?.code || ""
     ) !== currentCode
   ) {
+/* Pastikan 2nd Password aktif */
 
+if (
+  data?.enabled !== true
+) {
+
+  throw new Error(
+    "SECOND_AUTH_DISABLED"
+  );
+
+}
+
+
+/* Pastikan code memang tersedia */
+
+if (
+  !data?.code ||
+  String(data.code).trim() === ""
+) {
+
+  throw new Error(
+    "SECOND_CODE_NOT_SET"
+  );
+
+}
     throw new Error(
       "SECOND_CODE_WRONG"
     );
@@ -536,5 +560,6 @@ export {
   set,
   update,
   remove,
-  onValue
+  onValue,
+  get
 };

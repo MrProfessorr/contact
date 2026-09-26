@@ -847,9 +847,10 @@ loadingImageFile.addEventListener(
       )
     ) {
 
-      alert(
-        "Please select an image or GIF."
-      );
+window.showToast(
+  "Please select a valid image or GIF.",
+  "warning"
+);
 
       loadingImageFile.value =
         "";
@@ -1372,54 +1373,6 @@ loadingPreviewImage.addEventListener(
   }
 );
 
-
-
-/* =========================================================
-   MESSAGE
-========================================================= */
-
-let messageTimer =
-  null;
-
-
-function showMessage(
-  message,
-  type = "success"
-) {
-
-  if (messageTimer) {
-    clearTimeout(
-      messageTimer
-    );
-  }
-
-
-  loadingSaveMessage.textContent =
-    message;
-
-
-  loadingSaveMessage.className =
-    `loading-save-message ${type}`;
-
-
-  messageTimer =
-    setTimeout(
-      () => {
-
-        loadingSaveMessage.className =
-          "loading-save-message";
-
-
-        loadingSaveMessage.textContent =
-          "";
-
-      },
-      3500
-    );
-
-}
-
-
 /* =========================================================
    LOAD FIREBASE SETTINGS
 ========================================================= */
@@ -1460,10 +1413,11 @@ onValue(
       error
     );
 
-    showMessage(
-      "Failed to load loading settings.",
-      "error"
-    );
+window.showToast(
+  "Failed to load loading settings.",
+  "error",
+  5000
+);
 
     hideLoadingPageLoading();
 
@@ -1581,10 +1535,10 @@ saveLoadingBtn.addEventListener(
       }
 
 
-      showMessage(
-        "Loading settings saved successfully.",
-        "success"
-      );
+window.showToast(
+  "Loading settings saved successfully.",
+  "success"
+);
 
 
       updatePreview();
@@ -1598,11 +1552,12 @@ saveLoadingBtn.addEventListener(
       );
 
 
-      showMessage(
-        error.message ||
-        "Failed to save loading settings.",
-        "error"
-      );
+window.showToast(
+  error.message ||
+  "Failed to save loading settings.",
+  "error",
+  5000
+);
 
 
     } finally {
@@ -1650,10 +1605,11 @@ if (
 
 }
 
-    showMessage(
-      "Default values restored. Press Save Loading to save them.",
-      "success"
-    );
+window.showToast(
+  "Default values restored. Press Save Loading to save them.",
+  "info",
+  4500
+);  
 
   }
 );

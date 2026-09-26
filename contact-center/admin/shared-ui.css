@@ -2875,6 +2875,7 @@ padding:0 12px;
   color:var(--text2);
   cursor:pointer;
   z-index:3;
+  transition: all 0.2s;
 }
 
 .admin-password-eye svg{
@@ -2886,7 +2887,10 @@ padding:0 12px;
 .admin-password-eye:hover{
   color:var(--text);
 }
-
+.admin-password-input-wrap:has(.admin-password-eye:hover)
+.shared-input {
+  border-color: var(--input-line-hover);
+}
 .admin-password-eye:focus{
   outline:none;
 }

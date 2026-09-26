@@ -417,17 +417,10 @@ export async function changeAdminSecondPassword(
   }
 
 
-  const data =
-    snapshot.val();
+const data =
+  snapshot.val();
 
 
-  /* Check 2nd password lama */
-
-  if (
-    String(
-      data?.code || ""
-    ) !== currentCode
-  ) {
 /* Pastikan 2nd Password aktif */
 
 if (
@@ -445,7 +438,9 @@ if (
 
 if (
   !data?.code ||
-  String(data.code).trim() === ""
+  String(
+    data.code
+  ).trim() === ""
 ) {
 
   throw new Error(
@@ -453,12 +448,21 @@ if (
   );
 
 }
-    throw new Error(
-      "SECOND_CODE_WRONG"
-    );
 
-  }
 
+/* Check 2nd password lama */
+
+if (
+  String(
+    data.code
+  ) !== currentCode
+) {
+
+  throw new Error(
+    "SECOND_CODE_WRONG"
+  );
+
+}
 
   /* Tukar code sahaja */
 
@@ -522,14 +526,22 @@ export function setupLogout() {
             );
 
 
-          } catch (error) {
+} catch (error) {
 
-            console.error(
-              "Logout failed:",
-              error
-            );
+  console.error(
+    "Logout failed:",
+    error
+  );
 
-          }
+
+  window.showToast?.(
+    error?.message ||
+    "Failed to logout.",
+    "error",
+    5000
+  );
+
+}
 
         }
       );

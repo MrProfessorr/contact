@@ -1025,7 +1025,20 @@ body{
 .otp-input:focus{
   border-color:var(--blue);
 }
-
+.otp-message-error{
+  margin-top:-18px;
+  margin-bottom:14px;
+  color:#dc4446;
+  font-size:12px;
+  line-height:1.4;
+  text-align:left;
+}
+.otp-input.login-input-error{
+  border-color:#dc4446 !important;
+}
+.otp-message-error.hidden{
+  display:none;
+}
 .otp-error{
   animation:otpShake .32s ease;
 }
@@ -1663,7 +1676,10 @@ body{
             inputmode="numeric" maxlength="1">
 
         </div>
-
+<div
+  id="otpErrorMessage"
+  class="otp-message-error hidden"
+></div>
 
 <button
   id="secondAuthVerifyBtn"
@@ -2008,7 +2024,52 @@ const otpInputs =
       ".otp-input"
     )
   );
+const otpErrorMessage =
+  document.getElementById(
+    "otpErrorMessage"
+  );
 
+
+function showOtpError(message) {
+
+  otpErrorMessage.textContent =
+    message;
+
+  otpErrorMessage.classList.remove(
+    "hidden"
+  );
+
+  otpInputs.forEach(input => {
+    input.classList.add(
+      "login-input-error"
+    );
+  });
+
+  window.showToast(
+    message,
+    "error",
+    5000
+  );
+
+}
+
+
+function hideOtpError() {
+
+  otpErrorMessage.textContent =
+    "";
+
+  otpErrorMessage.classList.add(
+    "hidden"
+  );
+
+  otpInputs.forEach(input => {
+    input.classList.remove(
+      "login-input-error"
+    );
+  });
+
+}
 
 let pendingUser =
   null;
@@ -2213,20 +2274,20 @@ if (
         }
 
 
-        otpInputs.forEach(
-          (otpInput, otpIndex) => {
+otpInputs.forEach(
+  (otpInput, otpIndex) => {
 
-            otpInput.value =
-              digits[otpIndex] || "";
+    otpInput.value =
+      digits[otpIndex] || "";
 
+    otpInput.classList.toggle(
+      "filled",
+      otpInput.value !== ""
+    );
 
-            otpInput.classList.toggle(
-              "filled",
-              otpInput.value !== ""
-            );
-
-          }
-        );
+  }
+);
+hideOtpError();
 
 
         const focusIndex =
@@ -2903,7 +2964,7 @@ if (enteredCode.length !== 6) {
   }
 
 
-showLoginError(
+showOtpError(
   "Please enter the complete 6-digit 2nd Password."
 );
 
@@ -3001,7 +3062,7 @@ showLoginError(
     false;
 
 }
-showLoginError(
+showOtpError(
   "2nd Password incorrect."
 );
 

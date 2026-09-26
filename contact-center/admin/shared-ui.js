@@ -3724,11 +3724,24 @@ function applyAdminHeaderColor(
     );
 
 
-  adminNav.style.setProperty(
+const header =
+  document.querySelector(
+    ".admin-nav"
+  );
+
+if (header) {
+  header.style.setProperty(
+    "background",
+    finalColor,
+    "important"
+  );
+
+  header.style.setProperty(
     "background-color",
     finalColor,
     "important"
   );
+}
 
 
   if (adminHeaderColorSwatch) {

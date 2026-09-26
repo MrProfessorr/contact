@@ -3573,6 +3573,35 @@ userDropdown.className =
 
 userDropdown.innerHTML = `
 
+  <!-- HEADER BACKGROUND COLOR -->
+  <button
+    type="button"
+    id="adminHeaderColorBtn"
+    class="admin-user-logout admin-header-color-btn"
+  >
+    <span
+      id="adminHeaderColorSwatch"
+      class="admin-header-color-swatch"
+    ></span>
+
+    <span
+      id="adminHeaderColorText"
+      class="admin-header-color-text"
+    >
+      Header Background Color (#001528)
+    </span>
+
+    <span></span>
+  </button>
+
+  <input
+    type="color"
+    id="adminHeaderColorInput"
+    class="admin-header-color-input"
+    value="#001528"
+    aria-label="Header Background Color"
+  >
+
   <!-- RESET 2ND PASSWORD - PALING ATAS -->
   <button
     type="button"
@@ -3639,7 +3668,178 @@ userDropdown.innerHTML = `
   </button>
 
 `;
+/* =======================================================
+   ADMIN HEADER BACKGROUND COLOR
+======================================================= */
 
+const ADMIN_HEADER_COLOR_KEY =
+  "adminHeaderBackgroundColor";
+
+const ADMIN_HEADER_DEFAULT_COLOR =
+  "#001528";
+
+
+const adminHeaderColorBtn =
+  userDropdown.querySelector(
+    "#adminHeaderColorBtn"
+  );
+
+const adminHeaderColorInput =
+  userDropdown.querySelector(
+    "#adminHeaderColorInput"
+  );
+
+const adminHeaderColorSwatch =
+  userDropdown.querySelector(
+    "#adminHeaderColorSwatch"
+  );
+
+const adminHeaderColorText =
+  userDropdown.querySelector(
+    "#adminHeaderColorText"
+  );
+
+
+function normalizeAdminHeaderColor(
+  color
+) {
+
+  const value =
+    String(color || "")
+      .trim()
+      .toUpperCase();
+
+  return /^#[0-9A-F]{6}$/.test(value)
+    ? value
+    : ADMIN_HEADER_DEFAULT_COLOR;
+
+}
+
+
+function applyAdminHeaderColor(
+  color
+) {
+
+  const finalColor =
+    normalizeAdminHeaderColor(
+      color
+    );
+
+
+  adminNav.style.setProperty(
+    "background-color",
+    finalColor,
+    "important"
+  );
+
+
+  if (adminHeaderColorSwatch) {
+
+    adminHeaderColorSwatch
+      .style
+      .backgroundColor =
+        finalColor;
+
+  }
+
+
+  if (adminHeaderColorText) {
+
+    adminHeaderColorText
+      .textContent =
+        `Header Background Color (${finalColor})`;
+
+  }
+
+
+  if (adminHeaderColorInput) {
+
+    adminHeaderColorInput.value =
+      finalColor.toLowerCase();
+
+  }
+
+}
+
+
+/* LOAD SAVED COLOR */
+
+const savedAdminHeaderColor =
+  localStorage.getItem(
+    ADMIN_HEADER_COLOR_KEY
+  ) ||
+  ADMIN_HEADER_DEFAULT_COLOR;
+
+
+applyAdminHeaderColor(
+  savedAdminHeaderColor
+);
+
+
+/* OPEN COLOR PICKER */
+
+adminHeaderColorBtn
+  ?.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      adminHeaderColorInput
+        ?.click();
+
+    }
+  );
+
+
+/* LIVE PREVIEW */
+
+adminHeaderColorInput
+  ?.addEventListener(
+    "input",
+    () => {
+
+      const color =
+        normalizeAdminHeaderColor(
+          adminHeaderColorInput.value
+        );
+
+      applyAdminHeaderColor(
+        color
+      );
+
+      localStorage.setItem(
+        ADMIN_HEADER_COLOR_KEY,
+        color
+      );
+
+    }
+  );
+
+
+/* FINAL SAVE */
+
+adminHeaderColorInput
+  ?.addEventListener(
+    "change",
+    () => {
+
+      const color =
+        normalizeAdminHeaderColor(
+          adminHeaderColorInput.value
+        );
+
+      applyAdminHeaderColor(
+        color
+      );
+
+      localStorage.setItem(
+        ADMIN_HEADER_COLOR_KEY,
+        color
+      );
+
+    }
+  );
 
 userWrapper.appendChild(
   userButton

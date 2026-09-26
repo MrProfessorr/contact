@@ -3726,7 +3726,9 @@ adminPasswordModal.innerHTML = `
           id="adminCurrentPasswordLabel"
           for="adminCurrentPassword"
         >
-          Current Password
+         <span class="label-required"> 
+         Current Password 
+         </span>
         </label>
 
         <input
@@ -3748,7 +3750,9 @@ adminPasswordModal.innerHTML = `
     id="adminNewPasswordLabel"
     for="adminNewPassword"
   >
+  <span class="label-required"> 
     New Password
+   </span>
   </label>
 
   <div
@@ -3789,7 +3793,9 @@ adminPasswordModal.innerHTML = `
   <label
     for="adminConfirmPassword"
   >
+  <span class="label-required"> 
     Confirm New Password
+   </span>
   </label>
 
   <div

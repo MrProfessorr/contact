@@ -3576,7 +3576,7 @@ userDropdown.innerHTML = `
   <button
     type="button"
     id="adminChangePasswordBtn"
-    class="admin-user-menu-item"
+    class="admin-user-logout"
   >
     <svg
       viewBox="0 0 1024 1024"
@@ -3597,7 +3597,7 @@ userDropdown.innerHTML = `
   <button
     type="button"
     id="adminChangeSecondPasswordBtn"
-    class="admin-user-menu-item"
+    class="admin-user-logout"
   >
     <svg
       viewBox="0 0 1024 1024"

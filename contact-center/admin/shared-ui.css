@@ -2844,3 +2844,54 @@ padding:0 12px;
   }
 
 }
+/* =========================================================
+   ADMIN PASSWORD SHOW / HIDE
+========================================================= */
+
+.admin-password-input-wrap{
+  position:relative;
+}
+
+.admin-password-input-wrap
+.admin-password-icon-input{
+  padding-right:42px;
+}
+
+.admin-password-eye{
+  position:absolute;
+  top:50%;
+  right:12px;
+  transform:translateY(-50%);
+
+  width:20px;
+  height:20px;
+  padding:0;
+  margin:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:0;
+  outline:0;
+  background:transparent;
+
+  color:#8c8c8c;
+  cursor:pointer;
+
+  z-index:3;
+}
+
+.admin-password-eye svg{
+  width:14px;
+  height:14px;
+  display:block;
+}
+
+.admin-password-eye:hover{
+  color:#1677ff;
+}
+
+.admin-password-eye:focus{
+  outline:none;
+}

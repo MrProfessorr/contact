@@ -1064,7 +1064,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
   z-index:10005;
 
-  width:300px;
+  width:290px;
   max-width:calc(100vw - 16px);
 
   padding:12px;

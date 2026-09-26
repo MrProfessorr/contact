@@ -4162,152 +4162,157 @@ if (
 }
 
 
-      /* ==================================================
-         NORMAL FIREBASE PASSWORD
-      ================================================== */
+/* ==================================================
+   NORMAL FIREBASE PASSWORD
+================================================== */
 
 if (
-  newPassword.length < 6
+  adminPasswordMode ===
+  "password"
 ) {
 
-  showAdminPasswordError(
-    errorBox,
-    "New password must be at least 6 characters."
-  );
+  if (
+    newPassword.length < 6
+  ) {
+
+    showAdminPasswordError(
+      errorBox,
+      "New password must be at least 6 characters."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    if (saveButton) {
+
+      saveButton.disabled =
+        true;
+
+      saveButton.textContent =
+        "Changing...";
+
+    }
+
+
+    if (
+      typeof window
+        .changeAdminPassword !==
+      "function"
+    ) {
+
+      throw new Error(
+        "CHANGE_PASSWORD_NOT_READY"
+      );
+
+    }
+
+
+    await window
+      .changeAdminPassword(
+        currentPassword,
+        newPassword
+      );
+
+
+    window.showToast(
+      "Password changed successfully.",
+      "success"
+    );
+
+
+    adminPasswordForm.reset();
+
+
+    setTimeout(
+      () => {
+
+        closeAdminPasswordModal();
+
+      },
+      1000
+    );
+
+  }
+  catch (error) {
+
+    console.error(
+      "Change password error:",
+      error
+    );
+
+
+    let message =
+      "Unable to change password.";
+
+
+    if (
+      error.code ===
+        "auth/invalid-credential" ||
+      error.code ===
+        "auth/wrong-password"
+    ) {
+
+      message =
+        "Current password is incorrect.";
+
+    }
+    else if (
+      error.code ===
+      "auth/weak-password"
+    ) {
+
+      message =
+        "New password is too weak.";
+
+    }
+    else if (
+      error.code ===
+      "auth/too-many-requests"
+    ) {
+
+      message =
+        "Too many attempts. Please try again later.";
+
+    }
+    else if (
+      error.message ===
+      "CHANGE_PASSWORD_NOT_READY"
+    ) {
+
+      message =
+        "Password service is not ready.";
+
+    }
+
+
+    showAdminPasswordError(
+      errorBox,
+      message
+    );
+
+  }
+  finally {
+
+    if (saveButton) {
+
+      saveButton.disabled =
+        false;
+
+      saveButton.textContent =
+        "Change Password";
+
+    }
+
+  }
+
 
   return;
 
 }
-
-
-        try {
-
-          if (saveButton) {
-
-            saveButton.disabled =
-              true;
-
-            saveButton.textContent =
-              "Changing...";
-
-          }
-
-
-          if (
-            typeof window
-              .changeAdminPassword !==
-            "function"
-          ) {
-
-            throw new Error(
-              "CHANGE_PASSWORD_NOT_READY"
-            );
-
-          }
-
-
-await window
-  .changeAdminPassword(
-    currentPassword,
-    newPassword
-  );
-
-
-window.showToast(
-  "Password changed successfully.",
-  "success"
-);
-
-
-          adminPasswordForm.reset();
-
-
-          setTimeout(
-            () => {
-
-              closeAdminPasswordModal();
-
-            },
-            1000
-          );
-
-        }
-catch (error) {
-
-  console.error(
-    "Change password error:",
-    error
-  );
-
-
-  let message =
-    "Unable to change password.";
-
-
-  if (
-    error.code ===
-      "auth/invalid-credential" ||
-    error.code ===
-      "auth/wrong-password"
-  ) {
-
-    message =
-      "Current password is incorrect.";
-
-  }
-  else if (
-    error.code ===
-    "auth/weak-password"
-  ) {
-
-    message =
-      "New password is too weak.";
-
-  }
-  else if (
-    error.code ===
-    "auth/too-many-requests"
-  ) {
-
-    message =
-      "Too many attempts. Please try again later.";
-
-  }
-  else if (
-    error.message ===
-    "CHANGE_PASSWORD_NOT_READY"
-  ) {
-
-    message =
-      "Password service is not ready.";
-
-  }
-
-
-  showAdminPasswordError(
-    errorBox,
-    message
-  );
-
-}
-        finally {
-
-          if (saveButton) {
-
-            saveButton.disabled =
-              false;
-
-            saveButton.textContent =
-              "Change Password";
-
-          }
-
-        }
-
-
-        return;
-
-      }
 
 
       /* ==================================================

@@ -2783,8 +2783,17 @@ hideCredentialError();
 
 if (!turnstileToken) {
 
-  showLoginError(
-    "Please complete the security verification."
+  credentialError.textContent =
+    "Please complete the security verification.";
+
+  credentialError.classList.remove(
+    "hidden"
+  );
+
+  window.showToast(
+    "Please complete the security verification.",
+    "error",
+    5000
   );
 
   return;

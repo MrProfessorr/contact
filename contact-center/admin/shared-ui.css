@@ -2581,5 +2581,47 @@ padding:0 12px;
   }
 
 }
+/* =========================================
+   PASSWORD LOCK ICON
+========================================= */
 
+.admin-password-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.admin-password-input-icon {
+  position: absolute;
+
+  left: 12px;
+  top: 50%;
+
+  width: 14px;
+  height: 14px;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #8c8c8c;
+
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+.admin-password-input-icon svg {
+  display: block;
+
+  width: 14px;
+  height: 14px;
+
+  fill: currentColor;
+}
+
+.admin-password-icon-input {
+  padding-left: 38px !important;
+}
 

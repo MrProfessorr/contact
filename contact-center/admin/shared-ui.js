@@ -3942,10 +3942,10 @@ adminPasswordModal
       const isVisible =
         input.type === "text";
 
-      button.innerHTML =
-        isVisible
-          ? ADMIN_PASSWORD_EYE_OFF_ICON
-          : ADMIN_PASSWORD_EYE_ICON;
+button.innerHTML =
+  isVisible
+    ? ADMIN_PASSWORD_EYE_ICON
+    : ADMIN_PASSWORD_EYE_OFF_ICON;
 
       button.setAttribute(
         "aria-label",

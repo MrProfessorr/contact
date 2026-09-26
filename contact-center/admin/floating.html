@@ -627,15 +627,7 @@
     >
       SAVE FLOATING IMAGE
     </button>
-
   </div>
-
-
-  <div
-    id="floatingStatusMessage"
-    class="floating-save-message"
-  ></div>
-
 </section>
 
 
@@ -888,13 +880,6 @@ const saveBtn =
   document.getElementById(
     "saveFloatingBtn"
   );
-
-
-const statusMessage =
-  document.getElementById(
-    "floatingStatusMessage"
-  );
-
 
 const previewArea =
   document.getElementById(
@@ -1707,13 +1692,6 @@ error => {
     error
   );
 
-  statusMessage.textContent =
-    "Unable to load floating settings.";
-
-  statusMessage.className =
-    "floating-save-message error";
-
-
   window.showToast(
     "Unable to load floating settings.",
     "error",
@@ -1839,20 +1817,10 @@ saveBtn.addEventListener(
 
       }
 
-
-statusMessage.textContent =
-  "Floating image saved successfully.";
-
-
-statusMessage.className =
-  "floating-save-message success";
-
-
 window.showToast(
   "Floating image saved successfully.",
   "success"
 );
-
 
 updatePreview();
 
@@ -1868,15 +1836,6 @@ updatePreview();
   const errorMessage =
     error.message ||
     "Failed to save floating image.";
-
-
-  statusMessage.textContent =
-    errorMessage;
-
-
-  statusMessage.className =
-    "floating-save-message error";
-
 
   window.showToast(
     errorMessage,

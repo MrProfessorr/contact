@@ -3572,6 +3572,52 @@ userDropdown.className =
   "admin-user-dropdown";
 
 userDropdown.innerHTML = `
+
+  <button
+    type="button"
+    id="adminChangePasswordBtn"
+    class="admin-user-menu-item"
+  >
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        d="M832 464h-68V240c0-70.7-57.3-128-128-128H388c-70.7 0-128 57.3-128 128v224h-68c-17.7 0-32 14.3-32 32v384c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V496c0-17.7-14.3-32-32-32zM332 240c0-30.9 25.1-56 56-56h248c30.9 0 56 25.1 56 56v224H332V240zm460 600H232V536h560v304z"
+        fill="currentColor"
+      />
+    </svg>
+
+    <span>
+      Change Password
+    </span>
+  </button>
+
+
+  <button
+    type="button"
+    id="adminChangeSecondPasswordBtn"
+    class="admin-user-menu-item"
+  >
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        d="M866.9 169.9L527.1 54.1C523 52.7 517.5 52 512 52s-11 .7-15.1 2.1L157.1 169.9c-8.3 2.8-15.1 12.4-15.1 21.2v482.4c0 8.8 5.7 20.4 12.6 25.9L499.3 968c3.5 2.7 8 4.1 12.6 4.1s9.2-1.4 12.6-4.1l344.7-268.6c6.9-5.4 12.6-17 12.6-25.9V191.1c.2-8.8-6.6-18.3-14.9-21.2zM810 654.3L512 886.5 214 654.3V226.7l298-101.6 298 101.6v427.6z"
+        fill="currentColor"
+      />
+    </svg>
+
+    <span>
+      Change 2nd Password
+    </span>
+  </button>
+
+
+  <div class="admin-user-menu-divider"></div>
+
+
   <button
     type="button"
     id="adminUserLogoutBtn"
@@ -3583,7 +3629,7 @@ userDropdown.innerHTML = `
       aria-hidden="true"
     >
       <path
-        d="M868 732h-70.3c-4.8 0-9.3 2.1-12.3 5.8A341.3 341.3 0 0 1 512 864c-47.6 0-93.7-9.3-137-27.7a350.1 350.1 0 0 1-111.7-75.4 350.1 350.1 0 0 1-75.4-111.7A348.6 348.6 0 0 1 160 512c0-47.6 9.3-93.7 27.7-137a350.1 350.1 0 0 1 75.4-111.7A350.1 350.1 0 0 1 374.8 188 348.6 348.6 0 0 1 512 160a341.3 341.3 0 0 1 273.4 126.2c3 3.7 7.5 5.8 12.3 5.8H868c6.3 0 10.2-7 6.7-12.2C795.6 161.8 662.8 84 512 84 275.6 84 84 275.6 84 512s191.6 428 428 428c150.8 0 283.6-77.8 362.7-195.8 3.5-5.2-.4-12.2-6.7-12.2z"
+        d="M868 732h-70.3c-4.8 0-9.3 2.1-12.3 5.8A341.3 341.3 0 0 1 512 864c-47.6 0-93.7-9.3-137-27.7a350.1 350.1 0 0 1-111.7-75.4A350.1 350.1 0 0 1 188 649.2 348.6 348.6 0 0 1 160 512c0-47.6 9.3-93.7 27.7-137A350.1 350.1 0 0 1 263.1 263.3 350.1 350.1 0 0 1 374.8 188 348.6 348.6 0 0 1 512 160a341.3 341.3 0 0 1 273.4 126.2c3 3.7 7.5 5.8 12.3 5.8H868c6.3 0 10.2-7 6.7-12.2C795.6 161.8 662.8 84 512 84 275.6 84 84 275.6 84 512s191.6 428 428 428c150.8 0 283.6-77.8 362.7-195.8 3.5-5.2-.4-12.2-6.7-12.2z"
         fill="currentColor"
       />
 
@@ -3609,7 +3655,169 @@ userWrapper.appendChild(
   userDropdown
 );
 
+/* =======================================================
+   ADMIN PASSWORD MODAL
+======================================================= */
 
+const adminPasswordModal =
+  document.createElement(
+    "div"
+  );
+
+adminPasswordModal.className =
+  "admin-password-modal";
+
+adminPasswordModal.innerHTML = `
+
+  <div
+    class="admin-password-modal-backdrop"
+  ></div>
+
+  <div
+    class="admin-password-dialog"
+    role="dialog"
+    aria-modal="true"
+  >
+
+    <div
+      class="admin-password-header"
+    >
+
+      <div>
+        <h3
+          id="adminPasswordModalTitle"
+        >
+          Change Password
+        </h3>
+
+        <p
+          id="adminPasswordModalSubtitle"
+        >
+          Update your account password.
+        </p>
+      </div>
+
+
+      <button
+        type="button"
+        id="adminPasswordModalClose"
+        class="admin-password-close"
+        aria-label="Close"
+      >
+        <svg
+          viewBox="0 0 1024 1024"
+          aria-hidden="true"
+        >
+          <path
+            d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A8 8 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+
+    </div>
+
+
+    <form
+      id="adminPasswordForm"
+      class="admin-password-form"
+    >
+
+      <div
+        class="admin-password-field"
+      >
+        <label
+          id="adminCurrentPasswordLabel"
+          for="adminCurrentPassword"
+        >
+          Current Password
+        </label>
+
+        <input
+          id="adminCurrentPassword"
+          class="shared-input"
+          type="password"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+
+      <div
+        class="admin-password-field"
+      >
+        <label
+          id="adminNewPasswordLabel"
+          for="adminNewPassword"
+        >
+          New Password
+        </label>
+
+        <input
+          id="adminNewPassword"
+          class="shared-input"
+          type="password"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+
+      <div
+        class="admin-password-field"
+      >
+        <label
+          for="adminConfirmPassword"
+        >
+          Confirm New Password
+        </label>
+
+        <input
+          id="adminConfirmPassword"
+          class="shared-input"
+          type="password"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+
+      <div
+        id="adminPasswordError"
+        class="admin-password-error"
+      ></div>
+
+
+      <div
+        class="admin-password-actions"
+      >
+
+        <button
+          type="button"
+          id="adminPasswordCancel"
+          class="admin-password-cancel"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          id="adminPasswordSave"
+          class="admin-password-save"
+        >
+          Change Password
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+`;
+
+document.body.appendChild(
+  adminPasswordModal
+);
 /* OPEN / CLOSE USER DROPDOWN */
 
 function closeAdminUserDropdown() {
@@ -3624,6 +3832,212 @@ function closeAdminUserDropdown() {
   );
 
 }
+const adminChangePasswordBtn =
+  userDropdown.querySelector(
+    "#adminChangePasswordBtn"
+  );
+
+const adminChangeSecondPasswordBtn =
+  userDropdown.querySelector(
+    "#adminChangeSecondPasswordBtn"
+  );
+
+const adminPasswordModalClose =
+  adminPasswordModal.querySelector(
+    "#adminPasswordModalClose"
+  );
+
+const adminPasswordCancel =
+  adminPasswordModal.querySelector(
+    "#adminPasswordCancel"
+  );
+
+const adminPasswordBackdrop =
+  adminPasswordModal.querySelector(
+    ".admin-password-modal-backdrop"
+  );
+
+const adminPasswordForm =
+  adminPasswordModal.querySelector(
+    "#adminPasswordForm"
+  );
+
+let adminPasswordMode =
+  "password";
+
+
+function openAdminPasswordModal(
+  mode
+) {
+
+  adminPasswordMode =
+    mode;
+
+  const title =
+    adminPasswordModal.querySelector(
+      "#adminPasswordModalTitle"
+    );
+
+  const subtitle =
+    adminPasswordModal.querySelector(
+      "#adminPasswordModalSubtitle"
+    );
+
+  const currentLabel =
+    adminPasswordModal.querySelector(
+      "#adminCurrentPasswordLabel"
+    );
+
+  const newLabel =
+    adminPasswordModal.querySelector(
+      "#adminNewPasswordLabel"
+    );
+
+  const saveButton =
+    adminPasswordModal.querySelector(
+      "#adminPasswordSave"
+    );
+
+
+  adminPasswordForm.reset();
+
+
+  if (
+    mode === "second"
+  ) {
+
+    title.textContent =
+      "Change 2nd Password";
+
+    subtitle.textContent =
+      "Update your 6-digit second password.";
+
+    currentLabel.textContent =
+      "Current 2nd Password";
+
+    newLabel.textContent =
+      "New 2nd Password";
+
+    saveButton.textContent =
+      "Change 2nd Password";
+
+  } else {
+
+    title.textContent =
+      "Change Password";
+
+    subtitle.textContent =
+      "Update your account password.";
+
+    currentLabel.textContent =
+      "Current Password";
+
+    newLabel.textContent =
+      "New Password";
+
+    saveButton.textContent =
+      "Change Password";
+
+  }
+
+
+  adminPasswordModal.classList.add(
+    "show"
+  );
+
+  closeAdminUserDropdown();
+
+
+  requestAnimationFrame(
+    () => {
+
+      adminPasswordModal
+        .querySelector(
+          "#adminCurrentPassword"
+        )
+        ?.focus();
+
+    }
+  );
+
+}
+
+
+function closeAdminPasswordModal() {
+
+  adminPasswordModal.classList.remove(
+    "show"
+  );
+
+  adminPasswordForm.reset();
+
+}
+
+
+adminChangePasswordBtn
+  ?.addEventListener(
+    "click",
+    () => {
+
+      openAdminPasswordModal(
+        "password"
+      );
+
+    }
+  );
+
+
+adminChangeSecondPasswordBtn
+  ?.addEventListener(
+    "click",
+    () => {
+
+      openAdminPasswordModal(
+        "second"
+      );
+
+    }
+  );
+
+
+adminPasswordModalClose
+  ?.addEventListener(
+    "click",
+    closeAdminPasswordModal
+  );
+
+
+adminPasswordCancel
+  ?.addEventListener(
+    "click",
+    closeAdminPasswordModal
+  );
+
+
+adminPasswordBackdrop
+  ?.addEventListener(
+    "click",
+    closeAdminPasswordModal
+  );
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key === "Escape" &&
+      adminPasswordModal
+        .classList
+        .contains("show")
+    ) {
+
+      closeAdminPasswordModal();
+
+    }
+
+  }
+);
 function openAdminUserDropdown() {
 
   userWrapper.classList.add(

@@ -1217,26 +1217,17 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-password-header {
   min-height:70px;
-
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-
   gap:20px;
-
-  padding:18px 20px;
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.10);
+  padding:18px 20px 0;
 }
 
 
 .admin-password-header h3 {
   margin:0 0 4px;
-
   color:#ffffff;
-
   font-size:16px;
   font-weight:600;
 }
@@ -1244,10 +1235,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-password-header p {
   margin:0;
-
-  color:
-    rgba(255,255,255,.45);
-
+  color:rgba(255,255,255,.45);
   font-size:12px;
   line-height:1.5;
 }
@@ -1256,25 +1244,16 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 .admin-password-close {
   width:30px;
   height:30px;
-
   flex:none;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   padding:0;
-
   border:0;
   border-radius:6px;
-
-  color:
-    rgba(255,255,255,.45);
-
+  color:rgba(255,255,255,.45);
   background:transparent;
-
   cursor:pointer;
-
   transition:
     color .2s ease,
     background .2s ease;
@@ -1283,7 +1262,6 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-password-close:hover {
   color:#ffffff;
-
   background:
     rgba(255,255,255,.08);
 }
@@ -1324,11 +1302,8 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-password-error {
   min-height:18px;
-
   margin-top:2px;
-
   color:#ff7875;
-
   font-size:12px;
 }
 
@@ -1336,10 +1311,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 .admin-password-actions {
   display:flex;
   justify-content:flex-end;
-
   gap:8px;
-
-  margin-top:16px;
 }
 
 
@@ -2619,3 +2591,12 @@ padding:0 12px;
   padding-left: 30px !important;
 }
 
+.label-required::before {
+    content: "*";
+    display: inline-block;
+    margin-right: 4px;
+    color: #dc4446;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+}

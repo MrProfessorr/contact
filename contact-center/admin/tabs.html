@@ -784,12 +784,6 @@
 
 </div>
 
-
-  <div
-    id="tabsSaveMessage"
-    class="help-text"
-  ></div>
-
 </section>
 
       
@@ -1151,11 +1145,6 @@ const tabsList =
     "tabsList"
   );
 
-const tabsSaveMessage =
-  document.getElementById(
-    "tabsSaveMessage"
-  );
-
 
 /* =========================================================
    STATE
@@ -1228,22 +1217,6 @@ function updateFooterNavBackgroundPreview() {
     "🖼️";
 
 }
-
-function showMessage(
-  message,
-  isError = false
-) {
-
-  tabsSaveMessage.textContent =
-    message;
-
-  tabsSaveMessage.style.color =
-    isError
-      ? "#ff7b88"
-      : "#41e595";
-
-}
-
 
 function iconHtml(
   iconUrl,
@@ -1991,22 +1964,20 @@ saveAllSettingsBtn
           url ||
           editingTabId.value
         );
-
-
-      /*
-        Kalau user mula isi tab,
-        Name + URL mesti lengkap.
-      */
+const isEditingTab =
+  Boolean(
+    editingTabId.value
+  );
 
       if (
         hasTabData &&
         !name
       ) {
 
-        showMessage(
-          "Please enter tab name.",
-          true
-        );
+window.showToast(
+  "Please enter tab name.",
+  "warning"
+);
 
         tabName.focus();
 
@@ -2019,10 +1990,10 @@ saveAllSettingsBtn
         !url
       ) {
 
-        showMessage(
-          "Please enter tab URL.",
-          true
-        );
+window.showToast(
+  "Please enter tab URL.",
+  "warning"
+);
 
         tabUrl.focus();
 
@@ -2327,11 +2298,23 @@ footerTextImagePending
   );
 
 
-showMessage(
-          hasTabData
-            ? "All settings and tab saved."
-            : "All settings saved."
-        );
+if (hasTabData) {
+
+  window.showToast(
+    isEditingTab
+      ? "Tab updated successfully."
+      : "Tab added successfully.",
+    "success"
+  );
+
+} else {
+
+  window.showToast(
+    "Navigation settings saved successfully.",
+    "success"
+  );
+
+}
 
       }
       catch (error) {
@@ -2341,10 +2324,12 @@ showMessage(
           error
         );
 
-        showMessage(
-          "Failed to save settings.",
-          true
-        );
+window.showToast(
+  error?.message ||
+  "Failed to save settings.",
+  "error",
+  5000
+);
 
       }
       finally {
@@ -2500,7 +2485,11 @@ updateFooterTextImagePreview();
     behavior:
       "smooth"
   });
-
+window.showToast(
+  "Tab loaded for editing.",
+  "info"
+);
+  
 }
 
 
@@ -2552,19 +2541,22 @@ async function deleteTab(id) {
     }
 
 
-    showMessage(
-      "Tab deleted."
-    );
+window.showToast(
+  "Tab deleted successfully.",
+  "success"
+);
 
   }
   catch (error) {
 
     console.error(error);
 
-    showMessage(
-      "Failed to delete tab.",
-      true
-    );
+window.showToast(
+  error?.message ||
+  "Failed to delete tab.",
+  "error",
+  5000
+);
 
   }
 
@@ -2595,7 +2587,13 @@ async function toggleTab(
           Date.now()
       }
     );
-
+window.showToast(
+  !enabled
+    ? "Tab activated successfully."
+    : "Tab deactivated successfully.",
+  "success"
+);
+    
   }
   catch (error) {
 
@@ -2881,7 +2879,11 @@ error => {
     "Footer navigation style error:",
     error
   );
-
+window.showToast(
+  "Failed to load footer navigation settings.",
+  "error",
+  5000
+);
   footerStyleLoaded = true;
   finishTabsPageLoading();
 
@@ -2924,7 +2926,11 @@ error => {
     "Sidebar settings error:",
     error
   );
-
+window.showToast(
+  "Failed to load sidebar settings.",
+  "error",
+  5000
+);
   sidebarLoaded = true;
   finishTabsPageLoading();
 
@@ -2995,7 +3001,12 @@ error => {
       Failed to load tabs.
     </div>
   `;
-
+  
+window.showToast(
+  "Failed to load navigation tabs.",
+  "error",
+  5000
+);
   tabsLoaded = true;
   finishTabsPageLoading();
 

@@ -987,30 +987,18 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   border:
     1px solid
     #424242;
-
   border-radius:6px;
-
   outline:none;
-
-  color:
-    rgba(255,255,255,.85);
-
+  color:rgba(255,255,255,.85);
   background:#141414;
-
-  box-shadow:
-    0 2px 0
-    rgba(255,255,255,.04);
-
+  box-shadow: 0 2px 0 rgba(255, 255, 255, 0.04);
   font-family:inherit;
   font-size:14px;
   font-weight:400;
-
   white-space:nowrap;
-
   cursor:pointer;
-
   user-select:none;
-
+  margin-bottom:10px;
   transition:
     all .2s
     cubic-bezier(
@@ -1020,13 +1008,23 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
       1
     );
 }
-
+#adminUserLogoutBtn {
+  margin-bottom:0;
+}
 
 .admin-user-btn:hover,
 .admin-user-wrapper.open
 .admin-user-btn {
   border-color:
     var(--input-line-hover);
+   color:var(--input-line-hover);
+}
+.admin-user-btn:active,
+.admin-user-wrapper.open
+.admin-user-btn {
+  border-color:
+    var(--input-line-active);
+   color:var(--input-line-active);
 }
 
 

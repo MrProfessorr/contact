@@ -2730,12 +2730,9 @@ padding:0 12px;
 
 
 /* ERROR */
-
-.custom-toast.error
-.custom-toast-icon {
+.custom-toast.error .custom-toast-icon {
   color: #ff4d4f;
 }
-
 
 /* WARNING */
 

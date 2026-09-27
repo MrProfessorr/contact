@@ -3806,14 +3806,6 @@ const adminHeaderColorPicker =
     "#adminHeaderColorPicker"
   );
 
-if (adminHeaderColorPicker) {
-
-  document.body.appendChild(
-    adminHeaderColorPicker
-  );
-
-}
-
 const adminHeaderColorPalette =
   userDropdown.querySelector(
     "#adminHeaderColorPalette"
@@ -3916,7 +3908,13 @@ const adminHeaderColorText =
     "#adminHeaderColorText"
   );
 
+if (adminHeaderColorPicker) {
 
+  document.body.appendChild(
+    adminHeaderColorPicker
+  );
+
+}
 function normalizeAdminHeaderColor(
   color
 ) {

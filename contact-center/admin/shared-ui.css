@@ -3405,3 +3405,46 @@ padding:0 12px;
     translate(-50%,-50%);
   pointer-events:none;
 }
+/* =========================================================
+   ADMIN SITE SELECTOR
+========================================================= */
+
+.admin-site-selector {
+  width:220px;
+  min-width:150px;
+  max-width:320px;
+
+  flex:
+    0 1 220px;
+
+  box-sizing:
+    border-box;
+
+  margin-left:
+    16px;
+}
+
+
+.admin-site-selector
+.shared-chip-dropdown-panel {
+  min-width:
+    150px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:650px) {
+
+  .admin-site-selector {
+    width:150px;
+    min-width:120px;
+
+    flex:
+      0 1 150px;
+
+    margin-left:
+      8px;
+  }
+
+}

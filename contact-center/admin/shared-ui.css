@@ -3004,3 +3004,79 @@ padding:0 12px;
     translate(-50%,-50%);
   pointer-events:none;
 }
+/* =========================================================
+   ADMIN SITE SELECTOR
+========================================================= */
+
+.admin-site-selector {
+  width:150px;
+  min-width:150px;
+  flex:0 0 150px;
+  box-sizing:border-box;
+  margin-left:14px;
+}
+
+
+/*
+  Custom dropdown dalam header.
+*/
+
+.admin-site-selector
+.shared-dropdown {
+  width:100%;
+  min-width:150px;
+  box-sizing:border-box;
+}
+
+
+/*
+  Header site selector
+  ikut tinggi shared dropdown.
+*/
+
+.admin-site-selector
+.shared-dropdown-trigger {
+  width:100%;
+  box-sizing:border-box;
+}
+
+
+/*
+  Dropdown panel jangan jadi
+  lebih kecil daripada trigger.
+*/
+
+.admin-site-selector
+.shared-dropdown-panel {
+  width:100%;
+  min-width:150px;
+  box-sizing:border-box;
+}
+
+
+/* =========================================================
+   ADMIN SITE SELECTOR - MOBILE
+========================================================= */
+
+@media(max-width:650px) {
+
+  .admin-site-selector {
+    width:120px;
+    min-width:120px;
+    flex:0 0 120px;
+    margin-left:8px;
+  }
+
+
+  .admin-site-selector
+  .shared-dropdown {
+    min-width:120px;
+  }
+
+
+  .admin-site-selector
+  .shared-dropdown-panel {
+    min-width:120px;
+  }
+
+}

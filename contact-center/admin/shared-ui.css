@@ -3378,21 +3378,10 @@ padding:0 12px;
   gap:4px;
 }
 
-
-.admin-header-multi-input label {
-  flex:1;
-  min-width:0;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-
-  gap:3px;
-}
-
-
 .admin-header-multi-input input {
-  width:100%;
+  flex:1;
+  width:0;
+  min-width:0;
   height:32px;
 
   padding:4px 5px;
@@ -3435,14 +3424,6 @@ padding:0 12px;
 
 .admin-header-multi-input input:focus {
   border-color:#1668dc;
-}
-
-
-.admin-header-multi-input span {
-  color:rgba(255,255,255,.65);
-
-  font-size:11px;
-  line-height:1;
 }
 
 /* 100% */

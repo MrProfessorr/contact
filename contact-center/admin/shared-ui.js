@@ -3800,10 +3800,19 @@ const adminHeaderColorBtn =
   userDropdown.querySelector(
     "#adminHeaderColorBtn"
   );
+
 const adminHeaderColorPicker =
   userDropdown.querySelector(
     "#adminHeaderColorPicker"
   );
+
+if (adminHeaderColorPicker) {
+
+  document.body.appendChild(
+    adminHeaderColorPicker
+  );
+
+}
 
 const adminHeaderColorPalette =
   userDropdown.querySelector(
@@ -5154,18 +5163,67 @@ renderAdminHeaderFormatInputs();
 renderAdminHeaderFormatInputs();
 
 updateCustomHeaderColor();
-/* OPEN / CLOSE */
+/* =========================================
+   OPEN / CLOSE HEADER COLOR PICKER
+========================================= */
+
+function positionAdminHeaderColorPicker() {
+
+  if (
+    !adminHeaderColorBtn ||
+    !adminHeaderColorPicker
+  ) {
+    return;
+  }
+
+
+  const rect =
+    adminHeaderColorBtn
+      .getBoundingClientRect();
+
+
+  adminHeaderColorPicker.style.position =
+    "fixed";
+
+  adminHeaderColorPicker.style.top =
+    `${rect.bottom + 6}px`;
+
+  adminHeaderColorPicker.style.left =
+    `${rect.left}px`;
+
+}
+
 
 adminHeaderColorBtn
   ?.addEventListener(
     "click",
     event => {
 
+      event.preventDefault();
       event.stopPropagation();
 
-      adminHeaderColorPicker
-        ?.classList
-        .toggle("open");
+
+      const willOpen =
+        !adminHeaderColorPicker
+          ?.classList
+          .contains("open");
+
+
+      if (willOpen) {
+
+        positionAdminHeaderColorPicker();
+
+        adminHeaderColorPicker
+          ?.classList
+          .add("open");
+
+      } else {
+
+        adminHeaderColorPicker
+          ?.classList
+          .remove("open");
+
+      }
 
     }
   );
@@ -5498,28 +5556,58 @@ adminHeaderAlphaText
 
     }
   );
-/* CLOSE OUTSIDE */
+/* =========================================
+   CLOSE COLOR PICKER ONLY WHEN CLICK OUTSIDE
+========================================= */
 
 document.addEventListener(
   "click",
   event => {
 
-    if (
-      !userDropdown.contains(
-        event.target
-      )
-    ) {
+    const clickedPicker =
+      adminHeaderColorPicker
+        ?.contains(
+          event.target
+        );
 
+    const clickedColorButton =
+      adminHeaderColorBtn
+        ?.contains(
+          event.target
+        );
+
+
+    if (
+      clickedPicker ||
+      clickedColorButton
+    ) {
+      return;
+    }
+
+
+    adminHeaderColorPicker
+      ?.classList
+      .remove("open");
+
+  }
+);
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    if (
       adminHeaderColorPicker
         ?.classList
-        .remove("open");
+        .contains("open")
+    ) {
+
+      positionAdminHeaderColorPicker();
 
     }
 
   }
 );
-
-
 
 userWrapper.appendChild(
   userButton

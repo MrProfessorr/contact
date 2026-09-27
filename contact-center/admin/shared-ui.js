@@ -6,6 +6,125 @@
 (function () {
 
   "use strict";
+   /* =======================================================
+   ADMIN GLOBAL THEME
+======================================================= */
+
+const ADMIN_THEME_KEY =
+  "adminGlobalTheme";
+
+
+function getAdminTheme() {
+
+  const savedTheme =
+    localStorage.getItem(
+      ADMIN_THEME_KEY
+    );
+
+  return savedTheme === "light"
+    ? "light"
+    : "dark";
+
+}
+
+
+function applyAdminTheme(
+  theme,
+  save = true
+) {
+
+  const finalTheme =
+    theme === "light"
+      ? "light"
+      : "dark";
+
+
+  document.documentElement
+    .setAttribute(
+      "data-admin-theme",
+      finalTheme
+    );
+
+
+  if (save) {
+
+    localStorage.setItem(
+      ADMIN_THEME_KEY,
+      finalTheme
+    );
+
+  }
+
+
+  /*
+    Sync every theme switch
+    that currently exists.
+  */
+
+  document
+    .querySelectorAll(
+      "[data-admin-theme-switch]"
+    )
+    .forEach(
+      themeSwitch => {
+
+        const isDark =
+          finalTheme === "dark";
+
+
+        themeSwitch.classList.toggle(
+          "checked",
+          isDark
+        );
+
+
+        themeSwitch.setAttribute(
+          "aria-checked",
+          String(isDark)
+        );
+
+
+        const text =
+          themeSwitch.querySelector(
+            ".admin-theme-switch-text"
+          );
+
+
+        if (text) {
+
+          text.textContent =
+            isDark
+              ? "Dark Mode"
+              : "Light Mode";
+
+        }
+
+      }
+    );
+
+}
+
+
+/*
+  Apply saved theme immediately.
+*/
+
+applyAdminTheme(
+  getAdminTheme(),
+  false
+);
+
+
+/*
+  Make available globally if another
+  admin script needs it later.
+*/
+
+window.applyAdminTheme =
+  applyAdminTheme;
+
+window.getAdminTheme =
+  getAdminTheme;
 /* =======================================================
    ADMIN WORKSPACE FRAME MODE
 ======================================================= */
@@ -3573,6 +3692,28 @@ userDropdown.className =
 
 userDropdown.innerHTML = `
 
+  <!-- DARK / LIGHT THEME -->
+  <button
+    type="button"
+    id="adminThemeSwitch"
+    class="admin-theme-switch"
+    data-admin-theme-switch
+    role="switch"
+    aria-checked="true"
+  >
+    <span
+      class="admin-theme-switch-text"
+    >
+      Dark Mode
+    </span>
+
+    <span
+      class="admin-theme-switch-handle"
+      aria-hidden="true"
+    ></span>
+  </button>
+
+
   <!-- HEADER BACKGROUND COLOR -->
   <button
     type="button"
@@ -3785,6 +3926,96 @@ userDropdown.innerHTML = `
   </button>
 
 `;
+/* =======================================================
+   ADMIN DARK / LIGHT THEME SWITCH
+======================================================= */
+
+const adminThemeSwitch =
+  userDropdown.querySelector(
+    "#adminThemeSwitch"
+  );
+
+
+function syncAdminThemeSwitch() {
+
+  if (!adminThemeSwitch) {
+    return;
+  }
+
+
+  const theme =
+    getAdminTheme();
+
+
+  const isDark =
+    theme === "dark";
+
+
+  adminThemeSwitch
+    .classList
+    .toggle(
+      "checked",
+      isDark
+    );
+
+
+  adminThemeSwitch
+    .setAttribute(
+      "aria-checked",
+      String(isDark)
+    );
+
+
+  const text =
+    adminThemeSwitch
+      .querySelector(
+        ".admin-theme-switch-text"
+      );
+
+
+  if (text) {
+
+    text.textContent =
+      isDark
+        ? "Dark Mode"
+        : "Light Mode";
+
+  }
+
+}
+
+
+adminThemeSwitch
+  ?.addEventListener(
+    "click",
+    event => {
+
+      event.preventDefault();
+      event.stopPropagation();
+
+
+      const currentTheme =
+        getAdminTheme();
+
+
+      const nextTheme =
+        currentTheme === "dark"
+          ? "light"
+          : "dark";
+
+
+      applyAdminTheme(
+        nextTheme
+      );
+
+
+      syncAdminThemeSwitch();
+
+    }
+  );
+
+
+syncAdminThemeSwitch();
 /* =======================================================
    ADMIN HEADER BACKGROUND COLOR
 ======================================================= */

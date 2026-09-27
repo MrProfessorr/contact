@@ -4,7 +4,7 @@
 ========================================================= */
 html[data-admin-theme="light"] {
 
-    --tx-bg: #000000;
+    --tx-bg: #ffffff;
     --tx-accent: #1769e0;
     --tx-ink: #17243a;
     --tx-muted: #697991;
@@ -48,7 +48,7 @@ html[data-admin-theme="light"] {
 
 :root {
    
-    --tx-bg: #ffffff;
+    --tx-bg: #000000;
     --tx-ink: #e5edf8;
     --tx-muted: #9aaac0;
     --tx-border: #2b3e5b;

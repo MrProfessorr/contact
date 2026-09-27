@@ -4028,14 +4028,17 @@ function updateCustomHeaderColor() {
       adminHeaderValue
     );
 
+
   applyAdminHeaderColor(
     color
   );
+
 
   localStorage.setItem(
     ADMIN_HEADER_COLOR_KEY,
     color
   );
+
 
   if (adminHeaderColorPalette) {
 
@@ -4048,24 +4051,48 @@ function updateCustomHeaderColor() {
 
   }
 
+
+  if (adminHeaderAlphaSlider) {
+
+    adminHeaderAlphaSlider
+      .style
+      .setProperty(
+        "--alpha-color",
+        color
+      );
+
+  }
+
+
   if (adminHeaderColorPreview) {
+
+    const hexNumber =
+      color.slice(1);
+
+    const r =
+      parseInt(
+        hexNumber.slice(0, 2),
+        16
+      );
+
+    const g =
+      parseInt(
+        hexNumber.slice(2, 4),
+        16
+      );
+
+    const b =
+      parseInt(
+        hexNumber.slice(4, 6),
+        16
+      );
 
     adminHeaderColorPreview
       .style
       .background =
-        color;
+        `rgba(${r}, ${g}, ${b}, ${adminHeaderAlpha / 100})`;
 
   }
-
-}
-if (adminHeaderAlphaSlider) {
-
-  adminHeaderAlphaSlider
-    .style
-    .setProperty(
-      "--alpha-color",
-      color
-    );
 
 }
 

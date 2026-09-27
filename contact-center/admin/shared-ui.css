@@ -3374,28 +3374,19 @@ padding:0 12px;
   flex:1;
   width:0;
   min-width:0;
-  height:32px;
-
-  padding:4px 5px;
-
+  height:22px;
+  padding:0 8px;
   box-sizing:border-box;
-
   border:1px solid #424242;
-  border-radius:6px;
-
+  border-radius:4px;
   outline:none;
-
   color:rgba(255,255,255,.85);
   background:#141414;
-
   font-family:inherit;
   font-size:12px;
-
   text-align:center;
-
   appearance:textfield;
   -moz-appearance:textfield;
-
   transition:
     border-color .2s ease;
 }
@@ -3425,7 +3416,7 @@ padding:0 12px;
 
   width:44px;
   height:22px;
-  padding:0 7px;
+  padding:0 2px;
 
   box-sizing:border-box;
 

@@ -3,22 +3,20 @@
    Reusable for all admin pages
 ========================================================= */
 :root {
-  --tx-hover:#1d304b;
-  --tx-surface-soft:#1c2b42;
-  --tx-muted:#9aaac0;
-  --tx-ink:#e5edf8;
+    --tx-bg: #000000;
+    --tx-ink: #e5edf8;
+    --tx-muted: #9aaac0;
+    --tx-border: #2b3e5b;
+    --tx-surface: #152237;
+    --tx-surface-soft: #1c2b42;
+    --tx-hover: #1d304b;
     
-  --bg: #000000;
-  --panel: #152237;
+ 
   --panel2: #171e28;
- 
-  --line: #2b3e5b;
- 
- 
   --text: rgba(255,255,255,0.85);
-  --text2:rgba(255,255,255,0.25);
   --muted: rgba(255,255,255,0.45);
-
+  --placeholder:rgba(255,255,255,0.25);
+   
   --blue: #1668dc;
   --green: #26c979;
   --red: #dc4352;
@@ -34,23 +32,23 @@
   --dropdown-bg-active:#111a2c;
  
 }
+
 /* =========================================================
    ADMIN GLOBAL LIGHT THEME
 ========================================================= */
 
 html[data-admin-theme="light"] {
+   
+    --tx-bg: #ffffff;
+    --tx-accent: #1769e0;
+    --tx-ink: #17243a;
+    --tx-muted: #697991;
+    --tx-border: #e3eaf3;
+    --tx-surface: #ffffff;
+    --tx-surface-soft: #f6f9fd;
+    --tx-hover: #f8fbff;
 
-  --tx-hover:#e6f4ff;
-  --tx-surface-soft:#f5f5f5;
-  --tx-muted:#6b7280;
-  --tx-ink:#1f1f1f;
-
-  --bg:#f5f5f5;
-
-  --panel:#ffffff;
   --panel2:#fafafa;
-
-  --line:#d9d9d9;
 
   --text:rgba(0,0,0,.88);
   --text2:rgba(0,0,0,.25);

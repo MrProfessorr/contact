@@ -3640,9 +3640,57 @@ userDropdown.innerHTML = `
 
   <div class="admin-header-color-input-row">
 
-    <span class="admin-header-color-format">
+<div
+  id="adminHeaderFormatSelect"
+  class="admin-header-format-select"
+>
+  <button
+    type="button"
+    id="adminHeaderFormatBtn"
+    class="admin-header-format-btn"
+  >
+    <span id="adminHeaderFormatText">
       HEX
     </span>
+
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+        fill="currentColor"
+      />
+    </svg>
+  </button>
+
+  <div
+    id="adminHeaderFormatMenu"
+    class="admin-header-format-menu"
+  >
+    <button
+      type="button"
+      data-format="HEX"
+      class="active"
+    >
+      HEX
+    </button>
+
+    <button
+      type="button"
+      data-format="HSB"
+    >
+      HSB
+    </button>
+
+    <button
+      type="button"
+      data-format="RGB"
+    >
+      RGB
+    </button>
+  </div>
+</div>
 
     <input
       type="text"
@@ -3791,7 +3839,25 @@ const adminHeaderHexInput =
   userDropdown.querySelector(
     "#adminHeaderHexInput"
   );
+const adminHeaderFormatSelect =
+  userDropdown.querySelector(
+    "#adminHeaderFormatSelect"
+  );
 
+const adminHeaderFormatBtn =
+  userDropdown.querySelector(
+    "#adminHeaderFormatBtn"
+  );
+
+const adminHeaderFormatText =
+  userDropdown.querySelector(
+    "#adminHeaderFormatText"
+  );
+
+const adminHeaderFormatMenu =
+  userDropdown.querySelector(
+    "#adminHeaderFormatMenu"
+  );
 let adminHeaderHue = 210;
 let adminHeaderSaturation = 100;
 let adminHeaderValue = 16;
@@ -4226,6 +4292,78 @@ function updateAlphaFromPointer(
   updateCustomHeaderColor();
 
 }
+
+/* =========================
+   COLOR FORMAT DROPDOWN
+========================= */
+
+adminHeaderFormatBtn
+  ?.addEventListener(
+    "click",
+    event => {
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      adminHeaderFormatSelect
+        ?.classList
+        .toggle("open");
+
+    }
+  );
+
+
+adminHeaderFormatMenu
+  ?.querySelectorAll(
+    "[data-format]"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        event => {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          const format =
+            button.dataset.format;
+
+          if (!format) {
+            return;
+          }
+
+
+          adminHeaderFormatText.textContent =
+            format;
+
+
+          adminHeaderFormatMenu
+            .querySelectorAll(
+              "[data-format]"
+            )
+            .forEach(
+              item => {
+
+                item.classList.toggle(
+                  "active",
+                  item === button
+                );
+
+              }
+            );
+
+
+          adminHeaderFormatSelect
+            .classList
+            .remove("open");
+
+        }
+      );
+
+    }
+  );
 /* OPEN / CLOSE */
 
 adminHeaderColorBtn

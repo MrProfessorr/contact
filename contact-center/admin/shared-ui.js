@@ -3692,21 +3692,29 @@ userDropdown.innerHTML = `
   </div>
 </div>
 
-    <input
-      type="text"
-      id="adminHeaderHexInput"
-      class="admin-header-hex-input"
-      value="#001528"
-      maxlength="7"
-      spellcheck="false"
-    >
+<div
+  id="adminHeaderColorValueInputs"
+  class="admin-header-color-value-inputs"
+>
+  <input
+    type="text"
+    id="adminHeaderHexInput"
+    class="admin-header-hex-input"
+    value="#001528"
+    maxlength="7"
+    spellcheck="false"
+  >
+</div>
 
-<span
+<input
+  type="text"
   id="adminHeaderAlphaText"
   class="admin-header-color-alpha"
+  value="100%"
+  inputmode="numeric"
+  maxlength="4"
+  spellcheck="false"
 >
-  100%
-</span>
 
   </div>
 </div>
@@ -3843,7 +3851,13 @@ const adminHeaderFormatSelect =
   userDropdown.querySelector(
     "#adminHeaderFormatSelect"
   );
+const adminHeaderColorValueInputs =
+  userDropdown.querySelector(
+    "#adminHeaderColorValueInputs"
+  );
 
+let adminHeaderCurrentFormat =
+  "HEX";
 const adminHeaderFormatBtn =
   userDropdown.querySelector(
     "#adminHeaderFormatBtn"
@@ -4083,8 +4097,594 @@ function hsvToHex(
   ).toUpperCase();
 
 }
+function hexToRgb(
+  hex
+) {
+
+  const normalized =
+    normalizeAdminHeaderColor(
+      hex
+    );
+
+  const value =
+    normalized.slice(1);
+
+  return {
+    r: parseInt(
+      value.slice(0, 2),
+      16
+    ),
+    g: parseInt(
+      value.slice(2, 4),
+      16
+    ),
+    b: parseInt(
+      value.slice(4, 6),
+      16
+    )
+  };
+
+}
 
 
+function rgbToHex(
+  r,
+  g,
+  b
+) {
+
+  const toHex =
+    value =>
+      Math.max(
+        0,
+        Math.min(
+          255,
+          Math.round(value)
+        )
+      )
+        .toString(16)
+        .padStart(2, "0");
+
+  return (
+    "#" +
+    toHex(r) +
+    toHex(g) +
+    toHex(b)
+  ).toUpperCase();
+
+}
+
+
+function rgbToHsv(
+  r,
+  g,
+  b
+) {
+
+  r /= 255;
+  g /= 255;
+  b /= 255;
+
+  const max =
+    Math.max(r, g, b);
+
+  const min =
+    Math.min(r, g, b);
+
+  const delta =
+    max - min;
+
+  let h = 0;
+
+  if (delta !== 0) {
+
+    if (max === r) {
+
+      h =
+        60 *
+        (
+          (
+            (g - b) /
+            delta
+          ) % 6
+        );
+
+    } else if (max === g) {
+
+      h =
+        60 *
+        (
+          (b - r) /
+          delta +
+          2
+        );
+
+    } else {
+
+      h =
+        60 *
+        (
+          (r - g) /
+          delta +
+          4
+        );
+
+    }
+
+  }
+
+  if (h < 0) {
+    h += 360;
+  }
+
+  const s =
+    max === 0
+      ? 0
+      : delta / max;
+
+  return {
+    h,
+    s: s * 100,
+    v: max * 100
+  };
+
+}
+
+
+function syncAdminHeaderHSVFromHex(
+  hex
+) {
+
+  const {
+    r,
+    g,
+    b
+  } = hexToRgb(hex);
+
+  const hsv =
+    rgbToHsv(
+      r,
+      g,
+      b
+    );
+
+  adminHeaderHue =
+    hsv.h;
+
+  adminHeaderSaturation =
+    hsv.s;
+
+  adminHeaderValue =
+    hsv.v;
+
+
+  if (
+    adminHeaderHueHandle
+  ) {
+
+    adminHeaderHueHandle.style.left =
+      `${(adminHeaderHue / 360) * 100}%`;
+
+  }
+
+
+  if (
+    adminHeaderColorPaletteHandle
+  ) {
+
+    adminHeaderColorPaletteHandle
+      .style.left =
+        `${adminHeaderSaturation}%`;
+
+    adminHeaderColorPaletteHandle
+      .style.top =
+        `${100 - adminHeaderValue}%`;
+
+  }
+
+
+  if (
+    adminHeaderColorPalette
+  ) {
+
+    adminHeaderColorPalette
+      .style
+      .setProperty(
+        "--picker-hue",
+        `hsl(${adminHeaderHue}, 100%, 50%)`
+      );
+
+  }
+
+}
+
+function renderAdminHeaderFormatInputs() {
+
+  if (
+    !adminHeaderColorValueInputs
+  ) {
+    return;
+  }
+
+
+  const color =
+    hsvToHex(
+      adminHeaderHue,
+      adminHeaderSaturation,
+      adminHeaderValue
+    );
+
+
+  /* =====================
+     HEX
+  ===================== */
+
+  if (
+    adminHeaderCurrentFormat ===
+    "HEX"
+  ) {
+
+    adminHeaderColorValueInputs
+      .innerHTML = `
+        <input
+          type="text"
+          id="adminHeaderHexInput"
+          class="admin-header-hex-input"
+          value="${color}"
+          maxlength="7"
+          spellcheck="false"
+        >
+      `;
+
+
+    const input =
+      adminHeaderColorValueInputs
+        .querySelector(
+          "#adminHeaderHexInput"
+        );
+
+
+    input?.addEventListener(
+      "change",
+      () => {
+
+        const value =
+          input.value
+            .trim()
+            .toUpperCase();
+
+
+        if (
+          !/^#[0-9A-F]{6}$/.test(
+            value
+          )
+        ) {
+
+          input.value =
+            hsvToHex(
+              adminHeaderHue,
+              adminHeaderSaturation,
+              adminHeaderValue
+            );
+
+          return;
+
+        }
+
+
+        syncAdminHeaderHSVFromHex(
+          value
+        );
+
+        updateCustomHeaderColor();
+
+      }
+    );
+
+
+    return;
+
+  }
+
+
+  /* =====================
+     RGB
+  ===================== */
+
+  if (
+    adminHeaderCurrentFormat ===
+    "RGB"
+  ) {
+
+    const {
+      r,
+      g,
+      b
+    } = hexToRgb(color);
+
+
+    adminHeaderColorValueInputs
+      .innerHTML = `
+        <div class="admin-header-multi-input">
+
+          <label>
+            <input
+              type="number"
+              data-rgb="r"
+              min="0"
+              max="255"
+              value="${r}"
+            >
+            <span>R</span>
+          </label>
+
+          <label>
+            <input
+              type="number"
+              data-rgb="g"
+              min="0"
+              max="255"
+              value="${g}"
+            >
+            <span>G</span>
+          </label>
+
+          <label>
+            <input
+              type="number"
+              data-rgb="b"
+              min="0"
+              max="255"
+              value="${b}"
+            >
+            <span>B</span>
+          </label>
+
+        </div>
+      `;
+
+
+    const updateRgb =
+      () => {
+
+        const rInput =
+          adminHeaderColorValueInputs
+            .querySelector(
+              '[data-rgb="r"]'
+            );
+
+        const gInput =
+          adminHeaderColorValueInputs
+            .querySelector(
+              '[data-rgb="g"]'
+            );
+
+        const bInput =
+          adminHeaderColorValueInputs
+            .querySelector(
+              '[data-rgb="b"]'
+            );
+
+
+        const r =
+          Math.max(
+            0,
+            Math.min(
+              255,
+              Number(
+                rInput?.value || 0
+              )
+            )
+          );
+
+        const g =
+          Math.max(
+            0,
+            Math.min(
+              255,
+              Number(
+                gInput?.value || 0
+              )
+            )
+          );
+
+        const b =
+          Math.max(
+            0,
+            Math.min(
+              255,
+              Number(
+                bInput?.value || 0
+              )
+            )
+          );
+
+
+        const hex =
+          rgbToHex(
+            r,
+            g,
+            b
+          );
+
+
+        syncAdminHeaderHSVFromHex(
+          hex
+        );
+
+        updateCustomHeaderColor();
+
+      };
+
+
+    adminHeaderColorValueInputs
+      .querySelectorAll(
+        "[data-rgb]"
+      )
+      .forEach(
+        input => {
+
+          input.addEventListener(
+            "change",
+            updateRgb
+          );
+
+        }
+      );
+
+
+    return;
+
+  }
+
+
+  /* =====================
+     HSB
+  ===================== */
+
+  adminHeaderColorValueInputs
+    .innerHTML = `
+      <div class="admin-header-multi-input">
+
+        <label>
+          <input
+            type="number"
+            data-hsb="h"
+            min="0"
+            max="360"
+            value="${Math.round(adminHeaderHue)}"
+          >
+          <span>H</span>
+        </label>
+
+        <label>
+          <input
+            type="number"
+            data-hsb="s"
+            min="0"
+            max="100"
+            value="${Math.round(adminHeaderSaturation)}"
+          >
+          <span>S</span>
+        </label>
+
+        <label>
+          <input
+            type="number"
+            data-hsb="b"
+            min="0"
+            max="100"
+            value="${Math.round(adminHeaderValue)}"
+          >
+          <span>B</span>
+        </label>
+
+      </div>
+    `;
+
+
+  const updateHsb =
+    () => {
+
+      const hInput =
+        adminHeaderColorValueInputs
+          .querySelector(
+            '[data-hsb="h"]'
+          );
+
+      const sInput =
+        adminHeaderColorValueInputs
+          .querySelector(
+            '[data-hsb="s"]'
+          );
+
+      const bInput =
+        adminHeaderColorValueInputs
+          .querySelector(
+            '[data-hsb="b"]'
+          );
+
+
+      adminHeaderHue =
+        Math.max(
+          0,
+          Math.min(
+            360,
+            Number(
+              hInput?.value || 0
+            )
+          )
+        );
+
+      adminHeaderSaturation =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            Number(
+              sInput?.value || 0
+            )
+          )
+        );
+
+      adminHeaderValue =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            Number(
+              bInput?.value || 0
+            )
+          )
+        );
+
+
+      if (
+        adminHeaderHueHandle
+      ) {
+
+        adminHeaderHueHandle.style.left =
+          `${(adminHeaderHue / 360) * 100}%`;
+
+      }
+
+
+      if (
+        adminHeaderColorPaletteHandle
+      ) {
+
+        adminHeaderColorPaletteHandle
+          .style.left =
+            `${adminHeaderSaturation}%`;
+
+        adminHeaderColorPaletteHandle
+          .style.top =
+            `${100 - adminHeaderValue}%`;
+
+      }
+
+
+      updateCustomHeaderColor();
+
+    };
+
+
+  adminHeaderColorValueInputs
+    .querySelectorAll(
+      "[data-hsb]"
+    )
+    .forEach(
+      input => {
+
+        input.addEventListener(
+          "change",
+          updateHsb
+        );
+
+      }
+    );
+
+}
 function updateCustomHeaderColor() {
 
   const color =
@@ -4159,7 +4759,7 @@ function updateCustomHeaderColor() {
         `rgba(${r}, ${g}, ${b}, ${adminHeaderAlpha / 100})`;
 
   }
-
+ renderAdminHeaderFormatInputs();
 }
 
 function updatePaletteFromPointer(
@@ -4337,7 +4937,10 @@ adminHeaderFormatMenu
 
           adminHeaderFormatText.textContent =
             format;
+adminHeaderCurrentFormat =
+  format;
 
+renderAdminHeaderFormatInputs();
 
           adminHeaderFormatMenu
             .querySelectorAll(
@@ -4364,6 +4967,13 @@ adminHeaderFormatMenu
 
     }
   );
+   syncAdminHeaderHSVFromHex(
+  savedAdminHeaderColor
+);
+
+renderAdminHeaderFormatInputs();
+
+updateCustomHeaderColor();
 /* OPEN / CLOSE */
 
 adminHeaderColorBtn
@@ -4532,52 +5142,109 @@ if (adminHeaderAlphaHandle) {
 
 if (adminHeaderAlphaText) {
 
-  adminHeaderAlphaText.textContent =
+  adminHeaderAlphaText.value =
     `${Math.round(adminHeaderAlpha)}%`;
 
 }
-/* MANUAL HEX */
-
-adminHeaderHexInput
+adminHeaderAlphaText
   ?.addEventListener(
-    "change",
+    "focus",
     () => {
 
-      const value =
-        adminHeaderHexInput
-          .value
-          .trim()
-          .toUpperCase();
+      adminHeaderAlphaText.value =
+        String(
+          Math.round(
+            adminHeaderAlpha
+          )
+        );
 
-      if (
-        !/^#[0-9A-F]{6}$/.test(
-          value
-        )
-      ) {
-
-        adminHeaderHexInput.value =
-          localStorage.getItem(
-            ADMIN_HEADER_COLOR_KEY
-          ) ||
-          ADMIN_HEADER_DEFAULT_COLOR;
-
-        return;
-
-      }
-
-      applyAdminHeaderColor(
-        value
-      );
-
-      localStorage.setItem(
-        ADMIN_HEADER_COLOR_KEY,
-        value
-      );
+      adminHeaderAlphaText.select();
 
     }
   );
 
 
+adminHeaderAlphaText
+  ?.addEventListener(
+    "blur",
+    () => {
+
+      let value =
+        parseFloat(
+          adminHeaderAlphaText
+            .value
+            .replace("%", "")
+        );
+
+
+      if (
+        !Number.isFinite(value)
+      ) {
+
+        value =
+          adminHeaderAlpha;
+
+      }
+
+
+      value =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            value
+          )
+        );
+
+
+      adminHeaderAlpha =
+        value;
+
+
+      adminHeaderAlphaText.value =
+        `${Math.round(value)}%`;
+
+
+      if (
+        adminHeaderAlphaHandle
+      ) {
+
+        adminHeaderAlphaHandle
+          .style.left =
+            `${value}%`;
+
+      }
+
+
+      localStorage.setItem(
+        "adminHeaderBackgroundAlpha",
+        String(value)
+      );
+
+
+      updateCustomHeaderColor();
+
+    }
+  );
+
+
+adminHeaderAlphaText
+  ?.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        event.preventDefault();
+
+        adminHeaderAlphaText.blur();
+
+      }
+
+    }
+  );
 /* CLOSE OUTSIDE */
 
 document.addEventListener(

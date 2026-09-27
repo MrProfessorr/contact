@@ -417,12 +417,11 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .shared-dropdown-trigger {
   position:relative;
-
   width:100%;
   height:32px;
   display:flex;
   align-items:center;
-  border:1px solidvar(--input-line);
+  border:1px solid var(--input-line);
   border-radius:6px;
   background:var(--input);
   transition:

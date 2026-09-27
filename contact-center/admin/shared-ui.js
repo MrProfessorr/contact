@@ -3870,7 +3870,7 @@ userDropdown.innerHTML = `
 <select
   id="adminLanguageSelect"
   data-shared-dropdown
-  data-placeholder="Select Language"
+  data-placeholder="English"
 >
   <option value="en">
     English
@@ -4076,7 +4076,7 @@ if (adminLanguageSelect) {
     adminLanguageSelect,
     {
       placeholder:
-        "English",
+        "Select Language",
 
       emptyText:
         "No language"

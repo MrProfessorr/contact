@@ -2,7 +2,7 @@
    SHARED UI
    Reusable for all admin pages
 ========================================================= */
-:root {
+html[data-admin-theme="light"] {
 
     --tx-bg: #ffffff;
     --tx-accent: #1769e0;
@@ -46,7 +46,7 @@
    ADMIN GLOBAL LIGHT THEME
 ========================================================= */
 
-html[data-admin-theme="dark"] {
+:root {
    
     --tx-bg: #000000;
     --tx-ink: #e5edf8;

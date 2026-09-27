@@ -4058,7 +4058,16 @@ function updateCustomHeaderColor() {
   }
 
 }
+if (adminHeaderAlphaSlider) {
 
+  adminHeaderAlphaSlider
+    .style
+    .setProperty(
+      "--alpha-color",
+      color
+    );
+
+}
 
 function updatePaletteFromPointer(
   event

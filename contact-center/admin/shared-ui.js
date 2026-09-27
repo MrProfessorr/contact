@@ -4354,20 +4354,19 @@ input?.addEventListener(
         .toUpperCase();
 
 
-    /* Auto tambah # */
-
     if (
       value &&
       !value.startsWith("#")
     ) {
+
       value =
         "#" + value;
+
     }
 
 
     /*
-      Jangan reset input ketika
-      user masih sedang menaip.
+      Tunggu sehingga HEX lengkap.
     */
 
     if (
@@ -4375,7 +4374,9 @@ input?.addEventListener(
         value
       )
     ) {
+
       return;
+
     }
 
 
@@ -4418,8 +4419,6 @@ input?.addEventListener(
 );
 
 
-    return;
-  }
 input?.addEventListener(
   "blur",
   () => {
@@ -4434,8 +4433,10 @@ input?.addEventListener(
       value &&
       !value.startsWith("#")
     ) {
+
       value =
         "#" + value;
+
     }
 
 
@@ -4449,6 +4450,7 @@ input?.addEventListener(
         value;
 
       return;
+
     }
 
 
@@ -4461,6 +4463,11 @@ input?.addEventListener(
 
   }
 );
+
+
+return;
+
+}
 
   /* =====================
      RGB
@@ -5004,7 +5011,9 @@ function updateAlphaFromPointer(
   event
 ) {
 
-  if (!adminHeaderAlphaSlider) {
+  if (
+    !adminHeaderAlphaSlider
+  ) {
     return;
   }
 
@@ -5028,28 +5037,42 @@ function updateAlphaFromPointer(
     (x / rect.width) * 100;
 
 
-  adminHeaderAlphaHandle.style.left =
-    `${adminHeaderAlpha}%`;
+  if (
+    adminHeaderAlphaHandle
+  ) {
+
+    adminHeaderAlphaHandle
+      .style.left =
+        `${adminHeaderAlpha}%`;
+
+  }
 
 
-if (adminHeaderAlphaText) {
+  if (
+    adminHeaderAlphaText
+  ) {
 
-  adminHeaderAlphaText.textContent =
-    `${Math.round(adminHeaderAlpha)}%`;
+    adminHeaderAlphaText.value =
+      `${Math.round(
+        adminHeaderAlpha
+      )}%`;
 
-}
+  }
 
 
   localStorage.setItem(
     "adminHeaderBackgroundAlpha",
-    String(adminHeaderAlpha)
+    String(
+      adminHeaderAlpha
+    )
   );
 
 
-  updateCustomHeaderColor();
+  updateCustomHeaderColor(
+    false
+  );
 
 }
-
 /* =========================
    COLOR FORMAT DROPDOWN
 ========================= */

@@ -46,7 +46,7 @@
    ADMIN GLOBAL LIGHT THEME
 ========================================================= */
 
-html[data-admin-theme="light"] {
+html[data-admin-theme="dark"] {
    
     --tx-bg: #000000;
     --tx-ink: #e5edf8;

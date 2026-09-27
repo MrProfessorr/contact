@@ -650,6 +650,407 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   cursor:not-allowed;
 }
 /* =========================================================
+   SHARED CHIP DROPDOWN
+   Reusable multi-select dropdown
+========================================================= */
+
+.shared-chip-dropdown {
+  position:relative;
+  width:100%;
+  min-width:0;
+}
+
+
+/* =========================================================
+   TRIGGER
+========================================================= */
+
+.shared-chip-dropdown-trigger {
+  position:relative;
+
+  width:100%;
+  min-height:32px;
+
+  display:flex;
+  align-items:center;
+
+  padding:
+    1px 32px 1px 3px;
+
+  border:
+    1px solid var(--input-line);
+
+  border-radius:6px;
+
+  background:
+    var(--input);
+
+  cursor:pointer;
+
+  box-sizing:border-box;
+
+  transition:
+    border-color .2s ease;
+}
+
+
+.shared-chip-dropdown-trigger:hover {
+  border-color:
+    var(--input-line-hover);
+}
+
+
+.shared-chip-dropdown.open
+.shared-chip-dropdown-trigger {
+  border-color:
+    var(--input-line-focus);
+}
+
+
+/* =========================================================
+   CHIP AREA
+========================================================= */
+
+.shared-chip-dropdown-values {
+  position:relative;
+
+  display:flex;
+  flex:1 1 auto;
+  flex-wrap:wrap;
+  align-items:center;
+
+  min-width:0;
+  max-width:100%;
+}
+
+
+.shared-chip-dropdown-values:empty {
+  display:none;
+}
+
+
+/* =========================================================
+   CHIP
+========================================================= */
+
+.shared-chip-dropdown-chip {
+  display:flex;
+  align-self:center;
+  align-items:center;
+
+  flex:none;
+
+  max-width:100%;
+  height:24px;
+
+  margin:
+    2px 4px 2px 0;
+
+  padding:
+    0 4px 0 8px;
+
+  border:0;
+  border-radius:4px;
+
+  color:
+    var(--text);
+
+  background:
+    rgba(255,255,255,.12);
+
+  font-size:14px;
+
+  cursor:default;
+}
+
+
+.shared-chip-dropdown-chip-content {
+  display:inline-block;
+
+  margin-right:4px;
+
+  overflow:hidden;
+
+  white-space:nowrap;
+
+  text-overflow:ellipsis;
+}
+
+
+/* =========================================================
+   CHIP REMOVE
+========================================================= */
+
+.shared-chip-dropdown-chip-remove {
+  width:14px;
+  height:14px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:none;
+
+  color:
+    rgba(255,255,255,.45);
+
+  background:
+    transparent;
+
+  cursor:pointer;
+
+  transition:
+    color .2s ease;
+}
+
+
+.shared-chip-dropdown-chip-remove:hover {
+  color:
+    rgba(255,255,255,.85);
+}
+
+
+.shared-chip-dropdown-chip-remove svg {
+  width:10px;
+  height:10px;
+
+  display:block;
+
+  fill:
+    currentColor;
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+.shared-chip-dropdown-placeholder {
+  display:none;
+
+  flex:1 1 0;
+
+  width:100%;
+  min-width:0;
+
+  padding-left:8px;
+
+  color:
+    var(--text2);
+
+  font-size:14px;
+  line-height:30px;
+
+  text-align:left;
+}
+
+
+.shared-chip-dropdown-values:empty
++ .shared-chip-dropdown-placeholder {
+  display:block;
+
+  margin-right:auto;
+
+  text-align:left;
+}
+
+
+/* =========================================================
+   RIGHT ICON
+========================================================= */
+
+.shared-chip-dropdown-icon-btn {
+  position:absolute;
+
+  top:0;
+  right:0;
+
+  z-index:3;
+
+  width:32px;
+  height:100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:none;
+
+  color:
+    var(--text2);
+
+  background:
+    transparent;
+
+  cursor:pointer;
+
+  transition:
+    color .2s ease;
+}
+
+
+.shared-chip-dropdown-icon {
+  width:12px;
+  height:12px;
+
+  display:block;
+
+  fill:
+    currentColor;
+
+  transition:
+    all .2s ease;
+}
+
+
+.shared-chip-dropdown-icon-search,
+.shared-chip-dropdown-icon-clear {
+  display:none;
+}
+
+
+/* OPEN = SEARCH */
+
+.shared-chip-dropdown.open
+.shared-chip-dropdown-icon-arrow {
+  display:none;
+}
+
+
+.shared-chip-dropdown.open
+.shared-chip-dropdown-icon-search {
+  display:block;
+}
+
+
+/* HOVER WITH VALUE = CLEAR */
+
+.shared-chip-dropdown.has-value:not(.open):hover
+.shared-chip-dropdown-icon-arrow {
+  display:none;
+}
+
+
+.shared-chip-dropdown.has-value:not(.open):hover
+.shared-chip-dropdown-icon-clear {
+  display:block;
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.shared-chip-dropdown-panel {
+  position:absolute;
+
+  top:calc(100% + 3px);
+  left:0;
+
+  z-index:10000;
+
+  width:100%;
+
+  display:none;
+
+  padding:4px;
+
+  border:0;
+  border-radius:8px;
+
+  background:
+    var(--dropdown-bg);
+
+  box-sizing:border-box;
+
+  box-shadow:
+    0 6px 16px 0 rgba(0,0,0,.08),
+    0 3px 6px -4px rgba(0,0,0,.12),
+    0 9px 28px 8px rgba(0,0,0,.05);
+}
+
+
+.shared-chip-dropdown.open
+.shared-chip-dropdown-panel {
+  display:block;
+}
+
+
+/* =========================================================
+   OPTION
+========================================================= */
+
+.shared-chip-dropdown-option {
+  width:100%;
+  min-height:32px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:
+    5px 12px;
+
+  border:none;
+  border-radius:4px;
+
+  color:
+    var(--text);
+
+  background:
+    transparent;
+
+  cursor:pointer;
+
+  font-family:inherit;
+  font-size:14px;
+  font-weight:400;
+
+  text-align:left;
+
+  transition:
+    background .15s ease,
+    color .15s ease;
+}
+
+
+.shared-chip-dropdown-option:hover {
+  background:
+    var(--list-hover);
+}
+
+
+.shared-chip-dropdown-option.active {
+  color:
+    var(--text);
+
+  background:
+    var(--dropdown-bg-active);
+
+  font-weight:600;
+}
+
+
+/* CHECK */
+
+.shared-chip-dropdown-option-check {
+  display:none;
+
+  color:#1677ff;
+
+  font-size:14px;
+}
+
+
+.shared-chip-dropdown-option.active
+.shared-chip-dropdown-option-check {
+  display:block;
+}
+/* =========================================================
    SHARED TEXTAREA
 ========================================================= */
 
@@ -3003,80 +3404,4 @@ padding:0 12px;
   transform:
     translate(-50%,-50%);
   pointer-events:none;
-}
-/* =========================================================
-   ADMIN SITE SELECTOR
-========================================================= */
-
-.admin-site-selector {
-  width:150px;
-  min-width:150px;
-  flex:0 0 150px;
-  box-sizing:border-box;
-  padding-inline:16px; 
-}
-
-
-/*
-  Custom dropdown dalam header.
-*/
-
-.admin-site-selector
-.shared-dropdown {
-  width:100%;
-  min-width:150px;
-  box-sizing:border-box;
-}
-
-
-/*
-  Header site selector
-  ikut tinggi shared dropdown.
-*/
-
-.admin-site-selector
-.shared-dropdown-trigger {
-  width:100%;
-  box-sizing:border-box;
-}
-
-
-/*
-  Dropdown panel jangan jadi
-  lebih kecil daripada trigger.
-*/
-
-.admin-site-selector
-.shared-dropdown-panel {
-  width:100%;
-  min-width:150px;
-  box-sizing:border-box;
-}
-
-
-/* =========================================================
-   ADMIN SITE SELECTOR - MOBILE
-========================================================= */
-
-@media(max-width:650px) {
-
-  .admin-site-selector {
-    width:120px;
-    min-width:120px;
-    flex:0 0 120px;
-    margin-left:8px;
-  }
-
-
-  .admin-site-selector
-  .shared-dropdown {
-    min-width:120px;
-  }
-
-
-  .admin-site-selector
-  .shared-dropdown-panel {
-    min-width:120px;
-  }
-
 }

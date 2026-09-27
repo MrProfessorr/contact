@@ -3860,6 +3860,38 @@ userDropdown.innerHTML = `
   </div>
 </div>
 
+
+  <!-- =========================================
+       ADMIN LANGUAGE
+  ========================================== -->
+
+  <div class="admin-language-wrap">
+
+    <select
+      id="adminLanguageSelect"
+      data-shared-dropdown
+      data-placeholder="English"
+    >
+      <option value="en">
+        English
+      </option>
+
+      <option value="zh">
+        中文
+      </option>
+
+      <option value="vi">
+        Tiếng Việt
+      </option>
+
+      <option value="th">
+        แบบไทย
+      </option>
+    </select>
+
+  </div>
+
+
   <!-- RESET 2ND PASSWORD - PALING ATAS -->
   <button
     type="button"
@@ -4016,6 +4048,146 @@ adminThemeSwitch
 
 
 syncAdminThemeSwitch();
+
+
+/* =======================================================
+   ADMIN GLOBAL LANGUAGE
+======================================================= */
+
+const ADMIN_LANGUAGE_KEY =
+  "adminGlobalLanguage";
+
+
+const adminLanguageSelect =
+  userDropdown.querySelector(
+    "#adminLanguageSelect"
+  );
+if (adminLanguageSelect) {
+
+  createSharedDropdown(
+    adminLanguageSelect,
+    {
+      placeholder:
+        "English",
+
+      emptyText:
+        "No language"
+    }
+  );
+
+}
+
+function getAdminLanguage() {
+
+  const savedLanguage =
+    localStorage.getItem(
+      ADMIN_LANGUAGE_KEY
+    );
+
+  const allowedLanguages = [
+    "en",
+    "zh",
+    "vi",
+    "th"
+  ];
+
+
+  return allowedLanguages.includes(
+    savedLanguage
+  )
+    ? savedLanguage
+    : "en";
+
+}
+
+
+function applyAdminLanguage(
+  language,
+  save = true
+) {
+
+  const allowedLanguages = [
+    "en",
+    "zh",
+    "vi",
+    "th"
+  ];
+
+
+  const finalLanguage =
+    allowedLanguages.includes(
+      language
+    )
+      ? language
+      : "en";
+
+
+  document.documentElement
+    .setAttribute(
+      "lang",
+      finalLanguage
+    );
+
+
+  document.documentElement
+    .setAttribute(
+      "data-admin-language",
+      finalLanguage
+    );
+
+
+  if (save) {
+
+    localStorage.setItem(
+      ADMIN_LANGUAGE_KEY,
+      finalLanguage
+    );
+
+  }
+
+
+  /*
+    Translation engine akan
+    kita sambung di sini nanti.
+  */
+
+}
+
+
+if (adminLanguageSelect) {
+
+  adminLanguageSelect.value =
+    getAdminLanguage();
+
+
+  adminLanguageSelect
+    .addEventListener(
+      "change",
+      () => {
+
+        applyAdminLanguage(
+          adminLanguageSelect.value
+        );
+
+      }
+    );
+
+}
+
+
+applyAdminLanguage(
+  getAdminLanguage(),
+  false
+);
+
+
+window.getAdminLanguage =
+  getAdminLanguage;
+
+window.applyAdminLanguage =
+  applyAdminLanguage;
+
+
 /* =======================================================
    ADMIN HEADER BACKGROUND COLOR
 ======================================================= */

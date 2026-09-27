@@ -117,8 +117,8 @@ a {
 }
 
 .card {
-  background:var(--panel);
-  border:1px solid var(--line);
+  background:var(--tx-surface);
+  border:1px solid var(--tx-border);
   border-radius:12px;
   padding:18px;
 }
@@ -129,13 +129,10 @@ a {
   color:var(--tx-ink);
 }
 
-
 /* FORM */
-
 .form-group {
   margin-bottom: 14px;
 }
-
 label {
   display:block;
   margin-bottom:6px;
@@ -144,19 +141,17 @@ label {
   color:var(--tx-muted);
 }
 .help-text {
-  color:var(--muted);
+  color:var(--tx-muted);
   font-size:12px;
   margin-top:5px;
   line-height:1.5;
 }
 
-
 /* BUTTON */
-
 .btn {
   cursor:pointer;
   border:none;
-  border-radius:8px;
+  border-radius:6px;
   color:white;
   padding:0px 15px;
   font-weight:400;
@@ -187,18 +182,11 @@ label {
 /* LIST */
 
 .admin-list {
-
-  display:
-    grid;
-
-  gap:
-    11px;
+  display:grid;
+  gap:11px;
 }
-
 .admin-item {
-
-  background:
-    var(--panel2);
+  background:red;
 
   border:
     1px solid var(--line);

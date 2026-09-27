@@ -1199,7 +1199,39 @@ html[data-admin-theme="dark"]
 .admin-theme-switch.checked {
   background:#1668dc;
 }
+/* =========================================================
+   ADMIN LANGUAGE
+========================================================= */
 
+.admin-language-wrap {
+  position:relative;
+
+  width:100%;
+
+  margin:
+    8px
+    0;
+
+  z-index:20;
+}
+
+
+.admin-language-wrap
+.shared-dropdown {
+  width:100%;
+}
+
+
+.admin-language-wrap
+.shared-dropdown-trigger {
+  height:32px;
+}
+
+
+.admin-language-wrap
+.shared-dropdown-panel {
+  z-index:10020;
+}
 /* =========================================================
    ADMIN USER POPOVER
 ========================================================= */

@@ -3,45 +3,7 @@
    Reusable for all admin pages
 ========================================================= */
 :root {
-    --tx-bg: #000000;
-    --tx-ink: #e5edf8;
-    --tx-muted: #9aaac0;
-    --tx-border: #2b3e5b;
-    --tx-surface: #152237;
-    --tx-surface-soft: #1c2b42;
-    --tx-hover: #1d304b;
-    
- 
-  --panel2: #171e28;
-   
-  --text: rgba(255,255,255,0.85);
-  --muted: rgba(255,255,255,0.45);
-  --placeholder: rgba(255,255,255,0.25);
-   
-  --blue: #1668dc;
-  --green: #26c979;
-  --red: #dc4352;
-  --yellow: #d69116;
-   
-  --input:#141414;
-  --input-line:#424242;
-  --input-line-hover:#3c89e8;
-  --input-line-active:#1554ad;
-  --input-line-focus:#1668dc;
-   
-  --tab-border:#303030;
-   
-  --dropdown-bg:#1f1f1f;
-  --dropdown-bg-active:#111a2c;
- 
-}
 
-/* =========================================================
-   ADMIN GLOBAL LIGHT THEME
-========================================================= */
-
-html[data-admin-theme="light"] {
-   
     --tx-bg: #ffffff;
     --tx-accent: #1769e0;
     --tx-ink: #17243a;
@@ -70,6 +32,44 @@ html[data-admin-theme="light"] {
   --input-line-focus:#1677ff;
 
   --tab-border:#f0f0f0;
+   
+  --dropdown-bg:#1f1f1f;
+  --dropdown-bg-active:#111a2c;
+}
+
+/* =========================================================
+   ADMIN GLOBAL LIGHT THEME
+========================================================= */
+
+html[data-admin-theme="light"] {
+   
+    --tx-bg: #000000;
+    --tx-ink: #e5edf8;
+    --tx-muted: #9aaac0;
+    --tx-border: #2b3e5b;
+    --tx-surface: #152237;
+    --tx-surface-soft: #1c2b42;
+    --tx-hover: #1d304b;
+    
+ 
+  --panel2: #171e28;
+   
+  --text: rgba(255,255,255,0.85);
+  --muted: rgba(255,255,255,0.45);
+  --placeholder: rgba(255,255,255,0.25);
+   
+  --blue: #1668dc;
+  --green: #26c979;
+  --red: #dc4352;
+  --yellow: #d69116;
+   
+  --input:#141414;
+  --input-line:#424242;
+  --input-line-hover:#3c89e8;
+  --input-line-active:#1554ad;
+  --input-line-focus:#1668dc;
+   
+  --tab-border:#303030;
    
   --dropdown-bg:#1f1f1f;
   --dropdown-bg-active:#111a2c;

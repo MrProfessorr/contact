@@ -56,7 +56,39 @@ export const auth =
 
 export const db =
   getDatabase(app);
+/* =========================
+   CURRENT ADMIN PROFILE
+========================= */
 
+let currentAdminProfile =
+  null;
+
+
+/*
+  Ambil profile admin
+  yang sedang login.
+*/
+
+export function getCurrentAdminProfile() {
+
+  return currentAdminProfile;
+
+}
+
+
+/*
+  Check sama ada admin
+  sekarang ialah Super Admin.
+*/
+
+export function isSuperAdmin() {
+
+  return (
+    currentAdminProfile?.role ===
+    "superadmin"
+  );
+
+}
 /* =========================
    ADMIN SESSION 24 HOURS
 ========================= */
@@ -188,17 +220,26 @@ function startAdminSessionTimer() {
 }
 /* AUTH GUARD */
 
+/* =========================
+   AUTH GUARD
+========================= */
+
 export function requireAdmin() {
 
   onAuthStateChanged(
     auth,
-    user => {
+    async user => {
 
       /*
         STEP 1:
-        Firebase login belum ada.
+        Belum login Firebase.
       */
+
       if (!user) {
+
+        currentAdminProfile =
+          null;
+
 
         sessionStorage.removeItem(
           "adminSecondVerifiedUid"
@@ -217,10 +258,9 @@ export function requireAdmin() {
 
       /*
         STEP 2:
-        Firebase login sudah ada,
-        tetapi 2nd Password
-        belum verified.
+        Check 2nd Password.
       */
+
       const verifiedUid =
         sessionStorage.getItem(
           "adminSecondVerifiedUid"
@@ -230,6 +270,10 @@ export function requireAdmin() {
       if (
         verifiedUid !== user.uid
       ) {
+
+        currentAdminProfile =
+          null;
+
 
         location.replace(
           "./login.html"
@@ -243,47 +287,239 @@ export function requireAdmin() {
 
       /*
         STEP 3:
-        Firebase login +
-        2nd Password sudah lulus.
+        Ambil admin profile
+        berdasarkan UID Firebase.
       */
-     startAdminSessionTimer();
 
-      /* FULL EMAIL */
+      try {
 
-      const adminEmail =
-        document.getElementById(
-          "adminEmail"
+        const adminProfileRef =
+          ref(
+            db,
+            `admin_users/${user.uid}`
+          );
+
+
+        const snapshot =
+          await get(
+            adminProfileRef
+          );
+
+
+        /*
+          Firebase Auth ada,
+          tetapi user bukan admin.
+        */
+
+        if (!snapshot.exists()) {
+
+          console.error(
+            "ADMIN_PROFILE_NOT_FOUND"
+          );
+
+
+          window.showToast?.(
+            "Admin access not registered.",
+            "error",
+            5000
+          );
+
+
+          await forceAdminLogout();
+
+
+          return;
+
+        }
+
+
+        const profile =
+          snapshot.val() || {};
+
+
+        /*
+          Check enabled.
+        */
+
+        if (
+          profile.enabled !== true
+        ) {
+
+          console.error(
+            "ADMIN_DISABLED"
+          );
+
+
+          window.showToast?.(
+            "Admin account is disabled.",
+            "error",
+            5000
+          );
+
+
+          await forceAdminLogout();
+
+
+          return;
+
+        }
+
+
+        /*
+          Check role.
+        */
+
+        const validRoles = [
+          "superadmin",
+          "site_admin"
+        ];
+
+
+        if (
+          !validRoles.includes(
+            profile.role
+          )
+        ) {
+
+          console.error(
+            "INVALID_ADMIN_ROLE"
+          );
+
+
+          window.showToast?.(
+            "Invalid admin role.",
+            "error",
+            5000
+          );
+
+
+          await forceAdminLogout();
+
+
+          return;
+
+        }
+
+
+        /*
+          Simpan profile admin
+          dalam memory.
+        */
+
+        currentAdminProfile = {
+
+          uid:
+            user.uid,
+
+          email:
+            user.email || "",
+
+          username:
+            profile.username ||
+            user.email
+              ?.split("@")[0] ||
+            "Admin",
+
+          displayName:
+            profile.displayName ||
+            profile.username ||
+            "Admin",
+
+          role:
+            profile.role,
+
+          enabled:
+            true,
+
+          sites:
+            profile.sites || {},
+
+          permissions:
+            profile.permissions || {}
+
+        };
+
+
+        /*
+          Session 24 jam
+          masih sistem lama.
+        */
+
+        startAdminSessionTimer();
+
+
+        /*
+          FULL EMAIL
+        */
+
+        const adminEmail =
+          document.getElementById(
+            "adminEmail"
+          );
+
+
+        if (adminEmail) {
+
+          adminEmail.textContent =
+            user.email ||
+            "Admin";
+
+        }
+
+
+        /*
+          TOP NAV USERNAME
+        */
+
+        const adminUsername =
+          document.getElementById(
+            "adminUsername"
+          );
+
+
+        if (adminUsername) {
+
+          adminUsername.textContent =
+            currentAdminProfile
+              .displayName;
+
+        }
+
+
+        /*
+          Beritahu shared UI bahawa
+          profile admin sudah ready.
+        */
+
+        window.dispatchEvent(
+          new CustomEvent(
+            "admin-profile-ready",
+            {
+              detail: {
+                ...currentAdminProfile
+              }
+            }
+          )
         );
-
-
-      if (adminEmail) {
-
-        adminEmail.textContent =
-          user.email ||
-          "Admin";
 
       }
 
+      catch (error) {
 
-      /* TOP NAV USERNAME */
-
-      const adminUsername =
-        document.getElementById(
-          "adminUsername"
+        console.error(
+          "Failed to verify admin:",
+          error
         );
 
 
-      if (adminUsername) {
-
-        const username =
-          user.displayName ||
-          user.email
-            ?.split("@")[0] ||
-          "Admin";
+        window.showToast?.(
+          "Failed to verify admin access.",
+          "error",
+          5000
+        );
 
 
-        adminUsername.textContent =
-          username;
+        await forceAdminLogout();
 
       }
 

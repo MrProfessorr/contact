@@ -1146,6 +1146,461 @@ requestAnimationFrame(
 );
 
     }
+
+    /* =====================================================
+       CLOSE
+    ===================================================== */
+
+    function close() {
+
+      wrapper.classList.remove(
+        "open"
+      );
+
+
+      input.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+/*
+  Restore normal placeholder.
+*/
+
+input.placeholder =
+  config.placeholder;
+
+
+/*
+  Restore actual selected option.
+  Example:
+  Facebook returns if user cancels.
+*/
+
+updateValue();
+
+
+updateIcon();
+
+    }
+
+
+    /* =====================================================
+       INPUT CLICK
+    ===================================================== */
+
+    input.addEventListener(
+      "click",
+      event => {
+
+        event.stopPropagation();
+
+
+        if (
+          !wrapper
+            .classList
+            .contains("open")
+        ) {
+
+          open();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       INPUT FOCUS
+    ===================================================== */
+
+    input.addEventListener(
+      "focus",
+      () => {
+
+        if (
+          !wrapper
+            .classList
+            .contains("open")
+        ) {
+
+          open();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       SEARCH AS USER TYPES
+    ===================================================== */
+
+input.addEventListener(
+  "input",
+  () => {
+
+    if (
+      !wrapper
+        .classList
+        .contains("open")
+    ) {
+
+      open();
+
+    }
+
+
+    renderOptions(
+      input.value
+    );
+
+
+    updateIcon();
+
+  }
+);
+trigger.addEventListener(
+  "mouseenter",
+  () => {
+
+    isHovering =
+      true;
+
+    updateIcon();
+
+  }
+);
+
+
+trigger.addEventListener(
+  "mouseleave",
+  () => {
+
+    isHovering =
+      false;
+
+    updateIcon();
+
+  }
+);
+
+
+/*
+  Input already contains selected text.
+  Do not automatically open dropdown
+  just because hover state changed.
+*/
+
+input.addEventListener(
+  "mousemove",
+  () => {
+
+    if (
+      !wrapper.classList.contains("open") &&
+      select.value !== ""
+    ) {
+
+      isHovering =
+        true;
+
+      updateIcon();
+
+    }
+
+  }
+);
+
+    /* =====================================================
+       ICON CLICK
+    ===================================================== */
+
+icon.addEventListener(
+  "mousedown",
+  event => {
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+
+    const iconType =
+      icon.dataset.icon;
+
+
+    /* ==============================
+       CLEAR
+    ============================== */
+
+    if (
+      iconType === "clear"
+    ) {
+
+      /*
+        If dropdown is open,
+        clear only search text.
+      */
+
+if (
+  wrapper
+    .classList
+    .contains("open")
+) {
+
+  /*
+    Clear selected dropdown value.
+  */
+
+  select.value =
+    "";
+
+
+  select.dispatchEvent(
+    new Event(
+      "change",
+      {
+        bubbles:true
+      }
+    )
+  );
+
+
+  /*
+    Clear search text.
+  */
+
+  input.value =
+    "";
+
+
+  /*
+    Restore normal placeholder.
+  */
+
+  input.placeholder =
+    config.placeholder;
+
+
+  renderOptions(
+    ""
+  );
+
+
+  updateIcon();
+
+
+  input.focus();
+
+
+  input.setSelectionRange(
+    0,
+    0
+  );
+
+
+  return;
+}
+
+
+      /*
+        Dropdown closed:
+        clear selected value.
+      */
+
+      select.value =
+        "";
+
+
+      select.dispatchEvent(
+        new Event(
+          "change",
+          {
+            bubbles:true
+          }
+        )
+      );
+
+
+      input.value =
+        "";
+
+
+      updateIcon();
+
+
+      return;
+
+    }
+
+
+    /* ==============================
+       SEARCH ICON
+    ============================== */
+
+    if (
+      iconType === "search"
+    ) {
+
+      input.focus();
+
+      return;
+
+    }
+
+
+    /* ==============================
+       ARROW
+    ============================== */
+
+    if (
+      wrapper
+        .classList
+        .contains("open")
+    ) {
+
+      close();
+
+    } else {
+
+      open();
+
+    }
+
+  }
+);
+
+
+    /* =====================================================
+       SELECT CHANGE
+    ===================================================== */
+
+select.addEventListener(
+  "change",
+  () => {
+
+    updateValue();
+
+    renderOptions();
+
+    updateIcon();
+
+  }
+);
+
+    /* =====================================================
+       DISABLED
+    ===================================================== */
+
+    function updateDisabled() {
+
+      const disabled =
+        select.disabled;
+
+
+      input.disabled =
+        disabled;
+
+
+      wrapper
+        .classList
+        .toggle(
+          "disabled",
+          disabled
+        );
+
+
+      if (
+        disabled
+      ) {
+
+        close();
+
+      }
+
+    }
+
+
+    /* =====================================================
+       PUBLIC API
+    ===================================================== */
+
+    const api = {
+
+      open,
+
+      close,
+
+      refresh() {
+
+        updateValue();
+
+        updateDisabled();
+
+        renderOptions();
+
+      },
+
+
+      setValue(
+        value,
+        dispatchChange = true
+      ) {
+
+        select.value =
+          String(
+            value
+          );
+
+
+        updateValue();
+
+        renderOptions();
+
+
+        if (
+          dispatchChange
+        ) {
+
+          select.dispatchEvent(
+            new Event(
+              "change",
+              {
+                bubbles:true
+              }
+            )
+          );
+
+        }
+
+      },
+
+
+      getValue() {
+
+        return select.value;
+
+      }
+
+    };
+
+
+    select._sharedDropdown =
+      api;
+
+
+updateValue();
+
+updateDisabled();
+
+renderOptions();
+
+updateIcon();
+
+
+    return api;
+
+  }
+
 /* =======================================================
    SHARED CHIP DROPDOWN
    Reusable multi-select dropdown
@@ -1890,460 +2345,6 @@ function createSharedChipDropdown(
   return api;
 
 }
-
-    /* =====================================================
-       CLOSE
-    ===================================================== */
-
-    function close() {
-
-      wrapper.classList.remove(
-        "open"
-      );
-
-
-      input.setAttribute(
-        "aria-expanded",
-        "false"
-      );
-
-/*
-  Restore normal placeholder.
-*/
-
-input.placeholder =
-  config.placeholder;
-
-
-/*
-  Restore actual selected option.
-  Example:
-  Facebook returns if user cancels.
-*/
-
-updateValue();
-
-
-updateIcon();
-
-    }
-
-
-    /* =====================================================
-       INPUT CLICK
-    ===================================================== */
-
-    input.addEventListener(
-      "click",
-      event => {
-
-        event.stopPropagation();
-
-
-        if (
-          !wrapper
-            .classList
-            .contains("open")
-        ) {
-
-          open();
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
-       INPUT FOCUS
-    ===================================================== */
-
-    input.addEventListener(
-      "focus",
-      () => {
-
-        if (
-          !wrapper
-            .classList
-            .contains("open")
-        ) {
-
-          open();
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
-       SEARCH AS USER TYPES
-    ===================================================== */
-
-input.addEventListener(
-  "input",
-  () => {
-
-    if (
-      !wrapper
-        .classList
-        .contains("open")
-    ) {
-
-      open();
-
-    }
-
-
-    renderOptions(
-      input.value
-    );
-
-
-    updateIcon();
-
-  }
-);
-trigger.addEventListener(
-  "mouseenter",
-  () => {
-
-    isHovering =
-      true;
-
-    updateIcon();
-
-  }
-);
-
-
-trigger.addEventListener(
-  "mouseleave",
-  () => {
-
-    isHovering =
-      false;
-
-    updateIcon();
-
-  }
-);
-
-
-/*
-  Input already contains selected text.
-  Do not automatically open dropdown
-  just because hover state changed.
-*/
-
-input.addEventListener(
-  "mousemove",
-  () => {
-
-    if (
-      !wrapper.classList.contains("open") &&
-      select.value !== ""
-    ) {
-
-      isHovering =
-        true;
-
-      updateIcon();
-
-    }
-
-  }
-);
-
-    /* =====================================================
-       ICON CLICK
-    ===================================================== */
-
-icon.addEventListener(
-  "mousedown",
-  event => {
-
-    event.preventDefault();
-
-    event.stopPropagation();
-
-
-    const iconType =
-      icon.dataset.icon;
-
-
-    /* ==============================
-       CLEAR
-    ============================== */
-
-    if (
-      iconType === "clear"
-    ) {
-
-      /*
-        If dropdown is open,
-        clear only search text.
-      */
-
-if (
-  wrapper
-    .classList
-    .contains("open")
-) {
-
-  /*
-    Clear selected dropdown value.
-  */
-
-  select.value =
-    "";
-
-
-  select.dispatchEvent(
-    new Event(
-      "change",
-      {
-        bubbles:true
-      }
-    )
-  );
-
-
-  /*
-    Clear search text.
-  */
-
-  input.value =
-    "";
-
-
-  /*
-    Restore normal placeholder.
-  */
-
-  input.placeholder =
-    config.placeholder;
-
-
-  renderOptions(
-    ""
-  );
-
-
-  updateIcon();
-
-
-  input.focus();
-
-
-  input.setSelectionRange(
-    0,
-    0
-  );
-
-
-  return;
-}
-
-
-      /*
-        Dropdown closed:
-        clear selected value.
-      */
-
-      select.value =
-        "";
-
-
-      select.dispatchEvent(
-        new Event(
-          "change",
-          {
-            bubbles:true
-          }
-        )
-      );
-
-
-      input.value =
-        "";
-
-
-      updateIcon();
-
-
-      return;
-
-    }
-
-
-    /* ==============================
-       SEARCH ICON
-    ============================== */
-
-    if (
-      iconType === "search"
-    ) {
-
-      input.focus();
-
-      return;
-
-    }
-
-
-    /* ==============================
-       ARROW
-    ============================== */
-
-    if (
-      wrapper
-        .classList
-        .contains("open")
-    ) {
-
-      close();
-
-    } else {
-
-      open();
-
-    }
-
-  }
-);
-
-
-    /* =====================================================
-       SELECT CHANGE
-    ===================================================== */
-
-select.addEventListener(
-  "change",
-  () => {
-
-    updateValue();
-
-    renderOptions();
-
-    updateIcon();
-
-  }
-);
-
-    /* =====================================================
-       DISABLED
-    ===================================================== */
-
-    function updateDisabled() {
-
-      const disabled =
-        select.disabled;
-
-
-      input.disabled =
-        disabled;
-
-
-      wrapper
-        .classList
-        .toggle(
-          "disabled",
-          disabled
-        );
-
-
-      if (
-        disabled
-      ) {
-
-        close();
-
-      }
-
-    }
-
-
-    /* =====================================================
-       PUBLIC API
-    ===================================================== */
-
-    const api = {
-
-      open,
-
-      close,
-
-      refresh() {
-
-        updateValue();
-
-        updateDisabled();
-
-        renderOptions();
-
-      },
-
-
-      setValue(
-        value,
-        dispatchChange = true
-      ) {
-
-        select.value =
-          String(
-            value
-          );
-
-
-        updateValue();
-
-        renderOptions();
-
-
-        if (
-          dispatchChange
-        ) {
-
-          select.dispatchEvent(
-            new Event(
-              "change",
-              {
-                bubbles:true
-              }
-            )
-          );
-
-        }
-
-      },
-
-
-      getValue() {
-
-        return select.value;
-
-      }
-
-    };
-
-
-    select._sharedDropdown =
-      api;
-
-
-updateValue();
-
-updateDisabled();
-
-renderOptions();
-
-updateIcon();
-
-
-    return api;
-
-  }
   /* =======================================================
      INIT ALL SHARED DROPDOWNS
   ======================================================= */

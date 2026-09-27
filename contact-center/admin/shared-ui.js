@@ -4700,9 +4700,26 @@ if (document.body) {
 
 if (adminLanguageSelect) {
 
-  adminLanguageSelect.value =
+  const savedLanguage =
     getAdminLanguage();
 
+
+  adminLanguageSelect.value =
+    savedLanguage;
+
+  if (
+    adminLanguageSelect
+      ._sharedDropdown
+  ) {
+
+    adminLanguageSelect
+      ._sharedDropdown
+      .setValue(
+        savedLanguage,
+        false
+      );
+
+  }
 
   adminLanguageSelect
     .addEventListener(

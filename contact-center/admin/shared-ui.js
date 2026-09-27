@@ -4080,14 +4080,104 @@ const ADMIN_LANGUAGE_ALLOWED = [
   "vi",
   "th"
 ];
+/* =======================================================
+   ADMIN LOCAL TRANSLATIONS
+   FREE / FIREBASE SPARK
+======================================================= */
 
+const ADMIN_TRANSLATIONS = {
 
-/*
-  Store original English text.
+  id: {
+    "Dashboard": "Dasbor",
+    "Dark Mode": "Mode Gelap",
+    "Light Mode": "Mode Terang",
+    "Header Background Color": "Warna Latar Header",
+    "Reset Password": "Atur Ulang Kata Sandi",
+    "Logout": "Keluar",
+    "Save": "Simpan",
+    "Cancel": "Batal",
+    "Close": "Tutup",
+    "Refresh": "Muat Ulang",
+    "Search module": "Cari modul",
+    "No data": "Tidak ada data",
+    "Loading...": "Memuat...",
+    "Select Language": "Pilih Bahasa",
+    "No language": "Tidak ada bahasa"
+  },
 
-  WeakMap means we don't need to modify
-  every HTML element with data-i18n.
-*/
+  ms: {
+    "Dashboard": "Papan Pemuka",
+    "Dark Mode": "Mod Gelap",
+    "Light Mode": "Mod Cerah",
+    "Header Background Color": "Warna Latar Header",
+    "Reset Password": "Tetapkan Semula Kata Laluan",
+    "Logout": "Log Keluar",
+    "Save": "Simpan",
+    "Cancel": "Batal",
+    "Close": "Tutup",
+    "Refresh": "Muat Semula",
+    "Search module": "Cari modul",
+    "No data": "Tiada data",
+    "Loading...": "Memuatkan...",
+    "Select Language": "Pilih Bahasa",
+    "No language": "Tiada bahasa"
+  },
+
+  zh: {
+    "Dashboard": "仪表板",
+    "Dark Mode": "深色模式",
+    "Light Mode": "浅色模式",
+    "Header Background Color": "页眉背景颜色",
+    "Reset Password": "重置密码",
+    "Logout": "退出登录",
+    "Save": "保存",
+    "Cancel": "取消",
+    "Close": "关闭",
+    "Refresh": "刷新",
+    "Search module": "搜索模块",
+    "No data": "暂无数据",
+    "Loading...": "加载中...",
+    "Select Language": "选择语言",
+    "No language": "没有语言"
+  },
+
+  vi: {
+    "Dashboard": "Bảng điều khiển",
+    "Dark Mode": "Chế độ tối",
+    "Light Mode": "Chế độ sáng",
+    "Header Background Color": "Màu nền tiêu đề",
+    "Reset Password": "Đặt lại mật khẩu",
+    "Logout": "Đăng xuất",
+    "Save": "Lưu",
+    "Cancel": "Hủy",
+    "Close": "Đóng",
+    "Refresh": "Làm mới",
+    "Search module": "Tìm kiếm mô-đun",
+    "No data": "Không có dữ liệu",
+    "Loading...": "Đang tải...",
+    "Select Language": "Chọn ngôn ngữ",
+    "No language": "Không có ngôn ngữ"
+  },
+
+  th: {
+    "Dashboard": "แดชบอร์ด",
+    "Dark Mode": "โหมดมืด",
+    "Light Mode": "โหมดสว่าง",
+    "Header Background Color": "สีพื้นหลังส่วนหัว",
+    "Reset Password": "รีเซ็ตรหัสผ่าน",
+    "Logout": "ออกจากระบบ",
+    "Save": "บันทึก",
+    "Cancel": "ยกเลิก",
+    "Close": "ปิด",
+    "Refresh": "รีเฟรช",
+    "Search module": "ค้นหาโมดูล",
+    "No data": "ไม่มีข้อมูล",
+    "Loading...": "กำลังโหลด...",
+    "Select Language": "เลือกภาษา",
+    "No language": "ไม่มีภาษา"
+  }
+
+};
 
 const adminOriginalText =
   new WeakMap();
@@ -4195,15 +4285,6 @@ function getAdminOriginalAttributes(
 
 }
 
-
-/* =======================================================
-   TRANSLATION PROVIDER
-
-   IMPORTANT:
-   Untuk sekarang return original.
-   Nanti backend translator disambung di sini.
-======================================================= */
-
 async function requestAdminTranslation(
   text,
   language
@@ -4226,16 +4307,25 @@ async function requestAdminTranslation(
   }
 
 
-  /*
-    Translation API/backend akan
-    disambung di sini.
-
-    Jangan letak secret API key
-    dalam frontend.
-  */
+  const languageDictionary =
+    ADMIN_TRANSLATIONS[
+      language
+    ];
 
 
-  return cleanText;
+  if (!languageDictionary) {
+
+    return cleanText;
+
+  }
+
+
+  return (
+    languageDictionary[
+      cleanText
+    ] ??
+    cleanText
+  );
 
 }
 

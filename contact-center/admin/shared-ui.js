@@ -3867,27 +3867,35 @@ userDropdown.innerHTML = `
 
   <div class="admin-language-wrap">
 
-    <select
-      id="adminLanguageSelect"
-      data-shared-dropdown
-      data-placeholder="English"
-    >
-      <option value="en">
-        English
-      </option>
+<select
+  id="adminLanguageSelect"
+  data-shared-dropdown
+  data-placeholder="Select Language"
+>
+  <option value="en">
+    English
+  </option>
 
-      <option value="zh">
-        中文
-      </option>
+  <option value="id">
+    Bahasa Indonesia
+  </option>
 
-      <option value="vi">
-        Tiếng Việt
-      </option>
+  <option value="ms">
+    Bahasa Melayu
+  </option>
 
-      <option value="th">
-        แบบไทย
-      </option>
-    </select>
+  <option value="zh">
+    中文
+  </option>
+
+  <option value="vi">
+    Tiếng Việt
+  </option>
+
+  <option value="th">
+    ไทย
+  </option>
+</select>
 
   </div>
 
@@ -4084,12 +4092,14 @@ function getAdminLanguage() {
       ADMIN_LANGUAGE_KEY
     );
 
-  const allowedLanguages = [
-    "en",
-    "zh",
-    "vi",
-    "th"
-  ];
+const allowedLanguages = [
+  "en",
+  "id",
+  "ms",
+  "zh",
+  "vi",
+  "th"
+];
 
 
   return allowedLanguages.includes(
@@ -4106,12 +4116,14 @@ function applyAdminLanguage(
   save = true
 ) {
 
-  const allowedLanguages = [
-    "en",
-    "zh",
-    "vi",
-    "th"
-  ];
+const allowedLanguages = [
+  "en",
+  "id",
+  "ms",
+  "zh",
+  "vi",
+  "th"
+];
 
 
   const finalLanguage =

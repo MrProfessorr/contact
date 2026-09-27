@@ -4064,7 +4064,43 @@ syncAdminThemeSwitch();
 
 const ADMIN_LANGUAGE_KEY =
   "adminGlobalLanguage";
+/* =======================================================
+   ADMIN GLOBAL TRANSLATION ENGINE
+======================================================= */
 
+const ADMIN_LANGUAGE_DEFAULT =
+  "en";
+
+
+const ADMIN_LANGUAGE_ALLOWED = [
+  "en",
+  "id",
+  "ms",
+  "zh",
+  "vi",
+  "th"
+];
+
+
+/*
+  Store original English text.
+
+  WeakMap means we don't need to modify
+  every HTML element with data-i18n.
+*/
+
+const adminOriginalText =
+  new WeakMap();
+
+const adminOriginalAttributes =
+  new WeakMap();
+
+
+let adminTranslationObserver =
+  null;
+
+let adminTranslationRunning =
+  false;
 
 const adminLanguageSelect =
   userDropdown.querySelector(
@@ -4092,46 +4128,444 @@ function getAdminLanguage() {
       ADMIN_LANGUAGE_KEY
     );
 
-const allowedLanguages = [
-  "en",
-  "id",
-  "ms",
-  "zh",
-  "vi",
-  "th"
-];
 
-
-  return allowedLanguages.includes(
-    savedLanguage
-  )
+return ADMIN_LANGUAGE_ALLOWED.includes(
+  savedLanguage
+)
     ? savedLanguage
     : "en";
 
 }
 
+/* =======================================================
+   GET ORIGINAL ATTRIBUTE DATA
+======================================================= */
 
+function getAdminOriginalAttributes(
+  element
+) {
+
+  if (
+    adminOriginalAttributes.has(
+      element
+    )
+  ) {
+
+    return adminOriginalAttributes.get(
+      element
+    );
+
+  }
+
+
+  const data = {};
+
+
+  [
+    "placeholder",
+    "title",
+    "aria-label"
+  ].forEach(
+    attribute => {
+
+      if (
+        element.hasAttribute(
+          attribute
+        )
+      ) {
+
+        data[attribute] =
+          element.getAttribute(
+            attribute
+          );
+
+      }
+
+    }
+  );
+
+
+  adminOriginalAttributes.set(
+    element,
+    data
+  );
+
+
+  return data;
+
+}
+
+
+/* =======================================================
+   TRANSLATION PROVIDER
+
+   IMPORTANT:
+   Untuk sekarang return original.
+   Nanti backend translator disambung di sini.
+======================================================= */
+
+async function requestAdminTranslation(
+  text,
+  language
+) {
+
+  const cleanText =
+    String(
+      text ?? ""
+    ).trim();
+
+
+  if (
+    !cleanText ||
+    language ===
+      ADMIN_LANGUAGE_DEFAULT
+  ) {
+
+    return cleanText;
+
+  }
+
+
+  /*
+    Translation API/backend akan
+    disambung di sini.
+
+    Jangan letak secret API key
+    dalam frontend.
+  */
+
+
+  return cleanText;
+
+}
+
+
+/* =======================================================
+   TRANSLATE ONE TEXT NODE
+======================================================= */
+
+async function translateAdminTextNode(
+  node,
+  language
+) {
+
+  if (
+    !node ||
+    node.nodeType !==
+      Node.TEXT_NODE
+  ) {
+    return;
+  }
+
+
+  const parent =
+    node.parentElement;
+
+
+  if (!parent) {
+    return;
+  }
+
+
+  /*
+    Jangan sentuh script/style/code.
+  */
+
+  if (
+    parent.closest(
+      "script, style, noscript, code, pre"
+    )
+  ) {
+    return;
+  }
+
+
+  /*
+    Jangan translate input value.
+  */
+
+  if (
+    parent.closest(
+      "input, textarea, select"
+    )
+  ) {
+    return;
+  }
+
+
+  let original =
+    adminOriginalText.get(
+      node
+    );
+
+
+  if (
+    original === undefined
+  ) {
+
+    original =
+      node.nodeValue;
+
+
+    adminOriginalText.set(
+      node,
+      original
+    );
+
+  }
+
+
+  const cleanOriginal =
+    String(
+      original ?? ""
+    ).trim();
+
+
+  if (!cleanOriginal) {
+    return;
+  }
+
+
+  /*
+    Preserve whitespace kiri/kanan.
+  */
+
+  const leading =
+    original.match(
+      /^\s*/
+    )?.[0] || "";
+
+  const trailing =
+    original.match(
+      /\s*$/
+    )?.[0] || "";
+
+
+  if (
+    language ===
+      ADMIN_LANGUAGE_DEFAULT
+  ) {
+
+    node.nodeValue =
+      original;
+
+    return;
+
+  }
+
+
+  const translated =
+    await requestAdminTranslation(
+      cleanOriginal,
+      language
+    );
+
+
+  node.nodeValue =
+    `${leading}${translated}${trailing}`;
+
+}
+
+
+/* =======================================================
+   TRANSLATE ELEMENT ATTRIBUTES
+======================================================= */
+
+async function translateAdminAttributes(
+  element,
+  language
+) {
+
+  if (
+    !element ||
+    element.nodeType !==
+      Node.ELEMENT_NODE
+  ) {
+    return;
+  }
+
+
+  const originals =
+    getAdminOriginalAttributes(
+      element
+    );
+
+
+  for (
+    const [
+      attribute,
+      original
+    ]
+    of Object.entries(
+      originals
+    )
+  ) {
+
+    if (!original) {
+      continue;
+    }
+
+
+    if (
+      language ===
+        ADMIN_LANGUAGE_DEFAULT
+    ) {
+
+      element.setAttribute(
+        attribute,
+        original
+      );
+
+      continue;
+
+    }
+
+
+    const translated =
+      await requestAdminTranslation(
+        original,
+        language
+      );
+
+
+    element.setAttribute(
+      attribute,
+      translated
+    );
+
+  }
+
+}
+
+
+/* =======================================================
+   TRANSLATE DOM TREE
+======================================================= */
+
+async function translateAdminTree(
+  root = document.body,
+  language =
+    getAdminLanguage()
+) {
+
+  if (
+    !root ||
+    adminTranslationRunning
+  ) {
+    return;
+  }
+
+
+  adminTranslationRunning =
+    true;
+
+
+  try {
+
+    /*
+      Translate root attributes.
+    */
+
+    if (
+      root.nodeType ===
+        Node.ELEMENT_NODE
+    ) {
+
+      await translateAdminAttributes(
+        root,
+        language
+      );
+
+    }
+
+
+    /*
+      All text nodes.
+    */
+
+    const textWalker =
+      document.createTreeWalker(
+        root,
+        NodeFilter.SHOW_TEXT
+      );
+
+
+    const textNodes = [];
+
+    let currentNode;
+
+
+    while (
+      (
+        currentNode =
+          textWalker.nextNode()
+      )
+    ) {
+
+      textNodes.push(
+        currentNode
+      );
+
+    }
+
+
+    for (
+      const textNode
+      of textNodes
+    ) {
+
+      await translateAdminTextNode(
+        textNode,
+        language
+      );
+
+    }
+
+
+    /*
+      Placeholder / title /
+      aria-label.
+    */
+
+    const elements =
+      root.querySelectorAll
+        ? root.querySelectorAll(
+            "[placeholder], [title], [aria-label]"
+          )
+        : [];
+
+
+    for (
+      const element
+      of elements
+    ) {
+
+      await translateAdminAttributes(
+        element,
+        language
+      );
+
+    }
+
+  } finally {
+
+    adminTranslationRunning =
+      false;
+
+  }
+
+}
 function applyAdminLanguage(
   language,
   save = true
 ) {
 
-const allowedLanguages = [
-  "en",
-  "id",
-  "ms",
-  "zh",
-  "vi",
-  "th"
-];
-
-
-  const finalLanguage =
-    allowedLanguages.includes(
-      language
-    )
-      ? language
-      : "en";
+const finalLanguage =
+  ADMIN_LANGUAGE_ALLOWED.includes(
+    language
+  )
+    ? language
+    : ADMIN_LANGUAGE_DEFAULT;
 
 
   document.documentElement
@@ -4148,20 +4582,28 @@ const allowedLanguages = [
     );
 
 
-  if (save) {
+if (save) {
 
-    localStorage.setItem(
-      ADMIN_LANGUAGE_KEY,
-      finalLanguage
-    );
+  localStorage.setItem(
+    ADMIN_LANGUAGE_KEY,
+    finalLanguage
+  );
 
-  }
+}
 
 
-  /*
-    Translation engine akan
-    kita sambung di sini nanti.
-  */
+/*
+  Translate current page.
+*/
+
+if (document.body) {
+
+  translateAdminTree(
+    document.body,
+    finalLanguage
+  );
+
+}
 
 }
 
@@ -4199,7 +4641,113 @@ window.getAdminLanguage =
 window.applyAdminLanguage =
   applyAdminLanguage;
 
+/* =======================================================
+   AUTO TRANSLATE DYNAMIC / AJAX CONTENT
+======================================================= */
 
+function startAdminTranslationObserver() {
+
+  if (
+    adminTranslationObserver ||
+    !document.body
+  ) {
+    return;
+  }
+
+
+  adminTranslationObserver =
+    new MutationObserver(
+      mutations => {
+
+        const language =
+          getAdminLanguage();
+
+
+        /*
+          English tidak perlu
+          translate content baru.
+        */
+
+        if (
+          language ===
+            ADMIN_LANGUAGE_DEFAULT
+        ) {
+          return;
+        }
+
+
+        mutations.forEach(
+          mutation => {
+
+            mutation.addedNodes
+              .forEach(
+                node => {
+
+                  if (
+                    node.nodeType ===
+                      Node.ELEMENT_NODE
+                  ) {
+
+                    translateAdminTree(
+                      node,
+                      language
+                    );
+
+                  }
+
+                }
+              );
+
+          }
+        );
+
+      }
+    );
+
+
+  adminTranslationObserver.observe(
+    document.body,
+    {
+      childList:true,
+      subtree:true
+    }
+  );
+
+}
+
+
+if (
+  document.readyState ===
+    "loading"
+) {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+      startAdminTranslationObserver();
+
+      translateAdminTree(
+        document.body,
+        getAdminLanguage()
+      );
+
+    },
+    {
+      once:true
+    }
+  );
+
+} else {
+
+  startAdminTranslationObserver();
+
+  translateAdminTree(
+    document.body,
+    getAdminLanguage()
+  );
+
+}
 /* =======================================================
    ADMIN HEADER BACKGROUND COLOR
 ======================================================= */

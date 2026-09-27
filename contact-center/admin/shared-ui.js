@@ -1146,7 +1146,750 @@ requestAnimationFrame(
 );
 
     }
+/* =======================================================
+   SHARED CHIP DROPDOWN
+   Reusable multi-select dropdown
+======================================================= */
 
+function createSharedChipDropdown(
+  target,
+  options = {}
+) {
+
+  const container =
+    typeof target === "string"
+      ? document.querySelector(
+          target
+        )
+      : target;
+
+
+  if (!container) {
+    return null;
+  }
+
+
+  /* PREVENT DOUBLE INIT */
+
+  if (
+    container._sharedChipDropdown
+  ) {
+
+    return (
+      container._sharedChipDropdown
+    );
+
+  }
+
+
+  const config = {
+
+    placeholder:
+      options.placeholder ||
+      "Select option",
+
+    options:
+      Array.isArray(
+        options.options
+      )
+        ? options.options
+        : [],
+
+    value:
+      Array.isArray(
+        options.value
+      )
+        ? options.value
+        : [],
+
+    onChange:
+      typeof options.onChange ===
+      "function"
+        ? options.onChange
+        : null
+
+  };
+
+
+  const selectedValues =
+    new Set(
+      config.value.map(
+        value =>
+          String(value)
+      )
+    );
+
+
+  /* =====================================================
+     ICONS
+  ===================================================== */
+
+  const arrowIcon = `
+    <svg
+      class="shared-chip-dropdown-icon shared-chip-dropdown-icon-arrow"
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+      />
+    </svg>
+  `;
+
+
+  const searchIcon = `
+    <svg
+      class="shared-chip-dropdown-icon shared-chip-dropdown-icon-search"
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"
+      />
+    </svg>
+  `;
+
+
+  const clearIcon = `
+    <svg
+      class="shared-chip-dropdown-icon shared-chip-dropdown-icon-clear"
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        d="M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm127.98 274.82h-.04l-.08.06L512 466.75 384.14 338.88c-.04-.05-.06-.06-.08-.06a.12.12 0 00-.07 0c-.03 0-.05.01-.09.05l-45.02 45.02a.2.2 0 00-.05.09.12.12 0 000 .07v.02a.27.27 0 00.06.06L466.75 512 338.88 639.86c-.05.04-.06.06-.06.08a.12.12 0 000 .07c0 .03.01.05.05.09l45.02 45.02a.2.2 0 00.09.05.12.12 0 00.07 0c.02 0 .04-.01.08-.05L512 557.25l127.86 127.87c.04.04.06.05.08.05a.12.12 0 00.07 0c.03 0 .05-.01.09-.05l45.02-45.02a.2.2 0 00.05-.09.12.12 0 000-.07v-.02a.27.27 0 00-.05-.06L557.25 512l127.87-127.86c.04-.04.05-.06.05-.08a.12.12 0 000-.07c0-.03-.01-.05-.05-.09l-45.02-45.02a.2.2 0 00-.09-.05.12.12 0 00-.07 0z"
+      />
+    </svg>
+  `;
+
+
+  const removeIcon = `
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+    >
+      <path
+        d="M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z"
+      />
+    </svg>
+  `;
+
+
+  /* =====================================================
+     BUILD UI
+  ===================================================== */
+
+  container.classList.add(
+    "shared-chip-dropdown"
+  );
+
+
+  container.innerHTML = `
+    <div
+      class="shared-chip-dropdown-trigger"
+      tabindex="0"
+    >
+
+      <div
+        class="shared-chip-dropdown-values"
+      ></div>
+
+      <span
+        class="shared-chip-dropdown-placeholder"
+      >
+        ${escapeSharedText(
+          config.placeholder
+        )}
+      </span>
+
+      <button
+        class="shared-chip-dropdown-icon-btn"
+        type="button"
+        aria-label="Toggle options"
+      >
+        ${arrowIcon}
+        ${searchIcon}
+        ${clearIcon}
+      </button>
+
+    </div>
+
+    <div
+      class="shared-chip-dropdown-panel"
+    ></div>
+  `;
+
+
+  const trigger =
+    container.querySelector(
+      ".shared-chip-dropdown-trigger"
+    );
+
+
+  const valuesBox =
+    container.querySelector(
+      ".shared-chip-dropdown-values"
+    );
+
+
+  const panel =
+    container.querySelector(
+      ".shared-chip-dropdown-panel"
+    );
+
+
+  const iconButton =
+    container.querySelector(
+      ".shared-chip-dropdown-icon-btn"
+    );
+
+
+  /* =====================================================
+     GET OPTION
+  ===================================================== */
+
+  function getOption(
+    value
+  ) {
+
+    return (
+      config.options.find(
+        option =>
+          String(option.value) ===
+          String(value)
+      ) ||
+      null
+    );
+
+  }
+
+
+  /* =====================================================
+     NOTIFY CHANGE
+  ===================================================== */
+
+  function notifyChange() {
+
+    if (
+      config.onChange
+    ) {
+
+      config.onChange(
+        Array.from(
+          selectedValues
+        )
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     RENDER
+  ===================================================== */
+
+  function render() {
+
+    valuesBox.innerHTML =
+      Array
+        .from(
+          selectedValues
+        )
+        .map(
+          value => {
+
+            const option =
+              getOption(
+                value
+              );
+
+
+            if (!option) {
+              return "";
+            }
+
+
+            return `
+              <span
+                class="shared-chip-dropdown-chip"
+                data-chip-value="${escapeSharedText(
+                  value
+                )}"
+              >
+
+                <span
+                  class="shared-chip-dropdown-chip-content"
+                >
+                  ${escapeSharedText(
+                    option.label
+                  )}
+                </span>
+
+                <button
+                  class="shared-chip-dropdown-chip-remove"
+                  type="button"
+                  data-remove-value="${escapeSharedText(
+                    value
+                  )}"
+                  aria-label="Remove ${escapeSharedText(
+                    option.label
+                  )}"
+                >
+                  ${removeIcon}
+                </button>
+
+              </span>
+            `;
+
+          }
+        )
+        .join("");
+
+
+    container.classList.toggle(
+      "has-value",
+      selectedValues.size > 0
+    );
+
+
+    panel.innerHTML =
+      config.options
+        .map(
+          option => {
+
+            const value =
+              String(
+                option.value
+              );
+
+
+            const active =
+              selectedValues.has(
+                value
+              );
+
+
+            return `
+              <button
+                class="shared-chip-dropdown-option ${
+                  active
+                    ? "active"
+                    : ""
+                }"
+                type="button"
+                data-value="${escapeSharedText(
+                  value
+                )}"
+                aria-selected="${
+                  active
+                    ? "true"
+                    : "false"
+                }"
+              >
+                <span>
+                  ${escapeSharedText(
+                    option.label
+                  )}
+                </span>
+
+                <span
+                  class="shared-chip-dropdown-option-check"
+                >
+                  ✓
+                </span>
+
+              </button>
+            `;
+
+          }
+        )
+        .join("");
+
+  }
+
+
+  /* =====================================================
+     OPEN / CLOSE
+  ===================================================== */
+
+  function open() {
+
+    container.classList.add(
+      "open"
+    );
+
+  }
+
+
+  function close() {
+
+    container.classList.remove(
+      "open"
+    );
+
+  }
+
+
+  function toggle() {
+
+    if (
+      container.classList.contains(
+        "open"
+      )
+    ) {
+
+      close();
+
+    }
+    else {
+
+      open();
+
+    }
+
+  }
+
+
+  /* =====================================================
+     TRIGGER CLICK
+  ===================================================== */
+
+  trigger.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target.closest(
+          ".shared-chip-dropdown-chip-remove"
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        event.target.closest(
+          ".shared-chip-dropdown-icon-btn"
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      toggle();
+
+    }
+  );
+
+
+  /* =====================================================
+     OPTION CLICK
+  ===================================================== */
+
+  panel.addEventListener(
+    "click",
+    event => {
+
+      const optionButton =
+        event.target.closest(
+          "[data-value]"
+        );
+
+
+      if (!optionButton) {
+        return;
+      }
+
+
+      event.stopPropagation();
+
+
+      const value =
+        String(
+          optionButton.dataset.value ||
+          ""
+        );
+
+
+      if (!value) {
+        return;
+      }
+
+
+      if (
+        selectedValues.has(
+          value
+        )
+      ) {
+
+        selectedValues.delete(
+          value
+        );
+
+      }
+      else {
+
+        selectedValues.add(
+          value
+        );
+
+      }
+
+
+      render();
+
+      notifyChange();
+
+    }
+  );
+
+
+  /* =====================================================
+     REMOVE ONE CHIP
+  ===================================================== */
+
+  valuesBox.addEventListener(
+    "click",
+    event => {
+
+      const removeButton =
+        event.target.closest(
+          "[data-remove-value]"
+        );
+
+
+      if (!removeButton) {
+        return;
+      }
+
+
+      event.stopPropagation();
+
+
+      selectedValues.delete(
+        String(
+          removeButton.dataset
+            .removeValue
+        )
+      );
+
+
+      render();
+
+      notifyChange();
+
+    }
+  );
+
+
+  /* =====================================================
+     RIGHT ICON
+  ===================================================== */
+
+  iconButton.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+
+      /*
+        Closed + has chip + hover
+        = clear all.
+      */
+
+      if (
+        selectedValues.size &&
+        !container.classList.contains(
+          "open"
+        )
+      ) {
+
+        selectedValues.clear();
+
+        render();
+
+        notifyChange();
+
+        return;
+
+      }
+
+
+      toggle();
+
+    }
+  );
+
+
+  /* =====================================================
+     OUTSIDE CLICK
+  ===================================================== */
+
+  document.addEventListener(
+    "click",
+    event => {
+
+      if (
+        container.contains(
+          event.target
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      close();
+
+    }
+  );
+
+
+  /* =====================================================
+     PUBLIC API
+  ===================================================== */
+
+  const api = {
+
+    open,
+
+    close,
+
+    getValue() {
+
+      return Array.from(
+        selectedValues
+      );
+
+    },
+
+    setValue(
+      values = [],
+      dispatchChange = true
+    ) {
+
+      selectedValues.clear();
+
+
+      (
+        Array.isArray(values)
+          ? values
+          : []
+      )
+        .forEach(
+          value => {
+
+            const stringValue =
+              String(value);
+
+
+            if (
+              getOption(
+                stringValue
+              )
+            ) {
+
+              selectedValues.add(
+                stringValue
+              );
+
+            }
+
+          }
+        );
+
+
+      render();
+
+
+      if (
+        dispatchChange
+      ) {
+
+        notifyChange();
+
+      }
+
+    },
+
+    clear(
+      dispatchChange = true
+    ) {
+
+      selectedValues.clear();
+
+      render();
+
+
+      if (
+        dispatchChange
+      ) {
+
+        notifyChange();
+
+      }
+
+    },
+
+    setOptions(
+      newOptions = []
+    ) {
+
+      config.options =
+        Array.isArray(
+          newOptions
+        )
+          ? newOptions
+          : [];
+
+
+      Array
+        .from(
+          selectedValues
+        )
+        .forEach(
+          value => {
+
+            if (
+              !getOption(
+                value
+              )
+            ) {
+
+              selectedValues.delete(
+                value
+              );
+
+            }
+
+          }
+        );
+
+
+      render();
+
+    }
+
+  };
+
+
+  container._sharedChipDropdown =
+    api;
+
+
+  render();
+
+
+  return api;
+
+}
 
     /* =====================================================
        CLOSE
@@ -3533,12 +4276,45 @@ function initAdminSidebar() {
    ADMIN SITE SELECTOR
 ===================================================== */
 
-const ADMIN_ACTIVE_SITE_KEY =
-  "adminActiveSite";
+const ADMIN_SELECTED_SITES_KEY =
+  "adminSelectedSites";
 
 
 /*
-  Wrapper site selector.
+  Ambil selected sites.
+
+  [] = ALL SITES
+*/
+
+function getSavedAdminSites() {
+
+  try {
+
+    const saved =
+      JSON.parse(
+        localStorage.getItem(
+          ADMIN_SELECTED_SITES_KEY
+        ) ||
+        "[]"
+      );
+
+
+    return Array.isArray(saved)
+      ? saved
+      : [];
+
+  }
+  catch (error) {
+
+    return [];
+
+  }
+
+}
+
+
+/*
+  Wrapper di header.
 */
 
 const adminSiteSelector =
@@ -3552,96 +4328,8 @@ adminSiteSelector.className =
 
 
 /*
-  Native select.
-  createSharedDropdown()
-  akan convert select ini
-  kepada custom dropdown bro.
-*/
-
-const adminSiteSelect =
-  document.createElement(
-    "select"
-  );
-
-
-adminSiteSelect.id =
-  "adminSiteSelect";
-
-
-adminSiteSelect.setAttribute(
-  "data-shared-dropdown",
-  ""
-);
-
-
-adminSiteSelect.setAttribute(
-  "data-placeholder",
-  "Select Site"
-);
-
-
-/*
-  EMPTY VALUE = ALL SITES.
-
-  Option kosong tidak akan
-  muncul dalam dropdown list
-  kerana createSharedDropdown()
-  bro memang skip value "".
-*/
-
-adminSiteSelect.innerHTML = `
-  <option value=""></option>
-  <option value="5g88">5G88</option>
-  <option value="spm888">SPM888</option>
-`;
-
-
-/*
-  Ambil site yang pernah
-  dipilih sebelum ini.
-*/
-
-const savedAdminSite =
-  localStorage.getItem(
-    ADMIN_ACTIVE_SITE_KEY
-  ) || "";
-
-
-/*
-  Pastikan saved site masih
-  wujud dalam dropdown.
-*/
-
-const savedSiteExists =
-  Array
-    .from(
-      adminSiteSelect.options
-    )
-    .some(
-      option =>
-        option.value ===
-        savedAdminSite
-    );
-
-
-adminSiteSelect.value =
-  savedSiteExists
-    ? savedAdminSite
-    : "";
-
-
-/*
-  Masukkan select ke wrapper.
-*/
-
-adminSiteSelector.appendChild(
-  adminSiteSelect
-);
-
-
-/*
-  Masukkan di bahagian KIRI
-  header selepas Support Admin.
+  Masukkan selepas
+  Support Admin.
 */
 
 const adminBrand =
@@ -3668,102 +4356,106 @@ else {
 
 
 /*
-  Gunakan custom dropdown
-  bro yang sudah sedia ada.
+  Buat reusable
+  chip dropdown.
 */
 
 const adminSiteDropdown =
-  createSharedDropdown(
-    adminSiteSelect,
+  createSharedChipDropdown(
+    adminSiteSelector,
     {
+
       placeholder:
         "Select Site",
 
-      emptyText:
-        "No site"
+      options: [
+
+        {
+          value:
+            "5g88",
+
+          label:
+            "5G88"
+        },
+
+        {
+          value:
+            "spm888",
+
+          label:
+            "SPM888"
+        }
+
+      ],
+
+      value:
+        getSavedAdminSites(),
+
+      onChange(
+        values
+      ) {
+
+        /*
+          [] = ALL SITES.
+        */
+
+        if (
+          values.length
+        ) {
+
+          localStorage.setItem(
+            ADMIN_SELECTED_SITES_KEY,
+            JSON.stringify(
+              values
+            )
+          );
+
+        }
+        else {
+
+          localStorage.removeItem(
+            ADMIN_SELECTED_SITES_KEY
+          );
+
+        }
+
+
+        /*
+          Global event untuk
+          page lain nanti.
+        */
+
+        window.dispatchEvent(
+          new CustomEvent(
+            "admin-site-change",
+            {
+              detail: {
+
+                siteIds:
+                  [...values],
+
+                allSites:
+                  values.length === 0
+
+              }
+            }
+          )
+        );
+
+      }
+
     }
   );
-
-
-/*
-  Apabila site berubah.
-*/
-
-adminSiteSelect.addEventListener(
-  "change",
-  () => {
-
-    const siteId =
-      adminSiteSelect.value ||
-      "";
-
-
-    /*
-      Ada site dipilih:
-      simpan site.
-
-      Kosong:
-      remove = ALL SITES.
-    */
-
-    if (siteId) {
-
-      localStorage.setItem(
-        ADMIN_ACTIVE_SITE_KEY,
-        siteId
-      );
-
-    }
-    else {
-
-      localStorage.removeItem(
-        ADMIN_ACTIVE_SITE_KEY
-      );
-
-    }
-
-
-    /*
-      Event global.
-
-      Nanti visitors,
-      contacts, notices dll
-      dengar event ini.
-    */
-
-    window.dispatchEvent(
-      new CustomEvent(
-        "admin-site-change",
-        {
-          detail: {
-
-            siteId:
-              siteId,
-
-            allSites:
-              siteId === ""
-
-          }
-        }
-      )
-    );
-
-  }
-);
 
 
 /*
   GLOBAL HELPERS
 */
 
-window.getAdminActiveSite =
+window.getAdminSelectedSites =
   function () {
 
-    return (
-      localStorage.getItem(
-        ADMIN_ACTIVE_SITE_KEY
-      ) || ""
-    );
+    return getSavedAdminSites();
 
   };
 
@@ -3772,7 +4464,26 @@ window.isAdminAllSites =
   function () {
 
     return (
-      window.getAdminActiveSite() ===
+      getSavedAdminSites()
+        .length === 0
+    );
+
+  };
+
+
+/*
+  Backward helper sementara.
+
+  Kalau code lama masih panggil
+  getAdminActiveSite(),
+  return site pertama sahaja.
+*/
+
+window.getAdminActiveSite =
+  function () {
+
+    return (
+      getSavedAdminSites()[0] ||
       ""
     );
 
@@ -8531,6 +9242,16 @@ initAdminSidebar();
   window.initSharedDropdowns =
     initSharedDropdowns;
 
+   window.createSharedDropdown =
+  createSharedDropdown;
+
+
+window.createSharedChipDropdown =
+  createSharedChipDropdown;
+
+
+window.initSharedDropdowns =
+  initSharedDropdowns;
    /* =========================================================
    GLOBAL CUSTOM TOAST
 ========================================================= */

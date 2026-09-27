@@ -3094,13 +3094,9 @@ padding:0 12px;
 .admin-header-color-preview {
   width:28px;
   height:28px;
-
   flex:0 0 28px;
-
-  border-radius:50%;
-
+  border-radius:4px;
   background:#001528;
-
   box-shadow:
     inset 0 0 1px rgba(255,255,255,.25);
 
@@ -3113,11 +3109,9 @@ padding:0 12px;
 .admin-header-color-sliders {
   flex:1;
   min-width:0;
-
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-
   gap:8px;
 }
 
@@ -3131,9 +3125,7 @@ padding:0 12px;
 
   width:100%;
   height:8px;
-
   border-radius:4px;
-
   background:
     linear-gradient(
       to right,
@@ -3185,10 +3177,7 @@ padding:0 12px;
 .admin-header-color-input-row {
   display:flex;
   align-items:center;
-
   gap:4px;
-
-  margin-top:12px;
 }
 
 /* =========================

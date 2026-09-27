@@ -4344,48 +4344,123 @@ function renderAdminHeaderFormatInputs() {
         );
 
 
-    input?.addEventListener(
-      "change",
-      () => {
+input?.addEventListener(
+  "input",
+  () => {
 
-        const value =
-          input.value
-            .trim()
-            .toUpperCase();
-
-
-        if (
-          !/^#[0-9A-F]{6}$/.test(
-            value
-          )
-        ) {
-
-          input.value =
-            hsvToHex(
-              adminHeaderHue,
-              adminHeaderSaturation,
-              adminHeaderValue
-            );
-
-          return;
-        }
+    let value =
+      input.value
+        .trim()
+        .toUpperCase();
 
 
-        syncAdminHeaderHSVFromHex(
-          value
-        );
+    /* Auto tambah # */
 
-        updateCustomHeaderColor(
-          false
-        );
+    if (
+      value &&
+      !value.startsWith("#")
+    ) {
+      value =
+        "#" + value;
+    }
 
-      }
+
+    /*
+      Jangan reset input ketika
+      user masih sedang menaip.
+    */
+
+    if (
+      !/^#[0-9A-F]{6}$/.test(
+        value
+      )
+    ) {
+      return;
+    }
+
+
+    syncAdminHeaderHSVFromHex(
+      value
     );
+
+
+    if (
+      adminHeaderHueHandle
+    ) {
+
+      adminHeaderHueHandle
+        .style.left =
+          `${(adminHeaderHue / 360) * 100}%`;
+
+    }
+
+
+    if (
+      adminHeaderColorPaletteHandle
+    ) {
+
+      adminHeaderColorPaletteHandle
+        .style.left =
+          `${adminHeaderSaturation}%`;
+
+      adminHeaderColorPaletteHandle
+        .style.top =
+          `${100 - adminHeaderValue}%`;
+
+    }
+
+
+    updateCustomHeaderColor(
+      false
+    );
+
+  }
+);
 
 
     return;
   }
+input?.addEventListener(
+  "blur",
+  () => {
 
+    let value =
+      input.value
+        .trim()
+        .toUpperCase();
+
+
+    if (
+      value &&
+      !value.startsWith("#")
+    ) {
+      value =
+        "#" + value;
+    }
+
+
+    if (
+      /^#[0-9A-F]{6}$/.test(
+        value
+      )
+    ) {
+
+      input.value =
+        value;
+
+      return;
+    }
+
+
+    input.value =
+      hsvToHex(
+        adminHeaderHue,
+        adminHeaderSaturation,
+        adminHeaderValue
+      );
+
+  }
+);
 
   /* =====================
      RGB
@@ -4957,12 +5032,12 @@ function updateAlphaFromPointer(
     `${adminHeaderAlpha}%`;
 
 
-  if (adminHeaderAlphaText) {
+if (adminHeaderAlphaText) {
 
-    adminHeaderAlphaText.textContent =
-      `${Math.round(adminHeaderAlpha)}%`;
+  adminHeaderAlphaText.textContent =
+    `${Math.round(adminHeaderAlpha)}%`;
 
-  }
+}
 
 
   localStorage.setItem(
@@ -5245,7 +5320,80 @@ adminHeaderAlphaText
     }
   );
 
+adminHeaderAlphaText
+  ?.addEventListener(
+    "input",
+    () => {
 
+      let rawValue =
+        adminHeaderAlphaText
+          .value
+          .replace("%", "")
+          .trim();
+
+
+      /*
+        Biarkan kosong sementara
+        user sedang menaip.
+      */
+
+      if (
+        rawValue === ""
+      ) {
+        return;
+      }
+
+
+      let value =
+        parseFloat(
+          rawValue
+        );
+
+
+      if (
+        !Number.isFinite(value)
+      ) {
+        return;
+      }
+
+
+      value =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            value
+          )
+        );
+
+
+      adminHeaderAlpha =
+        value;
+
+
+      if (
+        adminHeaderAlphaHandle
+      ) {
+
+        adminHeaderAlphaHandle
+          .style.left =
+            `${value}%`;
+
+      }
+
+
+      localStorage.setItem(
+        "adminHeaderBackgroundAlpha",
+        String(value)
+      );
+
+
+      updateCustomHeaderColor(
+        false
+      );
+
+    }
+  );
 adminHeaderAlphaText
   ?.addEventListener(
     "blur",

@@ -3624,6 +3624,15 @@ userDropdown.innerHTML = `
           class="admin-header-hue-handle"
         ></span>
       </div>
+<div
+  id="adminHeaderAlphaSlider"
+  class="admin-header-alpha-slider"
+>
+  <span
+    id="adminHeaderAlphaHandle"
+    class="admin-header-alpha-handle"
+  ></span>
+</div>
 
     </div>
 
@@ -3644,9 +3653,12 @@ userDropdown.innerHTML = `
       spellcheck="false"
     >
 
-    <span class="admin-header-color-alpha">
-      100%
-    </span>
+<span
+  id="adminHeaderAlphaText"
+  class="admin-header-color-alpha"
+>
+  100%
+</span>
 
   </div>
 </div>
@@ -3756,7 +3768,20 @@ const adminHeaderHueHandle =
   userDropdown.querySelector(
     "#adminHeaderHueHandle"
   );
+const adminHeaderAlphaSlider =
+  userDropdown.querySelector(
+    "#adminHeaderAlphaSlider"
+  );
 
+const adminHeaderAlphaHandle =
+  userDropdown.querySelector(
+    "#adminHeaderAlphaHandle"
+  );
+
+const adminHeaderAlphaText =
+  userDropdown.querySelector(
+    "#adminHeaderAlphaText"
+  );
 const adminHeaderColorPreview =
   userDropdown.querySelector(
     "#adminHeaderColorPreview"
@@ -3770,6 +3795,28 @@ const adminHeaderHexInput =
 let adminHeaderHue = 210;
 let adminHeaderSaturation = 100;
 let adminHeaderValue = 16;
+
+let adminHeaderAlpha =
+  Number(
+    localStorage.getItem(
+      "adminHeaderBackgroundAlpha"
+    ) ?? 100
+  );
+
+if (
+  !Number.isFinite(adminHeaderAlpha)
+) {
+  adminHeaderAlpha = 100;
+}
+
+adminHeaderAlpha =
+  Math.max(
+    0,
+    Math.min(
+      100,
+      adminHeaderAlpha
+    )
+  );
 const adminHeaderColorSwatch =
   userDropdown.querySelector(
     "#adminHeaderColorSwatch"
@@ -3812,18 +3859,48 @@ const header =
     ".admin-nav"
   );
 
+const hexNumber =
+  finalColor.slice(1);
+
+const r =
+  parseInt(
+    hexNumber.slice(0, 2),
+    16
+  );
+
+const g =
+  parseInt(
+    hexNumber.slice(2, 4),
+    16
+  );
+
+const b =
+  parseInt(
+    hexNumber.slice(4, 6),
+    16
+  );
+
+const alpha =
+  adminHeaderAlpha / 100;
+
+const rgbaColor =
+  `rgba(${r}, ${g}, ${b}, ${alpha})`;
+
+
 if (header) {
+
   header.style.setProperty(
     "background",
-    finalColor,
+    rgbaColor,
     "important"
   );
 
   header.style.setProperty(
     "background-color",
-    finalColor,
+    rgbaColor,
     "important"
   );
+
 }
 
 
@@ -3852,8 +3929,10 @@ if (adminHeaderHexInput) {
 }
 
 if (adminHeaderColorPreview) {
+
   adminHeaderColorPreview.style.background =
-    finalColor;
+    rgbaColor;
+
 }
 
 }
@@ -4062,7 +4141,55 @@ function updateHueFromPointer(
 
 }
 
+function updateAlphaFromPointer(
+  event
+) {
 
+  if (!adminHeaderAlphaSlider) {
+    return;
+  }
+
+
+  const rect =
+    adminHeaderAlphaSlider
+      .getBoundingClientRect();
+
+
+  const x =
+    Math.max(
+      0,
+      Math.min(
+        rect.width,
+        event.clientX - rect.left
+      )
+    );
+
+
+  adminHeaderAlpha =
+    (x / rect.width) * 100;
+
+
+  adminHeaderAlphaHandle.style.left =
+    `${adminHeaderAlpha}%`;
+
+
+  if (adminHeaderAlphaText) {
+
+    adminHeaderAlphaText.textContent =
+      `${Math.round(adminHeaderAlpha)}%`;
+
+  }
+
+
+  localStorage.setItem(
+    "adminHeaderBackgroundAlpha",
+    String(adminHeaderAlpha)
+  );
+
+
+  updateCustomHeaderColor();
+
+}
 /* OPEN / CLOSE */
 
 adminHeaderColorBtn
@@ -4178,7 +4305,63 @@ adminHeaderHueSlider
     }
   );
 
+/* ALPHA / TRANSPARENCY DRAG */
 
+adminHeaderAlphaSlider
+  ?.addEventListener(
+    "pointerdown",
+    event => {
+
+      event.preventDefault();
+
+      adminHeaderAlphaSlider
+        .setPointerCapture(
+          event.pointerId
+        );
+
+      updateAlphaFromPointer(
+        event
+      );
+
+    }
+  );
+
+
+adminHeaderAlphaSlider
+  ?.addEventListener(
+    "pointermove",
+    event => {
+
+      if (
+        !adminHeaderAlphaSlider
+          .hasPointerCapture(
+            event.pointerId
+          )
+      ) {
+        return;
+      }
+
+      updateAlphaFromPointer(
+        event
+      );
+
+    }
+  );
+
+if (adminHeaderAlphaHandle) {
+
+  adminHeaderAlphaHandle.style.left =
+    `${adminHeaderAlpha}%`;
+
+}
+
+
+if (adminHeaderAlphaText) {
+
+  adminHeaderAlphaText.textContent =
+    `${Math.round(adminHeaderAlpha)}%`;
+
+}
 /* MANUAL HEX */
 
 adminHeaderHexInput

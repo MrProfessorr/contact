@@ -61,7 +61,7 @@ a {
 
 .admin-brand h1 {
   font-size: 17px;
-  color:var(--text);
+  color:rgba(255,255,255,0.85);
 }
 
 /* PAGE */

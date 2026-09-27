@@ -2988,8 +2988,10 @@ padding:0 12px;
 
 .admin-header-color-picker {
   position:absolute;
-  top:calc(100% + 4px);
-  left:0;
+
+  top:56px;
+  left:12px;
+
   z-index:10020;
 
   width:258px;
@@ -2998,6 +3000,7 @@ padding:0 12px;
   box-sizing:border-box;
 
   border-radius:8px;
+
   background:#1f1f1f;
 
   box-shadow:

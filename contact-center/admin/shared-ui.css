@@ -3335,24 +3335,16 @@ padding:0 12px;
 .admin-header-hex-input {
   flex:1;
   min-width:0;
-
-  height:32px;
-
-  padding:4px 8px;
-
+  height:22px;
+  padding:0 8px;
   box-sizing:border-box;
-
   border:1px solid #424242;
-  border-radius:6px;
-
+  border-radius:4px;
   outline:none;
-
   color:rgba(255,255,255,.85);
   background:#141414;
-
   font-family:inherit;
-  font-size:13px;
-
+  font-size:12px;
   transition:border-color .2s ease;
 }
 
@@ -3432,15 +3424,14 @@ padding:0 12px;
   flex:0 0 44px;
 
   width:44px;
-  height:32px;
-
-  padding:4px;
+  height:22px;
+  padding:0 7px;
 
   box-sizing:border-box;
 
   border:1px solid #424242;
-  border-radius:6px;
-
+  border-radius:4px;
+  margin-inline-start: 4px;
   outline:none;
 
   color:rgba(255,255,255,.85);

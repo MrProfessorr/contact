@@ -3528,6 +3528,255 @@ function initAdminSidebar() {
       .split("/")
       .pop() ||
     "index.html";
+
+/* =====================================================
+   ADMIN SITE SELECTOR
+===================================================== */
+
+const ADMIN_ACTIVE_SITE_KEY =
+  "adminActiveSite";
+
+
+/*
+  Wrapper site selector.
+*/
+
+const adminSiteSelector =
+  document.createElement(
+    "div"
+  );
+
+
+adminSiteSelector.className =
+  "admin-site-selector";
+
+
+/*
+  Native select.
+  createSharedDropdown()
+  akan convert select ini
+  kepada custom dropdown bro.
+*/
+
+const adminSiteSelect =
+  document.createElement(
+    "select"
+  );
+
+
+adminSiteSelect.id =
+  "adminSiteSelect";
+
+
+adminSiteSelect.setAttribute(
+  "data-shared-dropdown",
+  ""
+);
+
+
+adminSiteSelect.setAttribute(
+  "data-placeholder",
+  "Select Site"
+);
+
+
+/*
+  EMPTY VALUE = ALL SITES.
+
+  Option kosong tidak akan
+  muncul dalam dropdown list
+  kerana createSharedDropdown()
+  bro memang skip value "".
+*/
+
+adminSiteSelect.innerHTML = `
+  <option value=""></option>
+  <option value="5g88">5G88</option>
+  <option value="spm888">SPM888</option>
+`;
+
+
+/*
+  Ambil site yang pernah
+  dipilih sebelum ini.
+*/
+
+const savedAdminSite =
+  localStorage.getItem(
+    ADMIN_ACTIVE_SITE_KEY
+  ) || "";
+
+
+/*
+  Pastikan saved site masih
+  wujud dalam dropdown.
+*/
+
+const savedSiteExists =
+  Array
+    .from(
+      adminSiteSelect.options
+    )
+    .some(
+      option =>
+        option.value ===
+        savedAdminSite
+    );
+
+
+adminSiteSelect.value =
+  savedSiteExists
+    ? savedAdminSite
+    : "";
+
+
+/*
+  Masukkan select ke wrapper.
+*/
+
+adminSiteSelector.appendChild(
+  adminSiteSelect
+);
+
+
+/*
+  Masukkan di bahagian KIRI
+  header selepas Support Admin.
+*/
+
+const adminBrand =
+  adminNavInner.querySelector(
+    ".admin-brand"
+  );
+
+
+if (adminBrand) {
+
+  adminBrand.insertAdjacentElement(
+    "afterend",
+    adminSiteSelector
+  );
+
+}
+else {
+
+  adminNavInner.prepend(
+    adminSiteSelector
+  );
+
+}
+
+
+/*
+  Gunakan custom dropdown
+  bro yang sudah sedia ada.
+*/
+
+const adminSiteDropdown =
+  createSharedDropdown(
+    adminSiteSelect,
+    {
+      placeholder:
+        "Select Site",
+
+      emptyText:
+        "No site"
+    }
+  );
+
+
+/*
+  Apabila site berubah.
+*/
+
+adminSiteSelect.addEventListener(
+  "change",
+  () => {
+
+    const siteId =
+      adminSiteSelect.value ||
+      "";
+
+
+    /*
+      Ada site dipilih:
+      simpan site.
+
+      Kosong:
+      remove = ALL SITES.
+    */
+
+    if (siteId) {
+
+      localStorage.setItem(
+        ADMIN_ACTIVE_SITE_KEY,
+        siteId
+      );
+
+    }
+    else {
+
+      localStorage.removeItem(
+        ADMIN_ACTIVE_SITE_KEY
+      );
+
+    }
+
+
+    /*
+      Event global.
+
+      Nanti visitors,
+      contacts, notices dll
+      dengar event ini.
+    */
+
+    window.dispatchEvent(
+      new CustomEvent(
+        "admin-site-change",
+        {
+          detail: {
+
+            siteId:
+              siteId,
+
+            allSites:
+              siteId === ""
+
+          }
+        }
+      )
+    );
+
+  }
+);
+
+
+/*
+  GLOBAL HELPERS
+*/
+
+window.getAdminActiveSite =
+  function () {
+
+    return (
+      localStorage.getItem(
+        ADMIN_ACTIVE_SITE_KEY
+      ) || ""
+    );
+
+  };
+
+
+window.isAdminAllSites =
+  function () {
+
+    return (
+      window.getAdminActiveSite() ===
+      ""
+    );
+
+  };
 /* =====================================================
    ADMIN USER BUTTON
 ===================================================== */

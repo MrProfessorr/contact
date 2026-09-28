@@ -11,7 +11,7 @@ import {
   serverTimestamp,
   increment
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
-const SITE_ID = "spm888";
+const SITE_ID = "mega88my";
 
 let loaderMinMs =
   1500;

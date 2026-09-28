@@ -511,10 +511,10 @@ pageLoader.style.background =
 
 }
 onValue(
-  ref(
-    db,
-    "loading_settings"
-  ),
+ref(
+  db,
+  `sites/${SITE_ID}/loading_settings`
+),
 
 snapshot => {
 

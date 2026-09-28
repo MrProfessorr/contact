@@ -729,7 +729,7 @@ onValue(
 
   ref(
     db,
-    "skin_settings"
+    `sites/${SITE_ID}/skin_settings`
   ),
 
 snapshot => {

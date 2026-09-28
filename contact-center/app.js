@@ -4125,11 +4125,18 @@ function floatingWasClosed(
       .trim();
 
 
+  const sessionKey =
+    `floating_promo_closed_${SITE_ID}`;
+
+  const untilKey =
+    `floating_promo_closed_until_${SITE_ID}`;
+
+
   if (mode === "session") {
 
     return (
       sessionStorage.getItem(
-        "floating_promo_closed"
+        sessionKey
       ) === "1"
     );
 
@@ -4141,7 +4148,7 @@ function floatingWasClosed(
     const closedUntil =
       Number(
         localStorage.getItem(
-          "floating_promo_closed_until"
+          untilKey
         ) || 0
       );
 
@@ -4620,12 +4627,11 @@ if (floatingPromoClose) {
           mode === "session"
         ) {
 
-          sessionStorage
-            .setItem(
-              "floating_promo_closed",
-              "1"
-            );
-
+sessionStorage
+  .setItem(
+    `floating_promo_closed_${SITE_ID}`,
+    "1"
+  );
         }
 
 
@@ -4640,15 +4646,14 @@ if (floatingPromoClose) {
             1000;
 
 
-          localStorage
-            .setItem(
-              "floating_promo_closed_until",
-              String(
-                Date.now() +
-                oneDay
-              )
-            );
-
+localStorage
+  .setItem(
+    `floating_promo_closed_until_${SITE_ID}`,
+    String(
+      Date.now() +
+      oneDay
+    )
+  );
         }
 
         hideFloatingPromo();

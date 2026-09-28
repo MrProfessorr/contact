@@ -139,10 +139,20 @@
   <div class="tabs-admin-layout">
 <div>
 <section class="card tabs-settings-card">
-  <!-- =====================================================
-       SIDEBAR SETTINGS
-  ====================================================== -->
 
+<div class="form-group">
+  <label for="navigationSite">
+    Site
+  </label>
+
+  <select
+    id="navigationSite"
+    data-shared-dropdown
+    data-placeholder="Select Site"
+  >
+  </select>
+</div>
+  
   <h3>
     Sidebar Settings
   </h3>
@@ -810,7 +820,7 @@
 <script src="./shared-ui.js"></script>
 <script type="module">
   
-  import {
+import {
   db,
   ref,
   push,
@@ -820,7 +830,9 @@
   onValue,
   requireAdmin,
   setupLogout,
-  safe
+  safe,
+  getAdminSites,
+  getAdminSitePath
 } from "./admin.js";
 
 
@@ -951,7 +963,46 @@ async function uploadNavigationImage(
 /* =========================================================
    DOM
 ========================================================= */
+const navigationSiteInput =
+  document.getElementById(
+    "navigationSite"
+  );
 
+
+let navigationSites = [];
+
+let currentNavigationSiteId = "";
+
+let stopFooterStyleListener = null;
+let stopSidebarListener = null;
+let stopTabsListener = null;
+
+
+function getNavigationPath(
+  siteId,
+  childPath = ""
+) {
+
+  if (!siteId) {
+    throw new Error(
+      "Please select a site."
+    );
+  }
+
+
+  const basePath =
+    getAdminSitePath(
+      siteId,
+      "navigation_settings"
+    );
+
+
+  return childPath
+    ? `${basePath}/${childPath}`
+    : basePath;
+
+}
+  
 const sidebarEnabled =
   document.getElementById(
     "sidebarEnabled"
@@ -1946,6 +1997,15 @@ saveAllSettingsBtn
   .addEventListener(
     "click",
     async () => {
+      if (!currentNavigationSiteId) {
+
+  window.showToast(
+    "Please select a site.",
+    "warning"
+  );
+
+  return;
+}
 
       const name =
         tabName.value.trim();
@@ -2050,11 +2110,14 @@ if (pendingFooterBackgroundFile) {
            1. SAVE SIDEBAR
         ============================================= */
 
-        await set(
-          ref(
-            db,
-            "navigation_settings/sidebar"
-          ),
+await set(
+  ref(
+    db,
+    getNavigationPath(
+      currentNavigationSiteId,
+      "sidebar"
+    )
+  ),
           {
             enabled:
               sidebarEnabled.checked,
@@ -2078,7 +2141,10 @@ if (pendingFooterBackgroundFile) {
 await set(
   ref(
     db,
-    "navigation_settings/footerStyle"
+    getNavigationPath(
+      currentNavigationSiteId,
+      "footerStyle"
+    )
   ),
   {
     backgroundImageUrl:
@@ -2143,24 +2209,30 @@ await set(
 
           if (id) {
 
-            await update(
-              ref(
-                db,
-                `navigation_settings/tabs/${id}`
-              ),
-              data
-            );
+await update(
+  ref(
+    db,
+    getNavigationPath(
+      currentNavigationSiteId,
+      `tabs/${id}`
+    )
+  ),
+  data
+);
 
           }
           else {
 
-            const newRef =
-              push(
-                ref(
-                  db,
-                  "navigation_settings/tabs"
-                )
-              );
+const newRef =
+  push(
+    ref(
+      db,
+      getNavigationPath(
+        currentNavigationSiteId,
+        "tabs"
+      )
+    )
+  );
 
 
             await set(
@@ -2519,12 +2591,15 @@ async function deleteTab(id) {
 
   try {
 
-    await remove(
-      ref(
-        db,
-        `navigation_settings/tabs/${id}`
-      )
-    );
+await remove(
+  ref(
+    db,
+    getNavigationPath(
+      currentNavigationSiteId,
+      `tabs/${id}`
+    )
+  )
+);
 
 
     if (
@@ -2569,11 +2644,14 @@ async function toggleTab(
 
   try {
 
-    await update(
-      ref(
-        db,
-        `navigation_settings/tabs/${id}`
-      ),
+await update(
+  ref(
+    db,
+    getNavigationPath(
+      currentNavigationSiteId,
+      `tabs/${id}`
+    )
+  ),
       {
         enabled:
           !enabled,
@@ -2594,10 +2672,12 @@ window.showToast(
 
     console.error(error);
 
-    showMessage(
-      "Failed to update tab status.",
-      true
-    );
+window.showToast(
+  error?.message ||
+  "Failed to update tab status.",
+  "error",
+  5000
+);
 
   }
 
@@ -2843,172 +2923,460 @@ cancelEditTabBtn
   );
 
 /* =========================================================
-   FIREBASE FOOTER NAVIGATION STYLE
+   LOAD NAVIGATION SETTINGS BY SITE
 ========================================================= */
 
-onValue(
-  ref(
-    db,
-    "navigation_settings/footerStyle"
-  ),
+function loadNavigationForSite(
+  siteId
+) {
 
-  snapshot => {
+  if (stopFooterStyleListener) {
+    stopFooterStyleListener();
+    stopFooterStyleListener = null;
+  }
 
-    const data =
-      snapshot.val() || {};
+  if (stopSidebarListener) {
+    stopSidebarListener();
+    stopSidebarListener = null;
+  }
 
-footerNavBackgroundUrl =
-  data.backgroundImageUrl ||
-  "";
-
-updateFooterNavBackgroundPreview();
-
-footerStyleLoaded = true;
-finishTabsPageLoading();
-
-},
-
-error => {
-
-  console.error(
-    "Footer navigation style error:",
-    error
-  );
-window.showToast(
-  "Failed to load footer navigation settings.",
-  "error",
-  5000
-);
-  footerStyleLoaded = true;
-  finishTabsPageLoading();
-
-}
-);
-/* =========================================================
-   FIREBASE SIDEBAR
-========================================================= */
-
-onValue(
-  ref(
-    db,
-    "navigation_settings/sidebar"
-  ),
-
-  snapshot => {
-
-    const data =
-      snapshot.val() || {};
-
-    sidebarEnabled.checked =
-      data.enabled !== false;
-
-    sidebarIconUrl =
-      data.iconUrl || "";
-
-sidebarIconEmoji.value =
-  data.iconEmoji || "";
-
-updateSidebarPreview();
-
-sidebarLoaded = true;
-finishTabsPageLoading();
-
-},
-
-error => {
-
-  console.error(
-    "Sidebar settings error:",
-    error
-  );
-window.showToast(
-  "Failed to load sidebar settings.",
-  "error",
-  5000
-);
-  sidebarLoaded = true;
-  finishTabsPageLoading();
-
-}
-);
+  if (stopTabsListener) {
+    stopTabsListener();
+    stopTabsListener = null;
+  }
 
 
-/* =========================================================
-   FIREBASE TABS
-========================================================= */
-
-onValue(
-  ref(
-    db,
-    "navigation_settings/tabs"
-  ),
-
-  snapshot => {
-
-    const data =
-      snapshot.val() || {};
+  currentNavigationSiteId =
+    String(siteId || "");
 
 
-    tabs =
-      Object.entries(
-        data
-      )
-        .map(
-          ([id, item]) => ({
-            id,
-            ...item
-          })
+  footerStyleLoaded = false;
+  sidebarLoaded = false;
+  tabsLoaded = false;
+
+
+  if (!currentNavigationSiteId) {
+
+    footerStyleLoaded = true;
+    sidebarLoaded = true;
+    tabsLoaded = true;
+
+    finishTabsPageLoading();
+
+    return;
+  }
+
+
+  /* =============================================
+     FOOTER STYLE
+  ============================================= */
+
+  stopFooterStyleListener =
+    onValue(
+
+      ref(
+        db,
+        getNavigationPath(
+          currentNavigationSiteId,
+          "footerStyle"
         )
-        .sort(
-          (a, b) =>
-            Number(a.sort || 999) -
-            Number(b.sort || 999)
+      ),
+
+      snapshot => {
+
+        const data =
+          snapshot.val() || {};
+
+
+        footerNavBackgroundUrl =
+          data.backgroundImageUrl ||
+          "";
+
+
+        updateFooterNavBackgroundPreview();
+
+
+        footerStyleLoaded = true;
+
+        finishTabsPageLoading();
+
+      },
+
+      error => {
+
+        console.error(
+          "Footer navigation style error:",
+          error
         );
 
 
-    renderTabs();
+        window.showToast(
+          "Failed to load footer navigation settings.",
+          "error",
+          5000
+        );
 
 
-if (
-  !editingTabId.value
-) {
+        footerStyleLoaded = true;
 
-  tabSort.value =
-    tabs.length + 1;
+        finishTabsPageLoading();
+
+      }
+
+    );
+
+
+  /* =============================================
+     SIDEBAR
+  ============================================= */
+
+  stopSidebarListener =
+    onValue(
+
+      ref(
+        db,
+        getNavigationPath(
+          currentNavigationSiteId,
+          "sidebar"
+        )
+      ),
+
+      snapshot => {
+
+        const data =
+          snapshot.val() || {};
+
+
+        sidebarEnabled.checked =
+          data.enabled !== false;
+
+
+        sidebarIconUrl =
+          data.iconUrl || "";
+
+
+        sidebarIconEmoji.value =
+          data.iconEmoji || "";
+
+
+        updateSidebarPreview();
+
+
+        sidebarLoaded = true;
+
+        finishTabsPageLoading();
+
+      },
+
+      error => {
+
+        console.error(
+          "Sidebar settings error:",
+          error
+        );
+
+
+        window.showToast(
+          "Failed to load sidebar settings.",
+          "error",
+          5000
+        );
+
+
+        sidebarLoaded = true;
+
+        finishTabsPageLoading();
+
+      }
+
+    );
+
+
+  /* =============================================
+     TABS
+  ============================================= */
+
+  stopTabsListener =
+    onValue(
+
+      ref(
+        db,
+        getNavigationPath(
+          currentNavigationSiteId,
+          "tabs"
+        )
+      ),
+
+      snapshot => {
+
+        const data =
+          snapshot.val() || {};
+
+
+        tabs =
+          Object.entries(
+            data
+          )
+            .map(
+              ([id, item]) => ({
+                id,
+                ...item
+              })
+            )
+            .sort(
+              (a, b) =>
+                Number(
+                  a.sort || 999
+                ) -
+                Number(
+                  b.sort || 999
+                )
+            );
+
+
+        renderTabs();
+
+
+        if (
+          !editingTabId.value
+        ) {
+
+          tabSort.value =
+            tabs.length + 1;
+
+        }
+
+
+        tabsLoaded = true;
+
+        finishTabsPageLoading();
+
+      },
+
+      error => {
+
+        console.error(
+          "Navigation tabs error:",
+          error
+        );
+
+
+        tabsList.innerHTML =
+          `
+            <div class="help-text">
+              Failed to load tabs.
+            </div>
+          `;
+
+
+        window.showToast(
+          "Failed to load navigation tabs.",
+          "error",
+          5000
+        );
+
+
+        tabsLoaded = true;
+
+        finishTabsPageLoading();
+
+      }
+
+    );
 
 }
+async function refreshNavigationSites() {
 
-tabsLoaded = true;
-finishTabsPageLoading();
+  try {
 
-},
+    const sites =
+      await getAdminSites();
 
-error => {
 
-  console.error(
-    "Navigation tabs error:",
-    error
-  );
+    navigationSites =
+      Array.isArray(sites)
+        ? sites
+        : [];
 
-  tabsList.innerHTML =
-  `
-    <div class="help-text">
-      Failed to load tabs.
-    </div>
-  `;
-  
-window.showToast(
-  "Failed to load navigation tabs.",
-  "error",
-  5000
+
+    const selectedHeaderSites =
+      typeof window.getAdminSelectedSites ===
+        "function"
+        ? window.getAdminSelectedSites()
+        : [];
+
+
+    let allowedSites =
+      [...navigationSites];
+
+
+    if (
+      selectedHeaderSites.length
+    ) {
+
+      allowedSites =
+        navigationSites.filter(
+          site => {
+
+            const siteId =
+              String(
+                site.value ||
+                site.id
+              );
+
+
+            return selectedHeaderSites.includes(
+              siteId
+            );
+
+          }
+        );
+
+    }
+
+
+    const previousValue =
+      String(
+        navigationSiteInput.value ||
+        currentNavigationSiteId ||
+        ""
+      );
+
+
+    navigationSiteInput.innerHTML =
+      allowedSites
+        .map(
+          site => {
+
+            const siteId =
+              String(
+                site.value ||
+                site.id
+              );
+
+            const siteName =
+              site.label ||
+              site.name ||
+              siteId;
+
+
+            return `
+              <option value="${siteId}">
+                ${siteName}
+              </option>
+            `;
+
+          }
+        )
+        .join("");
+
+
+    let nextSiteId = "";
+
+
+    if (
+      previousValue &&
+      allowedSites.some(
+        site =>
+          String(
+            site.value ||
+            site.id
+          ) === previousValue
+      )
+    ) {
+
+      nextSiteId =
+        previousValue;
+
+    }
+    else {
+
+      nextSiteId =
+        String(
+          allowedSites[0]?.value ||
+          allowedSites[0]?.id ||
+          ""
+        );
+
+    }
+
+
+    navigationSiteInput.value =
+      nextSiteId;
+
+
+    if (
+      navigationSiteInput._sharedDropdown
+    ) {
+
+      navigationSiteInput
+        ._sharedDropdown
+        .refresh();
+
+    }
+
+
+    resetTabForm();
+
+    loadNavigationForSite(
+      nextSiteId
+    );
+
+  }
+  catch (error) {
+
+    console.error(
+      "Navigation sites load error:",
+      error
+    );
+
+
+    window.showToast(
+      "Failed to load sites.",
+      "error",
+      5000
+    );
+
+
+    footerStyleLoaded = true;
+    sidebarLoaded = true;
+    tabsLoaded = true;
+
+    finishTabsPageLoading();
+
+  }
+
+}
+navigationSiteInput.addEventListener(
+  "change",
+  () => {
+
+    resetTabForm();
+
+    loadNavigationForSite(
+      navigationSiteInput.value
+    );
+
+  }
 );
-  tabsLoaded = true;
-  finishTabsPageLoading();
+window.addEventListener(
+  "admin-profile-ready",
+  () => {
 
-}
+    refreshNavigationSites();
+
+  }
+);
+
+
+window.addEventListener(
+  "admin-site-change",
+  () => {
+
+    refreshNavigationSites();
+
+  }
 );
 </script>
-
-
 </body>
 </html>

@@ -11,26 +11,33 @@
 
   <title>Site Management</title>
 
-  <link
-    rel="stylesheet"
-    href="./shared-ui.css"
-  >
+<link
+  rel="stylesheet"
+  href="./admin.css"
+>
+
+<link
+  rel="stylesheet"
+  href="./shared-ui.css"
+>
 
   <style>
 
-    body {
-      margin: 0;
-      padding: 24px;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-    }
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background: var(--tx-bg);
+  color: var(--text);
+}
 
-    .site-page {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
+.site-page {
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  margin: 14px 12px 24px;
+}
     .site-header {
       display: flex;
       align-items: center;
@@ -189,6 +196,20 @@
 </head>
 
 <body>
+
+  <!-- =====================================================
+       ADMIN NAV
+  ===================================================== -->
+
+  <nav class="admin-nav">
+    <div class="admin-nav-inner">
+    </div>
+  </nav>
+
+
+  <!-- =====================================================
+       SITE MANAGEMENT PAGE
+  ===================================================== -->
 
   <main class="site-page">
 

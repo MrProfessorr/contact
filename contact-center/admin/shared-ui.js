@@ -4701,6 +4701,35 @@ window.addEventListener(
 
   }
 );
+
+window.addEventListener(
+  "message",
+  event => {
+
+    if (
+      event.origin !==
+      window.location.origin
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      event.data?.type !==
+      "admin-sites-changed"
+    ) {
+
+      return;
+
+    }
+
+
+    loadAdminSiteOptions();
+
+  }
+);
 /* =====================================================
    ADMIN USER BUTTON
 ===================================================== */
@@ -9141,61 +9170,115 @@ adminNavInner.appendChild(
      MENU ITEMS
   ===================================================== */
 
-  const menuItems = [
-    {
-      file: "visitors.html",
-      name: "Dashboard"
-    },
-     
-    {
-      file: "tabs.html",
-      name: "Tabs Settings"
-    },
+const baseMenuItems = [
 
-    {
-      file: "contacts.html",
-      name: "Contacts Manage"
-    },
+  {
+    file: "visitors.html",
+    name: "Dashboard"
+  },
 
-    {
-      file: "notices.html",
-      name: "Notices Message"
-    },
+  {
+    file: "tabs.html",
+    name: "Tabs Settings"
+  },
 
-    {
-      file: "marquee.html",
-      name: "Marquee Text"
-    },
+  {
+    file: "contacts.html",
+    name: "Contacts Manage"
+  },
 
-    {
-      file: "floating.html",
-      name: "Floating Image"
-    },
+  {
+    file: "notices.html",
+    name: "Notices Message"
+  },
 
-    {
-      file: "loading.html",
-      name: "Loading Config"
-    },
+  {
+    file: "marquee.html",
+    name: "Marquee Text"
+  },
 
-    {
-      file: "skin.html",
-      name: "Skin Config"
-    },
+  {
+    file: "floating.html",
+    name: "Floating Image"
+  },
 
-    {
-      file: "welcome.html",
-      name: "Welcome Popup"
-    }
+  {
+    file: "loading.html",
+    name: "Loading Config"
+  },
 
-  ];
+  {
+    file: "skin.html",
+    name: "Skin Config"
+  },
+
+  {
+    file: "welcome.html",
+    name: "Welcome Popup"
+  },
+{
+  file: "sites.html",
+  name: "Site Management",
+  superadminOnly: true
+}
+
+];
+
+
+const currentAdminProfile =
+  window.getCurrentAdminProfile?.();
+
+
+const menuItems = [
+  ...baseMenuItems
+];
+
+
+if (
+  currentAdminProfile?.role ===
+  "superadmin"
+) {
+
+  menuItems.push({
+    file: "sites.html",
+    name: "Site Management"
+  });
+
+}
 
 initAdminWorkspaceTabs(
-  menuItems
+  visibleMenuItems
 );
-  const linksHtml =
-    menuItems
-      .map(
-        item => {
+const currentAdminProfile =
+  window.getCurrentAdminProfile?.();
+
+
+const visibleMenuItems =
+  menuItems.filter(
+    item => {
+
+      if (
+        item.superadminOnly
+      ) {
+
+        return (
+          currentAdminProfile?.role ===
+          "superadmin"
+        );
+
+      }
+
+
+      return true;
+
+    }
+  );
+
+
+const linksHtml =
+  visibleMenuItems
+    .map(
+      item => {
 
           const active =
             currentPage ===

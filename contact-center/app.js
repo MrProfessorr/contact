@@ -6984,19 +6984,26 @@ setInterval(
     ).catch(() => {});
 
 
-    update(
-      presenceRef,
-      {
-        online:
-          true,
+update(
+  presenceRef,
+  {
+    online:
+      true,
 
-        page:
-          getCurrentPageUrl(),
+    page:
+      getCurrentPageUrl(),
 
-        lastSeen:
-          serverTimestamp()
-      }
-    ).catch(() => {});
+    lastSeen:
+      serverTimestamp()
+  }
+).catch(error => {
+
+  console.error(
+    "Presence heartbeat error:",
+    error
+  );
+
+});
 
   },
   15000

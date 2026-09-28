@@ -1627,7 +1627,7 @@ onValue(
 
   ref(
     db,
-    "navigation_settings"
+    `sites/${SITE_ID}/navigation_settings`
   ),
 
   snapshot => {

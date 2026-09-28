@@ -555,7 +555,6 @@ import {
 ========================================================= */
 requireAdmin();
 setupLogout();
-initSharedDropdowns();
 /* =========================================================
    LOADING PAGE OVERLAY
 ========================================================= */
@@ -1825,13 +1824,31 @@ async function refreshLoadingSites() {
   }
 
 
-  loadingSiteInput.value =
-    nextSiteId;
+loadingSiteInput.value =
+  nextSiteId;
 
 
-  loadLoadingSettingsForSite(
-    nextSiteId
-  );
+/* Refresh Shared UI dropdown after dynamic options */
+initSharedDropdowns();
+
+
+if (
+  loadingSiteInput._sharedDropdown
+) {
+
+  loadingSiteInput
+    ._sharedDropdown
+    .setValue(
+      nextSiteId,
+      false
+    );
+
+}
+
+
+loadLoadingSettingsForSite(
+  nextSiteId
+);
 
 }
 window.addEventListener(

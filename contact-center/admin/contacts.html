@@ -148,6 +148,24 @@
     type="hidden"
     id="editId"
   >
+  <input
+  type="hidden"
+  id="editSiteId"
+>
+
+<div class="form-group">
+  <label>
+    Site
+  </label>
+
+  <select
+    id="contactSite"
+    data-shared-dropdown
+    data-placeholder="Select Site"
+    required
+  >
+  </select>
+</div>
   <!-- ROW 1 -->
   <div class="contact-form-row">
     <div class="form-group">
@@ -457,14 +475,15 @@ import {
   db,
   requireAdmin,
   setupLogout,
-  safe,
-  ref,
+safe,
+getAdminSites,
+getAdminSitePath,
+ref,
   push,
   set,
   update,
   remove,
   onValue
-
 } from "./admin.js";
 
 
@@ -547,7 +566,141 @@ let contactPreviewObjectUrl =
   "";
 
 let cache = {};
+let contactSites = [];
 
+let contactListeners = [];
+
+let siteContactCache = {};
+
+let editingSiteId = "";
+
+
+/*
+  Ambil selected chips daripada
+  shared header.
+
+  Empty selection = semua allowed sites.
+*/
+
+function getSelectedContactSiteIds() {
+
+  const selected =
+    typeof window.getAdminSelectedSites === "function"
+      ? window.getAdminSelectedSites()
+      : [];
+
+
+  if (
+    Array.isArray(selected) &&
+    selected.length
+  ) {
+
+    return selected.map(
+      siteId => String(siteId)
+    );
+
+  }
+
+
+  return contactSites.map(
+    site => String(site.id)
+  );
+
+}
+
+
+/*
+  Firebase Contacts path.
+*/
+
+function getContactsPath(
+  siteId
+) {
+
+  if (!siteId) {
+
+    throw new Error(
+      "SITE_REQUIRED"
+    );
+
+  }
+
+
+  return getAdminSitePath(
+    siteId,
+    "contacts"
+  );
+
+}
+function refreshContactSiteDropdown(
+  preferredSiteId = ""
+) {
+
+  const select =
+    document.getElementById(
+      "contactSite"
+    );
+
+
+  if (!select) {
+    return;
+  }
+
+
+  const selectedSiteIds =
+    getSelectedContactSiteIds();
+
+
+  const availableSites =
+    contactSites.filter(
+      site =>
+        selectedSiteIds.includes(
+          String(site.id)
+        )
+    );
+
+
+  select.innerHTML =
+    availableSites
+      .map(
+        site => `
+          <option value="${safe(site.id)}">
+            ${safe(site.name || site.label || site.id)}
+          </option>
+        `
+      )
+      .join("");
+
+
+  const target =
+    preferredSiteId &&
+    availableSites.some(
+      site =>
+        String(site.id) ===
+        String(preferredSiteId)
+    )
+      ? String(preferredSiteId)
+      : String(
+          availableSites[0]?.id ||
+          ""
+        );
+
+
+  select.value =
+    target;
+
+
+  if (
+    select._sharedDropdown
+  ) {
+
+    select
+      ._sharedDropdown
+      .refresh();
+
+  }
+
+}
 /* =========================================================
    CLOUDINARY
 ========================================================= */
@@ -885,17 +1038,38 @@ if (
   editId.value
 ) {
 
-  await update(
+const targetSiteId =
+  editingSiteId ||
+  document
+    .getElementById(
+      "contactSite"
+    )
+    .value;
 
-    ref(
-      db,
-      "contacts/" +
-      editId.value
-    ),
 
-    data
+if (!targetSiteId) {
 
+  throw new Error(
+    "Please select a site."
   );
+
+}
+
+
+await update(
+
+  ref(
+    db,
+    getContactsPath(
+      targetSiteId
+    ) +
+    "/" +
+    editId.value
+  ),
+
+  data
+
+);
 
 
   window.showToast(
@@ -905,13 +1079,32 @@ if (
 
 } else {
 
-  const newRef =
-    push(
-      ref(
-        db,
-        "contacts"
+const targetSiteId =
+  document
+    .getElementById(
+      "contactSite"
+    )
+    .value;
+
+
+if (!targetSiteId) {
+
+  throw new Error(
+    "Please select a site."
+  );
+
+}
+
+
+const newRef =
+  push(
+    ref(
+      db,
+      getContactsPath(
+        targetSiteId
       )
-    );
+    )
+  );
 
 
   await set(
@@ -976,7 +1169,16 @@ function resetForm() {
   form.reset();
 
   editId.value = "";
+editingSiteId = "";
 
+document
+  .getElementById(
+    "editSiteId"
+  )
+  .value =
+  "";
+
+refreshContactSiteDropdown();
   document
     .getElementById(
       "sortOrder"
@@ -1058,13 +1260,36 @@ cancel.addEventListener(
 /* EDIT */
 
 window.editContact =
-function(id) {
+function(siteId, id) {
+
+  const cacheKey =
+    `${siteId}:${id}`;
+
 
   const item =
-    cache[id];
+    cache[cacheKey];
 
-  if (!item)
+
+  if (!item) {
     return;
+  }
+
+
+  editingSiteId =
+    siteId;
+
+
+  document
+    .getElementById(
+      "editSiteId"
+    )
+    .value =
+    siteId;
+
+
+  refreshContactSiteDropdown(
+    siteId
+  );
 
 
   editId.value =
@@ -1179,7 +1404,7 @@ if (
 /* DELETE */
 
 window.deleteContact =
-async function(id) {
+async function(siteId, id) {
 
   if (
     !confirm(
@@ -1192,12 +1417,16 @@ async function(id) {
 
   try {
 
-    await remove(
-      ref(
-        db,
-        "contacts/" + id
-      )
-    );
+await remove(
+  ref(
+    db,
+    getContactsPath(
+      siteId
+    ) +
+    "/" +
+    id
+  )
+);
 
 
     window.showToast(
@@ -1224,351 +1453,618 @@ async function(id) {
 };
 
 
-/* LIST */
-onValue(
-  ref(
-    db,
-    "contacts"
-  ),
-  snapshot => {
+/* =========================================================
+   MULTI SITE CONTACT LISTENER
+========================================================= */
 
-    cache =
-      snapshot.val() || {};
+function stopAllContactListeners() {
+
+  contactListeners.forEach(
+    unsubscribe => {
+
+      try {
+
+        unsubscribe();
+
+      } catch (error) {
+
+        console.error(
+          "Stop contact listener:",
+          error
+        );
+
+      }
+
+    }
+  );
 
 
-    const items =
-      Object.entries(cache)
-        .map(
-          ([id,value]) => ({
-            id,
-            ...value
-          })
-        )
-        .sort(
-          (a,b) =>
+  contactListeners = [];
+
+}
+
+
+function rebuildContactCache() {
+
+  cache = {};
+
+
+  Object
+    .entries(siteContactCache)
+    .forEach(
+      ([siteId, contacts]) => {
+
+        Object
+          .entries(
+            contacts || {}
+          )
+          .forEach(
+            ([id, value]) => {
+
+              cache[
+                `${siteId}:${id}`
+              ] = {
+
+                id,
+                siteId,
+                ...value
+
+              };
+
+            }
+          );
+
+      }
+    );
+
+}
+
+
+function renderContacts() {
+
+  rebuildContactCache();
+
+
+  const items =
+    Object
+      .values(cache)
+      .sort(
+        (a, b) => {
+
+          const siteCompare =
+            String(a.siteId)
+              .localeCompare(
+                String(b.siteId)
+              );
+
+
+          if (siteCompare !== 0) {
+
+            return siteCompare;
+
+          }
+
+
+          return (
             Number(
               a.sortOrder || 999
             ) -
             Number(
               b.sortOrder || 999
             )
+          );
+
+        }
+      );
+
+
+  list.innerHTML =
+    "";
+
+
+  if (!items.length) {
+
+    list.innerHTML = `
+      <div class="empty">
+        No contacts yet.
+      </div>
+    `;
+
+    hideContactPageLoading();
+
+    return;
+
+  }
+
+
+  items.forEach(
+    item => {
+
+      const status =
+        String(
+          item.status ||
+          "closed"
+        )
+          .toLowerCase()
+          .trim();
+
+
+      let statusClass =
+        "status-closed";
+
+
+      if (
+        status === "active"
+      ) {
+
+        statusClass =
+          "status-active";
+
+      }
+
+
+      if (
+        status === "problem"
+      ) {
+
+        statusClass =
+          "status-problem";
+
+      }
+
+
+      let buttonText =
+        "OPEN CONTACT";
+
+
+      if (
+        item.type ===
+        "whatsapp"
+      ) {
+
+        buttonText =
+          "Contact Us";
+
+      }
+
+
+      if (
+        item.type ===
+        "telegram"
+      ) {
+
+        buttonText =
+          "OPEN TELEGRAM";
+
+      }
+
+
+      if (
+        status ===
+        "closed"
+      ) {
+
+        buttonText =
+          "UNAVAILABLE";
+
+      }
+
+
+      let iconHtml =
+        "↗";
+
+
+      if (
+        item.type ===
+        "whatsapp"
+      ) {
+
+        iconHtml =
+          "💬";
+
+      }
+
+
+      if (
+        item.type ===
+        "telegram"
+      ) {
+
+        iconHtml =
+          "✈️";
+
+      }
+
+
+      if (
+        item.type ===
+        "facebook"
+      ) {
+
+        iconHtml =
+          "f";
+
+      }
+
+
+      if (
+        item.type ===
+        "instagram"
+      ) {
+
+        iconHtml =
+          "◎";
+
+      }
+
+
+      if (
+        item.type ===
+        "website"
+      ) {
+
+        iconHtml =
+          "🌐";
+
+      }
+
+
+      if (
+        item.imageUrl
+      ) {
+
+        iconHtml = `
+          <img
+            src="${safe(item.imageUrl)}"
+            alt="${safe(
+              item.name ||
+              "Contact"
+            )}"
+          >
+        `;
+
+      }
+
+
+      const site =
+        contactSites.find(
+          currentSite =>
+            String(
+              currentSite.id
+            ) ===
+            String(
+              item.siteId
+            )
         );
 
 
-    list.innerHTML = "";
-
-
-if (!items.length) {
-
-  list.innerHTML = `
-    <div class="empty">
-      No contacts yet.
-    </div>
-  `;
-
-  hideContactPageLoading();
-
-  return;
-}
-
-
-items.forEach(item => {
-
-  const status =
-    String(
-      item.status || "closed"
-    )
-      .toLowerCase()
-      .trim();
-
-
-  let statusClass =
-    "status-closed";
-
-
-  if (
-    status === "active"
-  ) {
-
-    statusClass =
-      "status-active";
-
-  }
-
-
-  if (
-    status === "problem"
-  ) {
-
-    statusClass =
-      "status-problem";
-
-  }
-
-
-  let buttonText =
-    "OPEN CONTACT";
-
-
-  if (
-    item.type === "whatsapp"
-  ) {
-
-    buttonText =
-      "Contact Us";
-
-  }
-
-
-  if (
-    item.type === "telegram"
-  ) {
-
-    buttonText =
-      "OPEN TELEGRAM";
-
-  }
-
-
-  if (
-    status === "closed"
-  ) {
-
-    buttonText =
-      "UNAVAILABLE";
-
-  }
-
-
-  let iconHtml =
-    "↗";
-
-
-  if (
-    item.type === "whatsapp"
-  ) {
-
-    iconHtml =
-      "💬";
-
-  }
-
-
-  if (
-    item.type === "telegram"
-  ) {
-
-    iconHtml =
-      "✈️";
-
-  }
-
-
-  if (
-    item.type === "facebook"
-  ) {
-
-    iconHtml =
-      "f";
-
-  }
-
-
-  if (
-    item.type === "instagram"
-  ) {
-
-    iconHtml =
-      "◎";
-
-  }
-
-
-  if (
-    item.type === "website"
-  ) {
-
-    iconHtml =
-      "🌐";
-
-  }
-
-
-  if (
-    item.imageUrl
-  ) {
-
-    iconHtml =
-      `
-        <img
-          src="${safe(item.imageUrl)}"
-          alt="${safe(
-            item.name || "Contact"
-          )}"
-        >
-      `;
-
-  }
-
-
-  list.insertAdjacentHTML(
-    "beforeend",
-    `
-
-    <article class="contact-card">
-
-
-      <div class="contact-icon">
-
-        ${iconHtml}
-
-      </div>
-
-
-      <div class="contact-content">
-
-        <h3>
-          ${safe(
-            item.name ||
-            "Contact"
-          )}
-        </h3>
-
-
-        <div class="contact-value-row">
-
-          <div class="contact-value">
-
-            ${safe(
-              item.value ||
-              ""
-            )}
+      const siteName =
+        site?.name ||
+        site?.label ||
+        item.siteId;
+
+
+      list.insertAdjacentHTML(
+        "beforeend",
+        `
+
+        <article class="contact-card">
+
+          <div class="contact-icon">
+            ${iconHtml}
+          </div>
+
+
+          <div class="contact-content">
+
+            <div
+              style="
+                display:inline-flex;
+                align-items:center;
+                margin-bottom:6px;
+                padding:3px 8px;
+                border-radius:999px;
+                font-size:11px;
+                font-weight:700;
+                background:rgba(255,255,255,.08);
+              "
+            >
+              ${safe(siteName)}
+            </div>
+
+            <h3>
+              ${safe(
+                item.name ||
+                "Contact"
+              )}
+            </h3>
+
+
+            <div class="contact-value-row">
+
+              <div class="contact-value">
+
+                ${safe(
+                  item.value ||
+                  ""
+                )}
+
+              </div>
+
+
+              <button
+                type="button"
+                class="copy-contact-btn"
+                data-copy-value="${safe(
+                  item.value ||
+                  ""
+                )}"
+                aria-label="Copy contact"
+              >
+
+                <svg
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6t.713.288T5 7v13h10q.425 0 .713.288T16 21t-.288.713T15 22zm4-6V4z"
+                    fill="currentColor"
+                  />
+                </svg>
+
+              </button>
+
+            </div>
+
+
+            ${
+              item.description
+                ? `
+                    <div class="contact-description">
+                      ${safe(
+                        item.description
+                      )}
+                    </div>
+                  `
+                : ""
+            }
 
           </div>
 
 
-          <button
-            type="button"
-            class="copy-contact-btn"
-            data-copy-value="${safe(
-              item.value || ""
-            )}"
-            aria-label="Copy contact"
+          <span
+            class="
+              status-badge
+              ${statusClass}
+            "
           >
+            ● ${safe(
+              status.toUpperCase()
+            )}
+          </span>
 
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
+
+          <div
+            class="
+              contact-open
+              ${
+                status === "closed"
+                  ? "closed"
+                  : ""
+              }
+            "
+          >
+            ${buttonText}
+          </div>
+
+
+          <div class="admin-contact-actions">
+
+            <button
+              type="button"
+              class="admin-contact-edit"
+              onclick="editContact(
+                '${safe(item.siteId)}',
+                '${safe(item.id)}'
+              )"
             >
-              <path
-                d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6t.713.288T5 7v13h10q.425 0 .713.288T16 21t-.288.713T15 22zm4-6V4z"
-                fill="currentColor"
-              />
-            </svg>
-
-          </button>
-
-        </div>
+              EDIT
+            </button>
 
 
-        ${
-          item.description
+            <button
+              type="button"
+              class="admin-contact-delete"
+              onclick="deleteContact(
+                '${safe(item.siteId)}',
+                '${safe(item.id)}'
+              )"
+            >
+              DELETE
+            </button>
 
-            ? `
-                <div class="contact-description">
+          </div>
 
-                  ${safe(
-                    item.description
-                  )}
+        </article>
 
-                </div>
-              `
+        `
+      );
 
-            : ""
-        }
-
-      </div>
-
-
-      <span
-        class="
-          status-badge
-          ${statusClass}
-        "
-      >
-
-        ● ${safe(
-          status.toUpperCase()
-        )}
-
-      </span>
-
-
-      <div
-        class="
-          contact-open
-          ${status === "closed"
-            ? "closed"
-            : ""}
-        "
-      >
-
-        ${buttonText}
-
-      </div>
-
-
-      <div class="admin-contact-actions">
-
-        <button
-          type="button"
-          class="admin-contact-edit"
-          onclick="editContact('${item.id}')"
-        >
-          EDIT
-        </button>
-
-
-        <button
-          type="button"
-          class="admin-contact-delete"
-          onclick="deleteContact('${item.id}')"
-        >
-          DELETE
-        </button>
-
-      </div>
-
-
-    </article>
-
-    `
+    }
   );
 
-});
-    
-hideContactPageLoading();
-},
-
-error => {
-
-  console.error(
-    "Contacts load error:",
-    error
-  );
-
-  list.innerHTML = `
-    <div class="empty">
-      Failed to load contacts.
-    </div>
-  `;
 
   hideContactPageLoading();
 
 }
 
+
+function startContactsListeners() {
+
+  stopAllContactListeners();
+
+
+  siteContactCache =
+    {};
+
+
+  const selectedSiteIds =
+    getSelectedContactSiteIds();
+
+
+  refreshContactSiteDropdown();
+
+
+  if (
+    !selectedSiteIds.length
+  ) {
+
+    cache = {};
+
+    list.innerHTML = `
+      <div class="empty">
+        No sites available.
+      </div>
+    `;
+
+    hideContactPageLoading();
+
+    return;
+
+  }
+
+
+  let loadedCount =
+    0;
+
+
+  selectedSiteIds.forEach(
+    siteId => {
+
+      const unsubscribe =
+        onValue(
+
+          ref(
+            db,
+            getContactsPath(
+              siteId
+            )
+          ),
+
+          snapshot => {
+
+            siteContactCache[
+              siteId
+            ] =
+              snapshot.val() ||
+              {};
+
+
+            loadedCount++;
+
+
+            renderContacts();
+
+
+            if (
+              loadedCount >=
+              selectedSiteIds.length
+            ) {
+
+              hideContactPageLoading();
+
+            }
+
+          },
+
+          error => {
+
+            console.error(
+              `Contacts load error (${siteId}):`,
+              error
+            );
+
+
+            siteContactCache[
+              siteId
+            ] =
+              {};
+
+
+            loadedCount++;
+
+
+            renderContacts();
+
+          }
+
+        );
+
+
+      contactListeners.push(
+        unsubscribe
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ADMIN READY
+========================================================= */
+
+window.addEventListener(
+  "admin-profile-ready",
+  async () => {
+
+    try {
+
+      contactSites =
+        await getAdminSites();
+
+
+      refreshContactSiteDropdown();
+
+      startContactsListeners();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to initialize contacts:",
+        error
+      );
+
+
+      list.innerHTML = `
+        <div class="empty">
+          Failed to initialize contacts.
+        </div>
+      `;
+
+
+      hideContactPageLoading();
+
+    }
+
+  }
 );
 
+/* =========================================================
+   HEADER SITE CHANGED
+========================================================= */
+
+window.addEventListener(
+  "admin-site-change",
+  () => {
+
+    resetForm();
+
+    startContactsListeners();
+
+  }
+);
 </script>
 </body>
 </html>

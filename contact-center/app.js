@@ -5206,10 +5206,10 @@ function renderSiteMarquee(
 
 onValue(
 
-  ref(
-    db,
-    "marquee"
-  ),
+ref(
+  db,
+  `sites/${SITE_ID}/marquee`
+),
 
 
   snapshot => {

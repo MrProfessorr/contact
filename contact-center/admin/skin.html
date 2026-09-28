@@ -704,11 +704,9 @@ import {
   getAdminSites,
   getAdminSitePath
 } from "./admin.js";
-
-
 requireAdmin();
-
 setupLogout();
+initSharedDropdowns();
 /* =====================================================
    SKIN PAGE LOADING
 ===================================================== */
@@ -2084,16 +2082,24 @@ window.showToast(
     }
 
 
-    skinSiteInput.value =
-      nextSiteId;
+skinSiteInput.value =
+  nextSiteId;
 
 
-    initSharedDropdowns();
+if (
+  skinSiteInput._sharedDropdown
+) {
+
+  skinSiteInput
+    ._sharedDropdown
+    .refresh();
+
+}
 
 
-    loadSkinSettingsForSite(
-      nextSiteId
-    );
+loadSkinSettingsForSite(
+  nextSiteId
+);
 
   }
   catch (error) {
@@ -2133,10 +2139,7 @@ window.addEventListener(
   }
 );
 
-
-refreshSkinSites();
 updateActiveText();
-
 updatePreview();
 
 

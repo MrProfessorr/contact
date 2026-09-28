@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Site Management</title>
+
+  <link
+    rel="stylesheet"
+    href="./shared-ui.css"
+  >
+
+  <style>
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+    .site-page {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .site-header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .site-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .site-search {
+      width: 260px;
+      max-width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #181818;
+      color: #fff;
+      outline: none;
+    }
+
+    .site-btn {
+      border: 0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+
+    .site-btn-primary {
+      background: #1677ff;
+      color: #fff;
+    }
+
+    .site-table-wrap {
+      overflow-x: auto;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+
+    .site-table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+    }
+
+    .site-table th,
+    .site-table td {
+      padding: 13px 14px;
+      text-align: left;
+      border-bottom: 1px solid #292929;
+    }
+
+    .site-status {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .site-status.active {
+      background: rgba(82,196,26,.15);
+      color: #73d13d;
+    }
+
+    .site-status.disabled {
+      background: rgba(255,77,79,.15);
+      color: #ff7875;
+    }
+
+    .site-row-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .site-row-actions button {
+      border: 1px solid #444;
+      background: transparent;
+      color: inherit;
+      padding: 6px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .site-empty {
+      padding: 40px 20px;
+      text-align: center;
+      opacity: .65;
+    }
+
+    .site-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,.6);
+      z-index: 999999;
+    }
+
+    .site-modal-backdrop.open {
+      display: flex;
+    }
+
+    .site-modal {
+      width: 420px;
+      max-width: 100%;
+      padding: 20px;
+      border: 1px solid #333;
+      border-radius: 10px;
+      background: #181818;
+    }
+
+    .site-modal h2 {
+      margin-top: 0;
+    }
+
+    .site-field {
+      margin-bottom: 15px;
+    }
+
+    .site-field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 13px;
+    }
+
+    .site-field input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #111;
+      color: #fff;
+    }
+
+    .site-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <main class="site-page">
+
+    <div class="site-header">
+
+      <div>
+        <h1>Site Management</h1>
+        <div>
+          Manage websites connected to this admin panel.
+        </div>
+      </div>
+
+      <div class="site-actions">
+
+        <input
+          id="siteSearch"
+          class="site-search"
+          type="search"
+          placeholder="Search site..."
+        >
+
+        <button
+          id="addSiteBtn"
+          class="site-btn site-btn-primary"
+          type="button"
+        >
+          + Add Site
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="site-table-wrap">
+
+      <table class="site-table">
+
+        <thead>
+          <tr>
+            <th>Site Name</th>
+            <th>Site ID</th>
+            <th>Status</th>
+            <th>Order</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="siteTableBody"></tbody>
+
+      </table>
+
+      <div
+        id="siteEmpty"
+        class="site-empty"
+        hidden
+      >
+        No sites found.
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- ADD / EDIT SITE MODAL -->
+
+  <div
+    id="siteModal"
+    class="site-modal-backdrop"
+  >
+
+    <div class="site-modal">
+
+      <h2 id="siteModalTitle">
+        Add Site
+      </h2>
+
+      <div class="site-field">
+
+        <label for="siteName">
+          Site Name
+        </label>
+
+        <input
+          id="siteName"
+          type="text"
+          placeholder="Example: 5G88"
+        >
+
+      </div>
+
+
+      <div class="site-field">
+
+        <label for="siteId">
+          Site ID
+        </label>
+
+        <input
+          id="siteId"
+          type="text"
+          placeholder="Example: 5g88"
+        >
+
+      </div>
+
+
+      <div class="site-modal-actions">
+
+        <button
+          id="cancelSiteBtn"
+          class="site-btn"
+          type="button"
+        >
+          Cancel
+        </button>
+
+        <button
+          id="saveSiteBtn"
+          class="site-btn site-btn-primary"
+          type="button"
+        >
+          Create Site
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script type="module">
+
+    import {
+      requireAdmin,
+      setupLogout,
+      getAdminSites,
+      createAdminSite,
+      updateAdminSite,
+      setAdminSiteEnabled,
+      isSuperAdmin,
+      safe
+    } from "./admin.js";
+
+
+    requireAdmin();
+    setupLogout();
+
+
+    const siteTableBody =
+      document.getElementById(
+        "siteTableBody"
+      );
+
+    const siteEmpty =
+      document.getElementById(
+        "siteEmpty"
+      );
+
+    const siteSearch =
+      document.getElementById(
+        "siteSearch"
+      );
+
+    const addSiteBtn =
+      document.getElementById(
+        "addSiteBtn"
+      );
+
+    const siteModal =
+      document.getElementById(
+        "siteModal"
+      );
+
+    const siteModalTitle =
+      document.getElementById(
+        "siteModalTitle"
+      );
+
+    const siteName =
+      document.getElementById(
+        "siteName"
+      );
+
+    const siteId =
+      document.getElementById(
+        "siteId"
+      );
+
+    const saveSiteBtn =
+      document.getElementById(
+        "saveSiteBtn"
+      );
+
+    const cancelSiteBtn =
+      document.getElementById(
+        "cancelSiteBtn"
+      );
+
+
+    let allSites = [];
+
+    let editingSiteId =
+      null;
+
+
+    function openAddSiteModal() {
+
+      editingSiteId =
+        null;
+
+      siteModalTitle.textContent =
+        "Add Site";
+
+      saveSiteBtn.textContent =
+        "Create Site";
+
+      siteName.value =
+        "";
+
+      siteId.value =
+        "";
+
+      siteId.disabled =
+        false;
+
+      siteModal.classList.add(
+        "open"
+      );
+
+      siteName.focus();
+
+    }
+
+
+    function openEditSiteModal(
+      site
+    ) {
+
+      editingSiteId =
+        site.id;
+
+      siteModalTitle.textContent =
+        "Edit Site";
+
+      saveSiteBtn.textContent =
+        "Save Changes";
+
+      siteName.value =
+        site.name;
+
+      siteId.value =
+        site.id;
+
+      /*
+        Site ID tidak boleh ditukar
+        selepas site dibuat.
+      */
+
+      siteId.disabled =
+        true;
+
+      siteModal.classList.add(
+        "open"
+      );
+
+    }
+
+
+    function closeSiteModal() {
+
+      siteModal.classList.remove(
+        "open"
+      );
+
+      editingSiteId =
+        null;
+
+    }
+
+
+    function renderSites() {
+
+      const keyword =
+        siteSearch.value
+          .trim()
+          .toLowerCase();
+
+
+      const filtered =
+        allSites.filter(
+          site => {
+
+            return (
+              site.name
+                .toLowerCase()
+                .includes(keyword) ||
+
+              site.id
+                .toLowerCase()
+                .includes(keyword)
+            );
+
+          }
+        );
+
+
+      siteTableBody.innerHTML =
+        "";
+
+
+      siteEmpty.hidden =
+        filtered.length > 0;
+
+
+      filtered.forEach(
+        site => {
+
+          const tr =
+            document.createElement(
+              "tr"
+            );
+
+
+          tr.innerHTML = `
+            <td>
+              ${safe(site.name)}
+            </td>
+
+            <td>
+              ${safe(site.id)}
+            </td>
+
+            <td>
+              <span
+                class="
+                  site-status
+                  ${
+                    site.enabled
+                      ? "active"
+                      : "disabled"
+                  }
+                "
+              >
+                ${
+                  site.enabled
+                    ? "Active"
+                    : "Disabled"
+                }
+              </span>
+            </td>
+
+            <td>
+              ${safe(site.order)}
+            </td>
+
+            <td>
+
+              <div
+                class="site-row-actions"
+              >
+
+                <button
+                  type="button"
+                  data-action="edit"
+                  data-site="${safe(site.id)}"
+                >
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  data-action="toggle"
+                  data-site="${safe(site.id)}"
+                >
+                  ${
+                    site.enabled
+                      ? "Disable"
+                      : "Enable"
+                  }
+                </button>
+
+              </div>
+
+            </td>
+          `;
+
+
+          siteTableBody.appendChild(
+            tr
+          );
+
+        }
+      );
+
+    }
+
+
+    async function loadSites() {
+
+      try {
+
+        allSites =
+          await getAdminSites(
+            true
+          );
+
+
+        renderSites();
+
+      }
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        window.showToast?.(
+          "Failed to load sites.",
+          "error",
+          5000
+        );
+
+      }
+
+    }
+
+
+    /*
+      Tunggu requireAdmin()
+      selesai membaca profile.
+    */
+
+    window.addEventListener(
+      "admin-profile-ready",
+      async () => {
+
+        if (
+          !isSuperAdmin()
+        ) {
+
+          window.showToast?.(
+            "Superadmin access required.",
+            "error",
+            5000
+          );
+
+          return;
+
+        }
+
+
+        await loadSites();
+
+      }
+    );
+
+
+    addSiteBtn.addEventListener(
+      "click",
+      () => {
+
+        if (
+          !isSuperAdmin()
+        ) {
+          return;
+        }
+
+
+        openAddSiteModal();
+
+      }
+    );
+
+
+    cancelSiteBtn.addEventListener(
+      "click",
+      closeSiteModal
+    );
+
+
+    siteModal.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          siteModal
+        ) {
+
+          closeSiteModal();
+
+        }
+
+      }
+    );
+
+
+    siteSearch.addEventListener(
+      "input",
+      renderSites
+    );
+
+
+    saveSiteBtn.addEventListener(
+      "click",
+      async () => {
+
+        const name =
+          siteName.value.trim();
+
+        const id =
+          siteId.value.trim();
+
+
+        if (!name) {
+
+          window.showToast?.(
+            "Please enter site name.",
+            "warning",
+            4000
+          );
+
+          siteName.focus();
+
+          return;
+
+        }
+
+
+        if (
+          !editingSiteId &&
+          !id
+        ) {
+
+          window.showToast?.(
+            "Please enter site ID.",
+            "warning",
+            4000
+          );
+
+          siteId.focus();
+
+          return;
+
+        }
+
+
+        saveSiteBtn.disabled =
+          true;
+
+
+        try {
+
+          if (
+            editingSiteId
+          ) {
+
+            await updateAdminSite(
+              editingSiteId,
+              {
+                name
+              }
+            );
+
+
+            window.showToast?.(
+              "Site updated successfully.",
+              "success",
+              4000
+            );
+
+          }
+          else {
+
+            await createAdminSite({
+              siteId:
+                id,
+
+              name
+            });
+
+
+            window.showToast?.(
+              "Site created successfully.",
+              "success",
+              4000
+            );
+
+          }
+
+
+          closeSiteModal();
+
+          await loadSites();
+
+        }
+        catch (error) {
+
+          console.error(
+            error
+          );
+
+
+          const messages = {
+
+            SITE_ALREADY_EXISTS:
+              "Site ID already exists.",
+
+            SITE_ID_REQUIRED:
+              "Site ID is required.",
+
+            SITE_NAME_REQUIRED:
+              "Site name is required.",
+
+            SUPERADMIN_REQUIRED:
+              "Superadmin access required."
+
+          };
+
+
+          window.showToast?.(
+            messages[
+              error?.message
+            ] ||
+            error?.message ||
+            "Failed to save site.",
+            "error",
+            5000
+          );
+
+        }
+        finally {
+
+          saveSiteBtn.disabled =
+            false;
+
+        }
+
+      }
+    );
+
+
+    siteTableBody.addEventListener(
+      "click",
+      async event => {
+
+        const button =
+          event.target.closest(
+            "button[data-action]"
+          );
+
+
+        if (!button) {
+          return;
+        }
+
+
+        const id =
+          button.dataset.site;
+
+        const action =
+          button.dataset.action;
+
+
+        const site =
+          allSites.find(
+            item =>
+              item.id === id
+          );
+
+
+        if (!site) {
+          return;
+        }
+
+
+        if (
+          action === "edit"
+        ) {
+
+          openEditSiteModal(
+            site
+          );
+
+          return;
+
+        }
+
+
+        if (
+          action === "toggle"
+        ) {
+
+          const nextEnabled =
+            !site.enabled;
+
+
+          const confirmed =
+            confirm(
+              nextEnabled
+                ? `Enable ${site.name}?`
+                : `Disable ${site.name}?`
+            );
+
+
+          if (!confirmed) {
+            return;
+          }
+
+
+          button.disabled =
+            true;
+
+
+          try {
+
+            await setAdminSiteEnabled(
+              site.id,
+              nextEnabled
+            );
+
+
+            window.showToast?.(
+              nextEnabled
+                ? "Site enabled."
+                : "Site disabled.",
+              "success",
+              4000
+            );
+
+
+            await loadSites();
+
+          }
+          catch (error) {
+
+            console.error(
+              error
+            );
+
+
+            window.showToast?.(
+              error?.message ||
+              "Failed to update site.",
+              "error",
+              5000
+            );
+
+          }
+          finally {
+
+            button.disabled =
+              false;
+
+          }
+
+        }
+
+      }
+    );
+
+
+    window.addEventListener(
+      "admin-sites-changed",
+      loadSites
+    );
+
+  </script>
+
+
+  <script src="./shared-ui.js"></script>
+
+</body>
+</html>

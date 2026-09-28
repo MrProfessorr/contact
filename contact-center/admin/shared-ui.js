@@ -9216,45 +9216,22 @@ const baseMenuItems = [
     file: "welcome.html",
     name: "Welcome Popup"
   },
-{
-  file: "sites.html",
-  name: "Site Management",
-  superadminOnly: true
-}
 
-];
-
-
-const currentAdminProfile =
-  window.getCurrentAdminProfile?.();
-
-
-const menuItems = [
-  ...baseMenuItems
-];
-
-
-if (
-  currentAdminProfile?.role ===
-  "superadmin"
-) {
-
-  menuItems.push({
+  {
     file: "sites.html",
-    name: "Site Management"
-  });
+    name: "Site Management",
+    superadminOnly: true
+  }
 
-}
+];
 
-initAdminWorkspaceTabs(
-  visibleMenuItems
-);
+
 const currentAdminProfile =
   window.getCurrentAdminProfile?.();
 
 
 const visibleMenuItems =
-  menuItems.filter(
+  baseMenuItems.filter(
     item => {
 
       if (
@@ -9273,6 +9250,11 @@ const visibleMenuItems =
 
     }
   );
+
+
+initAdminWorkspaceTabs(
+  visibleMenuItems
+);
 
 
 const linksHtml =

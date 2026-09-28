@@ -4,6 +4,7 @@ import {
 import {
   ref,
   onValue,
+  get,
   set,
   update,
   push,
@@ -6889,27 +6890,26 @@ browser:
     );
 
 
-    const firstSeenKey =
-      `support_first_seen_${visitorId}`;
+const visitorSnapshot =
+  await get(
+    visitorRef
+  );
 
-    if (
-      !localStorage.getItem(
-        firstSeenKey
-      )
-    ) {
+if (
+  !visitorSnapshot
+    .child("firstSeen")
+    .exists()
+) {
 
-      await update(
-        visitorRef,
-        {
-          firstSeen:
-            serverTimestamp()
-        }
-      );
+  await update(
+    visitorRef,
+    {
+      firstSeen:
+        serverTimestamp()
+    }
+  );
 
-      localStorage.setItem(
-        firstSeenKey,
-        "1"
-      );
+}
 
     }
 
@@ -6958,7 +6958,19 @@ await onDisconnect(
       serverTimestamp()
   }
 );
+await set(
+  presenceRef,
+  {
+    online:
+      true,
 
+    page:
+      getCurrentPageUrl(),
+
+    lastSeen:
+      serverTimestamp()
+  }
+);
 setInterval(
   () => {
 
@@ -6970,6 +6982,21 @@ setInterval(
 
         currentPage:
           getCurrentPageUrl()
+      }
+    ).catch(() => {});
+
+
+    update(
+      presenceRef,
+      {
+        online:
+          true,
+
+        page:
+          getCurrentPageUrl(),
+
+        lastSeen:
+          serverTimestamp()
       }
     ).catch(() => {});
 

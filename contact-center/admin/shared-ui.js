@@ -4369,25 +4369,7 @@ const adminSiteDropdown =
       placeholder:
         "Select Site",
 
-      options: [
-
-        {
-          value:
-            "5g88",
-
-          label:
-            "5G88"
-        },
-
-        {
-          value:
-            "spm888",
-
-          label:
-            "SPM888"
-        }
-
-      ],
+options: [],
 
       value:
         getSavedAdminSites(),
@@ -4489,6 +4471,236 @@ window.getAdminActiveSite =
     );
 
   };
+/* =====================================================
+   LOAD ADMIN SITE OPTIONS
+===================================================== */
+
+async function loadAdminSiteOptions() {
+
+  /*
+    admin.js belum selesai
+    load profile.
+  */
+
+  if (
+    typeof window.getAdminSites !==
+    "function"
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    const sites =
+      await window.getAdminSites(
+        false
+      );
+
+
+    /*
+      Format yang diperlukan
+      shared chip dropdown.
+    */
+
+    const options =
+      sites.map(
+        site => ({
+
+          value:
+            String(
+              site.value ||
+              site.id
+            ),
+
+          label:
+            String(
+              site.label ||
+              site.name ||
+              site.id
+            )
+
+        })
+      );
+
+
+    /*
+      Update dropdown tanpa
+      create dropdown baru.
+    */
+
+    adminSiteDropdown
+      ?.setOptions(
+        options
+      );
+
+
+    const allowedSiteIds =
+      options.map(
+        option =>
+          String(
+            option.value
+          )
+      );
+
+
+    /*
+      Check selection lama.
+
+      Contoh:
+      localStorage masih ada abc888
+      tetapi site sudah disabled /
+      admin sudah hilang permission.
+    */
+
+    const savedSites =
+      getSavedAdminSites();
+
+
+    const validSites =
+      savedSites.filter(
+        siteId =>
+          allowedSiteIds.includes(
+            String(siteId)
+          )
+      );
+
+
+    /*
+      Bersihkan invalid selection.
+    */
+
+    if (
+      validSites.length !==
+      savedSites.length
+    ) {
+
+      if (
+        validSites.length
+      ) {
+
+        localStorage.setItem(
+          ADMIN_SELECTED_SITES_KEY,
+          JSON.stringify(
+            validSites
+          )
+        );
+
+      }
+      else {
+
+        localStorage.removeItem(
+          ADMIN_SELECTED_SITES_KEY
+        );
+
+      }
+
+    }
+
+
+    /*
+      Sync chips.
+    */
+
+    adminSiteDropdown
+      ?.setValue(
+        validSites,
+        false
+      );
+
+
+    const profile =
+      window
+        .getCurrentAdminProfile
+        ?.();
+
+
+    /*
+      Site Admin + hanya 1 site:
+      pilih automatically dan
+      hide selector.
+    */
+
+    if (
+      profile?.role ===
+        "site_admin" &&
+      options.length === 1
+    ) {
+
+      const onlySite =
+        String(
+          options[0].value
+        );
+
+
+      localStorage.setItem(
+        ADMIN_SELECTED_SITES_KEY,
+        JSON.stringify(
+          [onlySite]
+        )
+      );
+
+
+      adminSiteDropdown
+        ?.setValue(
+          [onlySite],
+          false
+        );
+
+
+      adminSiteSelector
+        .style.display =
+        "none";
+
+    }
+    else {
+
+      adminSiteSelector
+        .style.display =
+        "";
+
+    }
+
+  }
+  catch (error) {
+
+    console.error(
+      "Failed to load admin sites:",
+      error
+    );
+
+
+    window.showToast?.(
+      "Failed to load site list.",
+      "error",
+      5000
+    );
+
+  }
+
+}
+
+
+window.addEventListener(
+  "admin-profile-ready",
+  () => {
+
+    loadAdminSiteOptions();
+
+  }
+);
+
+
+window.addEventListener(
+  "admin-sites-changed",
+  () => {
+
+    loadAdminSiteOptions();
+
+  }
+);
 /* =====================================================
    ADMIN USER BUTTON
 ===================================================== */

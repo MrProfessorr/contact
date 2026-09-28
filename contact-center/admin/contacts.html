@@ -574,14 +574,6 @@ let siteContactCache = {};
 
 let editingSiteId = "";
 
-
-/*
-  Ambil selected chips daripada
-  shared header.
-
-  Empty selection = semua allowed sites.
-*/
-
 function getSelectedContactSiteIds() {
 
   const selected =
@@ -602,9 +594,16 @@ function getSelectedContactSiteIds() {
   }
 
 
-  return contactSites.map(
-    site => String(site.id)
-  );
+return contactSites
+  .map(
+    site =>
+      String(
+        site.value ||
+        site.id ||
+        ""
+      )
+  )
+  .filter(Boolean);
 
 }
 
@@ -653,21 +652,52 @@ function refreshContactSiteDropdown(
 
   const availableSites =
     contactSites.filter(
-      site =>
-        selectedSiteIds.includes(
-          String(site.id)
-        )
+      site => {
+
+        const siteId =
+          String(
+            site.value ||
+            site.id ||
+            ""
+          );
+
+
+        return (
+          siteId &&
+          selectedSiteIds.includes(
+            siteId
+          )
+        );
+
+      }
     );
 
 
   select.innerHTML =
     availableSites
       .map(
-        site => `
-          <option value="${safe(site.id)}">
-            ${safe(site.name || site.label || site.id)}
-          </option>
-        `
+        site => {
+
+          const siteId =
+            String(
+              site.value ||
+              site.id ||
+              ""
+            );
+
+          const siteName =
+            site.label ||
+            site.name ||
+            siteId;
+
+
+          return `
+            <option value="${safe(siteId)}">
+              ${safe(siteName)}
+            </option>
+          `;
+
+        }
       )
       .join("");
 
@@ -676,11 +706,16 @@ function refreshContactSiteDropdown(
     preferredSiteId &&
     availableSites.some(
       site =>
-        String(site.id) ===
+        String(
+          site.value ||
+          site.id ||
+          ""
+        ) ===
         String(preferredSiteId)
     )
       ? String(preferredSiteId)
       : String(
+          availableSites[0]?.value ||
           availableSites[0]?.id ||
           ""
         );
@@ -1726,22 +1761,24 @@ function renderContacts() {
       }
 
 
-      const site =
-        contactSites.find(
-          currentSite =>
-            String(
-              currentSite.id
-            ) ===
-            String(
-              item.siteId
-            )
-        );
+const site =
+  contactSites.find(
+    currentSite =>
+      String(
+        currentSite.value ||
+        currentSite.id ||
+        ""
+      ) ===
+      String(
+        item.siteId
+      )
+  );
 
 
-      const siteName =
-        site?.name ||
-        site?.label ||
-        item.siteId;
+const siteName =
+  site?.label ||
+  site?.name ||
+  item.siteId;
 
 
       list.insertAdjacentHTML(
@@ -2021,8 +2058,17 @@ window.addEventListener(
 
     try {
 
-      contactSites =
-        await getAdminSites();
+contactSites =
+  (
+    await getAdminSites()
+  ).filter(
+    site =>
+      site &&
+      (
+        site.value ||
+        site.id
+      )
+  );
 
 
       refreshContactSiteDropdown();

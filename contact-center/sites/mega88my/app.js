@@ -4632,7 +4632,6 @@ sessionStorage
     `floating_promo_closed_${SITE_ID}`,
     "1"
   );
-
         }
 
 
@@ -4655,7 +4654,6 @@ localStorage
       oneDay
     )
   );
-
         }
 
         hideFloatingPromo();
@@ -6779,7 +6777,7 @@ onValue(
 
   ref(
     db,
-    `blocked_visitors/${visitorId}`
+    `sites/${SITE_ID}/blocked_visitors/${visitorId}`
   ),
 
   snapshot => {
@@ -6832,18 +6830,17 @@ async function startVisitorTracking() {
     const dateKey =
       getTrackingDateKey();
 
-    const visitorRef =
-      ref(
-        db,
-        `analytics/visitors/${visitorId}`
-      );
+const visitorRef =
+  ref(
+    db,
+    `sites/${SITE_ID}/analytics/visitors/${visitorId}`
+  );
 
-    const presenceRef =
-      ref(
-        db,
-        `analytics/presence/${visitorId}/${visitorSessionId}`
-      );
-
+const presenceRef =
+  ref(
+    db,
+    `sites/${SITE_ID}/analytics/presence/${visitorId}/${visitorSessionId}`
+  );
 
     await update(
       visitorRef,
@@ -6917,34 +6914,34 @@ browser:
     }
 
 
-    await set(
+await set(
 
-      ref(
-        db,
-        `analytics/daily/${dateKey}/visitors/${visitorId}`
-      ),
+  ref(
+    db,
+    `sites/${SITE_ID}/analytics/daily/${dateKey}/visitors/${visitorId}`
+  ),
 
-      true
+  true
 
-    );
+);
 
 
-    await update(
+await update(
 
-      ref(
-        db,
-        `analytics/daily/${dateKey}`
-      ),
+  ref(
+    db,
+    `sites/${SITE_ID}/analytics/daily/${dateKey}`
+  ),
 
-      {
-        pageViews:
-          increment(1),
+  {
+    pageViews:
+      increment(1),
 
-        lastUpdated:
-          serverTimestamp()
-      }
+    lastUpdated:
+      serverTimestamp()
+  }
 
-    );
+);
 
 
 await onDisconnect(
@@ -7033,13 +7030,13 @@ document.addEventListener(
     const dateKey =
       getTrackingDateKey();
 
-    const clickRef =
-      push(
-        ref(
-          db,
-          "analytics/clicks"
-        )
-      );
+const clickRef =
+  push(
+    ref(
+      db,
+      `sites/${SITE_ID}/analytics/clicks`
+    )
+  );
 
     set(
       clickRef,
@@ -7087,22 +7084,22 @@ timestamp:
     );
 
 
-    update(
+update(
 
-      ref(
-        db,
-        `analytics/daily/${dateKey}`
-      ),
+  ref(
+    db,
+    `sites/${SITE_ID}/analytics/daily/${dateKey}`
+  ),
 
-      {
-        linkClicks:
-          increment(1),
+  {
+    linkClicks:
+      increment(1),
 
-        lastUpdated:
-          serverTimestamp()
-      }
+    lastUpdated:
+      serverTimestamp()
+  }
 
-    ).catch(() => {});
+).catch(() => {});
 
   }
 );

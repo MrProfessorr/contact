@@ -1794,15 +1794,6 @@ async function refreshLoadingSites() {
         }
       )
       .join("");
-
-loadingSiteInput.dispatchEvent(
-  new Event(
-    "shared-dropdown-refresh",
-    {
-      bubbles: true
-    }
-  )
-);
   
   let nextSiteId = "";
 
@@ -1836,24 +1827,6 @@ loadingSiteInput.dispatchEvent(
 
   loadingSiteInput.value =
     nextSiteId;
-
-
-if (
-  loadingSiteInput._sharedDropdown
-) {
-
-  loadingSiteInput
-    ._sharedDropdown
-    .refresh();
-
-  loadingSiteInput
-    ._sharedDropdown
-    .setValue(
-      nextSiteId,
-      false
-    );
-
-}
 
 
   loadLoadingSettingsForSite(

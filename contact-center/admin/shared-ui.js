@@ -4689,6 +4689,8 @@ window.addEventListener(
 
     loadAdminSiteOptions();
 
+    syncSuperadminMenu();
+
   }
 );
 
@@ -4696,6 +4698,25 @@ window.addEventListener(
 window.addEventListener(
   "admin-sites-changed",
   () => {
+
+    loadAdminSiteOptions();
+
+  }
+);
+
+window.addEventListener(
+  "storage",
+  event => {
+
+    if (
+      event.key !==
+      "adminSitesRegistryChanged"
+    ) {
+
+      return;
+
+    }
+
 
     loadAdminSiteOptions();
 
@@ -9226,30 +9247,8 @@ const baseMenuItems = [
 ];
 
 
-const currentAdminProfile =
-  window.getCurrentAdminProfile?.();
-
-
 const visibleMenuItems =
-  baseMenuItems.filter(
-    item => {
-
-      if (
-        item.superadminOnly
-      ) {
-
-        return (
-          currentAdminProfile?.role ===
-          "superadmin"
-        );
-
-      }
-
-
-      return true;
-
-    }
-  );
+  [...baseMenuItems];
 
 
 initAdminWorkspaceTabs(
@@ -9272,6 +9271,11 @@ return `
     href="./${item.file}"
     data-admin-tab-file="${item.file}"
     data-admin-tab-name="${item.name}"
+    ${
+      item.superadminOnly
+        ? 'data-superadmin-only="true" style="display:none;"'
+        : ""
+    }
     class="admin-sidebar-link${
       active
         ? " active"
@@ -9314,7 +9318,33 @@ return `
     </div>
 
   `;
+function syncSuperadminMenu() {
 
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+
+  const isSuperadmin =
+    profile?.role ===
+    "superadmin";
+
+
+  document
+    .querySelectorAll(
+      '[data-superadmin-only="true"]'
+    )
+    .forEach(
+      item => {
+
+        item.style.display =
+          isSuperadmin
+            ? ""
+            : "none";
+
+      }
+    );
+
+}
 sidebar
   .querySelectorAll(
     "[data-admin-tab-file]"

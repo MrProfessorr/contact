@@ -141,7 +141,20 @@
   <h3>
     Loader Setup
   </h3>
+<div class="form-group">
 
+  <label for="loadingSite">
+    Site
+  </label>
+
+  <select
+    id="loadingSite"
+    data-shared-dropdown
+    data-placeholder="Select Site"
+  >
+  </select>
+
+</div>
 
   <!-- LOADING TEXT -->
   <div class="form-group">
@@ -531,7 +544,9 @@ import {
   set,
   onValue,
   requireAdmin,
-  setupLogout
+  setupLogout,
+  getAdminSites,
+  getAdminSitePath
 } from "./admin.js";
 
 
@@ -568,7 +583,37 @@ const loadingEnabled =
   document.getElementById(
     "loadingEnabled"
   );
+const loadingSiteInput =
+  document.getElementById(
+    "loadingSite"
+  );
 
+
+let loadingSites = [];
+
+let currentLoadingSiteId = "";
+
+let stopLoadingSettingsListener = null;
+  
+function getLoadingSettingsPath(
+  siteId
+) {
+
+  if (!siteId) {
+
+    throw new Error(
+      "Please select a site."
+    );
+
+  }
+
+
+  return getAdminSitePath(
+    siteId,
+    "loading_settings"
+  );
+
+}
 
 const loadingImageUrl =
   document.getElementById(
@@ -1368,58 +1413,108 @@ loadingPreviewImage.addEventListener(
   }
 );
 
-/* =========================================================
-   LOAD FIREBASE SETTINGS
-========================================================= */
+function loadLoadingSettingsForSite(
+  siteId
+) {
 
-onValue(
-  ref(
-    db,
-    "loading_settings"
-  ),
+  if (
+    typeof stopLoadingSettingsListener ===
+    "function"
+  ) {
 
-  snapshot => {
+    stopLoadingSettingsListener();
 
-    const data =
-      snapshot.val();
-
-    if (!data) {
-
-      applyForm(
-        DEFAULT_LOADING
-      );
-
-    } else {
-
-      applyForm(
-        data
-      );
-
-    }
-
-    hideLoadingPageLoading();
-
-  },
-
-  error => {
-
-    console.error(
-      "Loading settings read error:",
-      error
-    );
-
-window.showToast(
-  "Failed to load loading settings.",
-  "error",
-  5000
-);
-
-    hideLoadingPageLoading();
+    stopLoadingSettingsListener =
+      null;
 
   }
 
-);
 
+  currentLoadingSiteId =
+    String(siteId || "");
+
+
+  if (!currentLoadingSiteId) {
+
+    applyForm(
+      DEFAULT_LOADING
+    );
+
+    hideLoadingPageLoading();
+
+    return;
+
+  }
+
+
+  stopLoadingSettingsListener =
+    onValue(
+
+      ref(
+        db,
+        getLoadingSettingsPath(
+          currentLoadingSiteId
+        )
+      ),
+
+      snapshot => {
+
+        const data =
+          snapshot.val();
+
+
+        if (!data) {
+
+          applyForm(
+            DEFAULT_LOADING
+          );
+
+        } else {
+
+          applyForm(
+            data
+          );
+
+        }
+
+
+        hideLoadingPageLoading();
+
+      },
+
+      error => {
+
+        console.error(
+          `Loading settings read error (${currentLoadingSiteId}):`,
+          error
+        );
+
+
+        window.showToast(
+          "Failed to load loading settings.",
+          "error",
+          5000
+        );
+
+
+        hideLoadingPageLoading();
+
+      }
+
+    );
+
+}
+
+loadingSiteInput.addEventListener(
+  "change",
+  () => {
+
+    loadLoadingSettingsForSite(
+      loadingSiteInput.value
+    );
+
+  }
+);
 
 
 /* =========================================================
@@ -1477,26 +1572,41 @@ saveLoadingBtn.addEventListener(
         "SAVING...";
 
 
-      await set(
+const selectedSiteId =
+  loadingSiteInput.value;
 
-        ref(
-          db,
-          "loading_settings"
-        ),
 
-        {
+if (!selectedSiteId) {
 
-          ...data,
+  throw new Error(
+    "Please select a site."
+  );
 
-          imageUrl:
-            imageUrl,
+}
 
-          updatedAt:
-            Date.now()
 
-        }
+await set(
 
-      );
+  ref(
+    db,
+    getLoadingSettingsPath(
+      selectedSiteId
+    )
+  ),
+
+  {
+
+    ...data,
+
+    imageUrl:
+      imageUrl,
+
+    updatedAt:
+      Date.now()
+
+  }
+
+);
 
 
       if (selectedFile) {
@@ -1618,9 +1728,174 @@ window.showToast(
 applyForm(
   DEFAULT_LOADING
 );
+async function refreshLoadingSites() {
 
+  loadingSites =
+    (
+      await getAdminSites()
+    ).filter(
+      site =>
+        site &&
+        (
+          site.value ||
+          site.id
+        )
+    );
+
+
+  const headerSelected =
+    typeof window.getAdminSelectedSites ===
+    "function"
+      ? window.getAdminSelectedSites()
+      : [];
+
+
+  const allowedSites =
+    headerSelected.length
+      ? loadingSites.filter(
+          site =>
+            headerSelected.includes(
+              String(
+                site.value ||
+                site.id
+              )
+            )
+        )
+      : loadingSites;
+
+
+  const previousValue =
+    loadingSiteInput.value;
+
+
+  loadingSiteInput.innerHTML =
+    allowedSites
+      .map(
+        site => {
+
+          const siteId =
+            String(
+              site.value ||
+              site.id
+            );
+
+
+          const siteName =
+            site.label ||
+            site.name ||
+            siteId;
+
+
+          return `
+            <option value="${siteId}">
+              ${siteName}
+            </option>
+          `;
+
+        }
+      )
+      .join("");
+
+
+  let nextSiteId = "";
+
+
+  if (
+    previousValue &&
+    allowedSites.some(
+      site =>
+        String(
+          site.value ||
+          site.id
+        ) ===
+        previousValue
+    )
+  ) {
+
+    nextSiteId =
+      previousValue;
+
+  } else {
+
+    nextSiteId =
+      String(
+        allowedSites[0]?.value ||
+        allowedSites[0]?.id ||
+        ""
+      );
+
+  }
+
+
+  loadingSiteInput.value =
+    nextSiteId;
+
+
+  if (
+    loadingSiteInput._sharedDropdown
+  ) {
+
+    loadingSiteInput
+      ._sharedDropdown
+      .refresh();
+
+  }
+
+
+  loadLoadingSettingsForSite(
+    nextSiteId
+  );
+
+}
+window.addEventListener(
+  "admin-profile-ready",
+  async () => {
+
+    try {
+
+      await refreshLoadingSites();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to initialize Loading Settings:",
+        error
+      );
+
+
+      window.showToast(
+        "Failed to initialize Loading Settings.",
+        "error",
+        5000
+      );
+
+
+      hideLoadingPageLoading();
+
+    }
+
+  }
+);
+
+  window.addEventListener(
+  "admin-site-change",
+  async () => {
+
+    try {
+
+      await refreshLoadingSites();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to refresh Loading sites:",
+        error
+      );
+
+    }
+
+  }
+);
 </script>
-
-
 </body>
 </html>

@@ -4684,10 +4684,10 @@ if (floatingPromoLink) {
 
 onValue(
 
-  ref(
-    db,
-    "floating_image"
-  ),
+ref(
+  db,
+  `sites/${SITE_ID}/floating_image`
+),
 
 
 snapshot => {

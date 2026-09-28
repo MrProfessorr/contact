@@ -64,11 +64,6 @@ let currentAdminProfile =
   null;
 
 
-/*
-  Ambil profile admin
-  yang sedang login.
-*/
-
 export function getCurrentAdminProfile() {
 
   return currentAdminProfile;
@@ -85,18 +80,6 @@ export function isSuperAdmin() {
   );
 
 }
-/* =========================
-   ADMIN SITE MANAGEMENT
-========================= */
-
-/*
-  Ambil semua Site ID yang
-  diberikan kepada Site Admin.
-
-  Superadmin tidak bergantung
-  kepada list ini kerana dia
-  boleh access semua site.
-*/
 
 export function getAdminAllowedSiteIds() {
 
@@ -118,17 +101,64 @@ export function getAdminAllowedSiteIds() {
 }
 
 
-/*
-  Ambil semua site daripada
-  Firebase sites_registry.
+export function getAdminSelectedSiteId() {
 
-  Superadmin:
-  - nampak semua site.
+  const selectedSites =
+    typeof window.getAdminSelectedSites === "function"
+      ? window.getAdminSelectedSites()
+      : [];
 
-  Site Admin:
-  - hanya nampak site yang
-    diberikan kepadanya.
-*/
+
+  if (
+    Array.isArray(selectedSites) &&
+    selectedSites.length === 1
+  ) {
+
+    return String(
+      selectedSites[0]
+    );
+
+  }
+
+
+  return "";
+
+}
+
+
+export function getAdminSitePath(
+  siteId,
+  childPath = ""
+) {
+
+  const cleanSiteId =
+    normalizeSiteId(
+      siteId
+    );
+
+
+  if (!cleanSiteId) {
+
+    throw new Error(
+      "SITE_REQUIRED"
+    );
+
+  }
+
+
+  const cleanChild =
+    String(
+      childPath || ""
+    )
+      .replace(/^\/+|\/+$/g, "");
+
+
+  return cleanChild
+    ? `sites/${cleanSiteId}/${cleanChild}`
+    : `sites/${cleanSiteId}`;
+
+}
+
 
 export async function getAdminSites(
   includeDisabled = false
@@ -624,6 +654,12 @@ window.isSuperAdmin =
 
 window.getAdminAllowedSiteIds =
   getAdminAllowedSiteIds;
+
+window.getAdminSelectedSiteId =
+  getAdminSelectedSiteId;
+
+window.getAdminSitePath =
+  getAdminSitePath;
 
 window.getAdminSites =
   getAdminSites;

@@ -148,7 +148,20 @@
   <h3>
     Floating Settings
   </h3>
+<div class="form-group">
 
+  <label>
+    Site
+  </label>
+
+  <select
+    id="floatingSite"
+    data-shared-dropdown
+    data-placeholder="Select Site"
+  >
+  </select>
+
+</div>
 
   <!-- CLICK URL -->
   <div class="form-group">
@@ -718,7 +731,9 @@ import {
   set,
   onValue,
   requireAdmin,
-  setupLogout
+  setupLogout,
+  getAdminSites,
+  getAdminSitePath
 } from "./admin.js";
 
 
@@ -875,7 +890,35 @@ const saveBtn =
   document.getElementById(
     "saveFloatingBtn"
   );
+const floatingSiteInput =
+  document.getElementById(
+    "floatingSite"
+  );
 
+
+let floatingSites = [];
+
+let currentFloatingSiteId = "";
+
+let stopFloatingListener = null;
+
+function getFloatingPath(siteId) {
+
+  if (!siteId) {
+
+    throw new Error(
+      "Please select a site."
+    );
+
+  }
+
+
+  return getAdminSitePath(
+    siteId,
+    "floating_image"
+  );
+
+}
 const previewArea =
   document.getElementById(
     "floatingPreviewArea"
@@ -1512,86 +1555,120 @@ previewImage.addEventListener(
 );
 
 
+function applyFloatingData(data) {
 
-/* =====================================================
-   LOAD FIREBASE
-===================================================== */
-onValue(
+  if (
+    floatingPreviewObjectUrl
+  ) {
 
-  ref(
-    db,
-    "floating_image"
-  ),
+    URL.revokeObjectURL(
+      floatingPreviewObjectUrl
+    );
 
-  snapshot => {
+    floatingPreviewObjectUrl =
+      "";
 
-    const data =
-      snapshot.val();
-
-
-if (!data) {
-
-  enabledInput.checked =
-    true;
-
-  updateFloatingActiveText();
-
-  updatePreview();
-
-  hideFloatingPageLoading();
-
-  return;
-}
-
-enabledInput.checked =
-  data.enabled !== false;
+  }
 
 
-updateFloatingActiveText();
+  floatingImageFile.value =
+    "";
+
+
+  if (!data) {
+
+    enabledInput.checked =
+      true;
+
+    imageUrlInput.value =
+      "";
+
+    clickUrlInput.value =
+      "";
+
+    positionInput.value =
+      "right-center";
+
+    animationInput.value =
+      "soft";
+
+    widthInput.value =
+      140;
+
+    mobileWidthInput.value =
+      95;
+
+    distanceInput.value =
+      18;
+
+    speedInput.value =
+      6;
+
+    opacityInput.value =
+      100;
+
+    showCloseInput.value =
+      "true";
+
+    closeModeInput.value =
+      "session";
+
+    showDesktopInput.value =
+      "true";
+
+    showMobileInput.value =
+      "true";
+
+
+    floatingUploadPreviewImg.src =
+      "";
+
+    floatingUploadFileName.textContent =
+      "";
+
+    floatingUploadPreview
+      .classList
+      .add("hidden");
+
+  } else {
+
+    enabledInput.checked =
+      data.enabled !== false;
 
 
     imageUrlInput.value =
-      data.image_url ||
-      "";
-floatingImageFile.value =
-  "";
+      data.image_url || "";
 
 
-if (
-  data.image_url
-) {
+    if (data.image_url) {
 
-  floatingUploadPreviewImg.src =
-    data.image_url;
+      floatingUploadPreviewImg.src =
+        data.image_url;
 
+      floatingUploadFileName.textContent =
+        "Current floating image";
 
-  floatingUploadFileName.textContent =
-    "Current floating image";
+      floatingUploadPreview
+        .classList
+        .remove("hidden");
 
+    } else {
 
-  floatingUploadPreview
-    .classList
-    .remove("hidden");
+      floatingUploadPreviewImg.src =
+        "";
 
-} else {
+      floatingUploadFileName.textContent =
+        "";
 
-  floatingUploadPreviewImg.src =
-    "";
+      floatingUploadPreview
+        .classList
+        .add("hidden");
 
+    }
 
-  floatingUploadFileName.textContent =
-    "";
-
-
-  floatingUploadPreview
-    .classList
-    .add("hidden");
-
-}
 
     clickUrlInput.value =
-      data.click_url ||
-      "";
+      data.click_url || "";
 
 
     positionInput.value =
@@ -1605,34 +1682,28 @@ if (
 
 
     widthInput.value =
-      data.width ??
-      140;
+      data.width ?? 140;
 
 
     mobileWidthInput.value =
-      data.mobile_width ??
-      95;
+      data.mobile_width ?? 95;
 
 
     distanceInput.value =
-      data.distance ??
-      18;
+      data.distance ?? 18;
 
 
     speedInput.value =
-      data.speed ??
-      6;
+      data.speed ?? 6;
 
 
     opacityInput.value =
-      data.opacity ??
-      100;
+      data.opacity ?? 100;
 
 
     showCloseInput.value =
       String(
-        data.show_close ??
-        true
+        data.show_close ?? true
       );
 
 
@@ -1643,65 +1714,133 @@ if (
 
     showDesktopInput.value =
       String(
-        data.show_desktop ??
-        true
+        data.show_desktop ?? true
       );
 
-[
-  positionInput,
-  animationInput,
-  closeModeInput,
-  showDesktopInput,
-  showMobileInput,
-  showCloseInput
 
-].forEach(
-  select => {
+    showMobileInput.value =
+      String(
+        data.show_mobile ?? true
+      );
 
-    select.dispatchEvent(
-      new Event(
-        "change",
-        {
-          bubbles:true
-        }
-      )
+  }
+
+
+  updateFloatingActiveText();
+
+
+  [
+    positionInput,
+    animationInput,
+    closeModeInput,
+    showDesktopInput,
+    showMobileInput,
+    showCloseInput
+
+  ].forEach(
+    select => {
+
+      select.dispatchEvent(
+        new Event(
+          "change",
+          {
+            bubbles: true
+          }
+        )
+      );
+
+    }
+  );
+
+
+  updatePreview();
+
+}
+
+function loadFloatingForSite(
+  siteId
+) {
+
+  if (
+    typeof stopFloatingListener ===
+    "function"
+  ) {
+
+    stopFloatingListener();
+
+    stopFloatingListener =
+      null;
+
+  }
+
+
+  currentFloatingSiteId =
+    String(siteId || "");
+
+
+  if (!currentFloatingSiteId) {
+
+    applyFloatingData(null);
+
+    hideFloatingPageLoading();
+
+    return;
+
+  }
+
+
+  stopFloatingListener =
+    onValue(
+
+      ref(
+        db,
+        getFloatingPath(
+          currentFloatingSiteId
+        )
+      ),
+
+      snapshot => {
+
+        applyFloatingData(
+          snapshot.val()
+        );
+
+        hideFloatingPageLoading();
+
+      },
+
+      error => {
+
+        console.error(
+          `Floating settings load error (${currentFloatingSiteId}):`,
+          error
+        );
+
+
+        window.showToast(
+          "Unable to load floating settings.",
+          "error",
+          5000
+        );
+
+
+        hideFloatingPageLoading();
+
+      }
+
+    );
+
+}
+floatingSiteInput.addEventListener(
+  "change",
+  () => {
+
+    loadFloatingForSite(
+      floatingSiteInput.value
     );
 
   }
 );
-showMobileInput.value =
-  String(
-    data.show_mobile ??
-    true
-  );
-
-updatePreview();
-hideFloatingPageLoading();
-
-},
-
-error => {
-
-  console.error(
-    "Floating settings load error:",
-    error
-  );
-
-  window.showToast(
-    "Unable to load floating settings.",
-    "error",
-    5000
-  );
-
-
-  hideFloatingPageLoading();
-
-}
-
-);
-
-
-
 /* =====================================================
    SAVE
 ===================================================== */
@@ -1769,16 +1908,31 @@ saveBtn.addEventListener(
         "SAVING...";
 
 
-      await set(
+const selectedSiteId =
+  floatingSiteInput.value;
 
-        ref(
-          db,
-          "floating_image"
-        ),
 
-        data
+if (!selectedSiteId) {
 
-      );
+  throw new Error(
+    "Please select a site."
+  );
+
+}
+
+
+await set(
+
+  ref(
+    db,
+    getFloatingPath(
+      selectedSiteId
+    )
+  ),
+
+  data
+
+);
 
 
       /* after successful upload */
@@ -1891,9 +2045,173 @@ previewClose.addEventListener(
 updateFloatingActiveText();
 
 updatePreview();
+async function refreshFloatingSites() {
 
+  floatingSites =
+    (
+      await getAdminSites()
+    ).filter(
+      site =>
+        site &&
+        (
+          site.value ||
+          site.id
+        )
+    );
+
+
+  const headerSelected =
+    typeof window.getAdminSelectedSites ===
+    "function"
+      ? window.getAdminSelectedSites()
+      : [];
+
+
+  const allowedSites =
+    headerSelected.length
+      ? floatingSites.filter(
+          site =>
+            headerSelected.includes(
+              String(
+                site.value ||
+                site.id
+              )
+            )
+        )
+      : floatingSites;
+
+
+  const previousValue =
+    floatingSiteInput.value;
+
+
+  floatingSiteInput.innerHTML =
+    allowedSites
+      .map(
+        site => {
+
+          const siteId =
+            String(
+              site.value ||
+              site.id
+            );
+
+
+          const siteName =
+            site.label ||
+            site.name ||
+            siteId;
+
+
+          return `
+            <option value="${siteId}">
+              ${siteName}
+            </option>
+          `;
+
+        }
+      )
+      .join("");
+
+
+  let nextSiteId = "";
+
+
+  if (
+    previousValue &&
+    allowedSites.some(
+      site =>
+        String(
+          site.value ||
+          site.id
+        ) ===
+        previousValue
+    )
+  ) {
+
+    nextSiteId =
+      previousValue;
+
+  } else {
+
+    nextSiteId =
+      String(
+        allowedSites[0]?.value ||
+        allowedSites[0]?.id ||
+        ""
+      );
+
+  }
+
+
+  floatingSiteInput.value =
+    nextSiteId;
+
+
+  if (
+    floatingSiteInput._sharedDropdown
+  ) {
+
+    floatingSiteInput
+      ._sharedDropdown
+      .refresh();
+
+  }
+
+
+  loadFloatingForSite(
+    nextSiteId
+  );
+
+}
+window.addEventListener(
+  "admin-profile-ready",
+  async () => {
+
+    try {
+
+      await refreshFloatingSites();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to initialize Floating Image:",
+        error
+      );
+
+
+      window.showToast(
+        "Failed to initialize Floating Image.",
+        "error",
+        5000
+      );
+
+
+      hideFloatingPageLoading();
+
+    }
+
+  }
+);
+window.addEventListener(
+  "admin-site-change",
+  async () => {
+
+    try {
+
+      await refreshFloatingSites();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to refresh Floating sites:",
+        error
+      );
+
+    }
+
+  }
+);
 </script>
-
-
 </body>
 </html>

@@ -6126,7 +6126,7 @@ onValue(
 
   ref(
     db,
-    "welcome_popup"
+    `sites/${SITE_ID}/welcome_popup`
   ),
 
   snapshot => {

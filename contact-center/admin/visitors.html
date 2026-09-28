@@ -5604,21 +5604,125 @@ function visitorIsOnline(
   visitorKey
 ) {
 
-  const sessions =
+  const data =
     presence[
       visitorKey
-    ] || {};
+    ];
+
+  if (!data) {
+    return false;
+  }
 
 
-  return Object
-    .values(
-      sessions
+  /*
+   * FORMAT 1
+   *
+   * presence/{visitorId}/online
+   */
+
+  if (
+    data.online === true
+  ) {
+    return true;
+  }
+
+
+  /*
+   * FORMAT 2
+   *
+   * presence/{visitorId}/{sessionId}/online
+   */
+
+  const hasOnlineSession =
+    Object
+      .values(
+        data
+      )
+      .some(
+        session =>
+          session &&
+          typeof session === "object" &&
+          session.online === true
+      );
+
+
+  if (
+    hasOnlineSession
+  ) {
+    return true;
+  }
+
+
+  /*
+   * FALLBACK HEARTBEAT
+   *
+   * Kalau customer masih update lastSeen,
+   * anggap online.
+   */
+
+  const timestamps = [];
+
+
+  if (
+    Number(
+      data.lastSeen
     )
-    .some(
-      session =>
-        session &&
-        session.online === true
+  ) {
+
+    timestamps.push(
+      Number(
+        data.lastSeen
+      )
     );
+
+  }
+
+
+  Object
+    .values(
+      data
+    )
+    .forEach(
+      session => {
+
+        if (
+          session &&
+          typeof session === "object" &&
+          Number(
+            session.lastSeen
+          )
+        ) {
+
+          timestamps.push(
+            Number(
+              session.lastSeen
+            )
+          );
+
+        }
+
+      }
+    );
+
+
+  if (
+    timestamps.length
+  ) {
+
+    const latest =
+      Math.max(
+        ...timestamps
+      );
+
+
+    return (
+      Date.now() - latest
+    ) < 45000;
+
+  }
+
+
+  return false;
 
 }
 
@@ -7329,7 +7433,10 @@ const isBlocked =
       visitor.id
     ]
   );
-
+const isOnline =
+  visitorIsOnline(
+    visitor.id
+  );
 
 let matchesStatus =
   true;
@@ -7349,20 +7456,21 @@ if (
       true;
 
   } else {
-    matchesStatus =
-      (
-        !isBlocked &&
-        visitorStatusFilters.has(
-          "active"
-        )
-      )
-      ||
-      (
-        isBlocked &&
-        visitorStatusFilters.has(
-          "inactive"
-        )
-      );
+matchesStatus =
+  (
+    isOnline &&
+    !isBlocked &&
+    visitorStatusFilters.has(
+      "active"
+    )
+  )
+  ||
+  (
+    !isOnline &&
+    visitorStatusFilters.has(
+      "inactive"
+    )
+  );
 
   }
 
@@ -8116,18 +8224,26 @@ function rebuildVisitorAggregates() {
               );
 
 
-            nextVisitors[key] = {
+nextVisitors[key] = {
 
-              ...(value || {}),
+  ...(value || {}),
 
-              siteId,
-              siteName,
+  siteId,
+  siteName,
 
-              visitorId,
-              originalId:
-                visitorId
+  visitorId,
+  originalId:
+    visitorId,
 
-            };
+  firstSeen:
+    value?.firstSeen ||
+    value?.createdAt ||
+    value?.joinedAt ||
+    value?.firstVisit ||
+    value?.lastSeen ||
+    null
+
+};
 
           }
         );

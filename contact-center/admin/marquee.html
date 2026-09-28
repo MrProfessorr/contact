@@ -138,7 +138,20 @@
     Marquee Settings
   </h3>
 
+<div class="form-group">
 
+  <label>
+    Site
+  </label>
+
+  <select
+    id="marqueeSite"
+    data-shared-dropdown
+    data-placeholder="Select Site"
+  >
+  </select>
+
+</div>
   <!-- POSITION + DIRECTION -->
   <div class="marquee-form-row">
 
@@ -433,7 +446,9 @@ import {
   set,
   onValue,
   requireAdmin,
-  setupLogout
+  setupLogout,
+  getAdminSites,
+  getAdminSitePath
 } from "./admin.js";
 
 
@@ -539,7 +554,34 @@ const previewTextTwo =
   document.getElementById(
     "marqueePreviewTextTwo"
   );
+const marqueeSiteInput =
+  document.getElementById(
+    "marqueeSite"
+  );
 
+
+let marqueeSites = [];
+
+let currentMarqueeSiteId = "";
+
+let stopMarqueeListener = null;
+
+
+function getMarqueePath(siteId) {
+
+  if (!siteId) {
+    throw new Error(
+      "SITE_REQUIRED"
+    );
+  }
+
+
+  return getAdminSitePath(
+    siteId,
+    "marquee"
+  );
+
+}
 function updateMarqueeActiveText() {
 
   marqueeActiveText.textContent =
@@ -655,7 +697,128 @@ enabled:
 
 }
 
+function applyMarqueeData(data) {
 
+  if (!data) {
+
+    enabledInput.checked =
+      true;
+
+    textInput.value =
+      "";
+
+    positionInput.value =
+      "top";
+
+    directionInput.value =
+      "right-to-left";
+
+    speedInput.value =
+      15;
+
+    fontSizeInput.value =
+      13;
+
+    textColorInput.value =
+      "#f8dd76";
+
+    lineColorInput.value =
+      "#f8dd76";
+
+    backgroundInput.value =
+      "#181818";
+
+    pauseHoverInput.value =
+      "true";
+
+  } else {
+
+    enabledInput.checked =
+      data.enabled !== false;
+
+
+    textInput.value =
+      data.text || "";
+
+
+    positionInput.value =
+      data.position ||
+      "top";
+
+
+    directionInput.value =
+      data.direction ||
+      "right-to-left";
+
+
+    speedInput.value =
+      data.speed ?? 15;
+
+
+    fontSizeInput.value =
+      data.font_size ?? 13;
+
+
+    textColorInput.value =
+      data.text_color ||
+      "#f8dd76";
+
+
+    lineColorInput.value =
+      data.line_color ||
+      "#f8dd76";
+
+
+    backgroundInput.value =
+      data.background_color ||
+      "#181818";
+
+
+    pauseHoverInput.value =
+      String(
+        data.pause_hover ??
+        true
+      );
+
+  }
+
+
+  updateMarqueeActiveText();
+
+
+  positionInput.dispatchEvent(
+    new Event(
+      "change",
+      {
+        bubbles: true
+      }
+    )
+  );
+
+
+  directionInput.dispatchEvent(
+    new Event(
+      "change",
+      {
+        bubbles: true
+      }
+    )
+  );
+
+
+  pauseHoverInput.dispatchEvent(
+    new Event(
+      "change",
+      {
+        bubbles: true
+      }
+    )
+  );
+
+
+  updatePreview();
+
+}
 function updatePreview() {
 
   const data =
@@ -766,139 +929,91 @@ function updatePreview() {
   }
 );
 
+function loadMarqueeForSite(
+  siteId
+) {
 
-onValue(
+  if (
+    typeof stopMarqueeListener ===
+    "function"
+  ) {
 
-  ref(
-    db,
-    "marquee"
-  ),
+    stopMarqueeListener();
 
-  snapshot => {
+    stopMarqueeListener =
+      null;
 
-    const data =
-      snapshot.val();
-
-
-if (!data) {
-
-  enabledInput.checked = true;
-
-  updateMarqueeActiveText();
-
-  updatePreview();
-
-  hideMarqueePageLoading();
-
-  return;
-}
+  }
 
 
-enabledInput.checked =
-  data.enabled !== false;
+  currentMarqueeSiteId =
+    String(siteId || "");
 
 
-updateMarqueeActiveText();
+  if (!currentMarqueeSiteId) {
+
+    applyMarqueeData(null);
+
+    hideMarqueePageLoading();
+
+    return;
+
+  }
 
 
-    textInput.value =
-      data.text ||
-      "";
+  stopMarqueeListener =
+    onValue(
+
+      ref(
+        db,
+        getMarqueePath(
+          currentMarqueeSiteId
+        )
+      ),
+
+      snapshot => {
+
+        applyMarqueeData(
+          snapshot.val()
+        );
 
 
-    positionInput.value =
-      data.position ||
-      "top";
+        hideMarqueePageLoading();
+
+      },
+
+      error => {
+
+        console.error(
+          `Marquee load error (${currentMarqueeSiteId}):`,
+          error
+        );
 
 
-    directionInput.value =
-      data.direction ||
-      "right-to-left";
+        window.showToast(
+          "Unable to load marquee settings.",
+          "error",
+          5000
+        );
 
 
-    speedInput.value =
-      data.speed ??
-      15;
+        hideMarqueePageLoading();
 
+      }
 
-    fontSizeInput.value =
-      data.font_size ??
-      13;
-
-
-    textColorInput.value =
-      data.text_color ||
-      "#f8dd76";
-
-
-    lineColorInput.value =
-      data.line_color ||
-      "#f8dd76";
-
-
-    backgroundInput.value =
-      data.background_color ||
-      "#181818";
-
-
-    pauseHoverInput.value =
-      String(
-        data.pause_hover ??
-        true
-      );
-positionInput.dispatchEvent(
-  new Event(
-    "change",
-    {
-      bubbles:true
-    }
-  )
-);
-
-
-directionInput.dispatchEvent(
-  new Event(
-    "change",
-    {
-      bubbles:true
-    }
-  )
-);
-
-
-pauseHoverInput.dispatchEvent(
-  new Event(
-    "change",
-    {
-      bubbles:true
-    }
-  )
-);
-
-updatePreview();
-hideMarqueePageLoading();
-
-},
-
-error => {
-
-  console.error(
-    "Marquee load error:",
-    error
-  );
-
-  window.showToast(
-    "Unable to load marquee settings.",
-    "error",
-    5000
-  );
-
-  hideMarqueePageLoading();
+    );
 
 }
+marqueeSiteInput.addEventListener(
+  "change",
+  () => {
 
+    loadMarqueeForSite(
+      marqueeSiteInput.value
+    );
+
+  }
 );
-
 
 saveBtn.addEventListener(
   "click",
@@ -933,16 +1048,34 @@ if (
 
     try {
 
-      await set(
-        ref(
-          db,
-          "marquee"
-        ),
-        data
-      );
+const selectedSiteId =
+  marqueeSiteInput.value;
 
 
-      window.showToast(
+if (!selectedSiteId) {
+
+  throw new Error(
+    "Please select a site."
+  );
+
+}
+
+
+await set(
+
+  ref(
+    db,
+    getMarqueePath(
+      selectedSiteId
+    )
+  ),
+
+  data
+
+);
+
+
+window.showToast(
   "Marquee saved successfully.",
   "success"
 );
@@ -979,7 +1112,174 @@ if (
 updateMarqueeActiveText();
 
 updatePreview();
+async function refreshMarqueeSites() {
 
+  marqueeSites =
+    (
+      await getAdminSites()
+    ).filter(
+      site =>
+        site &&
+        (
+          site.value ||
+          site.id
+        )
+    );
+
+
+  const headerSelected =
+    typeof window.getAdminSelectedSites ===
+    "function"
+      ? window.getAdminSelectedSites()
+      : [];
+
+
+  const allowedSites =
+    headerSelected.length
+      ? marqueeSites.filter(
+          site =>
+            headerSelected.includes(
+              String(
+                site.value ||
+                site.id
+              )
+            )
+        )
+      : marqueeSites;
+
+
+  const previousValue =
+    marqueeSiteInput.value;
+
+
+  marqueeSiteInput.innerHTML =
+    allowedSites
+      .map(
+        site => {
+
+          const siteId =
+            String(
+              site.value ||
+              site.id
+            );
+
+
+          const siteName =
+            site.label ||
+            site.name ||
+            siteId;
+
+
+          return `
+            <option value="${siteId}">
+              ${siteName}
+            </option>
+          `;
+
+        }
+      )
+      .join("");
+
+
+  let nextSiteId = "";
+
+
+  if (
+    previousValue &&
+    allowedSites.some(
+      site =>
+        String(
+          site.value ||
+          site.id
+        ) ===
+        previousValue
+    )
+  ) {
+
+    nextSiteId =
+      previousValue;
+
+  } else {
+
+    nextSiteId =
+      String(
+        allowedSites[0]?.value ||
+        allowedSites[0]?.id ||
+        ""
+      );
+
+  }
+
+
+  marqueeSiteInput.value =
+    nextSiteId;
+
+
+  if (
+    marqueeSiteInput._sharedDropdown
+  ) {
+
+    marqueeSiteInput
+      ._sharedDropdown
+      .refresh();
+
+  }
+
+
+  loadMarqueeForSite(
+    nextSiteId
+  );
+
+}
+window.addEventListener(
+  "admin-profile-ready",
+  async () => {
+
+    try {
+
+      await refreshMarqueeSites();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to initialize Marquee:",
+        error
+      );
+
+
+      window.showToast(
+        "Failed to initialize Marquee.",
+        "error",
+        5000
+      );
+
+
+      hideMarqueePageLoading();
+
+    }
+
+  }
+);
+
+window.addEventListener(
+  "admin-site-change",
+  async () => {
+
+    try {
+
+      await refreshMarqueeSites();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to refresh Marquee sites:",
+        error
+      );
+
+    }
+
+  }
+);
 </script>
 
 </body>

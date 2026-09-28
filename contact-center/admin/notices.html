@@ -214,7 +214,26 @@ Add Notice
     id="imageUrl"
     type="hidden"
   >
+<input
+  id="editSiteId"
+  type="hidden"
+>
 
+<div class="form-group">
+
+  <label>
+    Site
+  </label>
+
+  <select
+    id="noticeSite"
+    data-shared-dropdown
+    data-placeholder="Select Site"
+    required
+  >
+  </select>
+
+</div>
 
   <!-- UPLOAD IMAGE -->
   <div class="notice-upload-section">
@@ -396,6 +415,8 @@ import {
   requireAdmin,
   setupLogout,
   safe,
+  getAdminSites,
+  getAdminSitePath,
   ref,
   push,
   set,
@@ -497,6 +518,166 @@ const removeNoticeImageBtn =
 let noticePreviewObjectUrl =
   "";
 let cache = {};
+let noticeSites = [];
+
+let editingNoticeSiteId = "";
+
+let stopNoticeListeners = [];
+
+
+function getSelectedNoticeSiteIds() {
+
+  const selected =
+    typeof window.getAdminSelectedSites === "function"
+      ? window.getAdminSelectedSites()
+      : [];
+
+
+  if (
+    Array.isArray(selected) &&
+    selected.length
+  ) {
+
+    return selected.map(
+      siteId =>
+        String(siteId)
+    );
+
+  }
+
+
+  return noticeSites
+    .map(
+      site =>
+        String(
+          site.value ||
+          site.id ||
+          ""
+        )
+    )
+    .filter(Boolean);
+
+}
+
+
+function getNoticesPath(siteId) {
+
+  if (!siteId) {
+    throw new Error(
+      "SITE_REQUIRED"
+    );
+  }
+
+  return getAdminSitePath(
+    siteId,
+    "notices"
+  );
+
+}
+function refreshNoticeSiteDropdown(
+  preferredSiteId = ""
+) {
+
+  const select =
+    document.getElementById(
+      "noticeSite"
+    );
+
+
+  if (!select) {
+    return;
+  }
+
+
+  const selectedSiteIds =
+    getSelectedNoticeSiteIds();
+
+
+  const availableSites =
+    noticeSites.filter(
+      site => {
+
+        const siteId =
+          String(
+            site.value ||
+            site.id ||
+            ""
+          );
+
+        return (
+          siteId &&
+          selectedSiteIds.includes(
+            siteId
+          )
+        );
+
+      }
+    );
+
+
+  select.innerHTML =
+    availableSites
+      .map(
+        site => {
+
+          const siteId =
+            String(
+              site.value ||
+              site.id ||
+              ""
+            );
+
+          const siteName =
+            site.label ||
+            site.name ||
+            siteId;
+
+
+          return `
+            <option value="${safe(siteId)}">
+              ${safe(siteName)}
+            </option>
+          `;
+
+        }
+      )
+      .join("");
+
+
+  const target =
+    preferredSiteId &&
+    availableSites.some(
+      site =>
+        String(
+          site.value ||
+          site.id ||
+          ""
+        ) ===
+        String(preferredSiteId)
+    )
+      ? String(preferredSiteId)
+      : String(
+          availableSites[0]?.value ||
+          availableSites[0]?.id ||
+          ""
+        );
+
+
+  select.value =
+    target;
+
+
+  if (
+    select._sharedDropdown
+  ) {
+
+    select
+      ._sharedDropdown
+      .refresh();
+
+  }
+
+}
 /* =========================================================
    CLOUDINARY
 ========================================================= */
@@ -782,7 +963,7 @@ form.addEventListener(
 
 
       submitBtn.textContent =
-        "SAVING...";
+        "Saving...";
 
 
       const data = {
@@ -823,18 +1004,37 @@ form.addEventListener(
 
       };
 
+const selectedSiteId =
+  editId.value
+    ? editingNoticeSiteId
+    : document
+        .getElementById(
+          "noticeSite"
+        )
+        .value;
 
+
+if (!selectedSiteId) {
+
+  throw new Error(
+    "Please select a site."
+  );
+
+}
 if (
   editId.value
 ) {
 
   await update(
 
-    ref(
-      db,
-      "notices/" +
-      editId.value
-    ),
+ref(
+  db,
+  getNoticesPath(
+    selectedSiteId
+  ) +
+  "/" +
+  editId.value
+),
 
     data
 
@@ -849,13 +1049,15 @@ if (
 
 } else {
 
-  const newRef =
-    push(
-      ref(
-        db,
-        "notices"
+const newRef =
+  push(
+    ref(
+      db,
+      getNoticesPath(
+        selectedSiteId
       )
-    );
+    )
+  );
 
 
   await set(
@@ -919,7 +1121,17 @@ function resetForm() {
 
   editId.value =
     "";
+editingNoticeSiteId =
+  "";
 
+document
+  .getElementById(
+    "editSiteId"
+  )
+  .value =
+  "";
+
+refreshNoticeSiteDropdown();
 
   noticeActiveInput.checked =
     true;
@@ -1011,17 +1223,39 @@ cancel.addEventListener(
 /* EDIT */
 
 window.editNotice =
-function(id) {
+function(siteId, id) {
+
+  const cacheKey =
+    `${siteId}::${id}`;
 
   const item =
-    cache[id];
+    cache[cacheKey];
 
-  if (!item)
+
+  if (!item) {
     return;
+  }
+
+
+  editingNoticeSiteId =
+    String(siteId);
 
 
   editId.value =
     id;
+
+
+  document
+    .getElementById(
+      "editSiteId"
+    )
+    .value =
+    String(siteId);
+
+
+  refreshNoticeSiteDropdown(
+    siteId
+  );
 
   document
     .getElementById("title")
@@ -1120,7 +1354,7 @@ document
 /* DELETE */
 
 window.deleteNotice =
-async function(id) {
+async function(siteId, id) {
 
   if (
     !confirm(
@@ -1134,10 +1368,14 @@ async function(id) {
   try {
 
     await remove(
-      ref(
-        db,
-        "notices/" + id
-      )
+ref(
+  db,
+  getNoticesPath(
+    siteId
+  ) +
+  "/" +
+  id
+)
     );
 
 
@@ -1166,108 +1404,122 @@ async function(id) {
 
 };
 
+/* =========================================================
+   MULTI SITE NOTICE LIST
+========================================================= */
 
-/* LIST */
+function stopAllNoticeListeners() {
 
-onValue(
-  ref(
-    db,
-    "notices"
-  ),
-  snapshot => {
+  stopNoticeListeners.forEach(
+    stop => {
 
-    cache =
-      snapshot.val() || {};
+      if (
+        typeof stop === "function"
+      ) {
+        stop();
+      }
 
+    }
+  );
 
-    const items =
-      Object.entries(cache)
-        .map(
-          ([id,value]) => ({
-            id,
-            ...value
-          })
-        )
-        .sort(
-          (a,b) =>
-            Number(
-              b.createdAt || 0
-            ) -
-            Number(
-              a.createdAt || 0
-            )
-        );
-
-
-    list.innerHTML = "";
-
-
-if (!items.length) {
-
-  list.innerHTML = `
-    <div class="empty">
-      No notices.
-    </div>
-  `;
-
-  hideNoticePageLoading();
-
-  return;
+  stopNoticeListeners = [];
 }
 
 
-items.forEach(item => {
+function renderNotices() {
 
-  const timestamp =
-    Number(
-      item.updatedAt ||
-      item.createdAt ||
-      0
-    );
+  const items =
+    Object.values(cache)
+      .sort(
+        (a, b) =>
+          Number(
+            b.createdAt || 0
+          ) -
+          Number(
+            a.createdAt || 0
+          )
+      );
 
 
-  let dateText =
-    "";
+  list.innerHTML = "";
 
 
-  if (timestamp > 0) {
+  if (!items.length) {
 
-    try {
+    list.innerHTML = `
+      <div class="empty">
+        No notices.
+      </div>
+    `;
 
-      dateText =
-        new Date(timestamp)
-          .toLocaleString(
-            undefined,
-            {
-              dateStyle:
-                "medium",
+    hideNoticePageLoading();
 
-              timeStyle:
-                "short"
-            }
-          );
-
-    } catch {
-
-      dateText =
-        new Date(
-          timestamp
-        )
-          .toLocaleString();
-
-    }
-
+    return;
   }
 
 
-  let imageHtml =
-    "";
+  items.forEach(item => {
+
+    const site =
+      noticeSites.find(
+        currentSite =>
+          String(
+            currentSite.value ||
+            currentSite.id ||
+            ""
+          ) ===
+          String(item.siteId)
+      );
 
 
-  if (item.imageUrl) {
+    const siteName =
+      site?.label ||
+      site?.name ||
+      item.siteId;
 
-    imageHtml =
-      `
+
+    const timestamp =
+      Number(
+        item.updatedAt ||
+        item.createdAt ||
+        0
+      );
+
+
+    let dateText = "";
+
+
+    if (timestamp > 0) {
+
+      try {
+
+        dateText =
+          new Date(timestamp)
+            .toLocaleString(
+              undefined,
+              {
+                dateStyle: "medium",
+                timeStyle: "short"
+              }
+            );
+
+      } catch {
+
+        dateText =
+          new Date(timestamp)
+            .toLocaleString();
+
+      }
+
+    }
+
+
+    let imageHtml = "";
+
+
+    if (item.imageUrl) {
+
+      imageHtml = `
         <div class="notice-image-wrap">
 
           <img
@@ -1284,157 +1536,290 @@ items.forEach(item => {
         </div>
       `;
 
-  }
+    }
 
 
-  list.insertAdjacentHTML(
-    "beforeend",
-    `
+    list.insertAdjacentHTML(
+      "beforeend",
+      `
 
-    <article class="notice-card">
+      <article class="notice-card">
 
-      ${imageHtml}
+        ${imageHtml}
 
+        <div class="notice-body">
 
-      <div class="notice-body">
+          <div class="notice-meta">
 
+            <span class="notice-tag">
+              ${safe(siteName)}
+            </span>
 
-        <div class="notice-meta">
+            <span class="notice-tag">
+              NOTICE
+            </span>
 
-          <span class="notice-tag">
-            NOTICE
-          </span>
-
-
-          ${
-            item.pinned === true
-
-              ? `
+            ${
+              item.pinned === true
+                ? `
                   <span class="pinned-tag">
                     📌 PINNED
                   </span>
                 `
+                : ""
+            }
 
-              : ""
-          }
-
-
-          ${
-            item.active !== false
-
-              ? `
+            ${
+              item.active !== false
+                ? `
                   <span class="admin-notice-active">
                     ● Active
                   </span>
                 `
-
-              : `
+                : `
                   <span class="admin-notice-hidden">
                     ● Inactive
                   </span>
                 `
-          }
-
-        </div>
-
-
-        <h3>
-          ${safe(
-            item.title ||
-            "Notice"
-          )}
-        </h3>
-
-
-        <div class="notice-message">
-
-          ${
-            item.message
-              ? safe(item.message)
-              : "No caption."
-          }
-
-        </div>
-
-
-        <div class="notice-footer">
-
-          <div class="notice-date">
-
-            ${
-              dateText
-                ? "Updated " +
-                  safe(dateText)
-                : ""
             }
 
           </div>
 
 
-          <div class="admin-notice-actions">
-
-            <button
-              type="button"
-              class="admin-notice-edit"
-              onclick="editNotice('${item.id}')"
-            >
-              EDIT
-            </button>
+          <h3>
+            ${safe(
+              item.title ||
+              "Notice"
+            )}
+          </h3>
 
 
-            <button
-              type="button"
-              class="admin-notice-delete"
-              onclick="deleteNotice('${item.id}')"
-            >
-              DELETE
-            </button>
+          <div class="notice-message">
+            ${
+              item.message
+                ? safe(item.message)
+                : "No caption."
+            }
+          </div>
+
+
+          <div class="notice-footer">
+
+            <div class="notice-date">
+              ${
+                dateText
+                  ? "Updated " +
+                    safe(dateText)
+                  : ""
+              }
+            </div>
+
+
+            <div class="admin-notice-actions">
+
+              <button
+                type="button"
+                class="admin-notice-edit"
+                onclick="editNotice('${safe(item.siteId)}','${safe(item.id)}')"
+              >
+                EDIT
+              </button>
+
+
+              <button
+                type="button"
+                class="admin-notice-delete"
+                onclick="deleteNotice('${safe(item.siteId)}','${safe(item.id)}')"
+              >
+                DELETE
+              </button>
+
+            </div>
 
           </div>
 
         </div>
 
+      </article>
 
-      </div>
+      `
+    );
 
-    </article>
-
-  `
-);
-
-});
-    
-hideNoticePageLoading();
-},
-
-error => {
-
-  console.error(
-    "Notice load error:",
-    error
-  );
-
-  list.innerHTML = `
-    <div class="empty">
-      Failed to load notices.
-    </div>
-  `;
-
-
-  window.showToast(
-    "Failed to load notices.",
-    "error",
-    5000
-  );
+  });
 
 
   hideNoticePageLoading();
-
 }
 
+
+function startNoticeListeners() {
+
+  stopAllNoticeListeners();
+
+  cache = {};
+
+
+  const selectedSiteIds =
+    getSelectedNoticeSiteIds();
+
+
+  refreshNoticeSiteDropdown();
+
+
+  if (!selectedSiteIds.length) {
+
+    list.innerHTML = `
+      <div class="empty">
+        No sites available.
+      </div>
+    `;
+
+    hideNoticePageLoading();
+
+    return;
+  }
+
+  selectedSiteIds.forEach(
+    siteId => {
+
+      const stop =
+        onValue(
+
+          ref(
+            db,
+            getNoticesPath(
+              siteId
+            )
+          ),
+
+          snapshot => {
+
+            Object.keys(cache)
+              .forEach(
+                key => {
+
+                  if (
+                    cache[key]?.siteId ===
+                    siteId
+                  ) {
+                    delete cache[key];
+                  }
+
+                }
+              );
+
+
+            const siteData =
+              snapshot.val() || {};
+
+
+            Object.entries(siteData)
+              .forEach(
+                ([id, value]) => {
+
+                  const cacheKey =
+                    `${siteId}::${id}`;
+
+
+                  cache[cacheKey] = {
+                    id,
+                    siteId,
+                    ...value
+                  };
+
+                }
+              );
+
+
+            renderNotices();
+
+          },
+
+          error => {
+
+            console.error(
+              `Notice load error (${siteId}):`,
+              error
+            );
+
+
+            window.showToast(
+              `Failed to load notices for ${siteId}.`,
+              "error",
+              5000
+            );
+
+
+            hideNoticePageLoading();
+
+          }
+
+        );
+
+
+      stopNoticeListeners.push(
+        stop
+      );
+
+    }
+  );
+
+}
+window.addEventListener(
+  "admin-profile-ready",
+  async () => {
+
+    try {
+
+      noticeSites =
+        (
+          await getAdminSites()
+        ).filter(
+          site =>
+            site &&
+            (
+              site.value ||
+              site.id
+            )
+        );
+
+
+      refreshNoticeSiteDropdown();
+
+      startNoticeListeners();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to initialize Notices:",
+        error
+      );
+
+
+      list.innerHTML = `
+        <div class="empty">
+          Failed to load sites.
+        </div>
+      `;
+
+
+      hideNoticePageLoading();
+
+    }
+
+  }
 );
 
-</script>
+window.addEventListener(
+  "admin-site-change",
+  () => {
 
+    resetForm();
+
+    startNoticeListeners();
+
+  }
+);
+</script>
 </body>
 </html>

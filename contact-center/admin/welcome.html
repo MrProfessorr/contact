@@ -136,7 +136,19 @@
       <h3>
         Welcome Settings
       </h3>
+      
+<div class="form-group">
+  <label for="welcomeSite">
+    Site
+  </label>
 
+  <select
+    id="welcomeSite"
+    data-shared-dropdown
+    data-placeholder="Select Site"
+  >
+  </select>
+</div>
 <!-- =====================================================
      WELCOME FORM GRID
 ===================================================== -->
@@ -664,7 +676,9 @@ import {
   set,
   onValue,
   requireAdmin,
-  setupLogout
+  setupLogout,
+  getAdminSites,
+  getAdminSitePath
 } from "./admin.js";
 
 
@@ -771,7 +785,36 @@ const $ =
   id =>
     document.getElementById(id);
 
+const welcomeSiteInput =
+  $("welcomeSite");
 
+
+let welcomeSites = [];
+
+let currentWelcomeSiteId = "";
+
+let stopWelcomeSettingsListener = null;
+
+
+function getWelcomeSettingsPath(
+  siteId
+) {
+
+  if (!siteId) {
+
+    throw new Error(
+      "Please select a site."
+    );
+
+  }
+
+
+  return getAdminSitePath(
+    siteId,
+    "welcome_popup"
+  );
+
+}
 const enabled =
   $("welcomeEnabled");
   
@@ -1245,234 +1288,276 @@ window.showToast(
   }
 );
 
-
-
 /* =========================================================
-   FIREBASE LOAD
+   FIREBASE LOAD BY SITE
 ========================================================= */
 
-onValue(
+function loadWelcomeForSite(
+  siteId
+) {
 
-  ref(
-    db,
-    "welcome_popup"
-  ),
+  if (stopWelcomeSettingsListener) {
 
-  snapshot => {
+    stopWelcomeSettingsListener();
 
-    const data =
-      snapshot.val() || {};
+    stopWelcomeSettingsListener =
+      null;
 
-
-    enabled.checked =
-      data.enabled !== false;
+  }
 
 
-    imageUrl.value =
-      data.imageUrl || "";
+  currentWelcomeSiteId =
+    String(siteId || "");
 
 
-    desktopWidth.value =
-      Number(
-        data.desktopWidth
-      ) || 520;
+  if (!currentWelcomeSiteId) {
+
+    hideWelcomePageLoading();
+
+    return;
+
+  }
 
 
-    mobileWidth.value =
-      Number(
-        data.mobileWidth
-      ) || 340;
+  stopWelcomeSettingsListener =
+    onValue(
+
+      ref(
+        db,
+        getWelcomeSettingsPath(
+          currentWelcomeSiteId
+        )
+      ),
+
+      snapshot => {
+
+        const data =
+          snapshot.val() || {};
 
 
-    borderColor.value =
-      data.borderColor ||
-      "#d6a917";
+        enabled.checked =
+          data.enabled !== false;
 
 
-    borderWidth.value =
-      Number(
-        data.borderWidth
-      ) ?? 2;
+        imageUrl.value =
+          data.imageUrl || "";
 
 
-    backgroundColor.value =
-      data.backgroundColor ||
-      "#111111";
+        desktopWidth.value =
+          Number(
+            data.desktopWidth
+          ) || 520;
 
 
-    backdropColor.value =
-      data.backdropColor ||
-      "#000000";
+        mobileWidth.value =
+          Number(
+            data.mobileWidth
+          ) || 340;
 
 
-    backdropOpacity.value =
-      Number(
-        data.backdropOpacity
-      ) || 78;
+        borderColor.value =
+          data.borderColor ||
+          "#d6a917";
 
 
-    okText.value =
-      data.okText ||
-      "OK";
+        borderWidth.value =
+          Number(
+            data.borderWidth
+          ) ?? 2;
 
 
-    okColor.value =
-      data.okColor ||
-      "#d6a917";
+        backgroundColor.value =
+          data.backgroundColor ||
+          "#111111";
 
 
-    okTextColor.value =
-      data.okTextColor ||
-      "#ffffff";
+        backdropColor.value =
+          data.backdropColor ||
+          "#000000";
 
 
-    closeColor.value =
-      data.closeColor ||
-      "#0a0a0a";
+        backdropOpacity.value =
+          Number(
+            data.backdropOpacity
+          ) || 78;
 
 
-    closeIconColor.value =
-      data.closeIconColor ||
-      "#ffd51b";
+        okText.value =
+          data.okText ||
+          "OK";
 
 
-    animation.value =
-      data.animation ||
-      "zoom";
+        okColor.value =
+          data.okColor ||
+          "#d6a917";
 
 
-    delay.value =
-      Number(
-        data.delay
-      ) || 300;
+        okTextColor.value =
+          data.okTextColor ||
+          "#ffffff";
 
 
-    showMode.value =
-      data.showMode ||
-      "refresh";
+        closeColor.value =
+          data.closeColor ||
+          "#0a0a0a";
 
-/*
-  Sync Shared Dropdown UI
-*/
 
-[
-  animation,
-  showMode
+        closeIconColor.value =
+          data.closeIconColor ||
+          "#ffd51b";
 
-].forEach(
-  select => {
 
-    select.dispatchEvent(
-      new Event(
-        "change",
-        {
-          bubbles:true
+        animation.value =
+          data.animation ||
+          "zoom";
+
+
+        delay.value =
+          Number(
+            data.delay
+          ) || 300;
+
+
+        showMode.value =
+          data.showMode ||
+          "refresh";
+
+
+        /* Sync Shared Dropdown UI */
+
+        [
+          animation,
+          showMode
+
+        ].forEach(
+          select => {
+
+            select.dispatchEvent(
+              new Event(
+                "change",
+                {
+                  bubbles: true
+                }
+              )
+            );
+
+          }
+        );
+
+
+        closeX.checked =
+          data.closeX !== false;
+
+
+        closeOk.checked =
+          data.closeOk !== false;
+
+
+        closeEsc.checked =
+          data.closeEsc !== false;
+
+
+        closeOutside.checked =
+          data.closeOutside !== false;
+
+
+        if (imageUrl.value) {
+
+          imagePreviewImg.src =
+            imageUrl.value;
+
+
+          if (imageFileName) {
+
+            try {
+
+              const url =
+                new URL(
+                  imageUrl.value
+                );
+
+
+              imageFileName.textContent =
+                decodeURIComponent(
+                  url.pathname
+                    .split("/")
+                    .pop() ||
+                  "Welcome image"
+                );
+
+            }
+            catch {
+
+              imageFileName.textContent =
+                "Welcome image";
+
+            }
+
+          }
+
+
+          uploadStatus.textContent =
+            "Ready";
+
+
+          imagePreview.classList.remove(
+            "hidden"
+          );
+
         }
-      )
+        else {
+
+          imagePreviewImg.src =
+            "";
+
+
+          if (imageFileName) {
+
+            imageFileName.textContent =
+              "Welcome image";
+
+          }
+
+
+          uploadStatus.textContent =
+            "Ready";
+
+
+          imagePreview.classList.add(
+            "hidden"
+          );
+
+        }
+
+
+        updatePreview();
+
+        hideWelcomePageLoading();
+
+      },
+
+      error => {
+
+        console.error(
+          "Welcome settings load error:",
+          error
+        );
+
+
+        window.showToast(
+          "Failed to load welcome settings.",
+          "error",
+          5000
+        );
+
+
+        hideWelcomePageLoading();
+
+      }
+
     );
 
-  }
-);
-    closeX.checked =
-      data.closeX !== false;
-
-
-    closeOk.checked =
-      data.closeOk !== false;
-
-
-    closeEsc.checked =
-      data.closeEsc !== false;
-
-
-    closeOutside.checked =
-      data.closeOutside !== false;
-
-
-if (imageUrl.value) {
-
-  imagePreviewImg.src =
-    imageUrl.value;
-
-
-  if (imageFileName) {
-
-    try {
-
-      const url =
-        new URL(
-          imageUrl.value
-        );
-
-
-      imageFileName.textContent =
-        decodeURIComponent(
-          url.pathname
-            .split("/")
-            .pop() ||
-          "Welcome image"
-        );
-
-
-    } catch {
-
-      imageFileName.textContent =
-        "Welcome image";
-
-    }
-
-  }
-
-
-  uploadStatus.textContent =
-    "Ready";
-
-
-  imagePreview.classList.remove(
-    "hidden"
-  );
-
-
-} else {
-
-  if (imageFileName) {
-
-    imageFileName.textContent =
-      "Welcome image";
-
-  }
-
-
-  imagePreview.classList.add(
-    "hidden"
-  );
-
 }
-
-
-    updatePreview();
-    hideWelcomePageLoading();
-  },
-
-error => {
-
-  console.error(
-    "Welcome settings load error:",
-    error
-  );
-
-window.showToast(
-  "Failed to load welcome settings.",
-  "error",
-  5000
-);
-
-  hideWelcomePageLoading();
-
-}
-
-);
-
 
 
 /* =========================================================
@@ -1482,7 +1567,17 @@ window.showToast(
 saveBtn.addEventListener(
   "click",
   async () => {
+    
+if (!currentWelcomeSiteId) {
 
+  window.showToast(
+    "Please select a site.",
+    "warning"
+  );
+
+  return;
+
+}
     if (
       !closeX.checked &&
       !closeOk.checked &&
@@ -1599,13 +1694,15 @@ saveBtn.addEventListener(
         "SAVING...";
 
 
-      await set(
-        ref(
-          db,
-          "welcome_popup"
-        ),
-        data
-      );
+await set(
+  ref(
+    db,
+    getWelcomeSettingsPath(
+      currentWelcomeSiteId
+    )
+  ),
+  data
+);
 
 
 window.showToast(
@@ -1642,7 +1739,195 @@ window.showToast(
   }
 );
 
+async function refreshWelcomeSites() {
 
+  try {
+
+    const sites =
+      await getAdminSites();
+
+
+    welcomeSites =
+      Array.isArray(sites)
+        ? sites
+        : [];
+
+
+    const selectedHeaderSites =
+      typeof window.getAdminSelectedSites ===
+        "function"
+        ? window.getAdminSelectedSites()
+        : [];
+
+
+    let allowedSites =
+      [...welcomeSites];
+
+
+    if (selectedHeaderSites.length) {
+
+      allowedSites =
+        welcomeSites.filter(
+          site => {
+
+            const siteId =
+              String(
+                site.value ||
+                site.id
+              );
+
+
+            return selectedHeaderSites.includes(
+              siteId
+            );
+
+          }
+        );
+
+    }
+
+
+    const previousValue =
+      String(
+        welcomeSiteInput.value ||
+        currentWelcomeSiteId ||
+        ""
+      );
+
+
+    welcomeSiteInput.innerHTML =
+      allowedSites
+        .map(
+          site => {
+
+            const siteId =
+              String(
+                site.value ||
+                site.id
+              );
+
+
+            const siteName =
+              site.label ||
+              site.name ||
+              siteId;
+
+
+            return `
+              <option value="${siteId}">
+                ${siteName}
+              </option>
+            `;
+
+          }
+        )
+        .join("");
+
+
+    let nextSiteId = "";
+
+
+    if (
+      previousValue &&
+      allowedSites.some(
+        site =>
+          String(
+            site.value ||
+            site.id
+          ) === previousValue
+      )
+    ) {
+
+      nextSiteId =
+        previousValue;
+
+    }
+    else {
+
+      nextSiteId =
+        String(
+          allowedSites[0]?.value ||
+          allowedSites[0]?.id ||
+          ""
+        );
+
+    }
+
+
+    welcomeSiteInput.value =
+      nextSiteId;
+
+
+    /*
+      IMPORTANT:
+      refresh existing shared dropdown.
+      Jangan initSharedDropdowns() lagi.
+    */
+
+    if (
+      welcomeSiteInput._sharedDropdown
+    ) {
+
+      welcomeSiteInput
+        ._sharedDropdown
+        .refresh();
+
+    }
+
+
+    loadWelcomeForSite(
+      nextSiteId
+    );
+
+  }
+  catch (error) {
+
+    console.error(
+      "Welcome sites load error:",
+      error
+    );
+
+
+    window.showToast(
+      "Failed to load sites.",
+      "error",
+      5000
+    );
+
+
+    hideWelcomePageLoading();
+
+  }
+
+}
+welcomeSiteInput.addEventListener(
+  "change",
+  () => {
+
+    loadWelcomeForSite(
+      welcomeSiteInput.value
+    );
+
+  }
+);
+window.addEventListener(
+  "admin-profile-ready",
+  () => {
+
+    refreshWelcomeSites();
+
+  }
+);
+
+
+window.addEventListener(
+  "admin-site-change",
+  () => {
+
+    refreshWelcomeSites();
+
+  }
+);
 updatePreview();
 
 </script>

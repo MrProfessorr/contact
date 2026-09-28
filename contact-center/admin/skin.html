@@ -144,7 +144,16 @@
 Skin Settings
 </h3>
 
+<div class="form-group">
+  <label for="skinSite">Site</label>
 
+  <select
+    id="skinSite"
+    data-shared-dropdown
+    data-placeholder="Select Site"
+  >
+  </select>
+</div>
 <!-- HEADER -->
 <div class="skin-section">
 
@@ -691,7 +700,9 @@ import {
   setupLogout,
   ref,
   set,
-  onValue
+  onValue,
+  getAdminSites,
+  getAdminSitePath
 } from "./admin.js";
 
 
@@ -797,7 +808,32 @@ const skinEnabled =
   document.getElementById(
     "skinEnabled"
   );
+const skinSiteInput =
+  document.getElementById(
+    "skinSite"
+  );
 
+let skinSites = [];
+
+let currentSkinSiteId = "";
+
+let stopSkinSettingsListener = null;
+
+
+function getSkinSettingsPath(siteId) {
+
+  if (!siteId) {
+    throw new Error(
+      "Please select a site."
+    );
+  }
+
+  return getAdminSitePath(
+    siteId,
+    "skin_settings"
+  );
+
+}
 const skinActiveText =
   document.getElementById(
     "skinActiveText"
@@ -1269,125 +1305,162 @@ skinEnabled.addEventListener(
 
   }
 );
+function loadSkinSettingsForSite(
+  siteId
+) {
+
+  if (stopSkinSettingsListener) {
+
+    stopSkinSettingsListener();
+
+    stopSkinSettingsListener =
+      null;
+
+  }
 
 
-
-/* =====================================================
-   LOAD FIREBASE
-===================================================== */
-
-onValue(
-
-  ref(
-    db,
-    "skin_settings"
-  ),
-
-  snapshot => {
-
-    const data =
-      snapshot.val() || {};
+  currentSkinSiteId =
+    String(siteId || "");
 
 
-    skinEnabled.checked =
-      data.enabled !== false;
+  if (!currentSkinSiteId) {
+
+    hideSkinPageLoading();
+
+    return;
+
+  }
 
 
-    headerColor.value =
-      data.header?.color ||
-      "#352c0e";
+  stopSkinSettingsListener =
+    onValue(
 
-    headerTextColor.value =
-  data.header?.textColor ||
-  "#f8dd76";
+      ref(
+        db,
+        getSkinSettingsPath(
+          currentSkinSiteId
+        )
+      ),
 
-    bodyColor.value =
-      data.body?.color ||
-      "#0a0a0a";
-    
-bodyTextColor.value =
-  data.body?.textColor ||
-  "#ffffff";
+      snapshot => {
 
-    footerColor.value =
-      data.footer?.color ||
-      "#0a0a0a";
-
-    footerTextColor.value =
-  data.footer?.textColor ||
-  "#ffffff";
-
-    headerImageUrl.value =
-      data.header?.imageUrl ||
-      "";
+        const data =
+          snapshot.val() || {};
 
 
-    bodyImageUrl.value =
-      data.body?.imageUrl ||
-      "";
+        skinEnabled.checked =
+          data.enabled !== false;
 
 
-    footerImageUrl.value =
-      data.footer?.imageUrl ||
-      "";
+        headerColor.value =
+          data.header?.color ||
+          "#352c0e";
+
+        headerTextColor.value =
+          data.header?.textColor ||
+          "#f8dd76";
 
 
-    showSavedImage(
-      "headerUploadPreview",
-      "headerUploadPreviewImg",
-      "headerUploadFileName",
-      headerImageUrl.value,
-      "Current header image"
+        bodyColor.value =
+          data.body?.color ||
+          "#0a0a0a";
+
+        bodyTextColor.value =
+          data.body?.textColor ||
+          "#ffffff";
+
+
+        footerColor.value =
+          data.footer?.color ||
+          "#0a0a0a";
+
+        footerTextColor.value =
+          data.footer?.textColor ||
+          "#ffffff";
+
+
+        headerImageUrl.value =
+          data.header?.imageUrl ||
+          "";
+
+        bodyImageUrl.value =
+          data.body?.imageUrl ||
+          "";
+
+        footerImageUrl.value =
+          data.footer?.imageUrl ||
+          "";
+
+
+        showSavedImage(
+          "headerUploadPreview",
+          "headerUploadPreviewImg",
+          "headerUploadFileName",
+          headerImageUrl.value,
+          "Current header image"
+        );
+
+
+        showSavedImage(
+          "bodyUploadPreview",
+          "bodyUploadPreviewImg",
+          "bodyUploadFileName",
+          bodyImageUrl.value,
+          "Current body image"
+        );
+
+
+        showSavedImage(
+          "footerUploadPreview",
+          "footerUploadPreviewImg",
+          "footerUploadFileName",
+          footerImageUrl.value,
+          "Current footer image"
+        );
+
+
+        updateActiveText();
+
+        updatePreview();
+
+        hideSkinPageLoading();
+
+      },
+
+      error => {
+
+        console.error(
+          "Skin settings load error:",
+          error
+        );
+
+
+        window.showToast(
+          "Failed to load skin settings.",
+          "error",
+          5000
+        );
+
+
+        hideSkinPageLoading();
+
+      }
+
     );
-
-
-    showSavedImage(
-      "bodyUploadPreview",
-      "bodyUploadPreviewImg",
-      "bodyUploadFileName",
-      bodyImageUrl.value,
-      "Current body image"
-    );
-
-
-    showSavedImage(
-      "footerUploadPreview",
-      "footerUploadPreviewImg",
-      "footerUploadFileName",
-      footerImageUrl.value,
-      "Current footer image"
-    );
-
-updateActiveText();
-
-updatePreview();
-hideSkinPageLoading();
-},
-
-error => {
-
-  console.error(
-    "Skin settings load error:",
-    error
-  );
-
-
-  window.showToast(
-    "Failed to load skin settings.",
-    "error",
-    5000
-  );
-
-
-  hideSkinPageLoading();
 
 }
+ 
+skinSiteInput.addEventListener(
+  "change",
+  () => {
 
+    loadSkinSettingsForSite(
+      skinSiteInput.value
+    );
+
+  }
 );
-
-
-
-
+ 
 function showSavedImage(
   previewId,
   imageId,
@@ -1580,16 +1653,31 @@ footer: {
       };
 
 
-      await set(
+const selectedSiteId =
+  skinSiteInput.value;
 
-        ref(
-          db,
-          "skin_settings"
-        ),
 
-        data
+if (!selectedSiteId) {
 
-      );
+  throw new Error(
+    "Please select a site."
+  );
+
+}
+
+
+await set(
+
+  ref(
+    db,
+    getSkinSettingsPath(
+      selectedSiteId
+    )
+  ),
+
+  data
+
+);
 
 
       headerImageUrl.value =
@@ -1832,14 +1920,31 @@ resetSkinBtn.addEventListener(
 
     try {
 
-      await set(
-        ref(
-          db,
-          "skin_settings"
-        ),
-        DEFAULT_SKIN
-      );
+const selectedSiteId =
+  skinSiteInput.value;
 
+
+if (!selectedSiteId) {
+
+  throw new Error(
+    "Please select a site."
+  );
+
+}
+
+
+await set(
+
+  ref(
+    db,
+    getSkinSettingsPath(
+      selectedSiteId
+    )
+  ),
+
+  DEFAULT_SKIN
+
+);
 
 window.showToast(
   "Skin reset to default successfully.",
@@ -1866,7 +1971,170 @@ window.showToast(
 
   }
 );
-  
+  async function refreshSkinSites() {
+
+  try {
+
+    const sites =
+      await getAdminSites();
+
+
+    skinSites =
+      Array.isArray(sites)
+        ? sites
+        : [];
+
+
+    const selectedHeaderSites =
+      typeof window.getAdminSelectedSites ===
+        "function"
+        ? window.getAdminSelectedSites()
+        : [];
+
+
+    let allowedSites =
+      [...skinSites];
+
+
+    if (
+      selectedHeaderSites.length
+    ) {
+
+      allowedSites =
+        skinSites.filter(
+          site => {
+
+            const siteId =
+              String(
+                site.value ||
+                site.id
+              );
+
+            return selectedHeaderSites.includes(
+              siteId
+            );
+
+          }
+        );
+
+    }
+
+
+    const previousValue =
+      String(
+        skinSiteInput.value ||
+        currentSkinSiteId ||
+        ""
+      );
+
+
+    skinSiteInput.innerHTML =
+      allowedSites
+        .map(
+          site => {
+
+            const siteId =
+              String(
+                site.value ||
+                site.id
+              );
+
+            const siteName =
+              site.label ||
+              site.name ||
+              siteId;
+
+            return `
+              <option value="${siteId}">
+                ${siteName}
+              </option>
+            `;
+
+          }
+        )
+        .join("");
+
+
+    let nextSiteId = "";
+
+
+    if (
+      previousValue &&
+      allowedSites.some(
+        site =>
+          String(
+            site.value ||
+            site.id
+          ) === previousValue
+      )
+    ) {
+
+      nextSiteId =
+        previousValue;
+
+    } else {
+
+      nextSiteId =
+        String(
+          allowedSites[0]?.value ||
+          allowedSites[0]?.id ||
+          ""
+        );
+
+    }
+
+
+    skinSiteInput.value =
+      nextSiteId;
+
+
+    initSharedDropdowns();
+
+
+    loadSkinSettingsForSite(
+      nextSiteId
+    );
+
+  }
+  catch (error) {
+
+    console.error(
+      "Skin sites load error:",
+      error
+    );
+
+    window.showToast(
+      "Failed to load sites.",
+      "error",
+      5000
+    );
+
+    hideSkinPageLoading();
+
+  }
+
+}
+window.addEventListener(
+  "admin-profile-ready",
+  () => {
+
+    refreshSkinSites();
+
+  }
+);
+
+
+window.addEventListener(
+  "admin-site-change",
+  () => {
+
+    refreshSkinSites();
+
+  }
+);
+
+
+refreshSkinSites();
 updateActiveText();
 
 updatePreview();

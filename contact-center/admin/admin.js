@@ -76,10 +76,6 @@ export function getCurrentAdminProfile() {
 }
 
 
-/*
-  Check sama ada admin
-  sekarang ialah Super Admin.
-*/
 
 export function isSuperAdmin() {
 
@@ -89,6 +85,557 @@ export function isSuperAdmin() {
   );
 
 }
+/* =========================
+   ADMIN SITE MANAGEMENT
+========================= */
+
+/*
+  Ambil semua Site ID yang
+  diberikan kepada Site Admin.
+
+  Superadmin tidak bergantung
+  kepada list ini kerana dia
+  boleh access semua site.
+*/
+
+export function getAdminAllowedSiteIds() {
+
+  const sites =
+    currentAdminProfile?.sites || {};
+
+
+  return Object
+    .entries(sites)
+    .filter(
+      ([, allowed]) =>
+        allowed === true
+    )
+    .map(
+      ([siteId]) =>
+        String(siteId)
+    );
+
+}
+
+
+/*
+  Ambil semua site daripada
+  Firebase sites_registry.
+
+  Superadmin:
+  - nampak semua site.
+
+  Site Admin:
+  - hanya nampak site yang
+    diberikan kepadanya.
+*/
+
+export async function getAdminSites(
+  includeDisabled = false
+) {
+
+  if (!currentAdminProfile) {
+
+    throw new Error(
+      "ADMIN_PROFILE_NOT_READY"
+    );
+
+  }
+
+
+  const snapshot =
+    await get(
+      ref(
+        db,
+        "sites_registry"
+      )
+    );
+
+
+  if (!snapshot.exists()) {
+    return [];
+  }
+
+
+  const registry =
+    snapshot.val() || {};
+
+
+  const allowedSiteIds =
+    getAdminAllowedSiteIds();
+
+
+  return Object
+    .entries(registry)
+    .filter(
+      ([siteId, site]) => {
+
+        /*
+          Site Admin hanya boleh
+          nampak assigned sites.
+        */
+
+        if (
+          !isSuperAdmin() &&
+          !allowedSiteIds.includes(
+            String(siteId)
+          )
+        ) {
+
+          return false;
+
+        }
+
+
+        /*
+          Selector biasa hanya
+          perlukan site Active.
+
+          Site Management boleh
+          pass true supaya Disabled
+          site juga kelihatan.
+        */
+
+        if (
+          !includeDisabled &&
+          site?.enabled !== true
+        ) {
+
+          return false;
+
+        }
+
+
+        return true;
+
+      }
+    )
+    .map(
+      ([siteId, site]) => ({
+
+        id:
+          String(siteId),
+
+        value:
+          String(siteId),
+
+        name:
+          site?.name ||
+          String(siteId),
+
+        label:
+          site?.name ||
+          String(siteId),
+
+        enabled:
+          site?.enabled === true,
+
+        order:
+          Number(
+            site?.order || 999
+          ),
+
+        createdAt:
+          Number(
+            site?.createdAt || 0
+          )
+
+      })
+    )
+    .sort(
+      (a, b) =>
+        a.order - b.order ||
+        a.name.localeCompare(
+          b.name
+        )
+    );
+
+}
+
+
+/*
+  Normalize Site ID.
+
+  Contoh:
+  "SPM 888" -> "spm-888"
+*/
+
+export function normalizeSiteId(
+  value
+) {
+
+  return String(
+    value || ""
+  )
+    .trim()
+    .toLowerCase()
+    .replace(
+      /[^a-z0-9_-]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      ""
+    );
+
+}
+
+
+/*
+  CREATE SITE
+
+  Hanya Superadmin boleh panggil.
+*/
+
+export async function createAdminSite({
+  siteId,
+  name
+}) {
+
+  if (!isSuperAdmin()) {
+
+    throw new Error(
+      "SUPERADMIN_REQUIRED"
+    );
+
+  }
+
+
+  const cleanId =
+    normalizeSiteId(
+      siteId
+    );
+
+
+  const cleanName =
+    String(
+      name || ""
+    ).trim();
+
+
+  if (!cleanId) {
+
+    throw new Error(
+      "SITE_ID_REQUIRED"
+    );
+
+  }
+
+
+  if (!cleanName) {
+
+    throw new Error(
+      "SITE_NAME_REQUIRED"
+    );
+
+  }
+
+
+  const siteRef =
+    ref(
+      db,
+      `sites_registry/${cleanId}`
+    );
+
+
+  const snapshot =
+    await get(
+      siteRef
+    );
+
+
+  if (snapshot.exists()) {
+
+    throw new Error(
+      "SITE_ALREADY_EXISTS"
+    );
+
+  }
+
+
+  /*
+    Tentukan order selepas
+    site terakhir.
+  */
+
+  const existingSites =
+    await getAdminSites(
+      true
+    );
+
+
+  const maxOrder =
+    existingSites.reduce(
+      (highest, site) =>
+        Math.max(
+          highest,
+          Number(
+            site.order || 0
+          )
+        ),
+      0
+    );
+
+
+  const siteData = {
+
+    name:
+      cleanName,
+
+    enabled:
+      true,
+
+    order:
+      maxOrder + 1,
+
+    createdAt:
+      Date.now(),
+
+    createdBy:
+      currentAdminProfile.uid
+
+  };
+
+
+  await set(
+    siteRef,
+    siteData
+  );
+
+
+  window.dispatchEvent(
+    new CustomEvent(
+      "admin-sites-changed",
+      {
+        detail: {
+          action:
+            "created",
+
+          siteId:
+            cleanId
+        }
+      }
+    )
+  );
+
+
+  return {
+    id:
+      cleanId,
+
+    value:
+      cleanId,
+
+    label:
+      cleanName,
+
+    ...siteData
+  };
+
+}
+
+
+/*
+  EDIT SITE NAME
+*/
+
+export async function updateAdminSite(
+  siteId,
+  updates = {}
+) {
+
+  if (!isSuperAdmin()) {
+
+    throw new Error(
+      "SUPERADMIN_REQUIRED"
+    );
+
+  }
+
+
+  const cleanId =
+    normalizeSiteId(
+      siteId
+    );
+
+
+  if (!cleanId) {
+
+    throw new Error(
+      "SITE_ID_REQUIRED"
+    );
+
+  }
+
+
+  const allowedUpdates = {};
+
+
+  if (
+    typeof updates.name ===
+    "string"
+  ) {
+
+    const name =
+      updates.name.trim();
+
+
+    if (!name) {
+
+      throw new Error(
+        "SITE_NAME_REQUIRED"
+      );
+
+    }
+
+
+    allowedUpdates.name =
+      name;
+
+  }
+
+
+  if (
+    typeof updates.order ===
+    "number" &&
+    Number.isFinite(
+      updates.order
+    )
+  ) {
+
+    allowedUpdates.order =
+      updates.order;
+
+  }
+
+
+  if (
+    !Object.keys(
+      allowedUpdates
+    ).length
+  ) {
+
+    return;
+
+  }
+
+
+  allowedUpdates.updatedAt =
+    Date.now();
+
+
+  await update(
+    ref(
+      db,
+      `sites_registry/${cleanId}`
+    ),
+    allowedUpdates
+  );
+
+
+  window.dispatchEvent(
+    new CustomEvent(
+      "admin-sites-changed",
+      {
+        detail: {
+          action:
+            "updated",
+
+          siteId:
+            cleanId
+        }
+      }
+    )
+  );
+
+}
+
+export async function setAdminSiteEnabled(
+  siteId,
+  enabled
+) {
+
+  if (!isSuperAdmin()) {
+
+    throw new Error(
+      "SUPERADMIN_REQUIRED"
+    );
+
+  }
+
+
+  const cleanId =
+    normalizeSiteId(
+      siteId
+    );
+
+
+  if (!cleanId) {
+
+    throw new Error(
+      "SITE_ID_REQUIRED"
+    );
+
+  }
+
+
+  await update(
+    ref(
+      db,
+      `sites_registry/${cleanId}`
+    ),
+    {
+      enabled:
+        enabled === true,
+
+      updatedAt:
+        Date.now()
+    }
+  );
+
+
+  window.dispatchEvent(
+    new CustomEvent(
+      "admin-sites-changed",
+      {
+        detail: {
+          action:
+            enabled
+              ? "enabled"
+              : "disabled",
+
+          siteId:
+            cleanId
+        }
+      }
+    )
+  );
+
+}
+/* =========================
+   EXPOSE ADMIN SITE API
+========================= */
+
+window.getCurrentAdminProfile =
+  getCurrentAdminProfile;
+
+window.isSuperAdmin =
+  isSuperAdmin;
+
+window.getAdminAllowedSiteIds =
+  getAdminAllowedSiteIds;
+
+window.getAdminSites =
+  getAdminSites;
+
+window.createAdminSite =
+  createAdminSite;
+
+window.updateAdminSite =
+  updateAdminSite;
+
+window.setAdminSiteEnabled =
+  setAdminSiteEnabled;
 /* =========================
    ADMIN SESSION 24 HOURS
 ========================= */

@@ -8214,56 +8214,82 @@ nextClicks[key] = {
         );
 
 
-        Object.entries(
-          siteData.daily || {}
-        ).forEach(
-          ([day, value]) => {
+Object.entries(
+  siteData.daily || {}
+).forEach(
+  ([day, value]) => {
 
-            /*
-             * Daily chart perlu digabung
-             * berdasarkan tarikh.
-             */
+    /*
+     * Daily analytics digabung
+     * berdasarkan tarikh.
+     *
+     * visitors = OBJECT visitor IDs
+     * pageViews/linkClicks/clicks = NUMBER
+     */
 
-            if (!nextDaily[day]) {
+    if (!nextDaily[day]) {
 
-              nextDaily[day] = {};
+      nextDaily[day] = {
+        visitors: {},
+        pageViews: 0,
+        linkClicks: 0,
+        clicks: 0
+      };
 
-            }
-
-
-            const target =
-              nextDaily[day];
-
-
-            const source =
-              value || {};
+    }
 
 
-            [
-              "visitors",
-              "pageViews",
-              "linkClicks",
-              "clicks"
-            ].forEach(
-              field => {
+    const target =
+      nextDaily[day];
 
-                target[field] =
-                  Number(
-                    target[field] || 0
-                  )
-                  +
-                  Number(
-                    source[field] || 0
-                  );
 
-              }
-            );
+    const source =
+      value || {};
 
-          }
-        );
+
+    /*
+     * MERGE UNIQUE VISITORS
+     */
+
+    Object.entries(
+      source.visitors || {}
+    ).forEach(
+      ([visitorId, visitorValue]) => {
+
+        const visitorKey =
+          makeVisitorKey(
+            siteId,
+            visitorId
+          );
+
+
+        target.visitors[
+          visitorKey
+        ] =
+          visitorValue;
 
       }
     );
+
+    target.pageViews +=
+      Number(
+        source.pageViews || 0
+      );
+
+
+    target.linkClicks +=
+      Number(
+        source.linkClicks || 0
+      );
+
+
+    target.clicks +=
+      Number(
+        source.clicks || 0
+      );
+
+  }
+);
 
 
   visitors =

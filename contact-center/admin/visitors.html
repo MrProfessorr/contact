@@ -2179,40 +2179,46 @@
 
 /* COLUMN WIDTH */
 
+/* SITE */
 .visitor-click-table th:nth-child(1),
 .visitor-click-table td:nth-child(1) {
-  width:
-    18%;
+  width:12%;
 }
 
 
+/* TYPE */
 .visitor-click-table th:nth-child(2),
 .visitor-click-table td:nth-child(2) {
-  width:
-    24%;
+  width:16%;
 }
 
 
+/* VISITOR */
 .visitor-click-table th:nth-child(3),
 .visitor-click-table td:nth-child(3) {
-  width:
-    16%;
+  width:20%;
 }
 
 
+/* SOURCE */
 .visitor-click-table th:nth-child(4),
 .visitor-click-table td:nth-child(4) {
-  width:
-    26%;
+  width:14%;
 }
 
 
+/* DATE & TIME */
 .visitor-click-table th:nth-child(5),
 .visitor-click-table td:nth-child(5) {
-  width:
-    16%;
+  width:23%;
 }
 
+
+/* LAST ACTIVITY */
+.visitor-click-table th:nth-child(6),
+.visitor-click-table td:nth-child(6) {
+  width:15%;
+}
 
 /* TYPE */
 
@@ -4131,35 +4137,29 @@ button.active {
   <table class="visitor-click-table">
 
     <thead>
-
-      <tr>
-        <th>Type</th>
-        <th>Visitor</th>
-        <th>Source</th>
-        <th>Date & Time</th>
-        <th>Last Activity</th>
-      </tr>
-
+<tr>
+  <th>Site</th>
+  <th>Type</th>
+  <th>Visitor</th>
+  <th>Source</th>
+  <th>Date & Time</th>
+  <th>Last Activity</th>
+</tr>
     </thead>
-
 
     <tbody id="visitorClickList">
 
       <tr>
-
         <td
-          colspan="5"
+          colspan="6"
           class="visitor-empty"
         >
           No clicks yet.
         </td>
-
       </tr>
 
     </tbody>
-
   </table>
-
 </div>
     </div>
 
@@ -6120,7 +6120,14 @@ function openVisitorDetail(
               <button
                 type="button"
                 class="visitor-detail-action visitor-detail-unblock"
-                data-unblock-id="${safe(visitorId)}"
+                data-unblock-id="${safe(
+  visitor.visitorId ||
+  visitor.originalId ||
+  visitorId
+)}"
+data-site-id="${safe(
+  visitor.siteId
+)}"
               >
                 UNBLOCK VISITOR
               </button>
@@ -6130,7 +6137,14 @@ function openVisitorDetail(
               <button
                 type="button"
                 class="visitor-detail-action visitor-detail-block"
-                data-block-id="${safe(visitorId)}"
+                data-block-id="${safe(
+  visitor.visitorId ||
+  visitor.originalId ||
+  visitorId
+)}"
+data-site-id="${safe(
+  visitor.siteId
+)}"
               >
                 BLOCK VISITOR
               </button>
@@ -7846,7 +7860,7 @@ if (
     <tr>
 
       <td
-        colspan="5"
+        colspan="6"
         class="shared-empty-table-cell"
       >
 
@@ -7868,21 +7882,35 @@ if (
   clickList.innerHTML =
     list
       .map(
-        item => `
+item => `
 
-          <tr>
+  <tr>
 
-            <td>
+    <td>
 
-              <strong class="visitor-click-type">
-                ${safe(
-                  item.contactName ||
-                  item.contactType ||
-                  "Link"
-                )}
-              </strong>
+      <span class="visitor-site-badge">
+        ${safe(
+          item.siteName ||
+          getVisitorSiteLabel(
+            item.siteId
+          )
+        )}
+      </span>
 
-            </td>
+    </td>
+
+
+    <td>
+
+      <strong class="visitor-click-type">
+        ${safe(
+          item.contactName ||
+          item.contactType ||
+          "Link"
+        )}
+      </strong>
+
+    </td>
 
 
             <td>
@@ -8162,22 +8190,25 @@ function rebuildVisitorAggregates() {
               );
 
 
-            nextClicks[key] = {
+nextClicks[key] = {
 
-              ...(value || {}),
+  ...(value || {}),
 
-              siteId,
-              siteName,
+  siteId,
+  siteName,
 
-              visitorId:
-                value?.visitorId
-                  ? makeVisitorKey(
-                      siteId,
-                      value.visitorId
-                    )
-                  : ""
+  visitorId:
+    value?.visitorId || "",
 
-            };
+  visitorKey:
+    value?.visitorId
+      ? makeVisitorKey(
+          siteId,
+          value.visitorId
+        )
+      : ""
+
+};
 
           }
         );

@@ -2854,7 +2854,10 @@ function markCurrentNoticesRead() {
 
 
 onValue(
-  ref(db, "notices"),
+  ref(
+  db,
+  `sites/${SITE_ID}/notices`
+),
 
   snapshot => {
 

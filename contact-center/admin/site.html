@@ -408,20 +408,25 @@ function notifySiteRegistryChanged() {
   );
 
 
-  if (
-    window.parent &&
-    window.parent !== window
-  ) {
+if (
+  window.parent &&
+  window.parent !== window
+) {
 
-    window.parent.postMessage(
-      {
-        type:
-          "admin-sites-changed"
-      },
-      window.location.origin
-    );
+  window.parent.postMessage(
+    {
+      type:
+        "admin-sites-changed"
+    },
+    window.location.origin
+  );
 
-  }
+}
+
+localStorage.setItem(
+  "adminSitesRegistryChanged",
+  String(Date.now())
+);
 
 }
 

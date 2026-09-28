@@ -4280,13 +4280,6 @@ function initAdminSidebar() {
 const ADMIN_SELECTED_SITES_KEY =
   "adminSelectedSites";
 
-
-/*
-  Ambil selected sites.
-
-  [] = ALL SITES
-*/
-
 function getSavedAdminSites() {
 
   try {
@@ -4314,9 +4307,18 @@ function getSavedAdminSites() {
 }
 
 
-/*
-  Wrapper di header.
-*/
+
+window.getAdminSelectedSites =
+function() {
+
+  return getSavedAdminSites()
+    .map(
+      siteId =>
+        String(siteId)
+    );
+
+};
+
 
 const adminSiteSelector =
   document.createElement(

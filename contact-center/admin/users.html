@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Admin Users</title>
+
+  <link
+    rel="stylesheet"
+    href="./admin.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./shared-ui.css"
+  >
+
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+      background: var(--tx-bg);
+      color: var(--text);
+    }
+
+    .user-page {
+      width: auto;
+      max-width: 100%;
+      min-width: 0;
+      margin: 14px 12px 24px;
+    }
+
+    .user-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .user-header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .user-subtitle {
+      margin-top: 4px;
+      opacity: .7;
+    }
+
+    .user-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .user-search {
+      width: 260px;
+      max-width: 100%;
+      padding: 10px 12px;
+      box-sizing: border-box;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #181818;
+      color: #fff;
+      outline: none;
+    }
+
+    .user-btn {
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 9px 13px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .user-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .user-btn-primary {
+      border-color: transparent;
+      background: #1677ff;
+      color: #fff;
+    }
+
+    .user-table-wrap {
+      overflow-x: auto;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+
+    .user-table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+    }
+
+    .user-table th,
+    .user-table td {
+      padding: 13px 14px;
+      text-align: left;
+      border-bottom: 1px solid #292929;
+      vertical-align: middle;
+    }
+
+    .user-status,
+    .user-role {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .user-status.active {
+      background: rgba(82,196,26,.15);
+      color: #73d13d;
+    }
+
+    .user-status.disabled {
+      background: rgba(255,77,79,.15);
+      color: #ff7875;
+    }
+
+    .user-role.superadmin {
+      background: rgba(250,173,20,.15);
+      color: #ffc53d;
+    }
+
+    .user-role.site-admin {
+      background: rgba(22,119,255,.15);
+      color: #69b1ff;
+    }
+
+    .site-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .site-badge {
+      display: inline-flex;
+      padding: 4px 8px;
+      border: 1px solid #444;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .user-row-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .user-empty {
+      padding: 40px 20px;
+      text-align: center;
+      opacity: .65;
+    }
+
+    /* MODAL */
+
+    .user-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,.65);
+      z-index: 999999;
+    }
+
+    .user-modal-backdrop.open {
+      display: flex;
+    }
+
+    .user-modal {
+      width: 620px;
+      max-width: 100%;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      padding: 20px;
+      box-sizing: border-box;
+      border: 1px solid #333;
+      border-radius: 10px;
+      background: #181818;
+    }
+
+    .user-modal h2 {
+      margin-top: 0;
+    }
+
+    .user-field {
+      margin-bottom: 16px;
+    }
+
+    .user-field > label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 13px;
+    }
+
+    .user-field input[type="text"],
+    .user-field select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #111;
+      color: #fff;
+      outline: none;
+    }
+
+    .user-field input:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .checkbox-list {
+      display: grid;
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(160px,1fr)
+        );
+      gap: 8px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 7px 10px;
+      box-sizing: border-box;
+      border: 1px solid #333;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .checkbox-item input {
+      margin: 0;
+    }
+
+    .permission-box {
+      margin-top: 10px;
+      padding: 14px;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+
+    .permission-title {
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .permission-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(120px,1fr)
+        );
+      gap: 8px;
+    }
+
+    .enabled-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 650px) {
+
+      .user-header {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .user-actions {
+        width: 100%;
+      }
+
+      .user-search {
+        flex: 1;
+        width: auto;
+      }
+
+      .user-modal {
+        width: 100%;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <nav class="admin-nav">
+    <div class="admin-nav-inner"></div>
+  </nav>
+
+
+  <main class="user-page">
+
+    <div class="user-header">
+
+      <div>
+
+        <h1>Admin Users</h1>
+
+        <div class="user-subtitle">
+          Manage admin access, sites and permissions.
+        </div>
+
+      </div>
+
+
+      <div class="user-actions">
+
+        <input
+          id="userSearch"
+          class="user-search"
+          type="search"
+          placeholder="Search admin..."
+        >
+
+        <button
+          id="addUserBtn"
+          class="user-btn user-btn-primary"
+          type="button"
+        >
+          + Add Admin
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="user-table-wrap">
+
+      <table class="user-table">
+
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Allowed Sites</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="userTableBody"></tbody>
+
+      </table>
+
+
+      <div
+        id="userEmpty"
+        class="user-empty"
+        hidden
+      >
+        No admin users found.
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- ADD / EDIT ADMIN -->
+
+  <div
+    id="userModal"
+    class="user-modal-backdrop"
+  >
+
+    <div class="user-modal">
+
+      <h2 id="userModalTitle">
+        Add Admin
+      </h2>
+
+
+      <div class="user-field">
+
+        <label for="adminUid">
+          Firebase UID
+        </label>
+
+        <input
+          id="adminUid"
+          type="text"
+          autocomplete="off"
+          placeholder="Paste Firebase Authentication UID"
+        >
+
+      </div>
+
+
+      <div class="user-field">
+
+        <label for="adminUsernameInput">
+          Username
+        </label>
+
+        <input
+          id="adminUsernameInput"
+          type="text"
+          autocomplete="off"
+          placeholder="Example: admin5g88"
+        >
+
+      </div>
+
+
+      <div class="user-field">
+
+        <label for="adminDisplayName">
+          Display Name
+        </label>
+
+        <input
+          id="adminDisplayName"
+          type="text"
+          autocomplete="off"
+          placeholder="Example: 5G88 Admin"
+        >
+
+      </div>
+
+
+      <div class="user-field">
+
+        <label for="adminRole">
+          Role
+        </label>
+
+        <select id="adminRole">
+          <option value="site_admin">
+            Site Admin
+          </option>
+          <option value="superadmin">
+            Superadmin
+          </option>
+        </select>
+
+      </div>
+
+
+      <div
+        id="siteAccessSection"
+        class="user-field"
+      >
+
+        <label>
+          Allowed Sites
+        </label>
+
+        <div
+          id="siteCheckboxes"
+          class="checkbox-list"
+        ></div>
+
+      </div>
+
+
+      <div
+        id="permissionSection"
+        class="user-field"
+      >
+
+        <label>
+          Permissions
+        </label>
+
+
+        <div class="permission-box">
+
+          <div class="permission-title">
+            Visitors
+          </div>
+
+          <div class="permission-grid">
+
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                data-permission="visitors.view"
+              >
+              View
+            </label>
+
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                data-permission="visitors.block"
+              >
+              Block
+            </label>
+
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                data-permission="visitors.delete"
+              >
+              Delete
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="permission-box">
+
+          <div class="permission-title">
+            Notices
+          </div>
+
+          <div class="permission-grid">
+
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                data-permission="notices.view"
+              >
+              View
+            </label>
+
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                data-permission="notices.create"
+              >
+              Create
+            </label>
+
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                data-permission="notices.edit"
+              >
+              Edit
+            </label>
+
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                data-permission="notices.delete"
+              >
+              Delete
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="user-field">
+
+        <label>
+          Status
+        </label>
+
+        <label class="enabled-row">
+          <input
+            id="adminEnabled"
+            type="checkbox"
+            checked
+          >
+          Enabled
+        </label>
+
+      </div>
+
+
+      <div class="user-modal-actions">
+
+        <button
+          id="cancelUserBtn"
+          class="user-btn"
+          type="button"
+        >
+          Cancel
+        </button>
+
+        <button
+          id="saveUserBtn"
+          class="user-btn user-btn-primary"
+          type="button"
+        >
+          Save Admin
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script type="module">
+
+    import {
+
+      requireAdmin,
+      setupLogout,
+      getAdminSites,
+      getAdminUsers,
+      saveAdminUser,
+      setAdminUserEnabled,
+      isSuperAdmin,
+      safe
+
+    } from "./admin.js";
+
+
+    requireAdmin();
+    setupLogout();
+
+
+    const userTableBody =
+      document.getElementById(
+        "userTableBody"
+      );
+
+    const userEmpty =
+      document.getElementById(
+        "userEmpty"
+      );
+
+    const userSearch =
+      document.getElementById(
+        "userSearch"
+      );
+
+    const addUserBtn =
+      document.getElementById(
+        "addUserBtn"
+      );
+
+    const userModal =
+      document.getElementById(
+        "userModal"
+      );
+
+    const userModalTitle =
+      document.getElementById(
+        "userModalTitle"
+      );
+
+    const adminUid =
+      document.getElementById(
+        "adminUid"
+      );
+
+    const adminUsernameInput =
+      document.getElementById(
+        "adminUsernameInput"
+      );
+
+    const adminDisplayName =
+      document.getElementById(
+        "adminDisplayName"
+      );
+
+    const adminRole =
+      document.getElementById(
+        "adminRole"
+      );
+
+    const adminEnabled =
+      document.getElementById(
+        "adminEnabled"
+      );
+
+    const siteAccessSection =
+      document.getElementById(
+        "siteAccessSection"
+      );
+
+    const permissionSection =
+      document.getElementById(
+        "permissionSection"
+      );
+
+    const siteCheckboxes =
+      document.getElementById(
+        "siteCheckboxes"
+      );
+
+    const saveUserBtn =
+      document.getElementById(
+        "saveUserBtn"
+      );
+
+    const cancelUserBtn =
+      document.getElementById(
+        "cancelUserBtn"
+      );
+
+
+    let allUsers = [];
+    let allSites = [];
+    let editingUid = "";
+
+
+    function getSiteName(siteId) {
+
+      const site =
+        allSites.find(
+          item =>
+            item.id === siteId
+        );
+
+      return site?.name || siteId;
+
+    }
+
+
+    function renderSiteCheckboxes(
+      selectedSites = {}
+    ) {
+
+      siteCheckboxes.innerHTML = "";
+
+
+      allSites.forEach(
+        site => {
+
+          const label =
+            document.createElement(
+              "label"
+            );
+
+          label.className =
+            "checkbox-item";
+
+
+          const checked =
+            selectedSites?.[
+              site.id
+            ] === true;
+
+
+          label.innerHTML = `
+            <input
+              type="checkbox"
+              data-site-id="${safe(site.id)}"
+              ${checked ? "checked" : ""}
+            >
+            ${safe(site.name)}
+          `;
+
+
+          siteCheckboxes.appendChild(
+            label
+          );
+
+        }
+      );
+
+    }
+
+
+    function getSelectedSites() {
+
+      const result = {};
+
+
+      siteCheckboxes
+        .querySelectorAll(
+          "input[data-site-id]:checked"
+        )
+        .forEach(
+          input => {
+
+            result[
+              input.dataset.siteId
+            ] = true;
+
+          }
+        );
+
+
+      return result;
+
+    }
+
+
+    function clearPermissions() {
+
+      document
+        .querySelectorAll(
+          "[data-permission]"
+        )
+        .forEach(
+          input => {
+
+            input.checked = false;
+
+          }
+        );
+
+    }
+
+
+    function setPermissions(
+      permissions = {}
+    ) {
+
+      clearPermissions();
+
+
+      document
+        .querySelectorAll(
+          "[data-permission]"
+        )
+        .forEach(
+          input => {
+
+            const [
+              group,
+              action
+            ] =
+              input.dataset.permission
+                .split(".");
+
+
+            input.checked =
+              permissions?.[
+                group
+              ]?.[
+                action
+              ] === true;
+
+          }
+        );
+
+    }
+
+
+    function getPermissions() {
+
+      const result = {};
+
+
+      document
+        .querySelectorAll(
+          "[data-permission]"
+        )
+        .forEach(
+          input => {
+
+            const [
+              group,
+              action
+            ] =
+              input.dataset.permission
+                .split(".");
+
+
+            if (!result[group]) {
+              result[group] = {};
+            }
+
+
+            result[group][action] =
+              input.checked === true;
+
+          }
+        );
+
+
+      return result;
+
+    }
+
+
+    function updateRoleUI() {
+
+      const superadmin =
+        adminRole.value ===
+        "superadmin";
+
+
+      siteAccessSection.hidden =
+        superadmin;
+
+      permissionSection.hidden =
+        superadmin;
+
+    }
+
+
+    function openAddUserModal() {
+
+      editingUid = "";
+
+      userModalTitle.textContent =
+        "Add Admin";
+
+      saveUserBtn.textContent =
+        "Create Admin Profile";
+
+      adminUid.value = "";
+      adminUid.disabled = false;
+
+      adminUsernameInput.value = "";
+      adminDisplayName.value = "";
+
+      adminRole.value =
+        "site_admin";
+
+      adminEnabled.checked =
+        true;
+
+      renderSiteCheckboxes();
+
+      clearPermissions();
+
+      updateRoleUI();
+
+      userModal.classList.add(
+        "open"
+      );
+
+      adminUid.focus();
+
+    }
+
+
+    function openEditUserModal(
+      user
+    ) {
+
+      editingUid =
+        user.uid;
+
+      userModalTitle.textContent =
+        "Edit Admin";
+
+      saveUserBtn.textContent =
+        "Save Changes";
+
+      adminUid.value =
+        user.uid;
+
+      adminUid.disabled =
+        true;
+
+      adminUsernameInput.value =
+        user.username || "";
+
+      adminDisplayName.value =
+        user.displayName ||
+        user.username ||
+        "";
+
+      adminRole.value =
+        user.role ||
+        "site_admin";
+
+      adminEnabled.checked =
+        user.enabled === true;
+
+      renderSiteCheckboxes(
+        user.sites || {}
+      );
+
+      setPermissions(
+        user.permissions || {}
+      );
+
+      updateRoleUI();
+
+      userModal.classList.add(
+        "open"
+      );
+
+    }
+
+
+    function closeUserModal() {
+
+      userModal.classList.remove(
+        "open"
+      );
+
+      editingUid = "";
+
+    }
+
+
+    function renderUsers() {
+
+      const keyword =
+        userSearch.value
+          .trim()
+          .toLowerCase();
+
+
+      const filtered =
+        allUsers.filter(
+          user => {
+
+            return (
+              String(
+                user.username || ""
+              )
+                .toLowerCase()
+                .includes(keyword) ||
+
+              String(
+                user.displayName || ""
+              )
+                .toLowerCase()
+                .includes(keyword) ||
+
+              String(
+                user.uid || ""
+              )
+                .toLowerCase()
+                .includes(keyword)
+            );
+
+          }
+        );
+
+
+      userTableBody.innerHTML = "";
+
+      userEmpty.hidden =
+        filtered.length > 0;
+
+
+      filtered.forEach(
+        user => {
+
+          const tr =
+            document.createElement(
+              "tr"
+            );
+
+
+          let sitesHtml = "";
+
+
+          if (
+            user.role ===
+            "superadmin"
+          ) {
+
+            sitesHtml = `
+              <span class="site-badge">
+                All Sites
+              </span>
+            `;
+
+          }
+          else {
+
+            const allowed =
+              Object
+                .entries(
+                  user.sites || {}
+                )
+                .filter(
+                  ([, value]) =>
+                    value === true
+                )
+                .map(
+                  ([siteId]) =>
+                    siteId
+                );
+
+
+            if (!allowed.length) {
+
+              sitesHtml = `
+                <span style="opacity:.55">
+                  No Site
+                </span>
+              `;
+
+            }
+            else {
+
+              sitesHtml =
+                allowed
+                  .map(
+                    siteId => `
+                      <span class="site-badge">
+                        ${safe(
+                          getSiteName(
+                            siteId
+                          )
+                        )}
+                      </span>
+                    `
+                  )
+                  .join("");
+
+            }
+
+          }
+
+
+          const roleLabel =
+            user.role === "superadmin"
+              ? "Superadmin"
+              : "Site Admin";
+
+
+          const roleClass =
+            user.role === "superadmin"
+              ? "superadmin"
+              : "site-admin";
+
+
+          tr.innerHTML = `
+
+            <td>
+
+              <div>
+                <strong>
+                  ${safe(
+                    user.displayName ||
+                    user.username
+                  )}
+                </strong>
+              </div>
+
+              <div
+                style="
+                  font-size:12px;
+                  opacity:.65;
+                  margin-top:3px;
+                "
+              >
+                ${safe(user.username)}
+              </div>
+
+            </td>
+
+
+            <td>
+              <span
+                class="
+                  user-role
+                  ${roleClass}
+                "
+              >
+                ${roleLabel}
+              </span>
+            </td>
+
+
+            <td>
+              <div class="site-badges">
+                ${sitesHtml}
+              </div>
+            </td>
+
+
+            <td>
+              <span
+                class="
+                  user-status
+                  ${
+                    user.enabled
+                      ? "active"
+                      : "disabled"
+                  }
+                "
+              >
+                ${
+                  user.enabled
+                    ? "Active"
+                    : "Disabled"
+                }
+              </span>
+            </td>
+
+
+            <td>
+
+              <div class="user-row-actions">
+
+                <button
+                  class="user-btn"
+                  type="button"
+                  data-action="edit"
+                  data-uid="${safe(user.uid)}"
+                >
+                  Edit
+                </button>
+
+                <button
+                  class="user-btn"
+                  type="button"
+                  data-action="toggle"
+                  data-uid="${safe(user.uid)}"
+                >
+                  ${
+                    user.enabled
+                      ? "Disable"
+                      : "Enable"
+                  }
+                </button>
+
+              </div>
+
+            </td>
+
+          `;
+
+
+          userTableBody.appendChild(
+            tr
+          );
+
+        }
+      );
+
+    }
+
+
+    async function loadData() {
+
+      try {
+
+        [
+          allSites,
+          allUsers
+        ] =
+          await Promise.all([
+            getAdminSites(true),
+            getAdminUsers()
+          ]);
+
+
+        renderUsers();
+
+      }
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+        window.showToast?.(
+          error?.message ||
+          "Failed to load admin users.",
+          "error",
+          5000
+        );
+
+      }
+
+    }
+
+
+    window.addEventListener(
+      "admin-profile-ready",
+      async () => {
+
+        if (!isSuperAdmin()) {
+
+          window.showToast?.(
+            "Superadmin access required.",
+            "error",
+            3000
+          );
+
+
+          setTimeout(
+            () => {
+
+              window.location.replace(
+                "./visitors.html"
+              );
+
+            },
+            500
+          );
+
+
+          return;
+
+        }
+
+
+        await loadData();
+
+      }
+    );
+
+
+    addUserBtn.addEventListener(
+      "click",
+      () => {
+
+        if (!isSuperAdmin()) {
+          return;
+        }
+
+        openAddUserModal();
+
+      }
+    );
+
+
+    cancelUserBtn.addEventListener(
+      "click",
+      closeUserModal
+    );
+
+
+    userModal.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          userModal
+        ) {
+
+          closeUserModal();
+
+        }
+
+      }
+    );
+
+
+    adminRole.addEventListener(
+      "change",
+      updateRoleUI
+    );
+
+
+    userSearch.addEventListener(
+      "input",
+      renderUsers
+    );
+
+
+    saveUserBtn.addEventListener(
+      "click",
+      async () => {
+
+        const uid =
+          (
+            editingUid ||
+            adminUid.value
+          ).trim();
+
+        const username =
+          adminUsernameInput.value
+            .trim();
+
+        const displayName =
+          adminDisplayName.value
+            .trim();
+
+
+        if (!uid) {
+
+          window.showToast?.(
+            "Please enter Firebase UID.",
+            "warning",
+            4000
+          );
+
+          adminUid.focus();
+
+          return;
+
+        }
+
+
+        if (!username) {
+
+          window.showToast?.(
+            "Please enter username.",
+            "warning",
+            4000
+          );
+
+          adminUsernameInput.focus();
+
+          return;
+
+        }
+
+
+        const role =
+          adminRole.value ===
+          "superadmin"
+            ? "superadmin"
+            : "site_admin";
+
+
+        const sites =
+          role === "superadmin"
+            ? {}
+            : getSelectedSites();
+
+
+        if (
+          role === "site_admin" &&
+          !Object.keys(
+            sites
+          ).length
+        ) {
+
+          window.showToast?.(
+            "Please select at least one site.",
+            "warning",
+            4000
+          );
+
+          return;
+
+        }
+
+
+        const permissions =
+          role === "superadmin"
+            ? {}
+            : getPermissions();
+
+
+        saveUserBtn.disabled =
+          true;
+
+
+        try {
+
+          await saveAdminUser(
+            uid,
+            {
+              username,
+
+              displayName:
+                displayName ||
+                username,
+
+              role,
+
+              enabled:
+                adminEnabled.checked,
+
+              sites,
+
+              permissions
+            }
+          );
+
+
+          window.showToast?.(
+            editingUid
+              ? "Admin updated successfully."
+              : "Admin profile created successfully.",
+            "success",
+            4000
+          );
+
+
+          closeUserModal();
+
+          await loadData();
+
+        }
+        catch (error) {
+
+          console.error(
+            error
+          );
+
+
+          const messages = {
+
+            SUPERADMIN_REQUIRED:
+              "Superadmin access required.",
+
+            ADMIN_UID_REQUIRED:
+              "Firebase UID is required.",
+
+            ADMIN_USERNAME_REQUIRED:
+              "Username is required.",
+
+            CANNOT_DISABLE_SELF:
+              "You cannot disable your own account."
+
+          };
+
+
+          window.showToast?.(
+            messages[
+              error?.message
+            ] ||
+            error?.message ||
+            "Failed to save admin.",
+            "error",
+            5000
+          );
+
+        }
+        finally {
+
+          saveUserBtn.disabled =
+            false;
+
+        }
+
+      }
+    );
+
+
+    userTableBody.addEventListener(
+      "click",
+      async event => {
+
+        const button =
+          event.target.closest(
+            "button[data-action]"
+          );
+
+
+        if (!button) {
+          return;
+        }
+
+
+        const uid =
+          button.dataset.uid;
+
+        const action =
+          button.dataset.action;
+
+
+        const user =
+          allUsers.find(
+            item =>
+              item.uid === uid
+          );
+
+
+        if (!user) {
+          return;
+        }
+
+
+        if (
+          action === "edit"
+        ) {
+
+          openEditUserModal(
+            user
+          );
+
+          return;
+
+        }
+
+
+        if (
+          action === "toggle"
+        ) {
+
+          const nextEnabled =
+            !user.enabled;
+
+
+          const confirmed =
+            confirm(
+              nextEnabled
+                ? `Enable ${user.username}?`
+                : `Disable ${user.username}?`
+            );
+
+
+          if (!confirmed) {
+            return;
+          }
+
+
+          button.disabled =
+            true;
+
+
+          try {
+
+            await setAdminUserEnabled(
+              user.uid,
+              nextEnabled
+            );
+
+
+            window.showToast?.(
+              nextEnabled
+                ? "Admin enabled."
+                : "Admin disabled.",
+              "success",
+              4000
+            );
+
+
+            await loadData();
+
+          }
+          catch (error) {
+
+            console.error(
+              error
+            );
+
+
+            const messages = {
+
+              CANNOT_DISABLE_SELF:
+                "You cannot disable your own account.",
+
+              SUPERADMIN_REQUIRED:
+                "Superadmin access required."
+
+            };
+
+
+            window.showToast?.(
+              messages[
+                error?.message
+              ] ||
+              error?.message ||
+              "Failed to update admin.",
+              "error",
+              5000
+            );
+
+          }
+          finally {
+
+            button.disabled =
+              false;
+
+          }
+
+        }
+
+      }
+    );
+
+
+    window.addEventListener(
+      "admin-users-changed",
+      () => {
+
+        if (isSuperAdmin()) {
+          loadData();
+        }
+
+      }
+    );
+
+  </script>
+
+
+  <script src="./shared-ui.js"></script>
+
+</body>
+</html>

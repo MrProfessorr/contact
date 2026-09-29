@@ -2338,7 +2338,13 @@ changeAccountBtn
       sessionStorage.removeItem(
         "adminSecondAuthPending"
       );
+sessionStorage.removeItem(
+  "adminLoginAt"
+);
 
+sessionStorage.removeItem(
+  "adminExpiresAt"
+);
 
       verificationPassed =
         false;

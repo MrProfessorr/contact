@@ -555,6 +555,7 @@ import {
 ========================================================= */
 requireAdmin();
 setupLogout();
+initSharedDropdowns();
 /* =========================================================
    LOADING PAGE OVERLAY
 ========================================================= */
@@ -1828,13 +1829,13 @@ loadingSiteInput.value =
   nextSiteId;
 
 
-/* Refresh Shared UI dropdown after dynamic options */
-initSharedDropdowns();
-
-
 if (
   loadingSiteInput._sharedDropdown
 ) {
+
+  loadingSiteInput
+    ._sharedDropdown
+    .refresh();
 
   loadingSiteInput
     ._sharedDropdown

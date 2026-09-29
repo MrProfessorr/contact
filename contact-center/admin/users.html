@@ -192,17 +192,31 @@
       display: flex;
     }
 
-    .user-modal {
-      width: 620px;
-      max-width: 100%;
-      max-height: calc(100vh - 40px);
-      overflow-y: auto;
-      padding: 20px;
-      box-sizing: border-box;
-      border: 1px solid #333;
-      border-radius: 10px;
-      background: #181818;
-    }
+.user-modal {
+  scrollbar-width: thin;
+  scrollbar-color:
+    rgba(255,255,255,.22)
+    transparent;
+}
+
+.user-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.user-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.user-modal::-webkit-scrollbar-thumb {
+  background:
+    rgba(255,255,255,.22);
+  border-radius: 999px;
+}
+
+.user-modal::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(255,255,255,.35);
+}
 
     .user-modal h2 {
       margin-top: 0;
@@ -466,14 +480,19 @@
           Role
         </label>
 
-        <select id="adminRole">
-          <option value="site_admin">
-            Site Admin
-          </option>
-          <option value="superadmin">
-            Superadmin
-          </option>
-        </select>
+<select
+  id="adminRole"
+  data-shared-dropdown
+  data-placeholder="Select Role"
+>
+  <option value="site_admin">
+    Site Admin
+  </option>
+
+  <option value="superadmin">
+    Superadmin
+  </option>
+</select>
 
       </div>
 
@@ -648,8 +667,18 @@
     } from "./admin.js";
 
 
-    requireAdmin();
-    setupLogout();
+requireAdmin();
+setupLogout();
+
+window.addEventListener(
+  "shared-ui-ready",
+  () => {
+    window.initSharedDropdowns?.();
+  },
+  {
+    once: true
+  }
+);
 
 
     const userTableBody =

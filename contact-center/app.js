@@ -6840,7 +6840,7 @@ const visitorRef =
 const presenceRef =
   ref(
     db,
-    `sites/${SITE_ID}/analytics/presence/${visitorId}/${visitorSessionId}`
+    `sites/${SITE_ID}/analytics/presence/${visitorId}`
   );
 
     await update(
@@ -6944,29 +6944,20 @@ await update(
 
 await onDisconnect(
   presenceRef
-).set(
-  {
-    online:
-      false,
-
-    page:
-      getCurrentPageUrl(),
-
-    lastSeen:
-      serverTimestamp()
-  }
-);
-await set(
+).update({
+  online: false,
+  sessionId: visitorSessionId,
+  page: getCurrentPageUrl(),
+  lastSeen: serverTimestamp()
+});
+await update(
   presenceRef,
   {
-    online:
-      true,
-
-    page:
-      getCurrentPageUrl(),
-
-    lastSeen:
-      serverTimestamp()
+    online: true,
+    visitorId: visitorId,
+    sessionId: visitorSessionId,
+    page: getCurrentPageUrl(),
+    lastSeen: serverTimestamp()
   }
 );
 setInterval(
@@ -6987,14 +6978,11 @@ setInterval(
 update(
   presenceRef,
   {
-    online:
-      true,
-
-    page:
-      getCurrentPageUrl(),
-
-    lastSeen:
-      serverTimestamp()
+    online: true,
+    visitorId: visitorId,
+    sessionId: visitorSessionId,
+    page: getCurrentPageUrl(),
+    lastSeen: serverTimestamp()
   }
 ).catch(error => {
 

@@ -9278,10 +9278,11 @@ const baseMenuItems = [
   permission: "notices.show"
 },
 
-  {
-    file: "marquee.html",
-    name: "Marquee Text"
-  },
+{
+  file: "marquee.html",
+  name: "Marquee Text",
+  permission: "marquee.show"
+},
 
   {
     file: "floating.html",

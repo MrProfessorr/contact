@@ -69,18 +69,203 @@ export const db =
 
 let currentAdminProfile =
   null;
-
+let adminProfileUnsubscribe =
+  null;
 
 export function getCurrentAdminProfile() {
-
   return currentAdminProfile;
-
 }
 
+function stopAdminProfileListener() {
+
+  if (
+    typeof adminProfileUnsubscribe ===
+    "function"
+  ) {
+
+    adminProfileUnsubscribe();
+
+  }
+
+  adminProfileUnsubscribe =
+    null;
+
+}
+function buildCurrentAdminProfile(
+  user,
+  profile = {}
+) {
+
+  return {
+
+    uid:
+      user.uid,
+
+    email:
+      user.email || "",
+
+    username:
+      profile.username ||
+      user.email
+        ?.split("@")[0] ||
+      "Admin",
+
+    displayName:
+      profile.displayName ||
+      profile.username ||
+      "Admin",
+
+    role:
+      profile.role,
+
+    enabled:
+      profile.enabled === true,
+
+    sites:
+      profile.sites || {},
+
+    permissions:
+      profile.permissions || {}
+
+  };
+
+}
+function startAdminProfileListener(
+  user
+) {
+
+  stopAdminProfileListener();
 
 
+  const adminProfileRef =
+    ref(
+      db,
+      `admin_users/${user.uid}`
+    );
+
+
+  let firstSnapshot =
+    true;
+
+
+  adminProfileUnsubscribe =
+    onValue(
+      adminProfileRef,
+
+      async snapshot => {
+
+        if (firstSnapshot) {
+
+          firstSnapshot =
+            false;
+
+          return;
+
+        }
+
+
+        /*
+          Profile dibuang.
+        */
+
+        if (!snapshot.exists()) {
+
+          console.error(
+            "ADMIN_PROFILE_REMOVED"
+          );
+
+
+          window.showToast?.(
+            "Admin access has been removed.",
+            "error",
+            5000
+          );
+
+
+          await forceAdminLogout();
+
+          return;
+
+        }
+
+
+        const profile =
+          snapshot.val() || {};
+
+
+        /*
+          Admin disabled semasa online.
+        */
+
+        if (
+          profile.enabled !== true
+        ) {
+
+          console.error(
+            "ADMIN_DISABLED_LIVE"
+          );
+
+
+          window.showToast?.(
+            "Admin account has been disabled.",
+            "error",
+            5000
+          );
+
+
+          await forceAdminLogout();
+
+          return;
+
+        }
+
+
+        /*
+          Role mesti valid.
+        */
+
+        const validRoles = [
+          "superadmin",
+          "site_admin"
+        ];
+
+
+        if (
+          !validRoles.includes(
+            profile.role
+          )
+        ) {
+
+          console.error(
+            "INVALID_ADMIN_ROLE_LIVE"
+          );
+
+
+          await forceAdminLogout();
+
+          return;
+
+        }
+
+        stopAdminProfileListener();
+
+
+        location.reload();
+
+      },
+
+      error => {
+
+        console.error(
+          "Admin profile listener failed:",
+          error
+        );
+
+      }
+    );
+
+}
 export function isSuperAdmin() {
-
   return (
     currentAdminProfile?.role ===
     "superadmin"
@@ -89,7 +274,6 @@ export function isSuperAdmin() {
 }
 
 export function getAdminAllowedSiteIds() {
-
   const sites =
     currentAdminProfile?.sites || {};
 
@@ -951,7 +1135,7 @@ function clearAdminSession() {
 }
 
 export async function forceAdminLogout() {
-
+stopAdminProfileListener();
   if (adminLogoutTimer) {
 
     clearTimeout(
@@ -1058,14 +1242,10 @@ export function requireAdmin() {
   onAuthStateChanged(
     auth,
     async user => {
-
-      /*
-        STEP 1:
-        Belum login Firebase.
-      */
-
+      
       if (!user) {
-
+        
+       stopAdminProfileListener();
         currentAdminProfile =
           null;
 
@@ -1099,7 +1279,7 @@ export function requireAdmin() {
       if (
         verifiedUid !== user.uid
       ) {
-
+stopAdminProfileListener();
         currentAdminProfile =
           null;
 
@@ -1230,44 +1410,11 @@ export function requireAdmin() {
         }
 
 
-        /*
-          Simpan profile admin
-          dalam memory.
-        */
-
-        currentAdminProfile = {
-
-          uid:
-            user.uid,
-
-          email:
-            user.email || "",
-
-          username:
-            profile.username ||
-            user.email
-              ?.split("@")[0] ||
-            "Admin",
-
-          displayName:
-            profile.displayName ||
-            profile.username ||
-            "Admin",
-
-          role:
-            profile.role,
-
-          enabled:
-            true,
-
-          sites:
-            profile.sites || {},
-
-          permissions:
-            profile.permissions || {}
-
-        };
-
+currentAdminProfile =
+  buildCurrentAdminProfile(
+    user,
+    profile
+  );
 
         /*
           Session 24 jam
@@ -1276,7 +1423,9 @@ export function requireAdmin() {
 
         startAdminSessionTimer();
 
-
+startAdminProfileListener(
+  user
+);
         /*
           FULL EMAIL
         */
@@ -1313,24 +1462,17 @@ export function requireAdmin() {
               .displayName;
 
         }
-
-
-        /*
-          Beritahu shared UI bahawa
-          profile admin sudah ready.
-        */
-
-        window.dispatchEvent(
-          new CustomEvent(
-            "admin-profile-ready",
-            {
-              detail: {
-                ...currentAdminProfile
-              }
-            }
-          )
-        );
-
+        
+window.dispatchEvent(
+  new CustomEvent(
+    "admin-profile-ready",
+    {
+      detail: {
+        ...currentAdminProfile
+      }
+    }
+  )
+);
       }
 
       catch (error) {
@@ -1567,7 +1709,7 @@ export function setupLogout() {
         async () => {
 
           try {
-
+stopAdminProfileListener();
             if (adminLogoutTimer) {
 
               clearTimeout(

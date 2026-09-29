@@ -4813,8 +4813,9 @@ if (
 adminSiteSelector
   .style.display =
   "";
-     
-  catch (error) {
+
+}
+catch (error) {
 
     console.error(
       "Failed to load admin sites:",

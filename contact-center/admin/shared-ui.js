@@ -4708,15 +4708,6 @@ async function loadAdminSiteOptions() {
       );
 
 
-    /*
-      Check selection lama.
-
-      Contoh:
-      localStorage masih ada abc888
-      tetapi site sudah disabled /
-      admin sudah hilang permission.
-    */
-
     const savedSites =
       getSavedAdminSites();
 
@@ -4785,47 +4776,44 @@ localStorage.setItem(
       hide selector.
     */
 
-    if (
-      profile?.role ===
-        "site_admin" &&
-      options.length === 1
-    ) {
+/*
+  Site Admin + hanya 1 site:
+  pilih automatically tetapi
+  selector tetap ditampilkan.
+*/
 
-      const onlySite =
-        String(
-          options[0].value
-        );
+if (
+  profile?.role ===
+    "site_admin" &&
+  options.length === 1
+) {
 
-
-localStorage.setItem(
-  getAdminSelectedSitesStorageKey(),
-  JSON.stringify(
-    [onlySite]
-  )
-);
+  const onlySite =
+    String(
+      options[0].value
+    );
 
 
-      adminSiteDropdown
-        ?.setValue(
-          [onlySite],
-          false
-        );
+  localStorage.setItem(
+    getAdminSelectedSitesStorageKey(),
+    JSON.stringify(
+      [onlySite]
+    )
+  );
 
 
-      adminSiteSelector
-        .style.display =
-        "none";
+  adminSiteDropdown
+    ?.setValue(
+      [onlySite],
+      false
+    );
 
-    }
-    else {
+}
 
-      adminSiteSelector
-        .style.display =
-        "";
-
-    }
-
-  }
+adminSiteSelector
+  .style.display =
+  "";
+     
   catch (error) {
 
     console.error(

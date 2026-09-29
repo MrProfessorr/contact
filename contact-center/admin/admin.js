@@ -950,7 +950,7 @@ function clearAdminSession() {
 
 }
 
-async function forceAdminLogout() {
+export async function forceAdminLogout() {
 
   if (adminLogoutTimer) {
 

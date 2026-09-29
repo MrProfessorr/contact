@@ -6836,11 +6836,12 @@ const visitorRef =
     db,
     `sites/${SITE_ID}/analytics/visitors/${visitorId}`
   );
-
+const firstSeenStorageKey =
+  `visitor_first_seen_${SITE_ID}_${visitorId}`;
 const presenceRef =
   ref(
     db,
-    `sites/${SITE_ID}/analytics/presence/${visitorId}/${visitorSessionId}`
+    `sites/${SITE_ID}/analytics/presence/${visitorId}`
   );
 
     await update(
@@ -6889,29 +6890,37 @@ browser:
       }
     );
 
-
-const visitorSnapshot =
-  await get(
-    visitorRef
-  );
-
-if (
-  !visitorSnapshot
-    .child("firstSeen")
-    .exists()
+    if (
+  !localStorage.getItem(
+    firstSeenStorageKey
+  )
 ) {
 
-  await update(
-    visitorRef,
-    {
-      firstSeen:
-        serverTimestamp()
-    }
-  );
+  try {
+
+    await update(
+      visitorRef,
+      {
+        firstSeen:
+          serverTimestamp()
+      }
+    );
+
+    localStorage.setItem(
+      firstSeenStorageKey,
+      "1"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "First seen write error:",
+      error
+    );
+
+  }
 
 }
-
-
 await set(
 
   ref(
@@ -6944,29 +6953,20 @@ await update(
 
 await onDisconnect(
   presenceRef
-).set(
-  {
-    online:
-      false,
-
-    page:
-      getCurrentPageUrl(),
-
-    lastSeen:
-      serverTimestamp()
-  }
-);
-await set(
+).update({
+  online: false,
+  sessionId: visitorSessionId,
+  page: getCurrentPageUrl(),
+  lastSeen: serverTimestamp()
+});
+await update(
   presenceRef,
   {
-    online:
-      true,
-
-    page:
-      getCurrentPageUrl(),
-
-    lastSeen:
-      serverTimestamp()
+    online: true,
+    visitorId: visitorId,
+    sessionId: visitorSessionId,
+    page: getCurrentPageUrl(),
+    lastSeen: serverTimestamp()
   }
 );
 setInterval(
@@ -6984,24 +6984,106 @@ setInterval(
     ).catch(() => {});
 
 
-    update(
-      presenceRef,
-      {
-        online:
-          true,
+if (
+  document.visibilityState === "visible"
+) {
 
-        page:
-          getCurrentPageUrl(),
+  update(
+    presenceRef,
+    {
+      online: true,
+      visitorId: visitorId,
+      sessionId: visitorSessionId,
+      page: getCurrentPageUrl(),
+      lastSeen: serverTimestamp()
+    }
+  ).catch(error => {
 
-        lastSeen:
-          serverTimestamp()
-      }
-    ).catch(() => {});
+    console.error(
+      "Presence heartbeat error:",
+      error
+    );
+
+  });
+
+}
 
   },
-  15000
+  5000
 );
 
+    const markVisitorOffline = () => {
+
+  update(
+    presenceRef,
+    {
+      online: false,
+      visitorId: visitorId,
+      sessionId: visitorSessionId,
+      page: getCurrentPageUrl(),
+      lastSeen: serverTimestamp()
+    }
+  ).catch(error => {
+
+    console.warn(
+      "Presence offline update error:",
+      error
+    );
+
+  });
+
+};
+
+const markVisitorOnline = () => {
+
+  update(
+    presenceRef,
+    {
+      online: true,
+      visitorId: visitorId,
+      sessionId: visitorSessionId,
+      page: getCurrentPageUrl(),
+      lastSeen: serverTimestamp()
+    }
+  ).catch(error => {
+
+    console.warn(
+      "Presence online update error:",
+      error
+    );
+
+  });
+
+};
+
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if (
+      document.visibilityState === "visible"
+    ) {
+
+      markVisitorOnline();
+
+    } else {
+
+      markVisitorOffline();
+
+    }
+
+  }
+);
+window.addEventListener(
+  "pagehide",
+  () => {
+
+    markVisitorOffline();
+
+  }
+);
+    
   } catch (error) {
 
     console.error(

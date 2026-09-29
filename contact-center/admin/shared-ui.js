@@ -9302,10 +9302,11 @@ const baseMenuItems = [
   permission: "skin.show"
 },
 
-  {
-    file: "welcome.html",
-    name: "Welcome Popup"
-  },
+{
+  file: "welcome.html",
+  name: "Welcome Popup",
+  permission: "welcome.show"
+},
 
 {
   file: "sites.html",

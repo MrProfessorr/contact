@@ -643,6 +643,237 @@ export async function setAdminSiteEnabled(
 
 }
 /* =========================
+   ADMIN USER MANAGEMENT
+========================= */
+
+export async function getAdminUsers() {
+
+  if (!isSuperAdmin()) {
+    throw new Error(
+      "SUPERADMIN_REQUIRED"
+    );
+  }
+
+  const snapshot =
+    await get(
+      ref(
+        db,
+        "admin_users"
+      )
+    );
+
+  if (!snapshot.exists()) {
+    return [];
+  }
+
+  return Object
+    .entries(
+      snapshot.val() || {}
+    )
+    .map(
+      ([uid, profile]) => ({
+        uid: String(uid),
+
+        username:
+          profile?.username || "",
+
+        displayName:
+          profile?.displayName ||
+          profile?.username ||
+          "Admin",
+
+        role:
+          profile?.role ||
+          "site_admin",
+
+        enabled:
+          profile?.enabled === true,
+
+        sites:
+          profile?.sites || {},
+
+        permissions:
+          profile?.permissions || {}
+      })
+    )
+    .sort(
+      (a, b) =>
+        a.username.localeCompare(
+          b.username
+        )
+    );
+
+}
+
+
+export async function saveAdminUser(
+  uid,
+  profile = {}
+) {
+
+  if (!isSuperAdmin()) {
+    throw new Error(
+      "SUPERADMIN_REQUIRED"
+    );
+  }
+
+
+  const cleanUid =
+    String(
+      uid || ""
+    ).trim();
+
+
+  if (!cleanUid) {
+    throw new Error(
+      "ADMIN_UID_REQUIRED"
+    );
+  }
+
+
+  const username =
+    String(
+      profile.username || ""
+    ).trim();
+
+
+  if (!username) {
+    throw new Error(
+      "ADMIN_USERNAME_REQUIRED"
+    );
+  }
+
+
+  const role =
+    profile.role === "superadmin"
+      ? "superadmin"
+      : "site_admin";
+
+
+  const data = {
+
+    username,
+
+    displayName:
+      String(
+        profile.displayName ||
+        username
+      ).trim(),
+
+    role,
+
+    enabled:
+      profile.enabled !== false,
+
+    sites:
+      role === "superadmin"
+        ? {}
+        : (
+            profile.sites || {}
+          ),
+
+    permissions:
+      role === "superadmin"
+        ? {}
+        : (
+            profile.permissions || {}
+          ),
+
+    updatedAt:
+      Date.now(),
+
+    updatedBy:
+      currentAdminProfile.uid
+
+  };
+
+
+  await update(
+    ref(
+      db,
+      `admin_users/${cleanUid}`
+    ),
+    data
+  );
+
+
+  window.dispatchEvent(
+    new CustomEvent(
+      "admin-users-changed"
+    )
+  );
+
+}
+
+
+export async function setAdminUserEnabled(
+  uid,
+  enabled
+) {
+
+  if (!isSuperAdmin()) {
+    throw new Error(
+      "SUPERADMIN_REQUIRED"
+    );
+  }
+
+
+  const cleanUid =
+    String(
+      uid || ""
+    ).trim();
+
+
+  if (!cleanUid) {
+    throw new Error(
+      "ADMIN_UID_REQUIRED"
+    );
+  }
+
+
+  /*
+    Jangan benarkan superadmin
+    disable account sendiri.
+  */
+
+  if (
+    cleanUid ===
+    currentAdminProfile?.uid &&
+    enabled !== true
+  ) {
+
+    throw new Error(
+      "CANNOT_DISABLE_SELF"
+    );
+  }
+
+
+  await update(
+    ref(
+      db,
+      `admin_users/${cleanUid}`
+    ),
+    {
+      enabled:
+        enabled === true,
+
+      updatedAt:
+        Date.now(),
+
+      updatedBy:
+        currentAdminProfile.uid
+    }
+  );
+
+
+  window.dispatchEvent(
+    new CustomEvent(
+      "admin-users-changed"
+    )
+  );
+
+}
+/* =========================
    EXPOSE ADMIN SITE API
 ========================= */
 
@@ -672,6 +903,15 @@ window.updateAdminSite =
 
 window.setAdminSiteEnabled =
   setAdminSiteEnabled;
+
+window.getAdminUsers =
+  getAdminUsers;
+
+window.saveAdminUser =
+  saveAdminUser;
+
+window.setAdminUserEnabled =
+  setAdminUserEnabled;
 /* =========================
    ADMIN SESSION 24 HOURS
 ========================= */

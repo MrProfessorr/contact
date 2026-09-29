@@ -9284,10 +9284,11 @@ const baseMenuItems = [
   permission: "marquee.show"
 },
 
-  {
-    file: "floating.html",
-    name: "Floating Image"
-  },
+{
+  file: "floating.html",
+  name: "Floating Image",
+  permission: "floating.show"
+},
 
   {
     file: "loading.html",

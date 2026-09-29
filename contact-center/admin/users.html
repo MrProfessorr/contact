@@ -839,18 +839,19 @@
 </script>
   <script type="module">
 
-    import {
+import {
 
-      requireAdmin,
-      setupLogout,
-      getAdminSites,
-      getAdminUsers,
-      saveAdminUser,
-      setAdminUserEnabled,
-      isSuperAdmin,
-      safe
+  requireAdmin,
+  setupLogout,
+  getAdminSites,
+  getAdminUsers,
+  saveAdminUser,
+  setAdminUserEnabled,
+  isSuperAdmin,
+  forceAdminLogout,
+  safe
 
-    } from "./admin.js";
+} from "./admin.js";
 
 
 requireAdmin();
@@ -1588,40 +1589,29 @@ userModal.classList.add(
     }
 
 
-    window.addEventListener(
-      "admin-profile-ready",
-      async () => {
+window.addEventListener(
+  "admin-profile-ready",
+  async () => {
 
-        if (!isSuperAdmin()) {
+    if (!isSuperAdmin()) {
 
-          window.showToast?.(
-            "Superadmin access required.",
-            "error",
-            3000
-          );
+      window.showToast?.(
+        "Permission access required1.",
+        "error",
+        1500
+      );
 
+      await forceAdminLogout();
 
-          setTimeout(
-            () => {
+      return;
 
-              window.location.replace(
-                "./visitors.html"
-              );
-
-            },
-            500
-          );
+    }
 
 
-          return;
+    await loadData();
 
-        }
-
-
-        await loadData();
-
-      }
-    );
+  }
+);
 
 
     addUserBtn.addEventListener(

@@ -7003,9 +7003,41 @@ update(
 });
 
   },
-  15000
+  5000
 );
 
+    const markVisitorOffline = () => {
+
+  update(
+    presenceRef,
+    {
+      online: false,
+      visitorId: visitorId,
+      sessionId: visitorSessionId,
+      page: getCurrentPageUrl(),
+      lastSeen: serverTimestamp()
+    }
+  ).catch(error => {
+
+    console.warn(
+      "Presence offline update error:",
+      error
+    );
+
+  });
+
+};
+
+
+window.addEventListener(
+  "pagehide",
+  () => {
+
+    markVisitorOffline();
+
+  }
+);
+    
   } catch (error) {
 
     console.error(

@@ -6,6 +6,8 @@ import {
   getAuth,
   onAuthStateChanged,
   signOut,
+  setPersistence,
+  browserSessionPersistence,
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword
@@ -53,6 +55,11 @@ export const app =
 
 export const auth =
   getAuth(app);
+
+await setPersistence(
+  auth,
+  browserSessionPersistence
+);
 
 export const db =
   getDatabase(app);
@@ -925,11 +932,11 @@ let adminLogoutTimer =
 
 function clearAdminSession() {
 
-  localStorage.removeItem(
+  sessionStorage.removeItem(
     "adminLoginAt"
   );
 
-  localStorage.removeItem(
+  sessionStorage.removeItem(
     "adminExpiresAt"
   );
 
@@ -942,7 +949,6 @@ function clearAdminSession() {
   );
 
 }
-
 
 async function forceAdminLogout() {
 
@@ -984,12 +990,12 @@ async function forceAdminLogout() {
 
 function startAdminSessionTimer() {
 
-  const expiresAt =
-    Number(
-      localStorage.getItem(
-        "adminExpiresAt"
-      )
-    );
+const expiresAt =
+  Number(
+    sessionStorage.getItem(
+      "adminExpiresAt"
+    )
+  );
 
 
   /*

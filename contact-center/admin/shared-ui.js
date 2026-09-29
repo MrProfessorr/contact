@@ -9240,11 +9240,17 @@ const baseMenuItems = [
     name: "Welcome Popup"
   },
 
-  {
-    file: "sites.html",
-    name: "Site Management",
-    superadminOnly: true
-  }
+{
+  file: "sites.html",
+  name: "Site Management",
+  superadminOnly: true
+},
+
+{
+  file: "users.html",
+  name: "Admin Users",
+  superadminOnly: true
+}
 
 ];
 

@@ -707,6 +707,32 @@ import {
 requireAdmin();
 setupLogout();
 initSharedDropdowns();
+function hasSkinPermission(
+  action
+) {
+
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+  if (!profile) {
+    return false;
+  }
+
+  if (
+    profile.role ===
+    "superadmin"
+  ) {
+    return true;
+  }
+
+  return (
+    profile
+      ?.permissions
+      ?.skin
+      ?.[action] === true
+  );
+
+}
 /* =====================================================
    SKIN PAGE LOADING
 ===================================================== */
@@ -931,7 +957,91 @@ let bodyObjectUrl = "";
 let footerObjectUrl = "";
 
 
+function syncSkinPermissionUI() {
 
+  const canEdit =
+    hasSkinPermission(
+      "edit"
+    );
+
+
+  [
+    skinEnabled,
+    headerColor,
+    headerTextColor,
+    bodyColor,
+    bodyTextColor,
+    footerColor,
+    footerTextColor
+  ].forEach(
+    element => {
+
+      if (element) {
+        element.disabled =
+          !canEdit;
+      }
+
+    }
+  );
+
+
+  [
+    "uploadHeaderImageBtn",
+    "removeHeaderImageBtn",
+    "uploadBodyImageBtn",
+    "removeBodyImageBtn",
+    "uploadFooterImageBtn",
+    "removeFooterImageBtn"
+  ].forEach(
+    id => {
+
+      const button =
+        document.getElementById(
+          id
+        );
+
+      if (!button) {
+        return;
+      }
+
+      button.disabled =
+        !canEdit;
+
+      button.style.display =
+        canEdit
+          ? ""
+          : "none";
+
+    }
+  );
+
+
+  if (resetSkinBtn) {
+
+    resetSkinBtn.disabled =
+      !canEdit;
+
+    resetSkinBtn.style.display =
+      canEdit
+        ? ""
+        : "none";
+
+  }
+
+
+  if (saveSkinBtn) {
+
+    saveSkinBtn.disabled =
+      !canEdit;
+
+    saveSkinBtn.style.display =
+      canEdit
+        ? ""
+        : "none";
+
+  }
+
+}
 /* =====================================================
    ACTIVE TEXT
 ===================================================== */
@@ -1071,14 +1181,22 @@ function setupUpload(
     );
 
 
-  button.addEventListener(
-    "click",
-    () => {
+button.addEventListener(
+  "click",
+  () => {
 
-      input.click();
-
+    if (
+      !hasSkinPermission(
+        "edit"
+      )
+    ) {
+      return;
     }
-  );
+
+    input.click();
+
+  }
+);
 
 
   input.addEventListener(
@@ -1154,7 +1272,13 @@ if (
   removeButton.addEventListener(
     "click",
     () => {
-
+if (
+  !hasSkinPermission(
+    "edit"
+  )
+) {
+  return;
+}
       input.value =
         "";
 
@@ -1306,7 +1430,31 @@ skinEnabled.addEventListener(
 function loadSkinSettingsForSite(
   siteId
 ) {
+if (
+  !hasSkinPermission(
+    "view"
+  )
+) {
 
+  if (
+    typeof stopSkinSettingsListener ===
+    "function"
+  ) {
+
+    stopSkinSettingsListener();
+
+    stopSkinSettingsListener =
+      null;
+
+  }
+
+  currentSkinSiteId = "";
+
+  hideSkinPageLoading();
+
+  return;
+
+}
   if (stopSkinSettingsListener) {
 
     stopSkinSettingsListener();
@@ -1522,7 +1670,21 @@ function showSavedImage(
 saveSkinBtn.addEventListener(
   "click",
   async () => {
+if (
+  !hasSkinPermission(
+    "edit"
+  )
+) {
 
+  window.showToast(
+    "You do not have permission to edit Skin Config.",
+    "error",
+    4000
+  );
+
+  return;
+
+}
     const oldText =
       saveSkinBtn.textContent;
 
@@ -1780,7 +1942,21 @@ const DEFAULT_SKIN = {
 resetSkinBtn.addEventListener(
   "click",
   async () => {
+if (
+  !hasSkinPermission(
+    "edit"
+  )
+) {
 
+  window.showToast(
+    "You do not have permission to edit Skin Config.",
+    "error",
+    4000
+  );
+
+  return;
+
+}
     const confirmed =
       confirm(
         "Reset skin to default?"
@@ -2122,9 +2298,50 @@ loadSkinSettingsForSite(
 }
 window.addEventListener(
   "admin-profile-ready",
-  () => {
+  async () => {
 
-    refreshSkinSites();
+    try {
+
+      syncSkinPermissionUI();
+
+
+      if (
+        !hasSkinPermission(
+          "view"
+        )
+      ) {
+
+        hideSkinPageLoading();
+
+        window.showToast(
+          "You do not have permission to view Skin Config.",
+          "error",
+          4000
+        );
+
+        return;
+
+      }
+
+
+      await refreshSkinSites();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to initialize Skin Config:",
+        error
+      );
+
+      window.showToast(
+        "Failed to initialize Skin Config.",
+        "error",
+        5000
+      );
+
+      hideSkinPageLoading();
+
+    }
 
   }
 );
@@ -2132,9 +2349,29 @@ window.addEventListener(
 
 window.addEventListener(
   "admin-site-change",
-  () => {
+  async () => {
 
-    refreshSkinSites();
+    if (
+      !hasSkinPermission(
+        "view"
+      )
+    ) {
+      return;
+    }
+
+
+    try {
+
+      await refreshSkinSites();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to refresh Skin sites:",
+        error
+      );
+
+    }
 
   }
 );

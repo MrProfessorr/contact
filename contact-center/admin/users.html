@@ -615,7 +615,13 @@
     >
       Contacts Manage
     </button>
-
+<button
+  type="button"
+  class="permission-module-tab"
+  data-permission-tab="tabs"
+>
+  Tabs Settings
+</button>
   </div>
 
 
@@ -786,7 +792,63 @@
     </div>
 
   </div>
+  <!-- TABS SETTINGS -->
 
+  <div
+    class="permission-box permission-panel"
+    data-permission-panel="tabs"
+  >
+
+    <div class="permission-module-head">
+      <strong>Tabs Settings</strong>
+      <span>Control navigation tabs and settings permissions.</span>
+    </div>
+
+    <div class="permission-grid">
+
+      <label class="checkbox-item permission-show-item">
+        <input
+          type="checkbox"
+          data-permission="tabs.show"
+        >
+        Show Module
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="tabs.view"
+        >
+        View
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="tabs.create"
+        >
+        Create
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="tabs.edit"
+        >
+        Edit
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="tabs.delete"
+        >
+        Delete
+      </label>
+
+    </div>
+
+  </div>
 </div>
 
 

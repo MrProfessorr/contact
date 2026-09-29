@@ -2123,14 +2123,14 @@ window.addEventListener(
   "admin-profile-ready",
   async () => {
 
-      if (
-      !hasContactPermission("view")
-    ) {
+if (
+  !hasContactPermission("show")
+) {
 
       hideContactPageLoading();
 
       window.showToast?.(
-        "You do not have permission to view Contacts.",
+        "Contact Manage module is not available for this account.",
         "error",
         3000
       );

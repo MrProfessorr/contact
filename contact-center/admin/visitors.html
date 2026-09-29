@@ -3832,7 +3832,23 @@ button.active {
         <span>Inactive</span>
         <span class="visitor-status-option-check">✓</span>
       </button>
+<button
+  class="visitor-status-option"
+  type="button"
+  data-status="online"
+>
+  <span>Online</span>
+  <span class="visitor-status-option-check">✓</span>
+</button>
 
+<button
+  class="visitor-status-option"
+  type="button"
+  data-status="offline"
+>
+  <span>Offline</span>
+  <span class="visitor-status-option-check">✓</span>
+</button>
     </div>
 
   </div>
@@ -7154,7 +7170,9 @@ if (
 const VISITOR_STATUS_LABELS = {
   all: "All",
   active: "Active",
-  inactive: "Inactive"
+  inactive: "Inactive",
+  online: "Online",
+  offline: "Offline"
 };
 
 
@@ -7372,21 +7390,64 @@ if (
       true;
 
   } else {
-matchesStatus =
-  (
-    isOnline &&
-    !isBlocked &&
-    visitorStatusFilters.has(
-      "active"
-    )
-  )
-  ||
-  (
-    !isOnline &&
-    visitorStatusFilters.has(
-      "inactive"
-    )
-  );
+
+    const wantsActive =
+      visitorStatusFilters.has(
+        "active"
+      );
+
+    const wantsInactive =
+      visitorStatusFilters.has(
+        "inactive"
+      );
+
+    const wantsOnline =
+      visitorStatusFilters.has(
+        "online"
+      );
+
+    const wantsOffline =
+      visitorStatusFilters.has(
+        "offline"
+      );
+
+
+    const hasAccountFilter =
+      wantsActive ||
+      wantsInactive;
+
+    const hasPresenceFilter =
+      wantsOnline ||
+      wantsOffline;
+
+
+    const matchesAccount =
+      !hasAccountFilter ||
+      (
+        wantsActive &&
+        !isBlocked
+      ) ||
+      (
+        wantsInactive &&
+        isBlocked
+      );
+
+
+    const matchesPresence =
+      !hasPresenceFilter ||
+      (
+        wantsOnline &&
+        isOnline
+      ) ||
+      (
+        wantsOffline &&
+        !isOnline
+      );
+
+
+    matchesStatus =
+      matchesAccount &&
+      matchesPresence;
 
   }
 

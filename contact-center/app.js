@@ -6836,7 +6836,8 @@ const visitorRef =
     db,
     `sites/${SITE_ID}/analytics/visitors/${visitorId}`
   );
-
+const firstSeenStorageKey =
+  `visitor_first_seen_${SITE_ID}_${visitorId}`;
 const presenceRef =
   ref(
     db,
@@ -6889,29 +6890,37 @@ browser:
       }
     );
 
-
-const visitorSnapshot =
-  await get(
-    visitorRef
-  );
-
-if (
-  !visitorSnapshot
-    .child("firstSeen")
-    .exists()
+    if (
+  !localStorage.getItem(
+    firstSeenStorageKey
+  )
 ) {
 
-  await update(
-    visitorRef,
-    {
-      firstSeen:
-        serverTimestamp()
-    }
-  );
+  try {
+
+    await update(
+      visitorRef,
+      {
+        firstSeen:
+          serverTimestamp()
+      }
+    );
+
+    localStorage.setItem(
+      firstSeenStorageKey,
+      "1"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "First seen write error:",
+      error
+    );
+
+  }
 
 }
-
-
 await set(
 
   ref(

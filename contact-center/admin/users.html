@@ -650,6 +650,13 @@
 >
   Skin Config
 </button>
+<button
+  type="button"
+  class="permission-module-tab"
+  data-permission-tab="welcome"
+>
+  Welcome Popup
+</button>
   </div>
 
 
@@ -1034,6 +1041,47 @@
       <input
         type="checkbox"
         data-permission="skin.edit"
+      >
+      Edit
+    </label>
+
+  </div>
+
+</div>
+<!-- WELCOME POPUP -->
+
+<div
+  class="permission-box permission-panel"
+  data-permission-panel="welcome"
+>
+
+  <div class="permission-module-head">
+    <strong>Welcome Popup</strong>
+    <span>Control welcome popup access and editing.</span>
+  </div>
+
+  <div class="permission-grid">
+
+    <label class="checkbox-item permission-show-item">
+      <input
+        type="checkbox"
+        data-permission="welcome.show"
+      >
+      Show Module
+    </label>
+
+    <label class="checkbox-item">
+      <input
+        type="checkbox"
+        data-permission="welcome.view"
+      >
+      View
+    </label>
+
+    <label class="checkbox-item">
+      <input
+        type="checkbox"
+        data-permission="welcome.edit"
       >
       Edit
     </label>

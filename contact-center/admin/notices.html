@@ -416,6 +416,7 @@ import {
   setupLogout,
   safe,
   getAdminSites,
+  isSuperAdmin,
   getAdminSitePath,
   ref,
   push,
@@ -431,6 +432,23 @@ requireAdmin();
 setupLogout();
 
 initSharedDropdowns();
+function hasNoticePermission(
+  action
+) {
+
+  if (isSuperAdmin()) {
+    return true;
+  }
+
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+  return (
+    profile?.role === "site_admin" &&
+    profile?.permissions?.notices?.[action] === true
+  );
+
+}
 /* =========================================================
    NOTICE PAGE LOADING
 ========================================================= */
@@ -910,7 +928,26 @@ form.addEventListener(
 
     event.preventDefault();
 
+    const requiredPermission =
+      editId.value
+        ? "edit"
+        : "create";
 
+
+    if (
+      !hasNoticePermission(
+        requiredPermission
+      )
+    ) {
+
+      window.showToast?.(
+        `You do not have permission to ${requiredPermission} notices.`,
+        "error",
+        4000
+      );
+
+      return;
+    }
     const submitBtn =
       form.querySelector(
         'button[type="submit"]'
@@ -1224,6 +1261,18 @@ cancel.addEventListener(
 
 window.editNotice =
 function(siteId, id) {
+      if (
+    !hasNoticePermission("edit")
+  ) {
+
+    window.showToast?.(
+      "You do not have permission to edit notices.",
+      "error",
+      4000
+    );
+
+    return;
+  }
 
   const cacheKey =
     `${siteId}::${id}`;
@@ -1355,6 +1404,19 @@ document
 
 window.deleteNotice =
 async function(siteId, id) {
+
+  if (
+    !hasNoticePermission("delete")
+  ) {
+
+    window.showToast?.(
+      "You do not have permission to delete notices.",
+      "error",
+      4000
+    );
+
+    return;
+  }
 
   if (
     !confirm(
@@ -1617,22 +1679,33 @@ function renderNotices() {
 
             <div class="admin-notice-actions">
 
-              <button
-                type="button"
-                class="admin-notice-edit"
-                onclick="editNotice('${safe(item.siteId)}','${safe(item.id)}')"
-              >
-                EDIT
-              </button>
+              ${
+                hasNoticePermission("edit")
+                  ? `
+                    <button
+                      type="button"
+                      class="admin-notice-edit"
+                      onclick="editNotice('${safe(item.siteId)}','${safe(item.id)}')"
+                    >
+                      EDIT
+                    </button>
+                  `
+                  : ""
+              }
 
-
-              <button
-                type="button"
-                class="admin-notice-delete"
-                onclick="deleteNotice('${safe(item.siteId)}','${safe(item.id)}')"
-              >
-                DELETE
-              </button>
+              ${
+                hasNoticePermission("delete")
+                  ? `
+                    <button
+                      type="button"
+                      class="admin-notice-delete"
+                      onclick="deleteNotice('${safe(item.siteId)}','${safe(item.id)}')"
+                    >
+                      DELETE
+                    </button>
+                  `
+                  : ""
+              }
 
             </div>
 
@@ -1769,6 +1842,29 @@ window.addEventListener(
   "admin-profile-ready",
   async () => {
 
+        if (
+      !hasNoticePermission("view")
+    ) {
+
+      hideNoticePageLoading();
+
+      window.showToast?.(
+        "You do not have permission to view Notices.",
+        "error",
+        3000
+      );
+
+      setTimeout(
+        () => {
+          window.location.replace(
+            "./visitors.html"
+          );
+        },
+        300
+      );
+
+      return;
+    }
     try {
 
       noticeSites =

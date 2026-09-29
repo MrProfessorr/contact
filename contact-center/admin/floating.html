@@ -917,7 +917,75 @@ const floatingSiteInput =
     "floatingSite"
   );
 
+function syncFloatingPermissionUI() {
 
+  const canEdit =
+    hasFloatingPermission(
+      "edit"
+    );
+
+  [
+    enabledInput,
+    clickUrlInput,
+    positionInput,
+    animationInput,
+    widthInput,
+    mobileWidthInput,
+    distanceInput,
+    speedInput,
+    opacityInput,
+    showCloseInput,
+    closeModeInput,
+    showDesktopInput,
+    showMobileInput
+  ].forEach(
+    element => {
+
+      if (element) {
+        element.disabled =
+          !canEdit;
+      }
+
+    }
+  );
+
+  if (uploadFloatingImageBtn) {
+
+    uploadFloatingImageBtn.disabled =
+      !canEdit;
+
+    uploadFloatingImageBtn.style.display =
+      canEdit
+        ? ""
+        : "none";
+
+  }
+
+  if (removeFloatingImageBtn) {
+
+    removeFloatingImageBtn.disabled =
+      !canEdit;
+
+    removeFloatingImageBtn.style.display =
+      canEdit
+        ? ""
+        : "none";
+
+  }
+
+  if (saveBtn) {
+
+    saveBtn.disabled =
+      !canEdit;
+
+    saveBtn.style.display =
+      canEdit
+        ? ""
+        : "none";
+
+  }
+
+}
 let floatingSites = [];
 
 let currentFloatingSiteId = "";
@@ -1074,6 +1142,14 @@ uploadFloatingImageBtn.addEventListener(
   "click",
   () => {
 
+    if (
+      !hasFloatingPermission(
+        "edit"
+      )
+    ) {
+      return;
+    }
+
     floatingImageFile.click();
 
   }
@@ -1150,7 +1226,13 @@ if (
 removeFloatingImageBtn.addEventListener(
   "click",
   () => {
-
+if (
+  !hasFloatingPermission(
+    "edit"
+  )
+) {
+  return;
+}
     floatingImageFile.value =
       "";
 
@@ -1782,7 +1864,31 @@ function applyFloatingData(data) {
 function loadFloatingForSite(
   siteId
 ) {
+if (
+  !hasFloatingPermission(
+    "view"
+  )
+) {
 
+  if (
+    typeof stopFloatingListener ===
+    "function"
+  ) {
+
+    stopFloatingListener();
+
+    stopFloatingListener =
+      null;
+
+  }
+
+  currentFloatingSiteId = "";
+
+  hideFloatingPageLoading();
+
+  return;
+
+}
   if (
     typeof stopFloatingListener ===
     "function"
@@ -1870,7 +1976,21 @@ floatingSiteInput.addEventListener(
 saveBtn.addEventListener(
   "click",
   async () => {
+if (
+  !hasFloatingPermission(
+    "edit"
+  )
+) {
 
+  window.showToast(
+    "You do not have permission to edit Floating Image.",
+    "error",
+    4000
+  );
+
+  return;
+
+}
     const oldText =
       saveBtn.textContent;
 
@@ -2192,6 +2312,26 @@ window.addEventListener(
 
     try {
 
+      syncFloatingPermissionUI();
+
+      if (
+        !hasFloatingPermission(
+          "view"
+        )
+      ) {
+
+        hideFloatingPageLoading();
+
+        window.showToast(
+          "You do not have permission to view Floating Image.",
+          "error",
+          4000
+        );
+
+        return;
+
+      }
+
       await refreshFloatingSites();
 
     } catch (error) {
@@ -2201,13 +2341,11 @@ window.addEventListener(
         error
       );
 
-
       window.showToast(
         "Failed to initialize Floating Image.",
         "error",
         5000
       );
-
 
       hideFloatingPageLoading();
 
@@ -2218,6 +2356,14 @@ window.addEventListener(
 window.addEventListener(
   "admin-site-change",
   async () => {
+
+    if (
+      !hasFloatingPermission(
+        "view"
+      )
+    ) {
+      return;
+    }
 
     try {
 

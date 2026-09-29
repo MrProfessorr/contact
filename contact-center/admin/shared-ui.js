@@ -9296,10 +9296,11 @@ const baseMenuItems = [
   permission: "loading.show"
 },
 
-  {
-    file: "skin.html",
-    name: "Skin Config"
-  },
+{
+  file: "skin.html",
+  name: "Skin Config",
+  permission: "skin.show"
+},
 
   {
     file: "welcome.html",

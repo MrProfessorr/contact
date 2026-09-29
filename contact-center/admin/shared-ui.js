@@ -9260,10 +9260,11 @@ const baseMenuItems = [
   permission: "visitors.show"
 },
 
-  {
-    file: "tabs.html",
-    name: "Tabs Settings"
-  },
+{
+  file: "tabs.html",
+  name: "Tabs Settings",
+  permission: "tabs.show"
+},
 
 {
   file: "contacts.html",

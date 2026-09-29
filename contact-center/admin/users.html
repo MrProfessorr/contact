@@ -660,7 +660,11 @@
 
   </div>
 
+<script src="./shared-ui.js"></script>
 
+<script>
+  window.initSharedDropdowns?.();
+</script>
   <script type="module">
 
     import {
@@ -679,7 +683,7 @@
 
 requireAdmin();
 setupLogout();
-initSharedDropdowns();
+
 window.addEventListener(
   "shared-ui-ready",
   () => {
@@ -981,12 +985,18 @@ window.addEventListener(
       adminUsernameInput.value = "";
       adminDisplayName.value = "";
 
-      adminRole.value =
-        "site_admin";
+adminRole.value =
+  "site_admin";
 
-      adminEnabled.checked =
-        true;
+adminRole
+  ._sharedDropdown
+  ?.setValue(
+    "site_admin",
+    false
+  );
 
+adminEnabled.checked =
+  true;
       renderSiteCheckboxes();
 
       clearPermissions();
@@ -1029,12 +1039,19 @@ window.addEventListener(
         user.username ||
         "";
 
-      adminRole.value =
-        user.role ||
-        "site_admin";
+adminRole.value =
+  user.role ||
+  "site_admin";
 
-      adminEnabled.checked =
-        user.enabled === true;
+adminRole
+  ._sharedDropdown
+  ?.setValue(
+    adminRole.value,
+    false
+  );
+
+adminEnabled.checked =
+  user.enabled === true;
 
       renderSiteCheckboxes(
         user.sites || {}

@@ -643,6 +643,13 @@
 >
   Loading Config
 </button>
+    <button
+  type="button"
+  class="permission-module-tab"
+  data-permission-tab="skin"
+>
+  Skin Config
+</button>
   </div>
 
 
@@ -986,6 +993,47 @@
       <input
         type="checkbox"
         data-permission="loading.edit"
+      >
+      Edit
+    </label>
+
+  </div>
+
+</div>
+<!-- SKIN CONFIG -->
+
+<div
+  class="permission-box permission-panel"
+  data-permission-panel="skin"
+>
+
+  <div class="permission-module-head">
+    <strong>Skin Config</strong>
+    <span>Control skin configuration access and editing.</span>
+  </div>
+
+  <div class="permission-grid">
+
+    <label class="checkbox-item permission-show-item">
+      <input
+        type="checkbox"
+        data-permission="skin.show"
+      >
+      Show Module
+    </label>
+
+    <label class="checkbox-item">
+      <input
+        type="checkbox"
+        data-permission="skin.view"
+      >
+      View
+    </label>
+
+    <label class="checkbox-item">
+      <input
+        type="checkbox"
+        data-permission="skin.edit"
       >
       Edit
     </label>

@@ -9200,10 +9200,11 @@ const baseMenuItems = [
     name: "Tabs Settings"
   },
 
-  {
-    file: "contacts.html",
-    name: "Contacts Manage"
-  },
+{
+  file: "contacts.html",
+  name: "Contacts Manage",
+  permission: "contacts.view"
+},
 
 {
   file: "notices.html",

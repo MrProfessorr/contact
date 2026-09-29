@@ -838,6 +838,32 @@ import {
 
 requireAdmin();
 setupLogout();
+function hasTabsPermission(
+  action
+) {
+
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+  if (!profile) {
+    return false;
+  }
+
+  if (
+    profile.role ===
+    "superadmin"
+  ) {
+    return true;
+  }
+
+  return (
+    profile
+      ?.permissions
+      ?.tabs
+      ?.[action] === true
+  );
+
+}
 /* =========================================================
    TABS PAGE LOADING
 ========================================================= */
@@ -2006,7 +2032,23 @@ saveAllSettingsBtn
 
   return;
 }
+if (
+  !hasTabsPermission(
+    "edit"
+  ) &&
+  !hasTabsPermission(
+    "create"
+  )
+) {
 
+  window.showToast(
+    "You do not have permission to modify navigation settings.",
+    "error",
+    4000
+  );
+
+  return;
+}
       const name =
         tabName.value.trim();
 
@@ -2023,7 +2065,22 @@ const isEditingTab =
   Boolean(
     editingTabId.value
   );
+if (
+  hasTabData &&
+  !isEditingTab &&
+  !hasTabsPermission(
+    "create"
+  )
+) {
 
+  window.showToast(
+    "You do not have permission to create tabs.",
+    "error",
+    4000
+  );
+
+  return;
+}
       if (
         hasTabData &&
         !name
@@ -2416,7 +2473,20 @@ window.showToast(
 ========================================================= */
 
 function editTab(id) {
+if (
+  !hasTabsPermission(
+    "edit"
+  )
+) {
 
+  window.showToast(
+    "You do not have permission to edit tabs.",
+    "error",
+    4000
+  );
+
+  return;
+}
   const item =
     tabs.find(
       tab =>
@@ -2565,7 +2635,20 @@ window.showToast(
 ========================================================= */
 
 async function deleteTab(id) {
+if (
+  !hasTabsPermission(
+    "delete"
+  )
+) {
 
+  window.showToast(
+    "You do not have permission to delete tabs.",
+    "error",
+    4000
+  );
+
+  return;
+}
   const item =
     tabs.find(
       tab =>
@@ -2641,6 +2724,21 @@ async function toggleTab(
   id,
   enabled
 ) {
+
+  if (
+    !hasTabsPermission(
+      "edit"
+    )
+  ) {
+
+    window.showToast(
+      "You do not have permission to update tab status.",
+      "error",
+      4000
+    );
+
+    return;
+  }
 
   try {
 
@@ -3362,6 +3460,27 @@ navigationSiteInput.addEventListener(
 window.addEventListener(
   "admin-profile-ready",
   () => {
+
+    if (
+      !hasTabsPermission(
+        "view"
+      )
+    ) {
+
+      footerStyleLoaded = true;
+      sidebarLoaded = true;
+      tabsLoaded = true;
+
+      finishTabsPageLoading();
+
+      window.showToast(
+        "You do not have permission to view Tabs Settings.",
+        "error",
+        4000
+      );
+
+      return;
+    }
 
     refreshNavigationSites();
 

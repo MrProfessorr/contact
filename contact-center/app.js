@@ -6984,23 +6984,29 @@ setInterval(
     ).catch(() => {});
 
 
-update(
-  presenceRef,
-  {
-    online: true,
-    visitorId: visitorId,
-    sessionId: visitorSessionId,
-    page: getCurrentPageUrl(),
-    lastSeen: serverTimestamp()
-  }
-).catch(error => {
+if (
+  document.visibilityState === "visible"
+) {
 
-  console.error(
-    "Presence heartbeat error:",
-    error
-  );
+  update(
+    presenceRef,
+    {
+      online: true,
+      visitorId: visitorId,
+      sessionId: visitorSessionId,
+      page: getCurrentPageUrl(),
+      lastSeen: serverTimestamp()
+    }
+  ).catch(error => {
 
-});
+    console.error(
+      "Presence heartbeat error:",
+      error
+    );
+
+  });
+
+}
 
   },
   5000
@@ -7028,7 +7034,47 @@ update(
 
 };
 
+const markVisitorOnline = () => {
 
+  update(
+    presenceRef,
+    {
+      online: true,
+      visitorId: visitorId,
+      sessionId: visitorSessionId,
+      page: getCurrentPageUrl(),
+      lastSeen: serverTimestamp()
+    }
+  ).catch(error => {
+
+    console.warn(
+      "Presence online update error:",
+      error
+    );
+
+  });
+
+};
+
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if (
+      document.visibilityState === "visible"
+    ) {
+
+      markVisitorOnline();
+
+    } else {
+
+      markVisitorOffline();
+
+    }
+
+  }
+);
 window.addEventListener(
   "pagehide",
   () => {

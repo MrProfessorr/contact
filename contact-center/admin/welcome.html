@@ -685,7 +685,32 @@ import {
 requireAdmin();
 setupLogout();
 initSharedDropdowns();
+function hasWelcomePermission(
+  action
+) {
 
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+  if (!profile) {
+    return false;
+  }
+
+  if (
+    profile.role ===
+    "superadmin"
+  ) {
+    return true;
+  }
+
+  return (
+    profile
+      ?.permissions
+      ?.welcome
+      ?.[action] === true
+  );
+
+}
 /* =========================================================
    WELCOME PAGE LOADING
 ========================================================= */
@@ -928,7 +953,86 @@ const previewOk =
   $("welcomePreviewOk");
 
 
+function syncWelcomePermissionUI() {
 
+  const canEdit =
+    hasWelcomePermission(
+      "edit"
+    );
+
+
+  [
+    enabled,
+    desktopWidth,
+    mobileWidth,
+    borderColor,
+    borderWidth,
+    backgroundColor,
+    backdropColor,
+    backdropOpacity,
+    okText,
+    okColor,
+    okTextColor,
+    closeColor,
+    closeIconColor,
+    animation,
+    delay,
+    showMode,
+    closeX,
+    closeOk,
+    closeEsc,
+    closeOutside
+  ].forEach(
+    element => {
+
+      if (element) {
+        element.disabled =
+          !canEdit;
+      }
+
+    }
+  );
+
+
+  if (uploadBtn) {
+
+    uploadBtn.disabled =
+      !canEdit;
+
+    uploadBtn.style.display =
+      canEdit
+        ? ""
+        : "none";
+
+  }
+
+
+  if (removeImage) {
+
+    removeImage.disabled =
+      !canEdit;
+
+    removeImage.style.display =
+      canEdit
+        ? ""
+        : "none";
+
+  }
+
+
+  if (saveBtn) {
+
+    saveBtn.disabled =
+      !canEdit;
+
+    saveBtn.style.display =
+      canEdit
+        ? ""
+        : "none";
+
+  }
+
+}
 /* =========================================================
    PREVIEW
 ========================================================= */
@@ -1084,16 +1188,33 @@ uploadBtn.addEventListener(
   "click",
   () => {
 
+    if (
+      !hasWelcomePermission(
+        "edit"
+      )
+    ) {
+      return;
+    }
+
     imageFile.click();
 
   }
 );
 
-
 imageFile.addEventListener(
   "change",
   async () => {
+if (
+  !hasWelcomePermission(
+    "edit"
+  )
+) {
 
+  imageFile.value = "";
+
+  return;
+
+}
     const file =
       imageFile.files?.[0];
 
@@ -1213,7 +1334,13 @@ window.showToast(
 removeImage.addEventListener(
   "click",
   () => {
-
+if (
+  !hasWelcomePermission(
+    "edit"
+  )
+) {
+  return;
+}
     imageUrl.value =
       "";
 
@@ -1295,7 +1422,31 @@ window.showToast(
 function loadWelcomeForSite(
   siteId
 ) {
+if (
+  !hasWelcomePermission(
+    "view"
+  )
+) {
 
+  if (
+    typeof stopWelcomeSettingsListener ===
+    "function"
+  ) {
+
+    stopWelcomeSettingsListener();
+
+    stopWelcomeSettingsListener =
+      null;
+
+  }
+
+  currentWelcomeSiteId = "";
+
+  hideWelcomePageLoading();
+
+  return;
+
+}
   if (stopWelcomeSettingsListener) {
 
     stopWelcomeSettingsListener();
@@ -1567,7 +1718,21 @@ function loadWelcomeForSite(
 saveBtn.addEventListener(
   "click",
   async () => {
-    
+    if (
+  !hasWelcomePermission(
+    "edit"
+  )
+) {
+
+  window.showToast(
+    "You do not have permission to edit Welcome Popup.",
+    "error",
+    4000
+  );
+
+  return;
+
+}
 if (!currentWelcomeSiteId) {
 
   window.showToast(
@@ -1912,9 +2077,52 @@ welcomeSiteInput.addEventListener(
 );
 window.addEventListener(
   "admin-profile-ready",
-  () => {
+  async () => {
 
-    refreshWelcomeSites();
+    try {
+
+      syncWelcomePermissionUI();
+
+
+      if (
+        !hasWelcomePermission(
+          "view"
+        )
+      ) {
+
+        hideWelcomePageLoading();
+
+        window.showToast(
+          "You do not have permission to view Welcome Popup.",
+          "error",
+          4000
+        );
+
+        return;
+
+      }
+
+
+      await refreshWelcomeSites();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to initialize Welcome Popup:",
+        error
+      );
+
+
+      window.showToast(
+        "Failed to initialize Welcome Popup.",
+        "error",
+        5000
+      );
+
+
+      hideWelcomePageLoading();
+
+    }
 
   }
 );
@@ -1922,9 +2130,29 @@ window.addEventListener(
 
 window.addEventListener(
   "admin-site-change",
-  () => {
+  async () => {
 
-    refreshWelcomeSites();
+    if (
+      !hasWelcomePermission(
+        "view"
+      )
+    ) {
+      return;
+    }
+
+
+    try {
+
+      await refreshWelcomeSites();
+
+    } catch (error) {
+
+      console.error(
+        "Failed to refresh Welcome sites:",
+        error
+      );
+
+    }
 
   }
 );

@@ -2467,17 +2467,17 @@ function navigateToTab(
   }
 
 sessionStorage.removeItem(
-  "adminWorkspaceClosedTab"
+  getAdminWorkspaceClosedStorageKey()
 );
   addAdminWorkspaceTab(
     tab
   );
 
 
-  localStorage.setItem(
-    ADMIN_WORKSPACE_ACTIVE_KEY,
-    tab.file
-  );
+localStorage.setItem(
+  getAdminWorkspaceActiveStorageKey(),
+  tab.file
+);
 
 
   sessionStorage.setItem(
@@ -2500,6 +2500,100 @@ const ADMIN_WORKSPACE_KEY =
 
 const ADMIN_WORKSPACE_ACTIVE_KEY =
   "adminWorkspaceActiveTab";
+const ADMIN_WORKSPACE_CLOSED_KEY =
+  "adminWorkspaceClosedTab";
+
+
+function getAdminWorkspaceClosedStorageKey() {
+
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+
+  const uid =
+    String(
+      profile?.uid || ""
+    ).trim();
+
+
+  if (!uid) {
+
+    return (
+      ADMIN_WORKSPACE_CLOSED_KEY +
+      ":guest"
+    );
+
+  }
+
+
+  return (
+    ADMIN_WORKSPACE_CLOSED_KEY +
+    ":" +
+    uid
+  );
+
+}
+
+function getAdminWorkspaceStorageKey() {
+
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+
+  const uid =
+    String(
+      profile?.uid || ""
+    ).trim();
+
+
+  if (!uid) {
+
+    return (
+      ADMIN_WORKSPACE_KEY +
+      ":guest"
+    );
+
+  }
+
+
+  return (
+    ADMIN_WORKSPACE_KEY +
+    ":" +
+    uid
+  );
+
+}
+
+
+function getAdminWorkspaceActiveStorageKey() {
+
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+
+  const uid =
+    String(
+      profile?.uid || ""
+    ).trim();
+
+
+  if (!uid) {
+
+    return (
+      ADMIN_WORKSPACE_ACTIVE_KEY +
+      ":guest"
+    );
+
+  }
+
+
+  return (
+    ADMIN_WORKSPACE_ACTIVE_KEY +
+    ":" +
+    uid
+  );
+
+}
 
 
 function getAdminDefaultTab(
@@ -2565,10 +2659,14 @@ function getAdminWorkspaceTabs() {
 
   try {
 
+    const storageKey =
+      getAdminWorkspaceStorageKey();
+
+
     const data =
       JSON.parse(
         localStorage.getItem(
-          ADMIN_WORKSPACE_KEY
+          storageKey
         ) || "[]"
       );
 
@@ -2591,8 +2689,12 @@ function saveAdminWorkspaceTabs(
   tabs
 ) {
 
+  const storageKey =
+    getAdminWorkspaceStorageKey();
+
+
   localStorage.setItem(
-    ADMIN_WORKSPACE_KEY,
+    storageKey,
     JSON.stringify(tabs)
   );
 
@@ -2629,10 +2731,10 @@ function addAdminWorkspaceTab(
   );
 
 
-  localStorage.setItem(
-    ADMIN_WORKSPACE_ACTIVE_KEY,
-    tab.file
-  );
+localStorage.setItem(
+  getAdminWorkspaceActiveStorageKey(),
+  tab.file
+);
 
 }
 
@@ -2689,10 +2791,10 @@ if (!currentItem) {
 
   if (fallbackTab) {
 
-    localStorage.setItem(
-      ADMIN_WORKSPACE_ACTIVE_KEY,
-      fallbackTab.file
-    );
+localStorage.setItem(
+  getAdminWorkspaceActiveStorageKey(),
+  fallbackTab.file
+);
 
 
     window.location.replace(
@@ -2728,7 +2830,7 @@ if (tabs.length === 0) {
 
 const recentlyClosedTab =
   sessionStorage.getItem(
-    "adminWorkspaceClosedTab"
+    getAdminWorkspaceClosedStorageKey()
   );
 
 
@@ -2758,7 +2860,7 @@ saveAdminWorkspaceTabs(
 if (currentItem) {
 
   localStorage.setItem(
-    ADMIN_WORKSPACE_ACTIVE_KEY,
+    getAdminWorkspaceActiveStorageKey(),
     currentPage
   );
 
@@ -3162,8 +3264,8 @@ refresh.addEventListener(
     event.stopPropagation();
 
 
-    localStorage.setItem(
-      ADMIN_WORKSPACE_ACTIVE_KEY,
+localStorage.setItem(
+  getAdminWorkspaceActiveStorageKey(),
       tab.file
     );
 
@@ -3200,8 +3302,8 @@ refresh.addEventListener(
 
           event.stopPropagation();
            
-         sessionStorage.setItem(
-  "adminWorkspaceClosedTab",
+sessionStorage.setItem(
+  getAdminWorkspaceClosedStorageKey(),
   tab.file
 );
           const currentTabs =
@@ -3221,7 +3323,7 @@ refresh.addEventListener(
 
 const activeFile =
   localStorage.getItem(
-    ADMIN_WORKSPACE_ACTIVE_KEY
+    getAdminWorkspaceActiveStorageKey()
   );
 
 
@@ -3623,7 +3725,7 @@ window.addEventListener(
 
 const activeFile =
   localStorage.getItem(
-    ADMIN_WORKSPACE_ACTIVE_KEY
+    getAdminWorkspaceActiveStorageKey()
   );
 
 
@@ -3720,10 +3822,10 @@ refresh.addEventListener(
     event.stopPropagation();
 
 
-    localStorage.setItem(
-      ADMIN_WORKSPACE_ACTIVE_KEY,
-      tab.file
-    );
+localStorage.setItem(
+  getAdminWorkspaceActiveStorageKey(),
+  tab.file
+);
 
 
     sessionStorage.setItem(
@@ -3766,7 +3868,7 @@ refresh.addEventListener(
 
 const activeFile =
   localStorage.getItem(
-    ADMIN_WORKSPACE_ACTIVE_KEY
+    getAdminWorkspaceActiveStorageKey()
   );
 
 
@@ -3823,7 +3925,7 @@ const wasActive =
 
 
 localStorage.setItem(
-  ADMIN_WORKSPACE_ACTIVE_KEY,
+  getAdminWorkspaceActiveStorageKey(),
   nextTab.file
 );
 
@@ -4317,16 +4419,44 @@ function initAdminSidebar() {
 
 const ADMIN_SELECTED_SITES_KEY =
   "adminSelectedSites";
+function getAdminSelectedSitesStorageKey() {
 
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+
+  const uid =
+    String(
+      profile?.uid || ""
+    ).trim();
+
+
+  if (!uid) {
+
+    return (
+      ADMIN_SELECTED_SITES_KEY +
+      ":guest"
+    );
+
+  }
+
+
+  return (
+    ADMIN_SELECTED_SITES_KEY +
+    ":" +
+    uid
+  );
+
+}
 function getSavedAdminSites() {
 
   try {
 
     const saved =
       JSON.parse(
-        localStorage.getItem(
-          ADMIN_SELECTED_SITES_KEY
-        ) ||
+localStorage.getItem(
+  getAdminSelectedSitesStorageKey()
+) ||
         "[]"
       );
 
@@ -4426,19 +4556,19 @@ options: [],
           values.length
         ) {
 
-          localStorage.setItem(
-            ADMIN_SELECTED_SITES_KEY,
-            JSON.stringify(
-              values
-            )
-          );
+localStorage.setItem(
+  getAdminSelectedSitesStorageKey(),
+  JSON.stringify(
+    values
+  )
+);
 
         }
         else {
 
-          localStorage.removeItem(
-            ADMIN_SELECTED_SITES_KEY
-          );
+localStorage.removeItem(
+  getAdminSelectedSitesStorageKey()
+);
 
         }
 
@@ -4493,14 +4623,6 @@ window.isAdminAllSites =
 
   };
 
-
-/*
-  Backward helper sementara.
-
-  Kalau code lama masih panggil
-  getAdminActiveSite(),
-  return site pertama sahaja.
-*/
 
 window.getAdminActiveSite =
   function () {
@@ -4621,19 +4743,19 @@ async function loadAdminSiteOptions() {
         validSites.length
       ) {
 
-        localStorage.setItem(
-          ADMIN_SELECTED_SITES_KEY,
-          JSON.stringify(
-            validSites
-          )
-        );
+localStorage.setItem(
+  getAdminSelectedSitesStorageKey(),
+  JSON.stringify(
+    validSites
+  )
+);
 
       }
       else {
 
-        localStorage.removeItem(
-          ADMIN_SELECTED_SITES_KEY
-        );
+ localStorage.removeItem(
+  getAdminSelectedSitesStorageKey()
+);
 
       }
 
@@ -4675,12 +4797,12 @@ async function loadAdminSiteOptions() {
         );
 
 
-      localStorage.setItem(
-        ADMIN_SELECTED_SITES_KEY,
-        JSON.stringify(
-          [onlySite]
-        )
-      );
+localStorage.setItem(
+  getAdminSelectedSitesStorageKey(),
+  JSON.stringify(
+    [onlySite]
+  )
+);
 
 
       adminSiteDropdown

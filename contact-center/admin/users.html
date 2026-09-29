@@ -306,7 +306,64 @@
         );
       gap: 8px;
     }
+.permission-module-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 14px;
+  overflow-x: auto;
+  padding-bottom: 3px;
+}
 
+.permission-module-tab {
+  flex: 0 0 auto;
+  border: 1px solid #3a3a3a;
+  background: #111;
+  color: #aaa;
+  padding: 9px 13px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: .18s ease;
+}
+
+.permission-module-tab:hover {
+  border-color: #555;
+  color: #fff;
+}
+
+.permission-module-tab.active {
+  background: #1677ff;
+  border-color: #1677ff;
+  color: #fff;
+}
+
+.permission-panel {
+  display: none;
+}
+
+.permission-panel.active {
+  display: block;
+}
+
+.permission-module-head {
+  margin-bottom: 12px;
+}
+
+.permission-module-head strong {
+  display: block;
+  font-size: 15px;
+}
+
+.permission-module-head span {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  opacity: .6;
+}
+
+.permission-show-item {
+  border-color: rgba(22,119,255,.55);
+}
     .enabled-row {
       display: flex;
       align-items: center;
@@ -524,10 +581,213 @@
       </div>
 
 
-      <div
-        id="permissionSection"
-        class="user-field"
-      >
+<div
+  id="permissionSection"
+  class="user-field"
+>
+
+  <label>
+    Permissions
+  </label>
+
+  <div class="permission-module-tabs">
+
+    <button
+      type="button"
+      class="permission-module-tab active"
+      data-permission-tab="visitors"
+    >
+      Visitors
+    </button>
+
+    <button
+      type="button"
+      class="permission-module-tab"
+      data-permission-tab="notices"
+    >
+      Notices
+    </button>
+
+    <button
+      type="button"
+      class="permission-module-tab"
+      data-permission-tab="contacts"
+    >
+      Contact Manage
+    </button>
+
+  </div>
+
+
+  <!-- VISITORS -->
+
+  <div
+    class="permission-box permission-panel active"
+    data-permission-panel="visitors"
+  >
+
+    <div class="permission-module-head">
+      <strong>Visitors</strong>
+      <span>Control access and visitor actions.</span>
+    </div>
+
+    <div class="permission-grid">
+
+      <label class="checkbox-item permission-show-item">
+        <input
+          type="checkbox"
+          data-permission="visitors.show"
+        >
+        Show Module
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="visitors.view"
+        >
+        View
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="visitors.block"
+        >
+        Block
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="visitors.delete"
+        >
+        Delete
+      </label>
+
+    </div>
+
+  </div>
+
+
+  <!-- NOTICES -->
+
+  <div
+    class="permission-box permission-panel"
+    data-permission-panel="notices"
+  >
+
+    <div class="permission-module-head">
+      <strong>Notices</strong>
+      <span>Control notice management permissions.</span>
+    </div>
+
+    <div class="permission-grid">
+
+      <label class="checkbox-item permission-show-item">
+        <input
+          type="checkbox"
+          data-permission="notices.show"
+        >
+        Show Module
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="notices.view"
+        >
+        View
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="notices.create"
+        >
+        Create
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="notices.edit"
+        >
+        Edit
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="notices.delete"
+        >
+        Delete
+      </label>
+
+    </div>
+
+  </div>
+
+
+  <!-- CONTACT MANAGE -->
+
+  <div
+    class="permission-box permission-panel"
+    data-permission-panel="contacts"
+  >
+
+    <div class="permission-module-head">
+      <strong>Contact Manage</strong>
+      <span>Control contact module access and actions.</span>
+    </div>
+
+    <div class="permission-grid">
+
+      <label class="checkbox-item permission-show-item">
+        <input
+          type="checkbox"
+          data-permission="contacts.show"
+        >
+        Show Module
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="contacts.view"
+        >
+        View
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="contacts.create"
+        >
+        Create
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="contacts.edit"
+        >
+        Edit
+      </label>
+
+      <label class="checkbox-item">
+        <input
+          type="checkbox"
+          data-permission="contacts.delete"
+        >
+        Delete
+      </label>
+
+    </div>
+
+  </div>
+
+</div>
 
         <label>
           Permissions
@@ -816,7 +1076,65 @@ window.addEventListener(
       document.getElementById(
         "cancelUserBtn"
       );
+const permissionModuleTabs =
+  document.querySelectorAll(
+    "[data-permission-tab]"
+  );
 
+const permissionPanels =
+  document.querySelectorAll(
+    "[data-permission-panel]"
+  );
+
+
+function openPermissionModule(
+  moduleName
+) {
+
+  permissionModuleTabs.forEach(
+    button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.permissionTab ===
+          moduleName
+      );
+
+    }
+  );
+
+
+  permissionPanels.forEach(
+    panel => {
+
+      panel.classList.toggle(
+        "active",
+        panel.dataset.permissionPanel ===
+          moduleName
+      );
+
+    }
+  );
+
+}
+
+
+permissionModuleTabs.forEach(
+  button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        openPermissionModule(
+          button.dataset.permissionTab
+        );
+
+      }
+    );
+
+  }
+);
 
     let allUsers = [];
     let allSites = [];
@@ -1041,13 +1359,17 @@ adminEnabled.checked =
   true;
       renderSiteCheckboxes();
 
-      clearPermissions();
+clearPermissions();
 
-      updateRoleUI();
+openPermissionModule(
+  "visitors"
+);
 
-      userModal.classList.add(
-        "open"
-      );
+updateRoleUI();
+
+userModal.classList.add(
+  "open"
+);
 
       adminUid.focus();
 
@@ -1099,15 +1421,19 @@ adminEnabled.checked =
         user.sites || {}
       );
 
-      setPermissions(
-        user.permissions || {}
-      );
+setPermissions(
+  user.permissions || {}
+);
 
-      updateRoleUI();
+openPermissionModule(
+  "visitors"
+);
 
-      userModal.classList.add(
-        "open"
-      );
+updateRoleUI();
+
+userModal.classList.add(
+  "open"
+);
 
     }
 

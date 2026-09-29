@@ -9290,10 +9290,11 @@ const baseMenuItems = [
   permission: "floating.show"
 },
 
-  {
-    file: "loading.html",
-    name: "Loading Config"
-  },
+{
+  file: "loading.html",
+  name: "Loading Config",
+  permission: "loading.show"
+},
 
   {
     file: "skin.html",

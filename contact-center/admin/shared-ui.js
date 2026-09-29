@@ -2502,10 +2502,26 @@ const ADMIN_WORKSPACE_ACTIVE_KEY =
   "adminWorkspaceActiveTab";
 
 
-const ADMIN_DEFAULT_TAB = {
-  file:"visitors.html",
-  name:"Dashboard"
-};
+function getAdminDefaultTab(
+  menuItems
+) {
+
+  if (
+    !Array.isArray(menuItems) ||
+    menuItems.length === 0
+  ) {
+    return null;
+  }
+
+  return {
+    file:
+      menuItems[0].file,
+
+    name:
+      menuItems[0].name
+  };
+
+}
 
 
 const ADMIN_TAB_REFRESH_ICON = `
@@ -2645,11 +2661,11 @@ function initAdminWorkspaceTabs(
   }
 
 
-  const currentPage =
-    window.location.pathname
-      .split("/")
-      .pop() ||
-    "visitors.html";
+const currentPage =
+  window.location.pathname
+    .split("/")
+    .pop() ||
+  "";
 
 
 let tabs =
@@ -2663,30 +2679,52 @@ const currentItem =
       currentPage
   );
 
+if (!currentItem) {
 
-/*
-  FIRST TIME ONLY:
-  CREATE DEFAULT VISITORS TAB
-*/
+  const fallbackTab =
+    getAdminDefaultTab(
+      menuItems
+    );
 
+
+  if (fallbackTab) {
+
+    localStorage.setItem(
+      ADMIN_WORKSPACE_ACTIVE_KEY,
+      fallbackTab.file
+    );
+
+
+    window.location.replace(
+      `./${fallbackTab.file}`
+    );
+
+    return;
+
+  }
+
+}
+   
 if (tabs.length === 0) {
 
-  tabs = [
-    {
-      ...ADMIN_DEFAULT_TAB
-    }
-  ];
+  const defaultTab =
+    getAdminDefaultTab(
+      menuItems
+    );
+
+
+  if (defaultTab) {
+
+    tabs = [
+      {
+        ...defaultTab
+      }
+    ];
+
+  }
 
 }
 
-
-/*
-  MAKE SURE CURRENT PAGE EXISTS
-  INSIDE WORKSPACE
-
-  TAPI JANGAN RESTORE TAB
-  YANG BARU SAHAJA DITUTUP
-*/
 
 const recentlyClosedTab =
   sessionStorage.getItem(

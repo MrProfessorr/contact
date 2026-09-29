@@ -1713,7 +1713,9 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  signOut
+  signOut,
+  setPersistence,
+  browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import {
   getDatabase,
@@ -1753,7 +1755,12 @@ const app =
 
 const auth =
   getAuth(app);
-  
+
+await setPersistence(
+  auth,
+  browserSessionPersistence
+);
+
 const db =
   getDatabase(app);
 
@@ -3100,12 +3107,12 @@ const expiresAt =
   loginTime +
   (24 * 60 * 60 * 1000);
 
-localStorage.setItem(
+sessionStorage.setItem(
   "adminLoginAt",
   loginTime.toString()
 );
 
-localStorage.setItem(
+sessionStorage.setItem(
   "adminExpiresAt",
   expiresAt.toString()
 );

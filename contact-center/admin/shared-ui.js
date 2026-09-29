@@ -4688,10 +4688,36 @@ async function loadAdminSiteOptions() {
 window.addEventListener(
   "admin-profile-ready",
   () => {
-
     loadAdminSiteOptions();
     syncSuperadminMenu();
     syncAdminPermissionMenu();
+     
+    visibleMenuItems =
+      getVisibleAdminMenuItems();
+     
+    const allowedFiles =
+      new Set(
+        visibleMenuItems.map(
+          item => item.file
+        )
+      );
+
+
+    const cleanTabs =
+      getAdminWorkspaceTabs()
+        .filter(
+          tab =>
+            allowedFiles.has(
+              tab.file
+            )
+        );
+    saveAdminWorkspaceTabs(
+      cleanTabs
+    );
+    initAdminWorkspaceTabs(
+      visibleMenuItems
+    );
+
   }
 );
 
@@ -9190,10 +9216,11 @@ adminNavInner.appendChild(
 
 const baseMenuItems = [
 
-  {
-    file: "visitors.html",
-    name: "Dashboard"
-  },
+{
+  file: "visitors.html",
+  name: "Dashboard",
+  permission: "visitors.show"
+},
 
   {
     file: "tabs.html",
@@ -9203,13 +9230,13 @@ const baseMenuItems = [
 {
   file: "contacts.html",
   name: "Contacts Manage",
-  permission: "contacts.view"
+  permission: "contacts.show"
 },
 
 {
   file: "notices.html",
   name: "Notices Message",
-  permission: "notices.view"
+  permission: "notices.show"
 },
 
   {
@@ -9252,13 +9279,8 @@ const baseMenuItems = [
 ];
 
 
-const visibleMenuItems =
+let visibleMenuItems =
   [...baseMenuItems];
-
-
-initAdminWorkspaceTabs(
-  visibleMenuItems
-);
 
 
 const linksHtml =
@@ -9325,7 +9347,69 @@ class="admin-sidebar-link${
     </div>
 
   `;
+function getVisibleAdminMenuItems() {
 
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+
+  if (!profile) {
+    return [];
+  }
+
+
+  const isSuperadmin =
+    profile.role ===
+    "superadmin";
+
+
+  return baseMenuItems.filter(
+    item => {
+
+      /*
+        Superadmin boleh nampak
+        semua module.
+      */
+      if (isSuperadmin) {
+        return true;
+      }
+
+
+      /*
+        Menu khas Superadmin.
+      */
+      if (item.superadminOnly) {
+        return false;
+      }
+
+
+      /*
+        Module biasa tanpa
+        permission khas.
+      */
+      if (!item.permission) {
+        return true;
+      }
+
+
+      const [
+        group,
+        action
+      ] =
+        item.permission.split(".");
+
+
+      return (
+        profile
+          ?.permissions
+          ?.[group]
+          ?.[action] === true
+      );
+
+    }
+  );
+
+}
 function syncAdminPermissionMenu() {
 
   const profile =

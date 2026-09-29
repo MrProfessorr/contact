@@ -475,10 +475,11 @@ import {
   db,
   requireAdmin,
   setupLogout,
-safe,
-getAdminSites,
-getAdminSitePath,
-ref,
+  isSuperAdmin,
+  safe,
+  getAdminSites,
+  getAdminSitePath,
+  ref,
   push,
   set,
   update,
@@ -486,13 +487,26 @@ ref,
   onValue
 } from "./admin.js";
 
-
 requireAdmin();
-
 setupLogout();
-
 initSharedDropdowns();
+function hasContactPermission(
+  action
+) {
 
+  if (isSuperAdmin()) {
+    return true;
+  }
+
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+  return (
+    profile?.role === "site_admin" &&
+    profile?.permissions?.contacts?.[action] === true
+  );
+
+}
 /* =========================================================
    CONTACT PAGE LOADING
 ========================================================= */
@@ -945,7 +959,26 @@ form.addEventListener(
   async event => {
 
     event.preventDefault();
+    const requiredPermission =
+      editId.value
+        ? "edit"
+        : "create";
 
+
+    if (
+      !hasContactPermission(
+        requiredPermission
+      )
+    ) {
+
+      window.showToast?.(
+        `You do not have permission to ${requiredPermission} contacts.`,
+        "error",
+        4000
+      );
+
+      return;
+    }
 
     const submitBtn =
       form.querySelector(
@@ -1296,7 +1329,18 @@ cancel.addEventListener(
 
 window.editContact =
 function(siteId, id) {
+  if (
+    !hasContactPermission("edit")
+  ) {
 
+    window.showToast?.(
+      "You do not have permission to edit contacts.",
+      "error",
+      4000
+    );
+
+    return;
+  }
   const cacheKey =
     `${siteId}:${id}`;
 
@@ -1440,7 +1484,18 @@ if (
 
 window.deleteContact =
 async function(siteId, id) {
+  if (
+    !hasContactPermission("delete")
+  ) {
 
+    window.showToast?.(
+      "You do not have permission to delete contacts.",
+      "error",
+      4000
+    );
+
+    return;
+  }
   if (
     !confirm(
       "Delete this contact?"
@@ -1895,32 +1950,44 @@ const siteName =
           </div>
 
 
-          <div class="admin-contact-actions">
+<div class="admin-contact-actions">
 
-            <button
-              type="button"
-              class="admin-contact-edit"
-              onclick="editContact(
-                '${safe(item.siteId)}',
-                '${safe(item.id)}'
-              )"
-            >
-              EDIT
-            </button>
+  ${
+    hasContactPermission("edit")
+      ? `
+          <button
+            type="button"
+            class="admin-contact-edit"
+            onclick="editContact(
+              '${safe(item.siteId)}',
+              '${safe(item.id)}'
+            )"
+          >
+            EDIT
+          </button>
+        `
+      : ""
+  }
 
 
-            <button
-              type="button"
-              class="admin-contact-delete"
-              onclick="deleteContact(
-                '${safe(item.siteId)}',
-                '${safe(item.id)}'
-              )"
-            >
-              DELETE
-            </button>
+  ${
+    hasContactPermission("delete")
+      ? `
+          <button
+            type="button"
+            class="admin-contact-delete"
+            onclick="deleteContact(
+              '${safe(item.siteId)}',
+              '${safe(item.id)}'
+            )"
+          >
+            DELETE
+          </button>
+        `
+      : ""
+  }
 
-          </div>
+</div>
 
         </article>
 
@@ -2056,6 +2123,29 @@ window.addEventListener(
   "admin-profile-ready",
   async () => {
 
+      if (
+      !hasContactPermission("view")
+    ) {
+
+      hideContactPageLoading();
+
+      window.showToast?.(
+        "You do not have permission to view Contacts.",
+        "error",
+        3000
+      );
+
+      setTimeout(
+        () => {
+          window.location.replace(
+            "./visitors.html"
+          );
+        },
+        300
+      );
+
+      return;
+    }
     try {
 
 contactSites =

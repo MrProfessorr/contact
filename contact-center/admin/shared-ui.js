@@ -4690,9 +4690,8 @@ window.addEventListener(
   () => {
 
     loadAdminSiteOptions();
-
     syncSuperadminMenu();
-
+    syncAdminPermissionMenu();
   }
 );
 
@@ -4702,7 +4701,6 @@ window.addEventListener(
   () => {
 
     loadAdminSiteOptions();
-
   }
 );
 
@@ -4718,10 +4716,8 @@ window.addEventListener(
       return;
 
     }
-
-
+     
     loadAdminSiteOptions();
-
   }
 );
 
@@ -4750,7 +4746,6 @@ window.addEventListener(
 
 
     loadAdminSiteOptions();
-
   }
 );
 /* =====================================================
@@ -9210,10 +9205,11 @@ const baseMenuItems = [
     name: "Contacts Manage"
   },
 
-  {
-    file: "notices.html",
-    name: "Notices Message"
-  },
+{
+  file: "notices.html",
+  name: "Notices Message",
+  permission: "notices.view"
+},
 
   {
     file: "marquee.html",
@@ -9279,12 +9275,14 @@ return `
     href="./${item.file}"
     data-admin-tab-file="${item.file}"
     data-admin-tab-name="${item.name}"
-    ${
-      item.superadminOnly
-        ? 'data-superadmin-only="true" style="display:none;"'
-        : ""
-    }
-    class="admin-sidebar-link${
+${
+  item.superadminOnly
+    ? 'data-superadmin-only="true" style="display:none;"'
+    : item.permission
+      ? `data-admin-permission="${item.permission}" style="display:none;"`
+      : ""
+}
+class="admin-sidebar-link${
       active
         ? " active"
         : ""
@@ -9326,6 +9324,51 @@ return `
     </div>
 
   `;
+
+function syncAdminPermissionMenu() {
+
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+  if (!profile) {
+    return;
+  }
+
+  const isSuperadmin =
+    profile.role === "superadmin";
+
+  document
+    .querySelectorAll(
+      "[data-admin-permission]"
+    )
+    .forEach(
+      item => {
+
+        const permission =
+          String(
+            item.dataset.adminPermission || ""
+          );
+
+        const [
+          group,
+          action
+        ] = permission.split(".");
+
+
+        const allowed =
+          isSuperadmin ||
+          profile?.permissions?.[group]?.[action] === true;
+
+
+        item.style.display =
+          allowed
+            ? ""
+            : "none";
+
+      }
+    );
+
+}
 function syncSuperadminMenu() {
 
   const profile =

@@ -182,20 +182,22 @@
     .user-btn {
       border: 1px solid #444;
       border-radius: 6px;
-      padding: 9px 13px;
+      padding: 0px 15px;
       background: transparent;
       color: inherit;
       cursor: pointer;
+      height:32px;
     }
 
     .user-btn:disabled {
       opacity: .5;
       cursor: not-allowed;
+      
     }
 
     .user-btn-primary {
       border-color: transparent;
-      background: #1677ff;
+      background: var(--blue);
       color: #fff;
     }
 
@@ -400,9 +402,12 @@
     }
 
     .user-field input:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
+    cursor: not-allowed;
+    border-color: #424242;
+    color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+}
 
     .checkbox-list {
       display: grid;

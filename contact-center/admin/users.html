@@ -46,13 +46,13 @@
       margin: 14px 12px 24px;
     }
 
-    .user-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
+.user-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 15px;
+}
 
     .user-header h1 {
       margin: 0;
@@ -64,22 +64,68 @@
       opacity: .7;
     }
 
-    .user-actions {
-      display: flex;
-      gap: 10px;
-    }
+.user-actions {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
 
-    .user-search {
-      width: 260px;
-      max-width: 100%;
-      padding: 10px 12px;
-      box-sizing: border-box;
-      border: 1px solid #444;
-      border-radius: 6px;
-      background: #181818;
-      color: #fff;
-      outline: none;
-    }
+.user-search-control {
+  width: 300px;
+  height: 32px;
+  flex: 0 0 300px;
+  display: flex;
+  align-items: stretch;
+}
+
+.user-search-input {
+  width: calc(100% - 32px);
+  min-width: 0;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 4px 11px;
+  border: 1px solid var(--input-line);
+  border-radius: 6px 0 0 6px;
+  background: var(--input);
+  color: var(--text);
+  outline: none;
+}
+
+.user-search-button {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-left: -1px;
+  border: 1px solid var(--input-line);
+  border-radius: 0 6px 6px 0;
+  background: var(--input);
+  color: var(--muted);
+  cursor: pointer;
+  outline: none;
+}
+
+.user-search-input:hover,
+.user-search-button:hover {
+  border-color: var(--input-line-hover);
+}
+
+.user-search-input:focus,
+.user-search-button:focus {
+  border-color: var(--input-line-focus);
+}
+
+.user-search-icon {
+  width: 14px;
+  height: 14px;
+  display: block;
+  fill: currentColor;
+}
 
     .user-btn {
       border: 1px solid #444;
@@ -169,12 +215,6 @@
       gap: 8px;
     }
 
-    .user-empty {
-      padding: 40px 20px;
-      text-align: center;
-      opacity: .65;
-    }
-
     /* MODAL */
 
     .user-modal-backdrop {
@@ -227,7 +267,16 @@
   background:
     rgba(255,255,255,.35);
 }
+.user-delete-btn {
+  color: #ff4d4f;
+  border-color: rgba(255,77,79,.55);
+}
 
+.user-delete-btn:hover {
+  color: #ff7875;
+  border-color: #ff4d4f;
+  background: rgba(255,77,79,.08);
+}
     .user-modal h2 {
       margin-top: 0;
     }
@@ -415,12 +464,36 @@
     <div class="user-header">
       <div class="user-actions">
 
-        <input
-          id="userSearch"
-          class="user-search"
-          type="search"
-          placeholder="Search admin..."
-        >
+<div class="user-search-control">
+
+  <input
+    id="userSearch"
+    class="user-search-input"
+    type="search"
+    placeholder="Search"
+    autocomplete="off"
+  >
+
+  <button
+    id="userSearchBtn"
+    class="user-search-button"
+    type="button"
+    aria-label="Search"
+  >
+
+    <svg
+      class="user-search-icon"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        d="M9.5 3a6.5 6.5 0 1 0 3.98 11.64L19.85 21 21 19.85l-6.36-6.37A6.5 6.5 0 0 0 9.5 3Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"
+      />
+    </svg>
+
+  </button>
+
+</div>
 
         <button
           id="addUserBtn"
@@ -441,11 +514,13 @@
 
         <thead>
           <tr>
-            <th>Username</th>
-            <th>Role</th>
-            <th>Allowed Sites</th>
-            <th>Status</th>
-            <th>Action</th>
+<th>Username</th>
+<th>Role</th>
+<th>Allowed Sites</th>
+<th>Status</th>
+<th>Date Created</th>
+<th>Last Edited</th>
+<th>Action</th>
           </tr>
         </thead>
 
@@ -454,13 +529,10 @@
       </table>
 
 
-      <div
-        id="userEmpty"
-        class="user-empty"
-        hidden
-      >
-        No admin users found.
-      </div>
+<div
+  id="userEmpty"
+  hidden
+></div>
 
     </div>
 
@@ -1136,8 +1208,9 @@ import {
   getAdminSites,
   getAdminUsers,
   saveAdminUser,
-  setAdminUserEnabled,
-  isSuperAdmin,
+setAdminUserEnabled,
+deleteAdminUser,
+isSuperAdmin,
   forceAdminLogout,
   safe
 
@@ -1300,7 +1373,43 @@ permissionModuleTabs.forEach(
     let allUsers = [];
     let allSites = [];
     let editingUid = "";
+function formatUserDate(
+  timestamp
+) {
 
+  const value =
+    Number(
+      timestamp || 0
+    );
+
+  if (!value) {
+    return "—";
+  }
+
+  const date =
+    new Date(value);
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+    return "—";
+  }
+
+  return new Intl.DateTimeFormat(
+    "en-MY",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    }
+  ).format(date);
+
+}
 
     function getSiteName(siteId) {
 
@@ -1648,9 +1757,42 @@ userModal.classList.add(
 
       userTableBody.innerHTML = "";
 
-      userEmpty.hidden =
-        filtered.length > 0;
+if (
+  filtered.length === 0
+) {
 
+  userEmpty.hidden =
+    false;
+
+  if (
+    window.showEmptyState
+  ) {
+
+    window.showEmptyState(
+      userEmpty,
+      "No data",
+      "",
+      "center"
+    );
+
+  }
+  else {
+
+    userEmpty.textContent =
+      "No data";
+
+  }
+
+}
+else {
+
+  userEmpty.hidden =
+    true;
+
+  userEmpty.innerHTML =
+    "";
+
+}
 
       filtered.forEach(
         user => {
@@ -1797,14 +1939,28 @@ userModal.classList.add(
                     ? "Active"
                     : "Disabled"
                 }
-              </span>
-            </td>
+</span>
+</td>
 
+<td>
+  ${safe(
+    formatUserDate(
+      user.createdAt
+    )
+  )}
+</td>
 
-            <td>
+<td>
+  ${safe(
+    formatUserDate(
+      user.updatedAt
+    )
+  )}
+</td>
 
-              <div class="user-row-actions">
+<td>
 
+  <div class="user-row-actions">
                 <button
                   class="user-btn"
                   type="button"
@@ -1828,7 +1984,20 @@ userModal.classList.add(
                 </button>
 
               </div>
-
+${
+  user.role === "site_admin"
+    ? `
+      <button
+        class="user-btn user-delete-btn"
+        type="button"
+        data-action="delete"
+        data-uid="${safe(user.uid)}"
+      >
+        Delete
+      </button>
+    `
+    : ""
+}
             </td>
 
           `;
@@ -2171,7 +2340,98 @@ window.addEventListener(
           return;
 
         }
+if (
+  action === "delete"
+) {
 
+  if (
+    user.role !==
+    "site_admin"
+  ) {
+    return;
+  }
+
+
+  const confirmed =
+    confirm(
+      `Delete Site Admin "${user.username}"?\n\n` +
+      `This will remove this admin profile and its access.\n\n` +
+      `This action cannot be undone.`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  button.disabled =
+    true;
+
+
+  try {
+
+    await deleteAdminUser(
+      user.uid
+    );
+
+
+    window.showToast?.(
+      `${user.username} deleted successfully.`,
+      "success",
+      4000
+    );
+
+
+    await loadData();
+
+  }
+  catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    const messages = {
+
+      CANNOT_DELETE_SELF:
+        "You cannot delete your own account.",
+
+      ONLY_SITE_ADMIN_DELETE:
+        "Only Site Admin can be deleted here.",
+
+      ADMIN_NOT_FOUND:
+        "Admin not found.",
+
+      SUPERADMIN_REQUIRED:
+        "Superadmin access required."
+
+    };
+
+
+    window.showToast?.(
+      messages[
+        error?.message
+      ] ||
+      error?.message ||
+      "Failed to delete admin.",
+      "error",
+      5000
+    );
+
+  }
+  finally {
+
+    button.disabled =
+      false;
+
+  }
+
+
+  return;
+
+}
 
         if (
           action === "toggle"

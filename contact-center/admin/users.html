@@ -125,6 +125,59 @@
   height: 14px;
   display: block;
   fill: currentColor;
+  transform-origin: center;
+}
+
+
+/* =========================
+   USER SEARCH SPINNER
+========================= */
+
+.user-sync-icon {
+  width: 14px;
+  height: 14px;
+  display: none;
+  transform-origin: center;
+}
+
+.user-sync-track {
+  fill: none;
+  stroke: rgba(255,255,255,.18);
+  stroke-width: 5;
+}
+
+.user-sync-spinner {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 80 120;
+  transform-origin: center;
+}
+
+.user-search-control.is-syncing
+.user-search-icon {
+  display: none;
+}
+
+.user-search-control.is-syncing
+.user-sync-icon {
+  display: block;
+  animation:
+    userSyncRotate
+    .75s linear infinite;
+}
+
+@keyframes userSyncRotate {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
 }
 
     .user-btn {
@@ -490,7 +543,25 @@
         d="M9.5 3a6.5 6.5 0 1 0 3.98 11.64L19.85 21 21 19.85l-6.36-6.37A6.5 6.5 0 0 0 9.5 3Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"
       />
     </svg>
+<svg
+  class="user-sync-icon"
+  viewBox="0 0 50 50"
+  aria-hidden="true"
+>
+  <circle
+    class="user-sync-track"
+    cx="25"
+    cy="25"
+    r="19"
+  ></circle>
 
+  <circle
+    class="user-sync-spinner"
+    cx="25"
+    cy="25"
+    r="19"
+  ></circle>
+</svg>
   </button>
 
 </div>
@@ -1245,7 +1316,17 @@ window.addEventListener(
       document.getElementById(
         "userSearch"
       );
+const userSearchBtn =
+  document.getElementById(
+    "userSearchBtn"
+  );
 
+
+const userSearchControl =
+  userSearch
+    ?.closest(
+      ".user-search-control"
+    );
     const addUserBtn =
       document.getElementById(
         "addUserBtn"
@@ -1373,6 +1454,87 @@ permissionModuleTabs.forEach(
     let allUsers = [];
     let allSites = [];
     let editingUid = "";
+    let userSearchSyncTimer =
+  null;
+
+let userSearchSyncStartedAt =
+  0;
+
+const USER_SEARCH_SYNC_DURATION =
+  900;
+
+
+function startUserSearchSync() {
+
+  clearTimeout(
+    userSearchSyncTimer
+  );
+
+
+  userSearchSyncStartedAt =
+    Date.now();
+
+
+  userSearchControl
+    ?.classList
+    .remove(
+      "is-syncing"
+    );
+
+
+  if (
+    userSearchControl
+  ) {
+
+    void userSearchControl.offsetWidth;
+
+  }
+
+
+  userSearchControl
+    ?.classList
+    .add(
+      "is-syncing"
+    );
+
+}
+
+
+function stopUserSearchSync() {
+
+  clearTimeout(
+    userSearchSyncTimer
+  );
+
+
+  const elapsed =
+    Date.now() -
+    userSearchSyncStartedAt;
+
+
+  const remaining =
+    Math.max(
+      0,
+      USER_SEARCH_SYNC_DURATION -
+      elapsed
+    );
+
+
+  userSearchSyncTimer =
+    setTimeout(
+      () => {
+
+        userSearchControl
+          ?.classList
+          .remove(
+            "is-syncing"
+          );
+
+      },
+      remaining
+    );
+
+}  q  
 function formatUserDate(
   timestamp
 ) {
@@ -1960,44 +2122,46 @@ else {
 
 <td>
 
-  <div class="user-row-actions">
-                <button
-                  class="user-btn"
-                  type="button"
-                  data-action="edit"
-                  data-uid="${safe(user.uid)}"
-                >
-                  Edit
-                </button>
+<div class="user-row-actions">
 
-                <button
-                  class="user-btn"
-                  type="button"
-                  data-action="toggle"
-                  data-uid="${safe(user.uid)}"
-                >
-                  ${
-                    user.enabled
-                      ? "Disable"
-                      : "Enable"
-                  }
-                </button>
+  <button
+    class="user-btn"
+    type="button"
+    data-action="edit"
+    data-uid="${safe(user.uid)}"
+  >
+    Edit
+  </button>
 
-              </div>
-${
-  user.role === "site_admin"
-    ? `
-      <button
-        class="user-btn user-delete-btn"
-        type="button"
-        data-action="delete"
-        data-uid="${safe(user.uid)}"
-      >
-        Delete
-      </button>
-    `
-    : ""
-}
+  <button
+    class="user-btn"
+    type="button"
+    data-action="toggle"
+    data-uid="${safe(user.uid)}"
+  >
+    ${
+      user.enabled
+        ? "Disable"
+        : "Enable"
+    }
+  </button>
+
+  ${
+    user.role === "site_admin"
+      ? `
+        <button
+          class="user-btn user-delete-btn"
+          type="button"
+          data-action="delete"
+          data-uid="${safe(user.uid)}"
+        >
+          Delete
+        </button>
+      `
+      : ""
+  }
+
+</div>
             </td>
 
           `;
@@ -2120,7 +2284,20 @@ window.addEventListener(
       "input",
       renderUsers
     );
+userSearchBtn.addEventListener(
+  "click",
+  () => {
 
+    userSearch.focus();
+
+    startUserSearchSync();
+
+    renderUsers();
+
+    stopUserSearchSync();
+
+  }
+);
 
     saveUserBtn.addEventListener(
       "click",

@@ -462,7 +462,10 @@ import {
       document.getElementById(
         "siteSearch"
       );
-
+const siteSearchBtn =
+  document.getElementById(
+    "siteSearchBtn"
+  );
     const addSiteBtn =
       document.getElementById(
         "addSiteBtn"
@@ -691,14 +694,24 @@ if (
   siteEmpty.hidden =
     false;
 
-  siteEmpty.innerHTML =
-    window.createEmptyState
-      ? window.createEmptyState(
-          "No data",
-          "",
-          "center"
-        )
-      : "No data";
+  if (
+    window.showEmptyState
+  ) {
+
+    window.showEmptyState(
+      siteEmpty,
+      "No data",
+      "",
+      "center"
+    );
+
+  }
+  else {
+
+    siteEmpty.textContent =
+      "No data";
+
+  }
 
 }
 else {
@@ -931,7 +944,16 @@ if (
       renderSites
     );
 
+siteSearchBtn.addEventListener(
+  "click",
+  () => {
 
+    renderSites();
+
+    siteSearch.focus();
+
+  }
+);
     saveSiteBtn.addEventListener(
       "click",
       async () => {

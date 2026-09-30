@@ -548,12 +548,124 @@
 .permission-show-item {
   border-color: rgba(22,119,255,.55);
 }
-    .enabled-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+/* =========================================================
+   ADMIN STATUS SWITCH
+========================================================= */
 
+.user-status-switch {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  width: max-content;
+  margin: 0 !important;
+  cursor: pointer;
+  user-select: none;
+}
+
+.user-status-switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+/* SWITCH BODY */
+
+.user-status-slider {
+  position: relative;
+
+  min-width: 86px;
+  height: 22px;
+
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0 9px 0 25px;
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  background: #777;
+  color: #fff;
+
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+
+  transition:
+    background .2s ease,
+    padding .2s ease;
+}
+
+
+/* BULAT PUTIH */
+
+.user-status-slider::before {
+  content: "";
+
+  position: absolute;
+
+  left: 3px;
+  top: 50%;
+
+  width: 16px;
+  height: 16px;
+
+  border-radius: 50%;
+  background: #fff;
+
+  transform: translateY(-50%);
+
+  transition: left .2s ease;
+}
+
+
+/* OFF TEXT */
+
+.user-status-text::before {
+  content: "Disabled";
+}
+
+
+/* =========================
+   ENABLED
+========================= */
+
+.user-status-switch
+input:checked +
+.user-status-slider {
+  background: #1677ff;
+  padding: 0 25px 0 9px;
+}
+
+
+/* BULAT PINDAH KANAN */
+
+.user-status-switch
+input:checked +
+.user-status-slider::before {
+  left: calc(100% - 19px);
+}
+
+
+/* ON TEXT */
+
+.user-status-switch
+input:checked +
+.user-status-slider
+.user-status-text::before {
+  content: "Enabled";
+}
+
+
+/* KEYBOARD FOCUS */
+
+.user-status-switch
+input:focus-visible +
+.user-status-slider {
+  outline: 2px solid rgba(22,119,255,.35);
+  outline-offset: 2px;
+}
     .user-modal-actions {
       display: flex;
       justify-content: flex-end;
@@ -1171,22 +1283,29 @@
 </div>
 
 
-      <div class="user-field">
+<div class="user-field">
 
-        <label>
-          Status
-        </label>
+  <label>
+    Status
+  </label>
 
-        <label class="enabled-row">
-          <input
-            id="adminEnabled"
-            type="checkbox"
-            checked
-          >
-          Enabled
-        </label>
+  <label class="user-status-switch">
 
-      </div>
+    <input
+      id="adminEnabled"
+      type="checkbox"
+      checked
+    >
+
+    <span class="user-status-slider">
+
+      <span class="user-status-text"></span>
+
+    </span>
+
+  </label>
+
+</div>
 
 
       <div class="user-modal-actions">

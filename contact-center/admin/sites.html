@@ -200,11 +200,42 @@ body {
       color: #fff;
     }
 
-    .site-table-wrap {
-      overflow-x: auto;
-      border: 1px solid #333;
-      border-radius: 8px;
-    }
+.site-table-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  border: 1px solid #333;
+  border-radius: 8px;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color:
+    rgba(255,255,255,.22)
+    transparent;
+}
+
+
+/* Chrome / Edge / Safari */
+
+.site-table-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+
+.site-table-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.site-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.22);
+  border-radius: 999px;
+}
+
+
+.site-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,.35);
+}
 
     .site-table {
       width: 100%;

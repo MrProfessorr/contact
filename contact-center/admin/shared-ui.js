@@ -4419,6 +4419,10 @@ function initAdminSidebar() {
 
 const ADMIN_SELECTED_SITES_KEY =
   "adminSelectedSites";
+   
+let currentAdminSelectedSites =
+  [];
+   
 function getAdminSelectedSitesStorageKey() {
 
   const profile =
@@ -4450,27 +4454,13 @@ function getAdminSelectedSitesStorageKey() {
 }
 function getSavedAdminSites() {
 
-  try {
-
-    const saved =
-      JSON.parse(
-localStorage.getItem(
-  getAdminSelectedSitesStorageKey()
-) ||
-        "[]"
-      );
-
-
-    return Array.isArray(saved)
-      ? saved
-      : [];
-
-  }
-  catch (error) {
-
-    return [];
-
-  }
+  return Array.isArray(
+    currentAdminSelectedSites
+  )
+    ? [
+        ...currentAdminSelectedSites
+      ]
+    : [];
 
 }
 
@@ -4498,11 +4488,6 @@ adminSiteSelector.className =
   "admin-site-selector";
 
 
-/*
-  Masukkan selepas
-  Support Admin.
-*/
-
 const adminBrand =
   adminNavInner.querySelector(
     ".admin-brand"
@@ -4526,11 +4511,6 @@ else {
 }
 
 
-/*
-  Buat reusable
-  chip dropdown.
-*/
-
 const adminSiteDropdown =
   createSharedChipDropdown(
     adminSiteSelector,
@@ -4548,35 +4528,13 @@ options: [],
         values
       ) {
 
-        /*
-          [] = ALL SITES.
-        */
-
-        if (
-          values.length
-        ) {
-
-localStorage.setItem(
-  getAdminSelectedSitesStorageKey(),
-  JSON.stringify(
-    values
-  )
-);
-
-        }
-        else {
-
-localStorage.removeItem(
-  getAdminSelectedSitesStorageKey()
-);
-
-        }
-
-
-        /*
-          Global event untuk
-          page lain nanti.
-        */
+currentAdminSelectedSites =
+  Array.isArray(values)
+    ? values.map(
+        value =>
+          String(value)
+      )
+    : [];
 
         window.dispatchEvent(
           new CustomEvent(
@@ -4600,10 +4558,6 @@ localStorage.removeItem(
     }
   );
 
-
-/*
-  GLOBAL HELPERS
-*/
 
 window.getAdminSelectedSites =
   function () {
@@ -4708,54 +4662,18 @@ async function loadAdminSiteOptions() {
       );
 
 
-    const savedSites =
-      getSavedAdminSites();
+const validSites =
+  currentAdminSelectedSites
+    .filter(
+      siteId =>
+        allowedSiteIds.includes(
+          String(siteId)
+        )
+    );
 
 
-    const validSites =
-      savedSites.filter(
-        siteId =>
-          allowedSiteIds.includes(
-            String(siteId)
-          )
-      );
-
-
-    /*
-      Bersihkan invalid selection.
-    */
-
-    if (
-      validSites.length !==
-      savedSites.length
-    ) {
-
-      if (
-        validSites.length
-      ) {
-
-localStorage.setItem(
-  getAdminSelectedSitesStorageKey(),
-  JSON.stringify(
-    validSites
-  )
-);
-
-      }
-      else {
-
- localStorage.removeItem(
-  getAdminSelectedSitesStorageKey()
-);
-
-      }
-
-    }
-
-
-    /*
-      Sync chips.
-    */
+currentAdminSelectedSites =
+  [...validSites];
 
     adminSiteDropdown
       ?.setValue(

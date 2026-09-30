@@ -456,10 +456,15 @@ export async function getAdminSites(
             site?.order || 999
           ),
 
-        createdAt:
-          Number(
-            site?.createdAt || 0
-          )
+createdAt:
+  Number(
+    site?.createdAt || 0
+  ),
+
+updatedAt:
+  Number(
+    site?.updatedAt || 0
+  )
 
       })
     )
@@ -472,14 +477,6 @@ export async function getAdminSites(
     );
 
 }
-
-
-/*
-  Normalize Site ID.
-
-  Contoh:
-  "SPM 888" -> "spm-888"
-*/
 
 export function normalizeSiteId(
   value

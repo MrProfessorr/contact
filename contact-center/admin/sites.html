@@ -130,6 +130,59 @@ body {
   height: 14px;
   display: block;
   fill: currentColor;
+  transform-origin: center;
+}
+
+
+/* =========================
+   SITE SEARCH SPINNER
+========================= */
+
+.site-sync-icon {
+  width: 14px;
+  height: 14px;
+  display: none;
+  transform-origin: center;
+}
+
+.site-sync-track {
+  fill: none;
+  stroke: rgba(255,255,255,.18);
+  stroke-width: 5;
+}
+
+.site-sync-spinner {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 80 120;
+  transform-origin: center;
+}
+
+.site-search-control.is-syncing
+.site-search-icon {
+  display: none;
+}
+
+.site-search-control.is-syncing
+.site-sync-icon {
+  display: block;
+  animation:
+    siteSyncRotate
+    .75s linear infinite;
+}
+
+@keyframes siteSyncRotate {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
 }
 
     .site-btn {
@@ -313,7 +366,25 @@ body {
         d="M9.5 3a6.5 6.5 0 1 0 3.98 11.64L19.85 21 21 19.85l-6.36-6.37A6.5 6.5 0 0 0 9.5 3Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"
       />
     </svg>
+<svg
+  class="site-sync-icon"
+  viewBox="0 0 50 50"
+  aria-hidden="true"
+>
+  <circle
+    class="site-sync-track"
+    cx="25"
+    cy="25"
+    r="19"
+  ></circle>
 
+  <circle
+    class="site-sync-spinner"
+    cx="25"
+    cy="25"
+    r="19"
+  ></circle>
+</svg>
   </button>
 
 </div>
@@ -466,6 +537,11 @@ const siteSearchBtn =
   document.getElementById(
     "siteSearchBtn"
   );
+  const siteSearchControl =
+  siteSearch
+    ?.closest(
+      ".site-search-control"
+    );
     const addSiteBtn =
       document.getElementById(
         "addSiteBtn"
@@ -506,6 +582,92 @@ const siteSearchBtn =
 
     let editingSiteId =
       null;
+  let siteSearchSyncTimer =
+  null;
+
+let siteSearchSyncStartedAt =
+  0;
+
+const SITE_SEARCH_SYNC_DURATION =
+  900;
+
+
+function startSiteSearchSync() {
+
+  clearTimeout(
+    siteSearchSyncTimer
+  );
+
+
+  siteSearchSyncStartedAt =
+    Date.now();
+
+
+  siteSearchControl
+    ?.classList
+    .remove(
+      "is-syncing"
+    );
+
+
+  /*
+    Force reflow supaya animation
+    restart setiap kali ditekan.
+  */
+
+  if (
+    siteSearchControl
+  ) {
+
+    void siteSearchControl.offsetWidth;
+
+  }
+
+
+  siteSearchControl
+    ?.classList
+    .add(
+      "is-syncing"
+    );
+
+}
+
+
+function stopSiteSearchSync() {
+
+  clearTimeout(
+    siteSearchSyncTimer
+  );
+
+
+  const elapsed =
+    Date.now() -
+    siteSearchSyncStartedAt;
+
+
+  const remaining =
+    Math.max(
+      0,
+      SITE_SEARCH_SYNC_DURATION -
+      elapsed
+    );
+
+
+  siteSearchSyncTimer =
+    setTimeout(
+      () => {
+
+        siteSearchControl
+          ?.classList
+          .remove(
+            "is-syncing"
+          );
+
+      },
+      remaining
+    );
+
+}
   function formatSiteDate(
   timestamp
 ) {
@@ -948,9 +1110,13 @@ siteSearchBtn.addEventListener(
   "click",
   () => {
 
+    siteSearch.focus();
+
+    startSiteSearchSync();
+
     renderSites();
 
-    siteSearch.focus();
+    stopSiteSearchSync();
 
   }
 );

@@ -459,10 +459,15 @@
 }
 .permission-module-tabs {
   display: flex;
-  gap: 8px;
-  margin: 10px 0 14px;
+  margin: 10px 0 0;
   overflow-x: auto;
-  padding-bottom: 3px;
+  overflow-y: hidden;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* old Edge */
+  scroll-behavior: smooth;
+}
+.permission-module-tabs::-webkit-scrollbar {
+  display: none;               /* Chrome / Edge / Safari */
 }
 
 .permission-module-tab {
@@ -1481,7 +1486,32 @@ const permissionPanels =
   document.querySelectorAll(
     "[data-permission-panel]"
   );
+const permissionTabsScroller =
+  document.querySelector(
+    ".permission-module-tabs"
+  );
 
+permissionTabsScroller?.addEventListener(
+  "wheel",
+  event => {
+
+    if (
+      permissionTabsScroller.scrollWidth <=
+      permissionTabsScroller.clientWidth
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+
+    permissionTabsScroller.scrollLeft +=
+      event.deltaY || event.deltaX;
+
+  },
+  {
+    passive: false
+  }
+);
 
 function openPermissionModule(
   moduleName

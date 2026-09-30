@@ -1747,17 +1747,30 @@ function renderPermissionChipEditors(
       }
 
 
-      permissionAvailableApis[
-        group
-      ]?.destroy?.();
+const oldAvailableApi =
+  permissionAvailableApis[group];
 
-      permissionGivenApis[
-        group
-      ]?.destroy?.();
+const oldGivenApi =
+  permissionGivenApis[group];
 
 
-      availableHost.innerHTML = "";
-      givenHost.innerHTML = "";
+if (oldAvailableApi) {
+  oldAvailableApi.destroy?.();
+}
+
+if (oldGivenApi) {
+  oldGivenApi.destroy?.();
+}
+
+
+/* buang reference instance lama */
+delete permissionAvailableApis[group];
+delete permissionGivenApis[group];
+
+
+/* reset host selepas destroy */
+availableHost.replaceChildren();
+givenHost.replaceChildren();
 
 
       const allValues =
@@ -2004,15 +2017,15 @@ userModal.classList.add(
     }
 
 
-    function closeUserModal() {
+function closeUserModal() {
 
-      userModal.classList.remove(
-        "open"
-      );
+  userModal.classList.remove(
+    "open"
+  );
 
-      editingUid = "";
+  editingUid = "";
 
-    }
+}
 
 
     function renderUsers() {

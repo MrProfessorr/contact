@@ -441,15 +441,36 @@
       font-weight: 600;
     }
 
-    .permission-grid {
-      display: grid;
-      grid-template-columns:
-        repeat(
-          auto-fit,
-          minmax(120px,1fr)
-        );
-      gap: 8px;
-    }
+.permission-chip-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+  gap: 8px;
+}
+
+.permission-chip-field {
+  min-width: 0;
+}
+
+.permission-chip-field > label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.permission-chip-host {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 650px) {
+  .permission-chip-grid {
+    grid-template-columns: 1fr;
+  }
+}
 @media (max-width: 1200px) {
 
   .user-form-grid {
@@ -876,432 +897,276 @@
 
   <!-- VISITORS -->
 
-  <div
-    class="permission-box permission-panel active"
-    data-permission-panel="visitors"
-  >
-
-    <div class="permission-module-head">
-      <strong>Visitors</strong>
-      <span>Control access and visitor actions.</span>
-    </div>
-
-    <div class="permission-grid">
-
-      <label class="checkbox-item permission-show-item">
-        <input
-          type="checkbox"
-          data-permission="visitors.show"
-        >
-        Show Module
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="visitors.view"
-        >
-        View
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="visitors.block"
-        >
-        Block
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="visitors.delete"
-        >
-        Delete
-      </label>
-
-    </div>
-
+<!-- VISITORS -->
+<div
+  class="permission-box permission-panel active"
+  data-permission-panel="visitors"
+>
+  <div class="permission-module-head">
+    <strong>Visitors</strong>
+    <span>Control access and visitor actions.</span>
   </div>
 
-
-  <!-- NOTICES -->
-
   <div
-    class="permission-box permission-panel"
-    data-permission-panel="notices"
+    class="permission-chip-grid"
+    data-permission-editor="visitors"
   >
-
-    <div class="permission-module-head">
-      <strong>Notices</strong>
-      <span>Control notice management permissions.</span>
+    <div class="permission-chip-field">
+      <label>Available Functions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-available="visitors"
+      ></div>
     </div>
 
-    <div class="permission-grid">
-
-      <label class="checkbox-item permission-show-item">
-        <input
-          type="checkbox"
-          data-permission="notices.show"
-        >
-        Show Module
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="notices.view"
-        >
-        View
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="notices.create"
-        >
-        Create
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="notices.edit"
-        >
-        Edit
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="notices.delete"
-        >
-        Delete
-      </label>
-
+    <div class="permission-chip-field">
+      <label>Given Permissions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-given="visitors"
+      ></div>
     </div>
+  </div>
+</div>
 
+
+<!-- NOTICES -->
+<div
+  class="permission-box permission-panel"
+  data-permission-panel="notices"
+>
+  <div class="permission-module-head">
+    <strong>Notices</strong>
+    <span>Control notice management permissions.</span>
   </div>
 
-
-  <!-- CONTACT MANAGE -->
-
-  <div
-    class="permission-box permission-panel"
-    data-permission-panel="contacts"
-  >
-
-    <div class="permission-module-head">
-      <strong>Contact Manage</strong>
-      <span>Control contact module access and actions.</span>
+  <div class="permission-chip-grid">
+    <div class="permission-chip-field">
+      <label>Available Functions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-available="notices"
+      ></div>
     </div>
 
-    <div class="permission-grid">
-
-      <label class="checkbox-item permission-show-item">
-        <input
-          type="checkbox"
-          data-permission="contacts.show"
-        >
-        Show Module
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="contacts.view"
-        >
-        View
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="contacts.create"
-        >
-        Create
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="contacts.edit"
-        >
-        Edit
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="contacts.delete"
-        >
-        Delete
-      </label>
-
+    <div class="permission-chip-field">
+      <label>Given Permissions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-given="notices"
+      ></div>
     </div>
-
   </div>
-  <!-- TABS SETTINGS -->
+</div>
 
-  <div
-    class="permission-box permission-panel"
-    data-permission-panel="tabs"
-  >
 
-    <div class="permission-module-head">
-      <strong>Tabs Settings</strong>
-      <span>Control navigation tabs and settings permissions.</span>
-    </div>
-
-    <div class="permission-grid">
-
-      <label class="checkbox-item permission-show-item">
-        <input
-          type="checkbox"
-          data-permission="tabs.show"
-        >
-        Show Module
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="tabs.view"
-        >
-        View
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="tabs.create"
-        >
-        Create
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="tabs.edit"
-        >
-        Edit
-      </label>
-
-      <label class="checkbox-item">
-        <input
-          type="checkbox"
-          data-permission="tabs.delete"
-        >
-        Delete
-      </label>
-
-    </div>
-
+<!-- CONTACTS -->
+<div
+  class="permission-box permission-panel"
+  data-permission-panel="contacts"
+>
+  <div class="permission-module-head">
+    <strong>Contact Manage</strong>
+    <span>Control contact module access and actions.</span>
   </div>
-  <!-- MARQUEE TEXT -->
 
+  <div class="permission-chip-grid">
+    <div class="permission-chip-field">
+      <label>Available Functions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-available="contacts"
+      ></div>
+    </div>
+
+    <div class="permission-chip-field">
+      <label>Given Permissions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-given="contacts"
+      ></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TABS -->
+<div
+  class="permission-box permission-panel"
+  data-permission-panel="tabs"
+>
+  <div class="permission-module-head">
+    <strong>Tabs Settings</strong>
+    <span>Control navigation tabs and settings permissions.</span>
+  </div>
+
+  <div class="permission-chip-grid">
+    <div class="permission-chip-field">
+      <label>Available Functions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-available="tabs"
+      ></div>
+    </div>
+
+    <div class="permission-chip-field">
+      <label>Given Permissions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-given="tabs"
+      ></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MARQUEE -->
 <div
   class="permission-box permission-panel"
   data-permission-panel="marquee"
 >
-
   <div class="permission-module-head">
     <strong>Marquee Text</strong>
     <span>Control marquee access and editing.</span>
   </div>
 
-  <div class="permission-grid">
+  <div class="permission-chip-grid">
+    <div class="permission-chip-field">
+      <label>Available Functions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-available="marquee"
+      ></div>
+    </div>
 
-    <label class="checkbox-item permission-show-item">
-      <input
-        type="checkbox"
-        data-permission="marquee.show"
-      >
-      Show Module
-    </label>
-
-    <label class="checkbox-item">
-      <input
-        type="checkbox"
-        data-permission="marquee.view"
-      >
-      View
-    </label>
-
-    <label class="checkbox-item">
-      <input
-        type="checkbox"
-        data-permission="marquee.edit"
-      >
-      Edit
-    </label>
-
+    <div class="permission-chip-field">
+      <label>Given Permissions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-given="marquee"
+      ></div>
+    </div>
   </div>
-
 </div>
-  <!-- FLOATING IMAGE -->
 
+
+<!-- FLOATING -->
 <div
   class="permission-box permission-panel"
   data-permission-panel="floating"
 >
-
   <div class="permission-module-head">
     <strong>Floating Image</strong>
     <span>Control floating image access and editing.</span>
   </div>
 
-  <div class="permission-grid">
+  <div class="permission-chip-grid">
+    <div class="permission-chip-field">
+      <label>Available Functions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-available="floating"
+      ></div>
+    </div>
 
-    <label class="checkbox-item permission-show-item">
-      <input
-        type="checkbox"
-        data-permission="floating.show"
-      >
-      Show Module
-    </label>
-
-    <label class="checkbox-item">
-      <input
-        type="checkbox"
-        data-permission="floating.view"
-      >
-      View
-    </label>
-
-    <label class="checkbox-item">
-      <input
-        type="checkbox"
-        data-permission="floating.edit"
-      >
-      Edit
-    </label>
-
+    <div class="permission-chip-field">
+      <label>Given Permissions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-given="floating"
+      ></div>
+    </div>
   </div>
-
 </div>
-  <!-- LOADING CONFIG -->
 
+
+<!-- LOADING -->
 <div
   class="permission-box permission-panel"
   data-permission-panel="loading"
 >
-
   <div class="permission-module-head">
     <strong>Loading Config</strong>
     <span>Control loading configuration access and editing.</span>
   </div>
 
-  <div class="permission-grid">
+  <div class="permission-chip-grid">
+    <div class="permission-chip-field">
+      <label>Available Functions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-available="loading"
+      ></div>
+    </div>
 
-    <label class="checkbox-item permission-show-item">
-      <input
-        type="checkbox"
-        data-permission="loading.show"
-      >
-      Show Module
-    </label>
-
-    <label class="checkbox-item">
-      <input
-        type="checkbox"
-        data-permission="loading.view"
-      >
-      View
-    </label>
-
-    <label class="checkbox-item">
-      <input
-        type="checkbox"
-        data-permission="loading.edit"
-      >
-      Edit
-    </label>
-
+    <div class="permission-chip-field">
+      <label>Given Permissions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-given="loading"
+      ></div>
+    </div>
   </div>
-
 </div>
-<!-- SKIN CONFIG -->
 
+
+<!-- SKIN -->
 <div
   class="permission-box permission-panel"
   data-permission-panel="skin"
 >
-
   <div class="permission-module-head">
     <strong>Skin Config</strong>
     <span>Control skin configuration access and editing.</span>
   </div>
 
-  <div class="permission-grid">
+  <div class="permission-chip-grid">
+    <div class="permission-chip-field">
+      <label>Available Functions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-available="skin"
+      ></div>
+    </div>
 
-    <label class="checkbox-item permission-show-item">
-      <input
-        type="checkbox"
-        data-permission="skin.show"
-      >
-      Show Module
-    </label>
-
-    <label class="checkbox-item">
-      <input
-        type="checkbox"
-        data-permission="skin.view"
-      >
-      View
-    </label>
-
-    <label class="checkbox-item">
-      <input
-        type="checkbox"
-        data-permission="skin.edit"
-      >
-      Edit
-    </label>
-
+    <div class="permission-chip-field">
+      <label>Given Permissions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-given="skin"
+      ></div>
+    </div>
   </div>
-
 </div>
-<!-- WELCOME POPUP -->
 
+
+<!-- WELCOME -->
 <div
   class="permission-box permission-panel"
   data-permission-panel="welcome"
 >
-
   <div class="permission-module-head">
     <strong>Welcome Popup</strong>
     <span>Control welcome popup access and editing.</span>
   </div>
 
-  <div class="permission-grid">
+  <div class="permission-chip-grid">
+    <div class="permission-chip-field">
+      <label>Available Functions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-available="welcome"
+      ></div>
+    </div>
 
-    <label class="checkbox-item permission-show-item">
-      <input
-        type="checkbox"
-        data-permission="welcome.show"
-      >
-      Show Module
-    </label>
-
-    <label class="checkbox-item">
-      <input
-        type="checkbox"
-        data-permission="welcome.view"
-      >
-      View
-    </label>
-
-    <label class="checkbox-item">
-      <input
-        type="checkbox"
-        data-permission="welcome.edit"
-      >
-      Edit
-    </label>
-
+    <div class="permission-chip-field">
+      <label>Given Permissions</label>
+      <div
+        class="permission-chip-host"
+        data-permission-given="welcome"
+      ></div>
+    </div>
   </div>
-
 </div>
 </div>
 
@@ -1466,7 +1331,74 @@ const siteChipDropdown =
   );
 
 let siteChipDropdownApi = null;
+const PERMISSION_DEFINITIONS = {
 
+  visitors: [
+    { value: "show", label: "Show Module" },
+    { value: "view", label: "View" },
+    { value: "block", label: "Block" },
+    { value: "delete", label: "Delete" }
+  ],
+
+  notices: [
+    { value: "show", label: "Show Module" },
+    { value: "view", label: "View" },
+    { value: "create", label: "Create" },
+    { value: "edit", label: "Edit" },
+    { value: "delete", label: "Delete" }
+  ],
+
+  contacts: [
+    { value: "show", label: "Show Module" },
+    { value: "view", label: "View" },
+    { value: "create", label: "Create" },
+    { value: "edit", label: "Edit" },
+    { value: "delete", label: "Delete" }
+  ],
+
+  tabs: [
+    { value: "show", label: "Show Module" },
+    { value: "view", label: "View" },
+    { value: "create", label: "Create" },
+    { value: "edit", label: "Edit" },
+    { value: "delete", label: "Delete" }
+  ],
+
+  marquee: [
+    { value: "show", label: "Show Module" },
+    { value: "view", label: "View" },
+    { value: "edit", label: "Edit" }
+  ],
+
+  floating: [
+    { value: "show", label: "Show Module" },
+    { value: "view", label: "View" },
+    { value: "edit", label: "Edit" }
+  ],
+
+  loading: [
+    { value: "show", label: "Show Module" },
+    { value: "view", label: "View" },
+    { value: "edit", label: "Edit" }
+  ],
+
+  skin: [
+    { value: "show", label: "Show Module" },
+    { value: "view", label: "View" },
+    { value: "edit", label: "Edit" }
+  ],
+
+  welcome: [
+    { value: "show", label: "Show Module" },
+    { value: "view", label: "View" },
+    { value: "edit", label: "Edit" }
+  ]
+
+};
+
+
+const permissionGivenApis = {};
+const permissionAvailableApis = {};
     const saveUserBtn =
       document.getElementById(
         "saveUserBtn"
@@ -1787,93 +1719,164 @@ function getSelectedSites() {
 
 }
 
-    function clearPermissions() {
+function renderPermissionChipEditors(
+  permissions = {}
+) {
 
-      document
-        .querySelectorAll(
-          "[data-permission]"
-        )
-        .forEach(
-          input => {
+  Object.entries(
+    PERMISSION_DEFINITIONS
+  ).forEach(
+    ([group, options]) => {
 
-            input.checked = false;
-
-          }
+      const availableHost =
+        document.querySelector(
+          `[data-permission-available="${group}"]`
         );
 
-    }
+      const givenHost =
+        document.querySelector(
+          `[data-permission-given="${group}"]`
+        );
 
 
-    function setPermissions(
-      permissions = {}
-    ) {
-
-      clearPermissions();
-
-
-      document
-        .querySelectorAll(
-          "[data-permission]"
-        )
-        .forEach(
-          input => {
-
-            const [
-              group,
-              action
-            ] =
-              input.dataset.permission
-                .split(".");
+      if (
+        !availableHost ||
+        !givenHost
+      ) {
+        return;
+      }
 
 
-            input.checked =
+      permissionAvailableApis[
+        group
+      ]?.destroy?.();
+
+      permissionGivenApis[
+        group
+      ]?.destroy?.();
+
+
+      availableHost.innerHTML = "";
+      givenHost.innerHTML = "";
+
+
+      const allValues =
+        options.map(
+          item => item.value
+        );
+
+
+      const selectedValues =
+        options
+          .filter(
+            item =>
               permissions?.[
                 group
               ]?.[
-                action
-              ] === true;
-
-          }
-        );
-
-    }
-
-
-    function getPermissions() {
-
-      const result = {};
+                item.value
+              ] === true
+          )
+          .map(
+            item => item.value
+          );
 
 
-      document
-        .querySelectorAll(
-          "[data-permission]"
-        )
-        .forEach(
-          input => {
+      permissionAvailableApis[group] =
+        window.createSharedChipDropdown?.(
+          availableHost,
+          {
+            placeholder:
+              "Available Functions",
 
-            const [
-              group,
-              action
-            ] =
-              input.dataset.permission
-                .split(".");
+            options,
 
-
-            if (!result[group]) {
-              result[group] = {};
-            }
-
-
-            result[group][action] =
-              input.checked === true;
-
+            value:
+              allValues
           }
         );
 
 
-      return result;
+      permissionGivenApis[group] =
+        window.createSharedChipDropdown?.(
+          givenHost,
+          {
+            placeholder:
+              "Select Permissions",
+
+            options,
+
+            value:
+              selectedValues
+          }
+        );
 
     }
+  );
+
+}
+
+
+function clearPermissions() {
+
+  renderPermissionChipEditors(
+    {}
+  );
+
+}
+
+
+function setPermissions(
+  permissions = {}
+) {
+
+  renderPermissionChipEditors(
+    permissions
+  );
+
+}
+
+
+function getPermissions() {
+
+  const result = {};
+
+
+  Object.entries(
+    PERMISSION_DEFINITIONS
+  ).forEach(
+    ([group, options]) => {
+
+      const selected =
+        new Set(
+          permissionGivenApis[
+            group
+          ]?.getValue?.() || []
+        );
+
+
+      result[group] = {};
+
+
+      options.forEach(
+        item => {
+
+          result[group][
+            item.value
+          ] =
+            selected.has(
+              item.value
+            );
+
+        }
+      );
+
+    }
+  );
+
+
+  return result;
+
+}
 
 
     function updateRoleUI() {

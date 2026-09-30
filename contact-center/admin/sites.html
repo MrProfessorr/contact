@@ -56,16 +56,81 @@ body {
       gap: 10px;
     }
 
-    .site-search {
-      width: 260px;
-      max-width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      background: #181818;
-      color: #fff;
-      outline: none;
-    }
+.site-search-control {
+  width: 300px;
+  height: 32px;
+  flex: 0 0 300px;
+  display: flex;
+  align-items: stretch;
+}
+
+.site-search-input {
+  width: calc(100% - 32px);
+  min-width: 0;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 4px 11px;
+
+  border: 1px solid var(--input-line);
+  border-radius: 6px 0 0 6px;
+
+  background: var(--input);
+  color: var(--text);
+
+  outline: none;
+}
+
+.site-search-button {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  margin-left: -1px;
+
+  border: 1px solid var(--input-line);
+  border-radius: 0 6px 6px 0;
+
+  background: var(--input);
+  color: var(--muted);
+
+  cursor: pointer;
+  outline: none;
+
+  position: relative;
+  z-index: 1;
+}
+
+.site-search-input:hover {
+  border-color: var(--input-line-hover);
+  z-index: 2;
+}
+
+.site-search-input:focus {
+  border-color: var(--input-line-focus);
+  z-index: 3;
+}
+
+.site-search-button:hover {
+  border-color: var(--input-line-hover);
+  color: var(--input-line-hover);
+}
+
+.site-search-button:focus {
+  border-color: var(--input-line-focus);
+  color: var(--input-line-focus);
+}
+
+.site-search-icon {
+  width: 14px;
+  height: 14px;
+  display: block;
+  fill: currentColor;
+}
 
     .site-btn {
       border: 0;
@@ -190,7 +255,16 @@ body {
       gap: 10px;
       margin-top: 20px;
     }
+.site-row-actions .site-delete-btn {
+  color: #ff4d4f;
+  border-color: rgba(255, 77, 79, .55);
+}
 
+.site-row-actions .site-delete-btn:hover {
+  color: #ff7875;
+  border-color: #ff4d4f;
+  background: rgba(255, 77, 79, .08);
+}
   </style>
 
 </head>
@@ -217,12 +291,36 @@ body {
 
       <div class="site-actions">
 
-        <input
-          id="siteSearch"
-          class="site-search"
-          type="search"
-          placeholder="Search site..."
-        >
+<div class="site-search-control">
+
+  <input
+    id="siteSearch"
+    class="site-search-input"
+    type="search"
+    placeholder="Search"
+    autocomplete="off"
+  >
+
+  <button
+    id="siteSearchBtn"
+    class="site-search-button"
+    type="button"
+    aria-label="Search"
+  >
+
+    <svg
+      class="site-search-icon"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        d="M9.5 3a6.5 6.5 0 1 0 3.98 11.64L19.85 21 21 19.85l-6.36-6.37A6.5 6.5 0 0 0 9.5 3Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"
+      />
+    </svg>
+
+  </button>
+
+</div>
 
         <button
           id="addSiteBtn"
@@ -338,16 +436,17 @@ body {
 
   <script type="module">
 
-    import {
-      requireAdmin,
-      setupLogout,
-      getAdminSites,
-      createAdminSite,
-      updateAdminSite,
-      setAdminSiteEnabled,
-      isSuperAdmin,
-      safe
-    } from "./admin.js";
+import {
+  requireAdmin,
+  setupLogout,
+  getAdminSites,
+  createAdminSite,
+  updateAdminSite,
+  setAdminSiteEnabled,
+  deleteAdminSite,
+  isSuperAdmin,
+  safe
+} from "./admin.js";
 
 
     requireAdmin();
@@ -619,7 +718,14 @@ localStorage.setItem(
                       : "Enable"
                   }
                 </button>
-
+<button
+  type="button"
+  data-action="delete"
+  data-site="${safe(site.id)}"
+  class="site-delete-btn"
+>
+  Delete
+</button>
               </div>
 
             </td>
@@ -936,7 +1042,115 @@ notifySiteRegistryChanged();
           return;
 
         }
+if (
+  action === "delete"
+) {
 
+  if (!isSuperAdmin()) {
+    return;
+  }
+
+
+  const confirmed =
+    confirm(
+      `Delete ${site.name} (${site.id}) permanently?\n\n` +
+      `This will delete all site data and remove this site from assigned admins.\n\n` +
+      `This action cannot be undone.`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  const typedSiteId =
+    prompt(
+      `Type "${site.id}" to confirm permanent deletion:`
+    );
+
+
+  if (
+    typedSiteId !== site.id
+  ) {
+
+    window.showToast?.(
+      "Site ID does not match. Delete cancelled.",
+      "warning",
+      4000
+    );
+
+    return;
+
+  }
+
+
+  button.disabled =
+    true;
+
+
+  try {
+
+    await deleteAdminSite(
+      site.id
+    );
+
+
+    window.showToast?.(
+      `${site.name} deleted permanently.`,
+      "success",
+      4000
+    );
+
+
+    await loadSites();
+
+    notifySiteRegistryChanged();
+
+  }
+  catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    const messages = {
+
+      SITE_NOT_FOUND:
+        "Site not found.",
+
+      SITE_ID_REQUIRED:
+        "Site ID is required.",
+
+      SUPERADMIN_REQUIRED:
+        "Superadmin access required."
+
+    };
+
+
+    window.showToast?.(
+      messages[
+        error?.message
+      ] ||
+      error?.message ||
+      "Failed to delete site.",
+      "error",
+      5000
+    );
+
+  }
+  finally {
+
+    button.disabled =
+      false;
+
+  }
+
+
+  return;
+
+}
 
         if (
           action === "toggle"

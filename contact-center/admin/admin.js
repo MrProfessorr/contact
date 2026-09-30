@@ -1024,8 +1024,18 @@ export async function getAdminUsers() {
         sites:
           profile?.sites || {},
 
-        permissions:
-          profile?.permissions || {}
+permissions:
+  profile?.permissions || {},
+
+createdAt:
+  Number(
+    profile?.createdAt || 0
+  ),
+
+updatedAt:
+  Number(
+    profile?.updatedAt || 0
+  )
       })
     )
     .sort(
@@ -1075,7 +1085,18 @@ export async function saveAdminUser(
     );
   }
 
+const existingSnapshot =
+  await get(
+    ref(
+      db,
+      `admin_users/${cleanUid}`
+    )
+  );
 
+
+const isNewAdmin =
+  !existingSnapshot.exists();
+  
   const role =
     profile.role === "superadmin"
       ? "superadmin"
@@ -1111,14 +1132,23 @@ export async function saveAdminUser(
             profile.permissions || {}
           ),
 
-    updatedAt:
-      Date.now(),
+updatedAt:
+  Date.now(),
 
-    updatedBy:
-      currentAdminProfile.uid
+updatedBy:
+  currentAdminProfile.uid
 
   };
+  
+if (isNewAdmin) {
 
+  data.createdAt =
+    Date.now();
+
+  data.createdBy =
+    currentAdminProfile.uid;
+
+}
 
   await update(
     ref(
@@ -1205,6 +1235,85 @@ export async function setAdminUserEnabled(
   );
 
 }
+export async function deleteAdminUser(
+  uid
+) {
+
+  if (!isSuperAdmin()) {
+    throw new Error(
+      "SUPERADMIN_REQUIRED"
+    );
+  }
+
+
+  const cleanUid =
+    String(
+      uid || ""
+    ).trim();
+
+
+  if (!cleanUid) {
+    throw new Error(
+      "ADMIN_UID_REQUIRED"
+    );
+  }
+
+
+  if (
+    cleanUid ===
+    currentAdminProfile?.uid
+  ) {
+    throw new Error(
+      "CANNOT_DELETE_SELF"
+    );
+  }
+
+
+  const snapshot =
+    await get(
+      ref(
+        db,
+        `admin_users/${cleanUid}`
+      )
+    );
+
+
+  if (!snapshot.exists()) {
+    throw new Error(
+      "ADMIN_NOT_FOUND"
+    );
+  }
+
+
+  const profile =
+    snapshot.val() || {};
+
+
+  if (
+    profile.role !==
+    "site_admin"
+  ) {
+    throw new Error(
+      "ONLY_SITE_ADMIN_DELETE"
+    );
+  }
+
+
+  await remove(
+    ref(
+      db,
+      `admin_users/${cleanUid}`
+    )
+  );
+
+
+  window.dispatchEvent(
+    new CustomEvent(
+      "admin-users-changed"
+    )
+  );
+
+}
 /* =========================
    EXPOSE ADMIN SITE API
 ========================= */
@@ -1245,6 +1354,8 @@ window.saveAdminUser =
 
 window.setAdminUserEnabled =
   setAdminUserEnabled;
+window.deleteAdminUser =
+  deleteAdminUser;
 /* =========================
    ADMIN SESSION 24 HOURS
 ========================= */

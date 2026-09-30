@@ -749,14 +749,30 @@ filtered.forEach(
               </span>
             </td>
 
-            <td>
-              ${safe(site.order)}
-            </td>
+<td>
+  ${safe(site.order)}
+</td>
 
-            <td>
+<td>
+  ${safe(
+    formatSiteDate(
+      site.createdAt
+    )
+  )}
+</td>
 
-              <div
-                class="site-row-actions"
+<td>
+  ${safe(
+    formatSiteDate(
+      site.updatedAt
+    )
+  )}
+</td>
+
+<td>
+
+  <div
+    class="site-row-actions"
               >
 
                 <button

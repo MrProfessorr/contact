@@ -4763,53 +4763,6 @@ localStorage.setItem(
         false
       );
 
-
-    const profile =
-      window
-        .getCurrentAdminProfile
-        ?.();
-
-
-    /*
-      Site Admin + hanya 1 site:
-      pilih automatically dan
-      hide selector.
-    */
-
-/*
-  Site Admin + hanya 1 site:
-  pilih automatically tetapi
-  selector tetap ditampilkan.
-*/
-
-if (
-  profile?.role ===
-    "site_admin" &&
-  options.length === 1
-) {
-
-  const onlySite =
-    String(
-      options[0].value
-    );
-
-
-  localStorage.setItem(
-    getAdminSelectedSitesStorageKey(),
-    JSON.stringify(
-      [onlySite]
-    )
-  );
-
-
-  adminSiteDropdown
-    ?.setValue(
-      [onlySite],
-      false
-    );
-
-}
-
 adminSiteSelector
   .style.display =
   "";

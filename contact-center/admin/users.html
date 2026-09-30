@@ -368,7 +368,30 @@
     .user-field {
       margin-bottom: 16px;
     }
+.user-form-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns:
+    minmax(220px, 1.35fr)
+    minmax(160px, 1fr)
+    minmax(160px, 1fr)
+    minmax(150px, .85fr)
+    minmax(220px, 1.35fr);
+  gap: 12px;
+  align-items: end;
+}
 
+.user-form-grid .user-field {
+  min-width: 0;
+  margin-bottom: 16px;
+}
+
+.user-form-grid .shared-input,
+.user-form-grid .shared-dropdown,
+.user-form-grid #siteChipDropdown {
+  width: 100%;
+  min-width: 0;
+}
     .user-field > label {
       display: block;
       margin-bottom: 7px;
@@ -427,6 +450,14 @@
         );
       gap: 8px;
     }
+@media (max-width: 1200px) {
+
+  .user-form-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
 .permission-module-tabs {
   display: flex;
   gap: 8px;
@@ -504,7 +535,10 @@
         align-items: stretch;
         flex-direction: column;
       }
-
+.user-form-grid {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
       .user-actions {
         width: 100%;
       }
@@ -658,11 +692,13 @@
   </h2>
 
 
-      <div class="user-field">
+<div class="user-form-grid">
 
-        <label for="adminUid">
-          Firebase UID
-        </label>
+  <div class="user-field">
+
+    <label for="adminUid">
+      Firebase UID
+    </label>
 
 <input
   id="adminUid"
@@ -746,7 +782,7 @@
 ></div>
 
       </div>
-
+</div>
 
 <div
   id="permissionSection"

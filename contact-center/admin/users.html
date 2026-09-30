@@ -575,7 +575,7 @@
   position: relative;
 
   min-width: 86px;
-  height: 22px;
+  height: 20px;
 
   display: inline-flex;
   align-items: center;
@@ -589,7 +589,7 @@
   color: #fff;
 
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
 
   transition:
@@ -623,7 +623,7 @@
 /* OFF TEXT */
 
 .user-status-text::before {
-  content: "Disabled";
+  content: "Inactive";
 }
 
 
@@ -654,7 +654,7 @@ input:checked +
 input:checked +
 .user-status-slider
 .user-status-text::before {
-  content: "Enabled";
+  content: "Active";
 }
 
 
@@ -1284,11 +1284,6 @@ input:focus-visible +
 
 
 <div class="user-field">
-
-  <label>
-    Status
-  </label>
-
   <label class="user-status-switch">
 
     <input

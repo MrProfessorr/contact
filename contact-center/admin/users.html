@@ -741,10 +741,9 @@
           Allowed Sites
         </label>
 
-        <div
-          id="siteCheckboxes"
-          class="checkbox-list"
-        ></div>
+<div
+  id="siteChipDropdown"
+></div>
 
       </div>
 
@@ -1414,10 +1413,12 @@ const userSearchControl =
         "permissionSection"
       );
 
-    const siteCheckboxes =
-      document.getElementById(
-        "siteCheckboxes"
-      );
+const siteChipDropdown =
+  document.getElementById(
+    "siteChipDropdown"
+  );
+
+let siteChipDropdownApi = null;
 
     const saveUserBtn =
       document.getElementById(
@@ -1627,75 +1628,86 @@ function formatUserDate(
     }
 
 
-    function renderSiteCheckboxes(
-      selectedSites = {}
-    ) {
+function renderSiteChipDropdown(
+  selectedSites = {}
+) {
 
-      siteCheckboxes.innerHTML = "";
-
-
-      allSites.forEach(
-        site => {
-
-          const label =
-            document.createElement(
-              "label"
-            );
-
-          label.className =
-            "checkbox-item";
-
-
-          const checked =
-            selectedSites?.[
-              site.id
-            ] === true;
-
-
-          label.innerHTML = `
-            <input
-              type="checkbox"
-              data-site-id="${safe(site.id)}"
-              ${checked ? "checked" : ""}
-            >
-            ${safe(site.name)}
-          `;
-
-
-          siteCheckboxes.appendChild(
-            label
-          );
-
-        }
+  const selectedValues =
+    Object.entries(
+      selectedSites || {}
+    )
+      .filter(
+        ([, enabled]) =>
+          enabled === true
+      )
+      .map(
+        ([siteId]) =>
+          String(siteId)
       );
 
+
+  if (siteChipDropdownApi) {
+
+    siteChipDropdownApi.destroy?.();
+
+    siteChipDropdownApi = null;
+
+  }
+
+
+  siteChipDropdown.innerHTML = "";
+
+
+  siteChipDropdownApi =
+    window.createSharedChipDropdown?.(
+      siteChipDropdown,
+      {
+        placeholder:
+          "Select Sites",
+
+        options:
+          allSites.map(
+            site => ({
+              value:
+                String(site.id),
+
+              label:
+                site.name ||
+                site.id
+            })
+          ),
+
+        value:
+          selectedValues
+      }
+    );
+
+}
+
+
+function getSelectedSites() {
+
+  const result = {};
+
+  const selectedValues =
+    siteChipDropdownApi
+      ?.getValue?.() || [];
+
+
+  selectedValues.forEach(
+    siteId => {
+
+      result[
+        String(siteId)
+      ] = true;
+
     }
+  );
 
 
-    function getSelectedSites() {
+  return result;
 
-      const result = {};
-
-
-      siteCheckboxes
-        .querySelectorAll(
-          "input[data-site-id]:checked"
-        )
-        .forEach(
-          input => {
-
-            result[
-              input.dataset.siteId
-            ] = true;
-
-          }
-        );
-
-
-      return result;
-
-    }
-
+}
 
     function clearPermissions() {
 
@@ -1830,7 +1842,7 @@ adminRole
 
 adminEnabled.checked =
   true;
-      renderSiteCheckboxes();
+      renderSiteChipDropdown();
 
 clearPermissions();
 
@@ -1890,9 +1902,9 @@ adminRole
 adminEnabled.checked =
   user.enabled === true;
 
-      renderSiteCheckboxes(
-        user.sites || {}
-      );
+renderSiteChipDropdown(
+  user.sites || {}
+);
 
 setPermissions(
   user.permissions || {}

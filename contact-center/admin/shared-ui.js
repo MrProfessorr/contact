@@ -2293,46 +2293,73 @@ function createSharedChipDropdown(
 
     },
 
-    setOptions(
-      newOptions = []
-    ) {
+setOptions(
+  newOptions = []
+) {
 
-      config.options =
-        Array.isArray(
-          newOptions
-        )
-          ? newOptions
-          : [];
-
-
-      Array
-        .from(
-          selectedValues
-        )
-        .forEach(
-          value => {
-
-            if (
-              !getOption(
-                value
-              )
-            ) {
-
-              selectedValues.delete(
-                value
-              );
-
-            }
-
-          }
-        );
+  config.options =
+    Array.isArray(
+      newOptions
+    )
+      ? newOptions
+      : [];
 
 
-      render();
+  Array
+    .from(
+      selectedValues
+    )
+    .forEach(
+      value => {
 
-    }
+        if (
+          !getOption(
+            value
+          )
+        ) {
 
-  };
+          selectedValues.delete(
+            value
+          );
+
+        }
+
+      }
+    );
+
+
+  render();
+
+},
+
+destroy() {
+
+  close();
+
+  if (
+    container._sharedChipDropdown ===
+    api
+  ) {
+
+    delete container._sharedChipDropdown;
+
+  }
+
+
+  /*
+    Buang UI dropdown lama.
+  */
+  container.innerHTML = "";
+
+  container.classList.remove(
+    "shared-chip-dropdown",
+    "has-value",
+    "open"
+  );
+
+}
+
+};
 
 
   container._sharedChipDropdown =

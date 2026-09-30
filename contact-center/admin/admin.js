@@ -834,6 +834,150 @@ export async function setAdminSiteEnabled(
 
 }
 /* =========================
+   DELETE SITE PERMANENTLY
+========================= */
+
+export async function deleteAdminSite(
+  siteId
+) {
+
+  if (!isSuperAdmin()) {
+    throw new Error(
+      "SUPERADMIN_REQUIRED"
+    );
+  }
+
+
+  const cleanId =
+    normalizeSiteId(
+      siteId
+    );
+
+
+  if (!cleanId) {
+    throw new Error(
+      "SITE_ID_REQUIRED"
+    );
+  }
+
+
+  /*
+    Pastikan site memang wujud.
+  */
+
+  const registryRef =
+    ref(
+      db,
+      `sites_registry/${cleanId}`
+    );
+
+
+  const registrySnapshot =
+    await get(
+      registryRef
+    );
+
+
+  if (!registrySnapshot.exists()) {
+    throw new Error(
+      "SITE_NOT_FOUND"
+    );
+  }
+
+
+  /*
+    Buang site daripada assignment
+    semua Site Admin.
+  */
+
+  const adminsSnapshot =
+    await get(
+      ref(
+        db,
+        "admin_users"
+      )
+    );
+
+
+  if (adminsSnapshot.exists()) {
+
+    const adminUpdates = {};
+
+
+    Object.entries(
+      adminsSnapshot.val() || {}
+    ).forEach(
+      ([uid, profile]) => {
+
+        if (
+          profile?.sites?.[cleanId] === true
+        ) {
+
+          adminUpdates[
+            `${uid}/sites/${cleanId}`
+          ] = null;
+
+        }
+
+      }
+    );
+
+
+    if (
+      Object.keys(
+        adminUpdates
+      ).length
+    ) {
+
+      await update(
+        ref(
+          db,
+          "admin_users"
+        ),
+        adminUpdates
+      );
+
+    }
+
+  }
+
+
+  /*
+    Buang semua data customer
+    untuk site ini.
+  */
+
+  await remove(
+    ref(
+      db,
+      `sites/${cleanId}`
+    )
+  );
+
+
+  /*
+    Akhir sekali buang registry.
+  */
+
+  await remove(
+    registryRef
+  );
+
+
+  window.dispatchEvent(
+    new CustomEvent(
+      "admin-sites-changed",
+      {
+        detail: {
+          action: "deleted",
+          siteId: cleanId
+        }
+      }
+    )
+  );
+
+}
+/* =========================
    ADMIN USER MANAGEMENT
 ========================= */
 
@@ -1094,7 +1238,8 @@ window.updateAdminSite =
 
 window.setAdminSiteEnabled =
   setAdminSiteEnabled;
-
+window.deleteAdminSite =
+  deleteAdminSite;
 window.getAdminUsers =
   getAdminUsers;
 

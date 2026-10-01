@@ -2234,19 +2234,16 @@ async function deleteAuthUser(user) {
   const previousUsers =
     [...allAuthUsers];
 
-
-  /*
-    INSTANT UI:
-    buang row dahulu tanpa tunggu backend.
-  */
-  allAuthUsers =
-    allAuthUsers.filter(
-      item =>
-        item.uid !== user.uid
-    );
+allAuthUsers =
+  allAuthUsers.filter(
+    item =>
+      item.uid !== user.uid
+  );
 
 
-  renderUsers();
+renderUsers();
+
+saveAuthUsersCache();
 
 
   try {
@@ -2279,16 +2276,13 @@ async function deleteAuthUser(user) {
       error
     );
 
-
-    /*
-      Backend gagal:
-      pulangkan user ke table.
-    */
-    allAuthUsers =
-      previousUsers;
+allAuthUsers =
+  previousUsers;
 
 
-    renderUsers();
+renderUsers();
+
+saveAuthUsersCache();
 
 
     window.showToast?.(
@@ -3287,7 +3281,7 @@ if (result?.user) {
   currentPage = 1;
 
   renderUsers();
-
+saveAuthUsersCache();
 }
 
       }
@@ -3473,10 +3467,39 @@ document
         );
 
 
-        selectedAuthUser = null;
+/*
+  Update user terus dalam local list.
+*/
+allAuthUsers =
+  allAuthUsers.map(
+    user => {
+
+      if (
+        user.uid !==
+        selectedAuthUser.uid
+      ) {
+        return user;
+      }
 
 
-        await loadAuthUsers();
+      return {
+        ...user,
+
+        enabled,
+
+        updatedAt:
+          Date.now()
+      };
+
+    }
+  );
+
+
+renderUsers();
+
+saveAuthUsersCache();
+
+selectedAuthUser = null;
 
       }
       catch (error) {

@@ -1791,7 +1791,17 @@ function createSharedChipDropdown(
     container.querySelector(
       ".shared-chip-dropdown-panel"
     );
+const overflowPopup =
+  document.createElement("div");
 
+overflowPopup.className =
+  "shared-chip-dropdown-overflow-popup";
+
+overflowPopup.hidden = true;
+
+container.appendChild(
+  overflowPopup
+);
 
   const iconButton =
     container.querySelector(
@@ -1844,124 +1854,188 @@ function createSharedChipDropdown(
      RENDER
   ===================================================== */
 
-  function render() {
+function render() {
 
-    valuesBox.innerHTML =
-      Array
-        .from(
-          selectedValues
-        )
-        .map(
-          value => {
+  const selected =
+    Array.from(selectedValues)
+      .map(value => {
 
-            const option =
-              getOption(
-                value
-              );
+        const option =
+          getOption(value);
 
+        if (!option) {
+          return null;
+        }
 
-            if (!option) {
-              return "";
-            }
+        return {
+          value,
+          label:
+            String(
+              option.label || value
+            )
+        };
 
-
-            return `
-              <span
-                class="shared-chip-dropdown-chip"
-                data-chip-value="${escapeSharedText(
-                  value
-                )}"
-              >
-
-                <span
-                  class="shared-chip-dropdown-chip-content"
-                >
-                  ${escapeSharedText(
-                    option.label
-                  )}
-                </span>
-
-                <button
-                  class="shared-chip-dropdown-chip-remove"
-                  type="button"
-                  data-remove-value="${escapeSharedText(
-                    value
-                  )}"
-                  aria-label="Remove ${escapeSharedText(
-                    option.label
-                  )}"
-                >
-                  ${removeIcon}
-                </button>
-
-              </span>
-            `;
-
-          }
-        )
-        .join("");
+      })
+      .filter(Boolean);
 
 
-    container.classList.toggle(
-      "has-value",
-      selectedValues.size > 0
+  /*
+    Header compact:
+    tampil maksimum 1 chip.
+    Selebihnya jadi +N.
+  */
+
+  const visibleItems =
+    selected.slice(0, 1);
+
+  const hiddenItems =
+    selected.slice(1);
+
+
+  valuesBox.innerHTML =
+    visibleItems
+      .map(item => `
+        <span
+          class="shared-chip-dropdown-chip"
+          data-chip-value="${escapeSharedText(
+            item.value
+          )}"
+        >
+
+          <span
+            class="shared-chip-dropdown-chip-content"
+          >
+            ${escapeSharedText(
+              item.label
+            )}
+          </span>
+
+          <button
+            class="shared-chip-dropdown-chip-remove"
+            type="button"
+            data-remove-value="${escapeSharedText(
+              item.value
+            )}"
+            aria-label="Remove ${escapeSharedText(
+              item.label
+            )}"
+          >
+            ${removeIcon}
+          </button>
+
+        </span>
+      `)
+      .join("");
+
+
+  /*
+    +N CHIP
+  */
+
+  if (
+    hiddenItems.length > 0
+  ) {
+
+    valuesBox.insertAdjacentHTML(
+      "beforeend",
+      `
+        <span
+          class="shared-chip-dropdown-overflow"
+          tabindex="0"
+        >
+          +${hiddenItems.length}
+        </span>
+      `
     );
 
-
-    panel.innerHTML =
-      config.options
-        .map(
-          option => {
-
-            const value =
-              String(
-                option.value
-              );
-
-
-            const active =
-              selectedValues.has(
-                value
-              );
-
-
-            return `
-              <button
-                class="shared-chip-dropdown-option ${
-                  active
-                    ? "active"
-                    : ""
-                }"
-                type="button"
-                data-value="${escapeSharedText(
-                  value
-                )}"
-                aria-selected="${
-                  active
-                    ? "true"
-                    : "false"
-                }"
-              >
-                <span>
-                  ${escapeSharedText(
-                    option.label
-                  )}
-                </span>
-
-                <span
-                  class="shared-chip-dropdown-option-check"
-                >
-                  ✓
-                </span>
-
-              </button>
-            `;
-
-          }
-        )
-        .join("");
-
   }
+
+
+  /*
+    Popup untuk chip tersembunyi.
+  */
+
+  overflowPopup.innerHTML =
+    hiddenItems
+      .map(item => `
+        <div
+          class="shared-chip-dropdown-overflow-item"
+        >
+          ${escapeSharedText(
+            item.label
+          )}
+        </div>
+      `)
+      .join("");
+
+
+  overflowPopup.hidden =
+    hiddenItems.length === 0;
+
+
+  container.classList.toggle(
+    "has-value",
+    selectedValues.size > 0
+  );
+
+
+  /*
+    Dropdown options asal.
+  */
+
+  panel.innerHTML =
+    config.options
+      .map(option => {
+
+        const value =
+          String(
+            option.value
+          );
+
+
+        const active =
+          selectedValues.has(
+            value
+          );
+
+
+        return `
+          <button
+            class="shared-chip-dropdown-option ${
+              active
+                ? "active"
+                : ""
+            }"
+            type="button"
+            data-value="${escapeSharedText(
+              value
+            )}"
+            aria-selected="${
+              active
+                ? "true"
+                : "false"
+            }"
+          >
+
+            <span>
+              ${escapeSharedText(
+                option.label
+              )}
+            </span>
+
+            <span
+              class="shared-chip-dropdown-option-check"
+            >
+              ✓
+            </span>
+
+          </button>
+        `;
+
+      })
+      .join("");
+
+}
 
 
   /* =====================================================
@@ -2141,7 +2215,90 @@ function createSharedChipDropdown(
     }
   );
 
+/* =====================================================
+   OVERFLOW +N HOVER
+===================================================== */
 
+valuesBox.addEventListener(
+  "mouseover",
+  event => {
+
+    const moreChip =
+      event.target.closest(
+        ".shared-chip-dropdown-overflow"
+      );
+
+    if (!moreChip) {
+      return;
+    }
+
+    overflowPopup.classList.add(
+      "show"
+    );
+
+  }
+);
+
+
+valuesBox.addEventListener(
+  "mouseout",
+  event => {
+
+    const moreChip =
+      event.target.closest(
+        ".shared-chip-dropdown-overflow"
+      );
+
+    if (!moreChip) {
+      return;
+    }
+
+
+    const next =
+      event.relatedTarget;
+
+
+    if (
+      next &&
+      (
+        moreChip.contains(next) ||
+        overflowPopup.contains(next)
+      )
+    ) {
+      return;
+    }
+
+
+    overflowPopup.classList.remove(
+      "show"
+    );
+
+  }
+);
+
+
+overflowPopup.addEventListener(
+  "mouseenter",
+  () => {
+
+    overflowPopup.classList.add(
+      "show"
+    );
+
+  }
+);
+
+
+overflowPopup.addEventListener(
+  "mouseleave",
+  () => {
+
+    overflowPopup.classList.remove(
+      "show"
+    );
+
+  }
+);
   /* =====================================================
      RIGHT ICON
   ===================================================== */

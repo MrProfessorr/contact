@@ -2164,6 +2164,28 @@ async function deleteAuthUser(user) {
   }
 
 
+  /*
+    Simpan list lama untuk rollback
+    kalau backend gagal.
+  */
+  const previousUsers =
+    [...allAuthUsers];
+
+
+  /*
+    INSTANT UI:
+    buang row dahulu tanpa tunggu backend.
+  */
+  allAuthUsers =
+    allAuthUsers.filter(
+      item =>
+        item.uid !== user.uid
+    );
+
+
+  renderUsers();
+
+
   try {
 
     await callAuthBackend(
@@ -2176,24 +2198,6 @@ async function deleteAuthUser(user) {
         method: "DELETE"
       }
     );
-
-
-    /*
-      Buang terus dari local list.
-      Jangan reload backend/table.
-    */
-    allAuthUsers =
-      allAuthUsers.filter(
-        item =>
-          item.uid !== user.uid
-      );
-
-
-    /*
-      renderUsers akan adjust
-      pagination jika page jadi kosong.
-    */
-    renderUsers();
 
 
     window.showToast?.(
@@ -2211,6 +2215,17 @@ async function deleteAuthUser(user) {
       "Delete auth user failed:",
       error
     );
+
+
+    /*
+      Backend gagal:
+      pulangkan user ke table.
+    */
+    allAuthUsers =
+      previousUsers;
+
+
+    renderUsers();
 
 
     window.showToast?.(

@@ -1658,7 +1658,53 @@ const authPageSizeMenu =
       );
     }
 
+  function getPaginationPages(current, total) {
 
+  if (total <= 6) {
+    return Array.from(
+      { length: total },
+      (_, index) => index + 1
+    );
+  }
+
+  // Page 1 - 5
+  if (current <= 4) {
+    return [
+      1,
+      2,
+      3,
+      4,
+      5,
+      "next-dots",
+      total
+    ];
+  }
+
+  // Dekat page terakhir
+  if (current >= total - 3) {
+    return [
+      1,
+      "prev-dots",
+      total - 4,
+      total - 3,
+      total - 2,
+      total - 1,
+      total
+    ];
+  }
+
+  // Tengah
+  return [
+    1,
+    "prev-dots",
+    current - 1,
+    current,
+    current + 1,
+    "next-dots",
+    total
+  ];
+}
+    
     function renderUsers() {
 
       const users =
@@ -1846,28 +1892,110 @@ const authPageSizeMenu =
 
 authPageNumbers.innerHTML = "";
 
-for (let page = 1; page <= totalPages; page++) {
+const paginationPages =
+  getPaginationPages(
+    currentPage,
+    totalPages
+  );
+
+paginationPages.forEach(item => {
+
+  // =========================
+  // ELLIPSIS ...
+  // =========================
+
+  if (
+    item === "prev-dots" ||
+    item === "next-dots"
+  ) {
+
+    const dots =
+      document.createElement("button");
+
+    dots.type = "button";
+
+    dots.className =
+      "auth-page-dots";
+
+    dots.textContent = "...";
+
+    dots.title =
+      item === "next-dots"
+        ? "Next 5 pages"
+        : "Previous 5 pages";
+
+    dots.addEventListener(
+      "click",
+      () => {
+
+        if (item === "next-dots") {
+
+          currentPage =
+            Math.min(
+              totalPages,
+              currentPage + 5
+            );
+
+        }
+        else {
+
+          currentPage =
+            Math.max(
+              1,
+              currentPage - 5
+            );
+
+        }
+
+        renderUsers();
+
+      }
+    );
+
+    authPageNumbers.appendChild(
+      dots
+    );
+
+    return;
+  }
+
+
+  // =========================
+  // NORMAL PAGE NUMBER
+  // =========================
 
   const button =
     document.createElement("button");
 
   button.type = "button";
-button.className =
-  "auth-page-number" +
-  (page === currentPage ? " active" : "");
 
-  button.textContent = String(page);
+  button.className =
+    "auth-page-number" +
+    (
+      item === currentPage
+        ? " active"
+        : ""
+    );
+
+  button.textContent =
+    String(item);
 
   button.addEventListener(
     "click",
     () => {
-      currentPage = page;
+
+      currentPage = item;
+
       renderUsers();
+
     }
   );
 
-  authPageNumbers.appendChild(button);
-}
+  authPageNumbers.appendChild(
+    button
+  );
+
+});
 
 
       authPrevPage.disabled =

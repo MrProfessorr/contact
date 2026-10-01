@@ -1779,20 +1779,11 @@ const authPageSizeMenu =
   ];
 }
 
-  function renderLoadingState() {
-
+function renderLoadingState() {
   authTableBody.innerHTML = "";
-
-  authEmpty.hidden = false;
-
-  if (window.showEmptyState) {
-
-    window.showEmptyState(
-      authEmpty,
-      "Loading...",
-      "",
-      "center"
-    );
+  authEmpty.style.display = "block";
+  authTable.style.display = "none";
+}
 
   } else {
 

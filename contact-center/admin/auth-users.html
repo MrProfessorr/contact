@@ -606,46 +606,113 @@
           </div>
 
 
-          <div class="auth-pagination">
+<div class="auth-pagination">
 
-            <span id="authPageInfo">
-              0-0 of 0 items
-            </span>
+  <span id="authPageInfo">
+    0-0 of 0 items
+  </span>
 
-            <div class="auth-pagination-nav">
 
-              <button
-                id="authPrevPage"
-                class="auth-page-btn"
-                type="button"
-              >
-                ‹
-              </button>
+  <div class="auth-pagination-nav">
 
-              <button
-                id="authCurrentPage"
-                class="auth-page-btn active"
-                type="button"
-              >
-                1
-              </button>
+    <button
+      id="authPrevPage"
+      class="auth-page-btn"
+      type="button"
+      aria-label="Previous page"
+    >
+      ‹
+    </button>
 
-              <button
-                id="authNextPage"
-                class="auth-page-btn"
-                type="button"
-              >
-                ›
-              </button>
 
-            </div>
+    <div
+      id="authPageNumbers"
+      class="auth-page-numbers"
+    ></div>
 
-            <div
-              id="authPageSize"
-              class="auth-page-size"
-            ></div>
 
-          </div>
+    <button
+      id="authNextPage"
+      class="auth-page-btn"
+      type="button"
+      aria-label="Next page"
+    >
+      ›
+    </button>
+
+  </div>
+
+
+  <div class="auth-page-size">
+
+    <div
+      id="authPageSizeControl"
+      class="auth-page-size-control"
+    >
+
+      <input
+        id="authPageSizeInput"
+        class="auth-page-size-input"
+        type="text"
+        value="10 / page"
+        autocomplete="off"
+        inputmode="numeric"
+        aria-label="Rows per page"
+        readonly
+      >
+
+
+      <button
+        id="authPageSizeToggle"
+        class="auth-page-size-arrow-btn"
+        type="button"
+        aria-expanded="false"
+        aria-label="Open page size"
+      >
+        ▼
+      </button>
+
+    </div>
+
+
+    <div
+      id="authPageSizeMenu"
+      class="auth-page-size-menu hidden"
+    >
+
+      <button
+        type="button"
+        data-page-size="10"
+      >
+        10 / page
+      </button>
+
+      <button
+        type="button"
+        data-page-size="25"
+      >
+        25 / page
+      </button>
+
+      <button
+        type="button"
+        data-page-size="50"
+      >
+        50 / page
+      </button>
+
+      <button
+        type="button"
+        data-page-size="100"
+      >
+        100 / page
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
         </div>
 

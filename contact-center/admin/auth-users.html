@@ -2018,22 +2018,197 @@ document
   );
 
 
-    document
-      .getElementById(
-        "saveManageAuth"
-      )
-      .addEventListener(
-        "click",
-        () => {
+/*
+  MANAGE AUTH USER
+*/
 
-          window.showToast?.(
-            "Backend Authentication Function belum disambungkan.",
-            "warning",
-            4000
-          );
+document
+  .getElementById(
+    "saveManageAuth"
+  )
+  .addEventListener(
+    "click",
+    async () => {
 
-        }
-      );
+      if (!selectedAuthUser?.uid) {
+
+        window.showToast?.(
+          "No username selected.",
+          "warning",
+          3000
+        );
+
+        return;
+      }
+
+
+      const saveBtn =
+        document.getElementById(
+          "saveManageAuth"
+        );
+
+
+      const password =
+        document
+          .getElementById(
+            "managePassword"
+          )
+          .value;
+
+
+      const secondPassword =
+        document
+          .getElementById(
+            "manageSecondPassword"
+          )
+          .value
+          .trim();
+
+
+      const enabled =
+        document
+          .getElementById(
+            "manageEnabled"
+          )
+          .checked;
+
+
+      /*
+        Validate Firebase password
+        hanya jika diisi.
+      */
+
+      if (
+        password &&
+        password.length < 6
+      ) {
+
+        window.showToast?.(
+          "New Password must be at least 6 characters.",
+          "warning",
+          4000
+        );
+
+        return;
+      }
+
+
+      /*
+        Validate 2nd Password
+        hanya jika diisi.
+      */
+
+      if (
+        secondPassword &&
+        !/^\d{6}$/.test(
+          secondPassword
+        )
+      ) {
+
+        window.showToast?.(
+          "New 2nd Password must be exactly 6 digits.",
+          "warning",
+          4000
+        );
+
+        return;
+      }
+
+
+      const payload = {
+        enabled
+      };
+
+
+      if (password) {
+        payload.password =
+          password;
+      }
+
+
+      if (secondPassword) {
+        payload.secondPassword =
+          secondPassword;
+      }
+
+
+      const oldText =
+        saveBtn.textContent;
+
+
+      saveBtn.disabled = true;
+
+      saveBtn.textContent =
+        "Saving...";
+
+
+      try {
+
+        await callAuthBackend(
+          `/api/admin-users/${
+            encodeURIComponent(
+              selectedAuthUser.uid
+            )
+          }`,
+          {
+            method: "PATCH",
+
+            body: JSON.stringify(
+              payload
+            )
+          }
+        );
+
+
+        closeModal(
+          manageAuthModal
+        );
+
+
+        window.showToast?.(
+          `Username ${
+            selectedAuthUser.username ||
+            ""
+          } updated successfully.`,
+          "success",
+          4000
+        );
+
+
+        selectedAuthUser = null;
+
+
+        await loadAuthUsers();
+
+      }
+      catch (error) {
+
+        console.error(
+          "Update auth user failed:",
+          error
+        );
+
+
+        window.showToast?.(
+          error?.message ||
+          "Failed to update username.",
+          "error",
+          5000
+        );
+
+      }
+      finally {
+
+        saveBtn.disabled =
+          false;
+
+        saveBtn.textContent =
+          oldText;
+
+      }
+
+    }
+  );
 
 
     window.addEventListener(

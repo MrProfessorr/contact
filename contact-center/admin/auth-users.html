@@ -1657,7 +1657,70 @@ const authPageSizeMenu =
     let pageSize = 10;
 
     let selectedAuthUser = null;
+const AUTH_USERS_CACHE_KEY =
+  "auth_users_cache_v1";
 
+
+function saveAuthUsersCache() {
+
+  try {
+
+    sessionStorage.setItem(
+      AUTH_USERS_CACHE_KEY,
+      JSON.stringify(
+        allAuthUsers
+      )
+    );
+
+  }
+  catch (error) {
+
+    console.warn(
+      "Unable to save auth users cache:",
+      error
+    );
+
+  }
+
+}
+
+
+function loadAuthUsersCache() {
+
+  try {
+
+    const cached =
+      JSON.parse(
+        sessionStorage.getItem(
+          AUTH_USERS_CACHE_KEY
+        ) || "[]"
+      );
+
+
+    if (
+      Array.isArray(cached) &&
+      cached.length
+    ) {
+
+      allAuthUsers = cached;
+
+      return true;
+
+    }
+
+  }
+  catch (error) {
+
+    console.warn(
+      "Unable to load auth users cache:",
+      error
+    );
+
+  }
+
+
+  return false;
+}
     function formatDate(value) {
 
       if (!value) {
@@ -2627,9 +2690,40 @@ async function callAuthBackend(
 }
 
 async function loadAuthUsers() {
-renderLoadingState();
+
+  /*
+    Cuba tampil cache dahulu.
+  */
+  const hasCache =
+    loadAuthUsersCache();
+
+
+  if (hasCache) {
+
+    /*
+      Refresh page:
+      data terus keluar.
+    */
+    renderUsers();
+
+  }
+  else {
+
+    /*
+      First visit sahaja
+      tunjuk Loading...
+    */
+    renderLoadingState();
+
+  }
+
+
   try {
 
+    /*
+      Sync data terbaru
+      daripada backend.
+    */
     const result =
       await callAuthBackend(
         "/api/admin-users",
@@ -2639,15 +2733,25 @@ renderLoadingState();
       );
 
 
-allAuthUsers =
-  Array.isArray(result?.users)
-    ? result.users
-    : [];
+    allAuthUsers =
+      Array.isArray(result?.users)
+        ? result.users
+        : [];
 
 
-   renderUsers();
+    /*
+      Update cache terbaru.
+    */
+    saveAuthUsersCache();
 
-  } catch (error) {
+
+    /*
+      Update table secara senyap.
+    */
+    renderUsers();
+
+  }
+  catch (error) {
 
     console.error(
       "Load auth users failed:",
@@ -2655,9 +2759,17 @@ allAuthUsers =
     );
 
 
-   allAuthUsers = [];
+    /*
+      Kalau ada cache,
+      biarkan data cache kekal.
+    */
+    if (!hasCache) {
 
-    renderUsers();
+      allAuthUsers = [];
+
+      renderUsers();
+
+    }
 
 
     window.showToast?.(

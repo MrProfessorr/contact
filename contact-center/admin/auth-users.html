@@ -274,11 +274,16 @@
       place-items: center;
       border: 0;
       background: transparent;
-      color: #aaa;
+      color: var(--text);
       cursor: pointer;
       font-size: 22px;
     }
-
+    .auth-modal-close:hover {
+      background:var(--list-hover);
+    }
+    .auth-modal-close:active {
+      color:var(--caret-color);
+    }
     .auth-modal-body {
       padding: 17px;
     }
@@ -473,7 +478,7 @@
   flex: none !important;
   align-self: flex-start !important;
 
-  overflow: visible;
+  overflow: hidden;
 
   border: 1px solid var(--tx-border);
   border-radius: 8px;
@@ -544,13 +549,6 @@
   font-size: 14px;
   font-weight: 600;
   letter-spacing: .02em;
-}
-.auth-table thead th:first-child {
-  border-top-left-radius: 8px;
-}
-
-.auth-table thead th:last-child {
-  border-top-right-radius: 8px;
 }
 
 .auth-table tbody tr {
@@ -1014,7 +1012,7 @@
               <input
                 id="authSearch"
                 type="search"
-                placeholder="Search..."
+                placeholder="Search"
                 autocomplete="off"
               >
 

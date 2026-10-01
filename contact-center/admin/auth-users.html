@@ -996,10 +996,55 @@
     </button>
 
   </div>
+<div
+  id="authPageSizeControl"
+  class="auth-page-size"
+>
+  <div class="auth-page-size-control">
+
+    <input
+      id="authPageSizeInput"
+      class="auth-page-size-input"
+      type="text"
+      value="10 / page"
+      autocomplete="off"
+      readonly
+    >
+
+    <button
+      id="authPageSizeToggle"
+      class="auth-page-size-arrow-btn"
+      type="button"
+      aria-label="Select page size"
+      aria-expanded="false"
+    >
+      <svg
+        viewBox="0 0 1024 1024"
+        aria-hidden="true"
+      >
+        <path
+          d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654 227.9 262.6a16 16 0 00-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+        />
+      </svg>
+    </button>
+
+  </div>
+
   <div
-    id="authPageSize"
-    class="auth-page-size"
-  ></div>
+    id="authPageSizeMenu"
+    class="auth-page-size-menu"
+    hidden
+  >
+    <button type="button" data-page-size="10">10 / page</button>
+    <button type="button" data-page-size="20">20 / page</button>
+    <button type="button" data-page-size="50">50 / page</button>
+    <button type="button" data-page-size="100">100 / page</button>
+    <button type="button" data-page-size="200">200 / page</button>
+    <button type="button" data-page-size="500">500 / page</button>
+    <button type="button" data-page-size="1000">1000 / page</button>
+  </div>
+
+</div>
 </div>
 
   </div>

@@ -552,7 +552,22 @@
   font-weight: 600;
   letter-spacing: .02em;
 }
+.auth-table th {
+  position: relative;
+}
 
+.auth-table th:not(:last-child)::after {
+  content: "";
+  position: absolute;
+
+  top: 25%;
+  right: 0;
+
+  width: 2px;
+  height: 50%;
+
+  background: var(--tx-border);
+}
 .auth-table tbody tr {
   transition: background .15s ease;
 }

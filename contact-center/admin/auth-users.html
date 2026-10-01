@@ -523,30 +523,22 @@
 .auth-table th,
 .auth-table td {
   height: 44px;
-
   padding: 10px 14px;
-
   text-align: left;
   vertical-align: middle;
-
   border-bottom: 1px solid var(--tx-border);
-
   white-space: nowrap;
-
   font-size: 12px;
 }
 
 
 .auth-table th {
   height: 42px;
-
-  background: rgba(255, 255, 255, .025);
-
+  background:var(--tx-surface-soft);
+  border-bottom: 2px solid var(--tx-border);
   color: var(--muted);
-
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
-
   letter-spacing: .02em;
 }
 
@@ -557,7 +549,7 @@
 
 
 .auth-table tbody tr:hover {
-  background: rgba(255, 255, 255, .025);
+  background: var(--tx-hover);
 }
 
 
@@ -913,20 +905,15 @@
   justify-content: center;
   padding: 0;
   border: 0;
-  background: var(--input);
+  background:var(--input);
   color: var(--muted);
-
   cursor: pointer;
-}
-
-.auth-page-size-arrow-btn:hover {
-  color: var(--text);
 }
 
 .auth-page-size-arrow-btn svg {
   width: 12px;
   height: 12px;
-  fill: currentColor;
+  fill: var(--muted);
   transition: transform .15s ease;
 }
 

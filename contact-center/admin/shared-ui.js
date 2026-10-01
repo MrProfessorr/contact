@@ -9327,6 +9327,12 @@ const baseMenuItems = [
   file: "users.html",
   name: "Admin Users",
   superadminOnly: true
+},
+
+{
+  file: "auth-users.html",
+  name: "Authentication Users",
+  superadminOnly: true
 }
 
 ];

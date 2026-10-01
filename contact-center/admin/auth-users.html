@@ -1704,7 +1704,44 @@ const authPageSizeMenu =
     total
   ];
 }
-    
+
+  function renderLoadingState() {
+
+  authTableBody.innerHTML = "";
+
+  authEmpty.hidden = false;
+
+  if (window.showEmptyState) {
+
+    window.showEmptyState(
+      authEmpty,
+      "Loading...",
+      "",
+      "center"
+    );
+
+  } else {
+
+    authEmpty.textContent = "Loading...";
+
+  }
+
+  authPageInfo.textContent =
+    "0-0 of 0 items";
+
+  authPageNumbers.innerHTML = `
+    <button
+      type="button"
+      class="auth-page-number active"
+      disabled
+    >
+      1
+    </button>
+  `;
+
+  authPrevPage.disabled = true;
+  authNextPage.disabled = true;
+}
     function renderUsers() {
 
       const users =
@@ -2424,7 +2461,7 @@ async function callAuthBackend(
 }
 
 async function loadAuthUsers() {
-
+renderLoadingState();
   try {
 
     const result =

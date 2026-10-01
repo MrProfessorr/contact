@@ -1842,27 +1842,180 @@ allAuthUsers =
       );
 
 
-    /*
-      CREATE button belum melakukan
-      Firebase Auth operation.
-    */
+/*
+  CREATE AUTH USER
+*/
 
-    document
-      .getElementById(
-        "submitCreateAuth"
-      )
-      .addEventListener(
-        "click",
-        () => {
+document
+  .getElementById(
+    "submitCreateAuth"
+  )
+  .addEventListener(
+    "click",
+    async () => {
 
-          window.showToast?.(
-            "Backend Authentication Function belum disambungkan.",
-            "warning",
-            4000
+      const submitBtn =
+        document.getElementById(
+          "submitCreateAuth"
+        );
+
+      const username =
+        document
+          .getElementById(
+            "createUsername"
+          )
+          .value
+          .trim()
+          .toLowerCase();
+
+      const password =
+        document
+          .getElementById(
+            "createPassword"
+          )
+          .value;
+
+      const secondPassword =
+        document
+          .getElementById(
+            "createSecondPassword"
+          )
+          .value
+          .trim();
+
+      const enabled =
+        document
+          .getElementById(
+            "createEnabled"
+          )
+          .checked;
+
+
+      if (!username) {
+
+        window.showToast?.(
+          "Please enter username.",
+          "warning",
+          3000
+        );
+
+        return;
+      }
+
+
+      if (
+        !/^[a-z0-9._-]{3,40}$/
+          .test(username)
+      ) {
+
+        window.showToast?.(
+          "Username must be 3-40 characters and only use letters, numbers, dot, underscore or dash.",
+          "warning",
+          5000
+        );
+
+        return;
+      }
+
+
+      if (
+        password.length < 6
+      ) {
+
+        window.showToast?.(
+          "Password must be at least 6 characters.",
+          "warning",
+          4000
+        );
+
+        return;
+      }
+
+
+      if (
+        !/^\d{6}$/
+          .test(secondPassword)
+      ) {
+
+        window.showToast?.(
+          "2nd Password must be exactly 6 digits.",
+          "warning",
+          4000
+        );
+
+        return;
+      }
+
+
+      const oldText =
+        submitBtn.textContent;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent =
+        "Creating...";
+
+
+      try {
+
+        const result =
+          await callAuthBackend(
+            "/api/admin-users",
+            {
+              method: "POST",
+
+              body: JSON.stringify({
+                username,
+                password,
+                secondPassword,
+                enabled
+              })
+            }
           );
 
-        }
-      );
+
+        closeModal(
+          createAuthModal
+        );
+
+
+        window.showToast?.(
+          `Username ${result?.username || username} created successfully.`,
+          "success",
+          4000
+        );
+
+
+        currentPage = 1;
+
+        await loadAuthUsers();
+
+      }
+      catch (error) {
+
+        console.error(
+          "Create auth user failed:",
+          error
+        );
+
+
+        window.showToast?.(
+          error?.message ||
+          "Failed to create username.",
+          "error",
+          5000
+        );
+
+      }
+      finally {
+
+        submitBtn.disabled = false;
+        submitBtn.textContent =
+          oldText;
+
+      }
+
+    }
+  );
 
 
     document

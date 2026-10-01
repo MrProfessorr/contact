@@ -918,13 +918,14 @@
 
   <script type="module">
 
-    import {
-      requireAdmin,
-      setupLogout,
-      isSuperAdmin,
-      forceAdminLogout,
-      safe
-    } from "./admin.js";
+import {
+  auth,
+  requireAdmin,
+  setupLogout,
+  isSuperAdmin,
+  forceAdminLogout,
+  safe
+} from "./admin.js";
 
 
     requireAdmin();
@@ -1425,18 +1426,124 @@
     }
 
 
-    /*
-      BACKEND FUNCTIONS AKAN
-      DISAMBUNG PADA STEP BERIKUTNYA.
-    */
+/* =========================
+   AUTH USERS BACKEND API
+========================= */
 
-    async function loadAuthUsers() {
+const AUTH_API_BASE =
+  "http://localhost:3000";
 
-      allAuthUsers = [];
 
-      renderUsers();
+async function callAuthBackend(
+  path,
+  options = {}
+) {
 
-    }
+  const user =
+    auth.currentUser;
+
+  if (!user) {
+    throw new Error(
+      "NO_AUTH_USER"
+    );
+  }
+
+
+  /*
+    Ambil Firebase ID Token
+    daripada superadmin yang
+    sedang login.
+  */
+
+  const idToken =
+    await user.getIdToken();
+
+
+  const response =
+    await fetch(
+      `${AUTH_API_BASE}${path}`,
+      {
+        ...options,
+
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Authorization:
+            `Bearer ${idToken}`,
+
+          ...(options.headers || {})
+        }
+      }
+    );
+
+
+  let result = null;
+
+  try {
+    result =
+      await response.json();
+  } catch {
+    result = null;
+  }
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      result?.message ||
+      `HTTP_${response.status}`
+    );
+
+  }
+
+
+  return result;
+}
+async function loadAuthUsers() {
+
+  try {
+
+    const result =
+      await callAuthBackend(
+        "/api/admin-users",
+        {
+          method: "GET"
+        }
+      );
+
+
+    authUsers =
+      Array.isArray(result?.users)
+        ? result.users
+        : [];
+
+
+    renderAuthUsers();
+
+  } catch (error) {
+
+    console.error(
+      "Load auth users failed:",
+      error
+    );
+
+
+    authUsers = [];
+
+    renderAuthUsers();
+
+
+    window.showToast?.(
+      error?.message ||
+      "Failed to load usernames.",
+      "error",
+      5000
+    );
+
+  }
+
+}
 
 
     createAuthUserBtn

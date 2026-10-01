@@ -33,7 +33,17 @@
       gap: 14px;
       margin-bottom: 15px;
     }
+.auth-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
 
+.auth-status-filter {
+  width: 180px;
+  flex: 0 0 180px;
+}
 .auth-search-control {
   width: 300px;
   height: 32px;
@@ -1051,52 +1061,66 @@
 
           <div class="auth-users-toolbar">
 
+<div class="auth-toolbar-left">
+
+  <div
+    class="auth-search-control"
+    id="authSearchControl"
+  >
+    <input
+      id="authSearch"
+      type="search"
+      placeholder="Search"
+      autocomplete="off"
+    >
+
+    <button
+      id="authSearchBtn"
+      type="button"
+      aria-label="Search"
+    >
+      <svg
+        id="authSearchIcon"
+        class="auth-search-icon"
+        viewBox="64 64 896 896"
+        aria-hidden="true"
+      >
+        <path
+          fill="currentColor"
+          d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"
+        ></path>
+      </svg>
+
+      <svg
+        class="auth-search-spinner"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="9"
+          opacity=".25"
+        ></circle>
+
+        <path d="M21 12a9 9 0 0 0-9-9"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div
+    id="authStatusFilter"
+    class="auth-status-filter"
+  ></div>
+
+</div>
+            
             <div
-              class="auth-search-control"
-              id="authSearchControl"
-            >
-              <input
-                id="authSearch"
-                type="search"
-                placeholder="Search"
-                autocomplete="off"
-              >
-
-              <button
-                id="authSearchBtn"
-                type="button"
-                aria-label="Search"
-              >
-<svg
-  id="authSearchIcon"
-  class="auth-search-icon"
-  viewBox="64 64 896 896"
-  aria-hidden="true"
->
-  <path
-    fill="currentColor"
-    d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"
-  ></path>
-</svg>
-
-                <svg
-                  class="auth-search-spinner"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="9"
-                    opacity=".25"
-                  ></circle>
-                  <path d="M21 12a9 9 0 0 0-9-9"></path>
-                </svg>
-              </button>
-            </div>
-
+  id="authStatusFilter"
+  class="auth-status-filter"
+></div>
             <button
               id="createAuthUserBtn"
               class="auth-btn auth-btn-primary"
@@ -1602,7 +1626,41 @@ import {
       document.getElementById(
         "authSearchControl"
       );
+const authStatusFilter =
+  document.getElementById(
+    "authStatusFilter"
+  );
 
+
+const authStatusDropdown =
+  window.createSharedChipDropdown?.(
+    authStatusFilter,
+    {
+      placeholder:
+        "All Status",
+
+      options: [
+        {
+          value: "active",
+          label: "Active"
+        },
+        {
+          value: "inactive",
+          label: "Inactive"
+        }
+      ],
+
+      value: [],
+
+      onChange() {
+
+        currentPage = 1;
+
+        renderUsers();
+
+      }
+    }
+  );
     const authTableBody =
       document.getElementById(
         "authTableBody"
@@ -1791,37 +1849,66 @@ function loadAuthUsersCache() {
     }
 
 
-    function filteredUsers() {
+function filteredUsers() {
 
-      const keyword =
-        authSearch.value
-          .trim()
-          .toLowerCase();
+  const keyword =
+    authSearch.value
+      .trim()
+      .toLowerCase();
 
-      if (!keyword) {
-        return allAuthUsers;
-      }
 
-      return allAuthUsers.filter(
-        user => {
+  const selectedStatuses =
+    authStatusDropdown
+      ?.getValue?.() || [];
 
-          return (
-            String(
-              user.username || ""
-            )
-              .toLowerCase()
-              .includes(keyword) ||
 
-            String(
-              user.uid || ""
-            )
-              .toLowerCase()
-              .includes(keyword)
-          );
+  return allAuthUsers.filter(
+    user => {
 
-        }
+      /* =========================
+         SEARCH
+      ========================= */
+
+      const matchesSearch =
+        !keyword ||
+        String(
+          user.username || ""
+        )
+          .toLowerCase()
+          .includes(keyword) ||
+
+        String(
+          user.uid || ""
+        )
+          .toLowerCase()
+          .includes(keyword);
+
+
+      /* =========================
+         STATUS
+      ========================= */
+
+      const userStatus =
+        user.enabled === true
+          ? "active"
+          : "inactive";
+
+
+      const matchesStatus =
+        selectedStatuses.length === 0 ||
+        selectedStatuses.includes(
+          userStatus
+        );
+
+
+      return (
+        matchesSearch &&
+        matchesStatus
       );
+
     }
+  );
+}
 
   function getPaginationPages(current, total) {
 

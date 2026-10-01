@@ -1972,7 +1972,16 @@ function renderLoadingState() {
                 >
                   Manage
                 </button>
-
+<button
+  class="auth-btn auth-btn-danger"
+  type="button"
+  data-action="delete"
+  data-uid="${safe(
+    user.uid
+  )}"
+>
+  Delete
+</button>
               </div>
 
             </td>
@@ -2136,7 +2145,85 @@ paginationPages.forEach(item => {
 
     }
 
+async function deleteAuthUser(user) {
 
+  if (!user?.uid) {
+    return;
+  }
+
+
+  const confirmed =
+    window.confirm(
+      `Delete username "${user.username || ""}"?\n\n` +
+      `This will permanently delete the account.`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  try {
+
+    await callAuthBackend(
+      `/api/admin-users/${
+        encodeURIComponent(
+          user.uid
+        )
+      }`,
+      {
+        method: "DELETE"
+      }
+    );
+
+
+    /*
+      Buang terus dari local list.
+      Jangan reload backend/table.
+    */
+    allAuthUsers =
+      allAuthUsers.filter(
+        item =>
+          item.uid !== user.uid
+      );
+
+
+    /*
+      renderUsers akan adjust
+      pagination jika page jadi kosong.
+    */
+    renderUsers();
+
+
+    window.showToast?.(
+      `Username ${
+        user.username || ""
+      } deleted successfully.`,
+      "success",
+      4000
+    );
+
+  }
+  catch (error) {
+
+    console.error(
+      "Delete auth user failed:",
+      error
+    );
+
+
+    window.showToast?.(
+      error?.message ||
+      "Failed to delete username.",
+      "error",
+      5000
+    );
+
+  }
+
+}
+    
     function openManageUser(user) {
 
       selectedAuthUser =
@@ -2745,6 +2832,29 @@ allAuthUsers =
 
           }
 
+          if (
+  action === "delete"
+) {
+
+  const user =
+    allAuthUsers.find(
+      item =>
+        item.uid === uid
+    );
+
+
+  if (user) {
+
+    deleteAuthUser(
+      user
+    );
+
+  }
+
+
+  return;
+}
+          
         }
       );
 

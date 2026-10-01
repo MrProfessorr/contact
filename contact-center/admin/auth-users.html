@@ -734,6 +734,552 @@
         justify-content: center;
       }
     }
+    /* =========================
+   AUTH USERS TABLE
+========================= */
+
+.auth-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  border: 1px solid var(--line);
+  border-radius: 8px;
+
+  background: var(--panel);
+
+  scrollbar-width: thin;
+  scrollbar-color:
+    rgba(255, 255, 255, .22)
+    transparent;
+}
+
+.auth-table-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.auth-table-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.auth-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, .22);
+  border-radius: 999px;
+}
+
+.auth-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, .35);
+}
+
+
+.auth-table {
+  width: 100%;
+  min-width: 1050px;
+
+  border-collapse: collapse;
+  table-layout: auto;
+
+  background: transparent;
+}
+
+
+.auth-table th,
+.auth-table td {
+  height: 44px;
+
+  padding: 10px 14px;
+
+  text-align: left;
+  vertical-align: middle;
+
+  border-bottom: 1px solid var(--line);
+
+  white-space: nowrap;
+
+  font-size: 12px;
+}
+
+
+.auth-table th {
+  height: 42px;
+
+  background: rgba(255, 255, 255, .025);
+
+  color: var(--muted);
+
+  font-size: 11px;
+  font-weight: 600;
+
+  letter-spacing: .02em;
+}
+
+
+.auth-table tbody tr {
+  transition: background .15s ease;
+}
+
+
+.auth-table tbody tr:hover {
+  background: rgba(255, 255, 255, .025);
+}
+
+
+.auth-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+
+/* Username */
+
+.auth-table td:first-child strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+
+/* UID */
+
+.auth-uid {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  min-width: 0;
+}
+
+
+.auth-uid code {
+  display: block;
+
+  max-width: 220px;
+
+  overflow: hidden;
+
+  color: var(--text2);
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 11px;
+}
+
+
+.auth-copy-btn {
+  flex: 0 0 auto;
+
+  padding: 3px 6px;
+
+  border: 0;
+  border-radius: 5px;
+
+  background: transparent;
+
+  color: #7eb6ff;
+
+  cursor: pointer;
+
+  font-size: 11px;
+}
+
+
+.auth-copy-btn:hover {
+  background: rgba(22, 119, 255, .10);
+}
+
+
+/* STATUS */
+
+.auth-status {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 11px;
+}
+
+
+.auth-status::before {
+  content: "";
+
+  width: 6px;
+  height: 6px;
+
+  flex: 0 0 6px;
+
+  border-radius: 50%;
+
+  background: #777;
+}
+
+
+.auth-status.active {
+  color: #68d391;
+}
+
+
+.auth-status.active::before {
+  background: #68d391;
+}
+
+
+.auth-status.inactive {
+  color: var(--muted);
+}
+
+
+/* ACTION */
+
+.auth-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+}
+
+
+/* EMPTY */
+
+.auth-empty {
+  min-height: 180px;
+
+  display: grid;
+  place-items: center;
+}
+
+
+/* =========================
+   AUTH USERS PAGINATION
+========================= */
+
+.auth-pagination {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(150px, 1fr)
+    auto
+    minmax(150px, 1fr);
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding-top: 14px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+
+.auth-pagination-info {
+  justify-self: start;
+
+  white-space: nowrap;
+}
+
+
+.auth-pagination-center {
+  justify-self: center;
+
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+
+.auth-page-numbers {
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+}
+
+
+/* NUMBER BUTTON */
+
+.auth-page-number {
+  min-width: 30px;
+  height: 30px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 7px;
+
+  border: 1px solid transparent;
+  border-radius: 6px;
+
+  background: transparent;
+
+  color: var(--text2);
+
+  cursor: pointer;
+
+  font: inherit;
+  font-size: 12px;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    color .15s ease;
+}
+
+
+.auth-page-number:hover {
+  background: rgba(255, 255, 255, .06);
+
+  color: var(--text);
+}
+
+
+.auth-page-number.active {
+  border-color: #1677ff;
+
+  background: #1677ff;
+
+  color: #fff;
+}
+
+
+/* PREVIOUS / NEXT */
+
+.auth-page-nav {
+  width: 30px;
+  height: 30px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 1px solid transparent;
+  border-radius: 6px;
+
+  background: transparent;
+
+  color: var(--text2);
+
+  cursor: pointer;
+}
+
+
+.auth-page-nav:hover:not(:disabled) {
+  background: rgba(255, 255, 255, .06);
+
+  color: var(--text);
+}
+
+
+.auth-page-nav:disabled {
+  opacity: .3;
+
+  cursor: default;
+}
+
+
+.auth-page-nav-icon {
+  width: 12px;
+  height: 12px;
+
+  fill: currentColor;
+}
+
+
+/* ELLIPSIS */
+
+.auth-page-dots {
+  min-width: 28px;
+  height: 30px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  background: transparent;
+
+  color: var(--muted);
+
+  cursor: pointer;
+
+  font-size: 12px;
+}
+
+
+.auth-page-dots:hover {
+  color: var(--text);
+}
+
+
+/* =========================
+   PAGE SIZE
+========================= */
+
+.auth-page-size {
+  position: relative;
+
+  justify-self: end;
+
+  width: 105px;
+}
+
+
+.auth-page-size-control {
+  width: 100%;
+  height: 30px;
+
+  display: flex;
+  align-items: stretch;
+}
+
+
+.auth-page-size-input {
+  width: calc(100% - 28px);
+  min-width: 0;
+  height: 30px;
+
+  padding: 0 8px;
+
+  border: 1px solid var(--input-line);
+  border-right: 0;
+
+  border-radius: 6px 0 0 6px;
+
+  outline: none;
+
+  background: var(--input);
+
+  color: var(--text);
+
+  cursor: pointer;
+
+  font-size: 12px;
+}
+
+
+.auth-page-size-arrow-btn {
+  width: 28px;
+  min-width: 28px;
+  height: 30px;
+
+  padding: 0;
+
+  border: 1px solid var(--input-line);
+
+  border-radius: 0 6px 6px 0;
+
+  background: var(--input);
+
+  color: var(--text2);
+
+  cursor: pointer;
+
+  font-size: 9px;
+}
+
+
+.auth-page-size-control:hover
+.auth-page-size-input,
+
+.auth-page-size-control:hover
+.auth-page-size-arrow-btn {
+  border-color: var(--input-line-hover);
+}
+
+
+.auth-page-size-menu {
+  position: absolute;
+
+  right: 0;
+  bottom: calc(100% + 5px);
+
+  z-index: 1000;
+
+  width: 105px;
+
+  padding: 4px;
+
+  border: 1px solid var(--line);
+
+  border-radius: 7px;
+
+  background: var(--panel);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, .35);
+}
+
+
+.auth-page-size-menu.hidden {
+  display: none;
+}
+
+
+.auth-page-size-menu button {
+  width: 100%;
+
+  display: block;
+
+  padding: 6px 8px;
+
+  border: 0;
+  border-radius: 5px;
+
+  background: transparent;
+
+  color: var(--text2);
+
+  text-align: left;
+
+  cursor: pointer;
+
+  font-size: 12px;
+}
+
+
+.auth-page-size-menu button:hover {
+  background: rgba(255, 255, 255, .07);
+
+  color: var(--text);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 760px) {
+
+  .auth-table {
+    min-width: 900px;
+  }
+
+
+  .auth-pagination {
+    grid-template-columns: 1fr;
+
+    justify-items: center;
+
+    gap: 10px;
+  }
+
+
+  .auth-pagination-info,
+  .auth-pagination-center,
+  .auth-page-size {
+    justify-self: center;
+  }
+
+}
   </style>
 </head>
 
@@ -836,20 +1382,31 @@
 
 <div class="auth-pagination">
 
-  <span id="authPageInfo">
+  <div
+    id="authPageInfo"
+    class="auth-pagination-info"
+  >
     0-0 of 0 items
-  </span>
+  </div>
 
 
-  <div class="auth-pagination-nav">
+  <div class="auth-pagination-center">
 
     <button
       id="authPrevPage"
-      class="auth-page-btn"
+      class="auth-page-nav"
       type="button"
       aria-label="Previous page"
     >
-      ‹
+      <svg
+        class="auth-page-nav-icon"
+        viewBox="0 0 1024 1024"
+        aria-hidden="true"
+      >
+        <path
+          d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 000 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"
+        />
+      </svg>
     </button>
 
 
@@ -861,22 +1418,30 @@
 
     <button
       id="authNextPage"
-      class="auth-page-btn"
+      class="auth-page-nav"
       type="button"
       aria-label="Next page"
     >
-      ›
+      <svg
+        class="auth-page-nav-icon"
+        viewBox="0 0 1024 1024"
+        aria-hidden="true"
+      >
+        <path
+          d="M765.7 486.8L314.9 134.7A7.97 7.97 0 00302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 000-50.3z"
+        />
+      </svg>
     </button>
 
   </div>
 
 
-  <div class="auth-page-size">
+  <div
+    id="authPageSizeControl"
+    class="auth-page-size"
+  >
 
-    <div
-      id="authPageSizeControl"
-      class="auth-page-size-control"
-    >
+    <div class="auth-page-size-control">
 
       <input
         id="authPageSizeInput"
@@ -888,7 +1453,6 @@
         aria-label="Rows per page"
         readonly
       >
-
 
       <button
         id="authPageSizeToggle"
@@ -903,69 +1467,37 @@
     </div>
 
 
-<div
-  id="authPageSizeMenu"
-  class="auth-page-size-menu hidden"
->
-
-  <button type="button" data-page-size="10">
-    10 / page
-  </button>
-
-  <button type="button" data-page-size="20">
-    20 / page
-  </button>
-
-  <button type="button" data-page-size="50">
-    50 / page
-  </button>
-
-  <button type="button" data-page-size="100">
-    100 / page
-  </button>
-
-  <button type="button" data-page-size="200">
-    200 / page
-  </button>
-
-  <button type="button" data-page-size="500">
-    500 / page
-  </button>
-
-  <button type="button" data-page-size="1000">
-    1000 / page
-  </button>
-
-</div>
-
-      <button
-        type="button"
-        data-page-size="10"
-      >
+    <div
+      id="authPageSizeMenu"
+      class="auth-page-size-menu hidden"
+    >
+      <button type="button" data-page-size="10">
         10 / page
       </button>
 
-      <button
-        type="button"
-        data-page-size="25"
-      >
-        25 / page
+      <button type="button" data-page-size="20">
+        20 / page
       </button>
 
-      <button
-        type="button"
-        data-page-size="50"
-      >
+      <button type="button" data-page-size="50">
         50 / page
       </button>
 
-      <button
-        type="button"
-        data-page-size="100"
-      >
+      <button type="button" data-page-size="100">
         100 / page
       </button>
 
+      <button type="button" data-page-size="200">
+        200 / page
+      </button>
+
+      <button type="button" data-page-size="500">
+        500 / page
+      </button>
+
+      <button type="button" data-page-size="1000">
+        1000 / page
+      </button>
     </div>
 
   </div>

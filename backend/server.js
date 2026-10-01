@@ -150,40 +150,64 @@ app.get("/api/test-firebase", async (req, res) => {
   }
 });
 
-// ================================
-// LIST ADMIN USERS
-// ================================
 app.get("/api/admin-users", requireSuperAdmin, async (req, res) => {
   try {
+
+    /*
+      Ambil semua admin profile SEKALI sahaja.
+      Jangan read RTDB satu-satu dalam loop.
+    */
+    const profileSnapshot = await db
+      .ref("admin_users")
+      .once("value");
+
+    const profiles =
+      profileSnapshot.val() || {};
+
+
     const users = [];
 
     let pageToken;
 
     do {
-      const result = await auth.listUsers(1000, pageToken);
+
+      const result =
+        await auth.listUsers(
+          1000,
+          pageToken
+        );
+
 
       for (const authUser of result.users) {
-        // Hanya account yang memang mempunyai admin profile.
-        // Ini mengelakkan customer Firebase Auth user masuk table ini.
-        const profileSnapshot = await db
-          .ref(`admin_users/${authUser.uid}`)
-          .once("value");
 
-        if (!profileSnapshot.exists()) {
+        const profile =
+          profiles[authUser.uid];
+
+        /*
+          Skip Firebase Auth customer
+          yang bukan admin.
+        */
+        if (!profile) {
           continue;
         }
 
-        const profile = profileSnapshot.val() || {};
 
         users.push({
-          uid: authUser.uid,
+
+          uid:
+            authUser.uid,
 
           username:
             profile.username ||
-            String(authUser.email || "")
-              .replace(/@5g88\.local$/i, ""),
+            String(
+              authUser.email || ""
+            ).replace(
+              /@5g88\.local$/i,
+              ""
+            ),
 
-          email: authUser.email || "",
+          email:
+            authUser.email || "",
 
           enabled:
             authUser.disabled !== true &&
@@ -198,30 +222,51 @@ app.get("/api/admin-users", requireSuperAdmin, async (req, res) => {
             profile.updatedAt ||
             profile.createdAt ||
             null
+
         });
+
       }
 
-      pageToken = result.pageToken;
+
+      pageToken =
+        result.pageToken;
+
     } while (pageToken);
 
+
     users.sort((a, b) => {
+
       return (
-        new Date(b.createdAt || 0).getTime() -
-        new Date(a.createdAt || 0).getTime()
+        new Date(
+          b.createdAt || 0
+        ).getTime() -
+
+        new Date(
+          a.createdAt || 0
+        ).getTime()
       );
+
     });
+
 
     return res.json({
       ok: true,
       users
     });
+
   } catch (error) {
-    console.error("List admin users error:", error);
+
+    console.error(
+      "List admin users error:",
+      error
+    );
 
     return res.status(500).json({
       ok: false,
-      message: "Failed to load usernames"
+      message:
+        "Failed to load usernames"
     });
+
   }
 });
 

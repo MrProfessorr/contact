@@ -315,8 +315,11 @@
       outline: 0;
       padding: 4px 11px;
       font-size:14px;
+      transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
-
+    .auth-input:hover {
+      border-color: var(--input-line);
+    }
     .auth-input:focus {
       border-color: var(--input-line-focus);
     }
@@ -537,7 +540,7 @@
   height: 42px;
   background:var(--tx-surface-soft);
   border-bottom: 2px solid var(--tx-border);
-  color: var(--muted);
+  color: var(--text);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: .02em;

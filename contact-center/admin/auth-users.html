@@ -26,13 +26,14 @@
   align-self: flex-start !important;
 }
 
-    .auth-users-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 15px;
-    }
+.auth-users-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
 .auth-toolbar-left {
   display: flex;
   align-items: center;
@@ -191,7 +192,11 @@
       border-color: transparent;
       color: #ffffff;
     }
-
+#createAuthUserBtn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  min-width: max-content;
+}
     .auth-btn-primary:hover {
       background: #3c89e8;
       color: #ffffff;
@@ -452,7 +457,23 @@
     .auth-manage-row span:first-child {
       color: #777;
     }
+@media (max-width: 850px) {
 
+  .auth-toolbar-left {
+    width: 100%;
+  }
+
+  .auth-search-control,
+  .auth-status-filter {
+    width: auto;
+    flex: 1 1 0;
+  }
+
+  #createAuthUserBtn {
+    margin-left: auto;
+  }
+
+}
     @media (max-width: 650px) {
       .auth-users-toolbar {
         align-items: stretch;
@@ -476,7 +497,9 @@
 .auth-users-toolbar > .auth-btn-primary {
   width: 100%;
 }
-
+#createAuthUserBtn {
+  margin-left: 0;
+}
       .auth-form-grid {
         grid-template-columns: 1fr;
       }

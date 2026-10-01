@@ -9391,7 +9391,7 @@ class="admin-sidebar-link${
         target="_blank"
         class="admin-sidebar-link"
       >
-        Customer
+        Front-End
       </a>
 
 
@@ -9425,27 +9425,14 @@ function getVisibleAdminMenuItems() {
   return baseMenuItems.filter(
     item => {
 
-      /*
-        Superadmin boleh nampak
-        semua module.
-      */
       if (isSuperadmin) {
         return true;
       }
 
-
-      /*
-        Menu khas Superadmin.
-      */
       if (item.superadminOnly) {
         return false;
       }
 
-
-      /*
-        Module biasa tanpa
-        permission khas.
-      */
       if (!item.permission) {
         return true;
       }

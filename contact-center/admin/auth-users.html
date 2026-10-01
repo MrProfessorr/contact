@@ -40,14 +40,14 @@
   min-width: 0;
 }
 
+.auth-search-control,
 .auth-status-filter {
-  width: 180px;
-  flex: 0 0 180px;
-}
-.auth-search-control {
   width: 300px;
-  height: 32px;
   flex: 0 0 300px;
+}
+
+.auth-search-control {
+  height: 32px;
   display: flex;
   align-items: stretch;
 }
@@ -459,9 +459,23 @@
         flex-direction: column;
       }
 
-      .auth-search-control {
-        width: 100%;
-      }
+.auth-toolbar-left {
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.auth-search-control,
+.auth-status-filter {
+  width: 100%;
+  max-width: none;
+  flex: 0 0 auto;
+}
+
+.auth-users-toolbar > .auth-btn-primary {
+  width: 100%;
+}
 
       .auth-form-grid {
         grid-template-columns: 1fr;
@@ -1117,10 +1131,6 @@
 
 </div>
             
-            <div
-  id="authStatusFilter"
-  class="auth-status-filter"
-></div>
             <button
               id="createAuthUserBtn"
               class="auth-btn auth-btn-primary"

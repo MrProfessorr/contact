@@ -1781,15 +1781,8 @@ const authPageSizeMenu =
 
 function renderLoadingState() {
   authTableBody.innerHTML = "";
-  authEmpty.style.display = "block";
-  authTable.style.display = "none";
-}
 
-  } else {
-
-    authEmpty.textContent = "Loading...";
-
-  }
+  authEmpty.hidden = false;
 
   authPageInfo.textContent =
     "0-0 of 0 items";

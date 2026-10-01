@@ -211,10 +211,6 @@
       cursor: default;
     }
 
-    .auth-page-size {
-      width: 105px;
-    }
-
     /* MODAL */
 
     .auth-modal-backdrop {
@@ -830,6 +826,145 @@
   width: 105px;
   flex: 0 0 105px;
 }
+.auth-page-size {
+  position: relative;
+}
+
+.auth-page-size-control {
+  width: 105px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid var(--tx-border);
+  border-radius: 6px;
+
+  background: var(--tx-surface-soft);
+
+  overflow: hidden;
+}
+
+.auth-page-size-control:hover,
+.auth-page-size-control.open {
+  border-color: #1677ff;
+}
+
+.auth-page-size-input {
+  width: 72px;
+  height: 28px;
+
+  padding: 0 0 0 10px;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+  color: var(--text);
+
+  font: inherit;
+  font-size: 12px;
+}
+
+.auth-page-size-input[readonly] {
+  cursor: pointer;
+}
+
+.auth-page-size-arrow-btn {
+  width: 31px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+  color: var(--muted);
+
+  cursor: pointer;
+}
+
+.auth-page-size-arrow-btn:hover {
+  color: var(--text);
+}
+
+.auth-page-size-arrow-btn svg {
+  width: 10px;
+  height: 10px;
+
+  fill: currentColor;
+
+  transition: transform .15s ease;
+}
+
+.auth-page-size-control.open
+.auth-page-size-arrow-btn svg {
+  transform: rotate(180deg);
+}
+
+.auth-page-size-menu {
+  position: absolute;
+
+  right: 0;
+  bottom: calc(100% + 5px);
+
+  z-index: 100;
+
+  width: 105px;
+  max-height: 220px;
+
+  overflow-y: auto;
+
+  padding: 4px;
+
+  border: 1px solid var(--tx-border);
+  border-radius: 6px;
+
+  background: var(--tx-surface);
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, .35);
+}
+
+.auth-page-size-menu[hidden] {
+  display: none;
+}
+
+.auth-page-size-menu button {
+  width: 100%;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 8px;
+
+  border: 0;
+  border-radius: 4px;
+
+  background: transparent;
+  color: var(--text2);
+
+  cursor: pointer;
+
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+}
+
+.auth-page-size-menu button:hover {
+  background: rgba(255,255,255,.07);
+  color: var(--text);
+}
+
+.auth-page-size-menu button.active {
+  background: rgba(22,119,255,.14);
+  color: #1677ff;
+}
 @media (max-width: 760px) {
 
   .auth-table {
@@ -1386,7 +1521,30 @@ const authPageNumbers =
   document.getElementById(
     "authPageNumbers"
   );
+const authPageSizeControl =
+  document.getElementById(
+    "authPageSizeControl"
+  );
 
+const authPageSizeBox =
+  authPageSizeControl?.querySelector(
+    ".auth-page-size-control"
+  );
+
+const authPageSizeInput =
+  document.getElementById(
+    "authPageSizeInput"
+  );
+
+const authPageSizeToggle =
+  document.getElementById(
+    "authPageSizeToggle"
+  );
+
+const authPageSizeMenu =
+  document.getElementById(
+    "authPageSizeMenu"
+  );
 
     let allAuthUsers = [];
 
@@ -1395,9 +1553,6 @@ const authPageNumbers =
     let pageSize = 10;
 
     let selectedAuthUser = null;
-
-    let pageSizeApi = null;
-
 
     function formatDate(value) {
 
@@ -1673,9 +1828,9 @@ for (let page = 1; page <= totalPages; page++) {
     document.createElement("button");
 
   button.type = "button";
-  button.className =
-    "auth-page-btn" +
-    (page === currentPage ? " active" : "");
+button.className =
+  "auth-page-number" +
+  (page === currentPage ? " active" : "");
 
   button.textContent = String(page);
 
@@ -1787,65 +1942,260 @@ for (let page = 1; page <= totalPages; page++) {
       );
 
     }
+function closePageSizeMenu() {
 
-function setupPageSize() {
-
-  if (!window.createSharedDropdown) {
+  if (
+    !authPageSizeControl ||
+    !authPageSizeInput ||
+    !authPageSizeMenu
+  ) {
     return;
   }
 
-  pageSizeApi =
-    window.createSharedDropdown(
-      document.getElementById(
-        "authPageSize"
-      ),
-      {
-        options: [
-          {
-            value: "10",
-            label: "10 / page"
-          },
-          {
-            value: "20",
-            label: "20 / page"
-          },
-          {
-            value: "50",
-            label: "50 / page"
-          },
-          {
-            value: "100",
-            label: "100 / page"
-          },
-          {
-            value: "200",
-            label: "200 / page"
-          },
-          {
-            value: "500",
-            label: "500 / page"
-          },
-          {
-            value: "1000",
-            label: "1000 / page"
-          }
-        ],
+  authPageSizeMenu.hidden = true;
 
-        value: String(pageSize),
+  authPageSizeBox?.classList.remove(
+    "open"
+  );
 
-        onChange(value) {
+  authPageSizeToggle?.setAttribute(
+    "aria-expanded",
+    "false"
+  );
 
-          pageSize =
-            Number(value) || 10;
+  authPageSizeInput.readOnly = true;
 
-          currentPage = 1;
+  authPageSizeInput.placeholder = "";
 
-          renderUsers();
-        }
-      }
-    );
+  authPageSizeInput.value =
+    `${pageSize} / page`;
 }
 
+
+function openPageSizeMenu() {
+
+  if (
+    !authPageSizeControl ||
+    !authPageSizeInput ||
+    !authPageSizeMenu
+  ) {
+    return;
+  }
+
+  authPageSizeMenu.hidden = false;
+
+  authPageSizeBox?.classList.add(
+    "open"
+  );
+
+  authPageSizeToggle?.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+  authPageSizeInput.readOnly = false;
+
+  authPageSizeInput.placeholder =
+    `${pageSize} / page`;
+
+  authPageSizeInput.value = "";
+
+  authPageSizeInput.focus();
+
+  authPageSizeInput.select();
+}
+
+
+function syncPageSizeMenu() {
+
+  authPageSizeMenu
+    ?.querySelectorAll(
+      "[data-page-size]"
+    )
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        Number(
+          button.dataset.pageSize
+        ) === pageSize
+      );
+
+    });
+}
+
+
+function applyPageSize(value) {
+
+  let nextSize =
+    Number(value);
+
+  if (
+    !Number.isFinite(nextSize) ||
+    nextSize < 1
+  ) {
+    closePageSizeMenu();
+    return;
+  }
+
+  nextSize =
+    Math.min(
+      10000,
+      Math.floor(nextSize)
+    );
+
+  pageSize = nextSize;
+
+  currentPage = 1;
+
+  syncPageSizeMenu();
+
+  renderUsers();
+
+  closePageSizeMenu();
+}
+
+
+function setupPageSize() {
+
+  if (
+    !authPageSizeControl ||
+    !authPageSizeInput ||
+    !authPageSizeToggle ||
+    !authPageSizeMenu
+  ) {
+    return;
+  }
+
+  authPageSizeInput.value =
+    `${pageSize} / page`;
+
+  syncPageSizeMenu();
+
+
+  authPageSizeToggle.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      if (authPageSizeMenu.hidden) {
+        openPageSizeMenu();
+      }
+      else {
+        closePageSizeMenu();
+      }
+
+    }
+  );
+
+
+  authPageSizeInput.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      if (authPageSizeMenu.hidden) {
+        openPageSizeMenu();
+      }
+
+    }
+  );
+
+
+  authPageSizeMenu.addEventListener(
+    "click",
+    event => {
+
+      const button =
+        event.target.closest(
+          "[data-page-size]"
+        );
+
+      if (!button) {
+        return;
+      }
+
+      applyPageSize(
+        button.dataset.pageSize
+      );
+
+    }
+  );
+
+
+  authPageSizeInput.addEventListener(
+    "input",
+    () => {
+
+      authPageSizeInput.value =
+        authPageSizeInput.value.replace(
+          /\D/g,
+          ""
+        );
+
+    }
+  );
+
+
+  authPageSizeInput.addEventListener(
+    "keydown",
+    event => {
+
+      if (event.key === "Enter") {
+
+        event.preventDefault();
+
+        applyPageSize(
+          authPageSizeInput.value
+        );
+
+        return;
+      }
+
+      if (event.key === "Escape") {
+
+        event.preventDefault();
+
+        closePageSizeMenu();
+
+      }
+
+    }
+  );
+
+
+  document.addEventListener(
+    "click",
+    event => {
+
+      if (
+        authPageSizeControl.contains(
+          event.target
+        )
+      ) {
+        return;
+      }
+
+      if (!authPageSizeMenu.hidden) {
+
+        const value =
+          authPageSizeInput.value.trim();
+
+        if (value) {
+          applyPageSize(value);
+        }
+        else {
+          closePageSizeMenu();
+        }
+
+      }
+
+    }
+  );
+
+}
 /* =========================
    AUTH USERS BACKEND API
 ========================= */

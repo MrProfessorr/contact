@@ -713,14 +713,14 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .shared-chip-dropdown-values {
   position:relative;
-
   display:flex;
   flex:1 1 auto;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   align-items:center;
-
   min-width:0;
   max-width:100%;
+  overflow:hidden;
+  gap:4px;
 }
 
 
@@ -738,9 +738,10 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   align-self:center;
   align-items:center;
 
-  flex:none;
+  flex:0 1 auto;
 
-  max-width:100%;
+  min-width:0;
+  max-width:120px;
   height:24px;
 
   margin:
@@ -776,7 +777,161 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   text-overflow:ellipsis;
 }
 
+/* =========================================================
+   CHIP OVERFLOW +N
+========================================================= */
 
+.shared-chip-dropdown-overflow {
+  flex:0 0 auto;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  height:24px;
+
+  padding:
+    0 7px;
+
+  margin:
+    2px 4px 2px 0;
+
+  border-radius:4px;
+
+  color:var(--text);
+
+  background:
+    rgba(255,255,255,.12);
+
+  font-size:12px;
+  line-height:1;
+
+  white-space:nowrap;
+
+  cursor:default;
+}
+/* =========================================================
+   CHIP OVERFLOW POPUP
+========================================================= */
+
+.shared-chip-dropdown-overflow-popup {
+  position:absolute;
+
+  top:calc(100% + 5px);
+  left:0;
+
+  z-index:10020;
+
+  min-width:140px;
+  max-width:220px;
+
+  padding:4px;
+
+  border:0;
+  border-radius:8px;
+
+  color:var(--text);
+
+  background:
+    var(--dropdown-bg);
+
+  box-shadow:
+    0 6px 16px 0 rgba(0,0,0,.08),
+    0 3px 6px -4px rgba(0,0,0,.12),
+    0 9px 28px 8px rgba(0,0,0,.05);
+
+  opacity:0;
+  visibility:hidden;
+
+  transform:
+    translateY(-4px);
+
+  pointer-events:none;
+
+  transition:
+    opacity .15s ease,
+    transform .15s ease,
+    visibility .15s ease;
+}
+
+
+.shared-chip-dropdown-overflow-popup.show {
+  opacity:1;
+  visibility:visible;
+
+  transform:
+    translateY(0);
+
+  pointer-events:auto;
+}
+
+
+.shared-chip-dropdown-overflow-item {
+  padding:
+    5px 10px;
+
+  border-radius:4px;
+
+  color:var(--text);
+
+  font-size:13px;
+
+  white-space:nowrap;
+}
+
+
+.shared-chip-dropdown-overflow-item:hover {
+  background:
+    var(--list-hover);
+}
+/* =========================================================
+   ADMIN SITE SELECTOR - COMPACT
+========================================================= */
+
+.admin-site-selector {
+  width:100%;
+  min-width:150px;
+  max-width:320px;
+
+  flex:
+    1 1 150px;
+}
+
+
+.admin-site-selector
+.shared-chip-dropdown-trigger {
+  width:100%;
+  min-width:150px;
+}
+
+
+.admin-site-selector
+.shared-chip-dropdown-values {
+  flex-wrap:nowrap;
+
+  min-width:0;
+
+  overflow:hidden;
+}
+
+
+.admin-site-selector
+.shared-chip-dropdown-chip {
+  flex:0 1 auto;
+
+  min-width:0;
+  max-width:120px;
+}
+
+
+.admin-site-selector
+.shared-chip-dropdown-chip-content {
+  overflow:hidden;
+
+  white-space:nowrap;
+
+  text-overflow:ellipsis;
+}
 /* =========================================================
    CHIP REMOVE
 ========================================================= */

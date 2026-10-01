@@ -92,12 +92,13 @@ app.use(
       "http://localhost:3000",
       "http://127.0.0.1:3000"
     ],
-    methods: [
-      "GET",
-      "POST",
-      "PATCH",
-      "OPTIONS"
-    ],
+methods: [
+  "GET",
+  "POST",
+  "PATCH",
+  "DELETE",
+  "OPTIONS"
+],
     allowedHeaders: [
       "Content-Type",
       "Authorization"
@@ -571,7 +572,128 @@ app.patch(
     }
   }
 );
+// ================================
+// DELETE ADMIN USER
+// ================================
+app.delete(
+  "/api/admin-users/:uid",
+  requireSuperAdmin,
+  async (req, res) => {
 
+    try {
+
+      const uid =
+        String(
+          req.params.uid || ""
+        ).trim();
+
+
+      if (!uid) {
+        return res.status(400).json({
+          ok: false,
+          message: "UID is required"
+        });
+      }
+
+
+      /*
+        Jangan benarkan superadmin
+        delete account sendiri.
+      */
+      if (uid === req.adminUser.uid) {
+
+        return res.status(400).json({
+          ok: false,
+          message:
+            "You cannot delete your own account."
+        });
+
+      }
+
+
+      /*
+        Pastikan account ini memang
+        ada dalam admin_users.
+      */
+      const profileSnapshot =
+        await db
+          .ref(`admin_users/${uid}`)
+          .once("value");
+
+
+      if (!profileSnapshot.exists()) {
+
+        return res.status(404).json({
+          ok: false,
+          message:
+            "Admin user not found"
+        });
+
+      }
+
+
+      /*
+        Delete Firebase Authentication.
+      */
+      await auth.deleteUser(uid);
+
+
+      /*
+        Delete profile + 2nd password.
+      */
+      await Promise.all([
+
+        db
+          .ref(`admin_users/${uid}`)
+          .remove(),
+
+        db
+          .ref(`admin_second_auth/${uid}`)
+          .remove()
+
+      ]);
+
+
+      return res.json({
+        ok: true,
+        message:
+          "Username deleted successfully",
+        uid
+      });
+
+    }
+    catch (error) {
+
+      console.error(
+        "Delete admin user error:",
+        error
+      );
+
+
+      if (
+        error.code ===
+        "auth/user-not-found"
+      ) {
+
+        return res.status(404).json({
+          ok: false,
+          message:
+            "Firebase Auth user not found"
+        });
+
+      }
+
+
+      return res.status(500).json({
+        ok: false,
+        message:
+          "Failed to delete username"
+      });
+
+    }
+
+  }
+);
 // ================================
 // SERVER
 // ================================

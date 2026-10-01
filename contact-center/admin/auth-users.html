@@ -458,21 +458,29 @@
   min-height: 0 !important;
 
   flex: none !important;
-  align-self: flex-start !important; /* TAMBAH */
+  align-self: flex-start !important;
 
-  overflow-x: auto;
-  overflow-y: visible;
+  overflow: visible;
 
   border: 1px solid var(--tx-border);
   border-radius: 8px;
 
   background: var(--tx-surface);
+}
+.auth-table-scroll {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  overflow-x: auto;
+  overflow-y: hidden;
 
   scrollbar-width: thin;
   scrollbar-color:
     rgba(255, 255, 255, .22)
     transparent;
 }
+
 
 .auth-table-wrap::-webkit-scrollbar {
   height: 6px;
@@ -1063,10 +1071,11 @@
 
           </div>
 
+<div class="auth-table-wrap">
 
-          <div class="auth-table-wrap">
+  <div class="auth-table-scroll">
 
-            <table class="auth-table">
+    <table class="auth-table">
 
               <thead>
                 <tr>
@@ -1088,7 +1097,7 @@
               class="auth-empty"
               hidden
             ></div>
-
+</div>
 <div class="auth-pagination">
 
   <div

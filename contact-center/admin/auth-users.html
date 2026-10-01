@@ -1054,17 +1054,32 @@ import {
         "authNextPage"
       );
 
-    const authCurrentPage =
-      document.getElementById(
-        "authCurrentPage"
-      );
+const authPageNumbers =
+  document.getElementById(
+    "authPageNumbers"
+  );
+
+const authPageSizeInput =
+  document.getElementById(
+    "authPageSizeInput"
+  );
+
+const authPageSizeToggle =
+  document.getElementById(
+    "authPageSizeToggle"
+  );
+
+const authPageSizeMenu =
+  document.getElementById(
+    "authPageSizeMenu"
+  );
 
 
     let allAuthUsers = [];
 
     let currentPage = 1;
 
-    let pageSize = 100;
+    let pageSize = 10;
 
     let selectedAuthUser = null;
 
@@ -1337,8 +1352,30 @@ import {
           : "0-0 of 0 items";
 
 
-      authCurrentPage.textContent =
-        String(currentPage);
+authPageNumbers.innerHTML = "";
+
+for (let page = 1; page <= totalPages; page++) {
+
+  const button =
+    document.createElement("button");
+
+  button.type = "button";
+  button.className =
+    "auth-page-btn" +
+    (page === currentPage ? " active" : "");
+
+  button.textContent = String(page);
+
+  button.addEventListener(
+    "click",
+    () => {
+      currentPage = page;
+      renderUsers();
+    }
+  );
+
+  authPageNumbers.appendChild(button);
+}
 
 
       authPrevPage.disabled =

@@ -49,11 +49,11 @@
   height: 32px;
   padding: 4px 11px;
   border: 1px solid var(--input-line);
-  border-right: none;
   border-radius: 6px 0 0 6px;
   background: var(--input);
   color: var(--text);
   outline: none;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 
@@ -68,7 +68,7 @@
   border: 1px solid var(--input-line);
   border-radius: 0 6px 6px 0;
   background: var(--input);
-  color: var(--text2);
+  color: var(--text);
   cursor: pointer;
   transition:
     border-color .2s ease,
@@ -97,7 +97,7 @@
     var(--input-line-hover);
 
   color:
-    rgba(255,255,255,.85);
+    var(--input-line-hover);
 }
 
 
@@ -110,18 +110,10 @@
 }
 
 
-.auth-search-control button:hover {
-  color:
-    rgba(255,255,255,.85);
-}
-
-
 .auth-search-icon {
   width: 14px;
   height: 14px;
-
   display: block;
-
   transform-origin: center;
 }
 
@@ -129,9 +121,7 @@
 .auth-search-spinner {
   width: 14px;
   height: 14px;
-
   display: none;
-
   transform-origin: center;
 }
 
@@ -145,7 +135,6 @@
 .auth-search-control.is-syncing
 .auth-search-spinner {
   display: block;
-
   animation:
     authSpin .75s linear infinite;
 }
@@ -183,18 +172,23 @@
       color: #3c89e8;
       border-color: #3c89e8;
     }
-
+    .auth-btn:active {
+      color: #1554ad;
+      border-color: #1554ad;
+    }
     .auth-btn-primary {
       background: #1668dc;
       border-color: transparent;
-      color: rgba(255,255,255,0.85);
+      color: #ffffff;
     }
 
     .auth-btn-primary:hover {
       background: #3c89e8;
+      color: #ffffff;
     }
-    .auth-btn-primary:hover {
+    .auth-btn-primary:active {
       background: #1554ad;
+      color: #ffffff;
     }
     .auth-btn-danger {
       color: #ff6b6b;
@@ -888,17 +882,13 @@
 }
 
 .auth-page-size-control {
-  width: 105px;
-  height: 30px;
-
+  width: 100%;
+  height: 32px;
   display: flex;
   align-items: center;
-
   border: 1px solid var(--tx-border);
   border-radius: 6px;
-
   background: var(--tx-surface-soft);
-
   overflow: hidden;
 }
 
@@ -908,19 +898,15 @@
 }
 
 .auth-page-size-input {
-  width: 72px;
-  height: 28px;
-
+  width: 100%;
+  height: 32px;
   padding: 0 0 0 10px;
-
   border: 0;
   outline: 0;
-
-  background: transparent;
+  background: var(--input);
   color: var(--text);
-
   font: inherit;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .auth-page-size-input[readonly] {
@@ -930,15 +916,11 @@
 .auth-page-size-arrow-btn {
   width: 31px;
   height: 28px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
   border: 0;
-
   background: transparent;
   color: var(--muted);
 
@@ -950,11 +932,9 @@
 }
 
 .auth-page-size-arrow-btn svg {
-  width: 10px;
-  height: 10px;
-
+  width: 12px;
+  height: 12px;
   fill: currentColor;
-
   transition: transform .15s ease;
 }
 
@@ -1075,7 +1055,7 @@ scrollbar-width: none;
                   stroke-width="2"
                 >
                   <circle cx="11" cy="11" r="7"></circle>
-                  <path d="m20 20-3.5-3.5"></path>
+                  <path d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"></path>
                 </svg>
 
                 <svg

@@ -327,11 +327,10 @@
 
     /* STATUS SWITCH */
 
-    .auth-status-switch {
-      display: inline-block;
-      position: relative;
-      cursor: pointer;
-    }
+.auth-status-switch {
+  display: inline-block;
+  position: relative;
+}
 
     .auth-status-switch input {
       position: absolute;
@@ -349,6 +348,7 @@
       border-radius: 999px;
       background: #444;
       transition: .2s;
+      cursor: pointer;
     }
 
     .auth-status-slider::before {
@@ -1361,19 +1361,22 @@ scrollbar-width: none;
 
             <label>Status</label>
 
-            <label class="auth-status-switch">
+<div class="auth-status-switch">
 
-              <input
-                id="createEnabled"
-                type="checkbox"
-                checked
-              >
+  <input
+    id="createEnabled"
+    type="checkbox"
+    checked
+  >
 
-              <span class="auth-status-slider">
-                <span class="auth-status-text"></span>
-              </span>
+  <label
+    class="auth-status-slider"
+    for="createEnabled"
+  >
+    <span class="auth-status-text"></span>
+  </label>
 
-            </label>
+</div>
 
           </div>
 
@@ -1497,18 +1500,21 @@ scrollbar-width: none;
 
             <label>Status</label>
 
-            <label class="auth-status-switch">
+<div class="auth-status-switch">
 
-              <input
-                id="manageEnabled"
-                type="checkbox"
-              >
+  <input
+    id="manageEnabled"
+    type="checkbox"
+  >
 
-              <span class="auth-status-slider">
-                <span class="auth-status-text"></span>
-              </span>
+  <label
+    class="auth-status-slider"
+    for="manageEnabled"
+  >
+    <span class="auth-status-text"></span>
+  </label>
 
-            </label>
+</div>
 
           </div>
 

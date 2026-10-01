@@ -447,13 +447,19 @@
 .auth-table-wrap {
   width: 100%;
   max-width: 100%;
+  min-width: 0;
+
+  height: auto;
+  min-height: 0;
+
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: visible;
 
   border: 1px solid var(--tx-border);
   border-radius: 8px;
 
   background: var(--tx-surface);
+
   scrollbar-width: thin;
   scrollbar-color:
     rgba(255, 255, 255, .22)

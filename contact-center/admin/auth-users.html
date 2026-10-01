@@ -2995,22 +2995,57 @@ closeModal(
 );
 
 
-window.showToast?.(
-  `Username ${result?.username || username} created successfully.`,
-  "success",
-  4000
-);
+/*
+  Backend sudah return user yang baru dibuat.
+  Masukkan terus ke list tanpa reload table.
+*/
+if (result?.user) {
+
+  const newUser = {
+    uid:
+      result.user.uid,
+
+    username:
+      result.user.username ||
+      username,
+
+    email:
+      result.user.email ||
+      `${username}@5g88.local`,
+
+    enabled:
+      result.user.enabled === true,
+
+    createdAt:
+      result.user.createdAt ||
+      Date.now(),
+
+    updatedAt:
+      result.user.updatedAt ||
+      result.user.createdAt ||
+      Date.now()
+  };
 
 
-/* Reset button terus selepas create berjaya */
-submitBtn.disabled = false;
-submitBtn.textContent = oldText;
+  /*
+    Masukkan user baru paling atas.
+    Filter UID untuk elak duplicate.
+  */
+  allAuthUsers = [
+    newUser,
+
+    ...allAuthUsers.filter(
+      user =>
+        user.uid !== newUser.uid
+    )
+  ];
 
 
-currentPage = 1;
+  currentPage = 1;
 
-/* Refresh list selepas create */
-await loadAuthUsers();
+  renderUsers();
+
+}
 
       }
       catch (error) {
@@ -3041,9 +3076,6 @@ await loadAuthUsers();
   );
 
 
-/*
-  MANAGE AUTH USER
-*/
 
 document
   .getElementById(

@@ -31,7 +31,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      margin-bottom: 16px;
+      margin-bottom: 15px;
     }
 
 .auth-search-control {
@@ -47,17 +47,12 @@
   width: calc(100% - 34px);
   min-width: 0;
   height: 32px;
-
   padding: 4px 11px;
-
   border: 1px solid var(--input-line);
   border-right: none;
-
   border-radius: 6px 0 0 6px;
-
   background: var(--input);
   color: var(--text);
-
   outline: none;
 }
 
@@ -66,23 +61,15 @@
   width: 32px;
   min-width: 32px;
   height: 32px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
   border: 1px solid var(--input-line);
-
   border-radius: 0 6px 6px 0;
-
   background: var(--input);
-
   color: var(--text2);
-
   cursor: pointer;
-
   transition:
     border-color .2s ease,
     color .2s ease,
@@ -90,17 +77,36 @@
 }
 
 
-.auth-search-control:hover input,
-.auth-search-control:hover button {
+/* INPUT - hover sendiri */
+.auth-search-control input:hover {
   border-color:
     var(--input-line-hover);
 }
 
 
-.auth-search-control:focus-within input,
-.auth-search-control:focus-within button {
+/* INPUT - focus sendiri */
+.auth-search-control input:focus {
   border-color:
     var(--input-line-focus);
+}
+
+
+/* BUTTON - hover sendiri */
+.auth-search-control button:hover {
+  border-color:
+    var(--input-line-hover);
+
+  color:
+    rgba(255,255,255,.85);
+}
+
+
+/* BUTTON - focus sendiri */
+.auth-search-control button:focus-visible {
+  border-color:
+    var(--input-line-focus);
+
+  outline: none;
 }
 
 
@@ -160,29 +166,35 @@
 }
 
     .auth-btn {
-      min-height: 32px;
-      border: 1px solid #383838;
-      border-radius: 7px;
-      background: #1d1d1d;
-      color: #fff;
-      padding: 6px 12px;
+      height: 32px;
+      border: 1px solid #424242;
+      border-radius: 6px;
+      background: tra;
+      color: rgba(255,255,255,0.85);
+      padding: 0px 15px;
       cursor: pointer;
       font: inherit;
+      font-size:14px;
+      font-weight:400px;
+      transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
 
     .auth-btn:hover {
-      background: #282828;
+      color: #3c89e8;
+      border-color: #3c89e8;
     }
 
     .auth-btn-primary {
-      background: #1677ff;
-      border-color: #1677ff;
+      background: #1668dc;
+      border-color: transparent;
     }
 
     .auth-btn-primary:hover {
-      background: #2b84ff;
+      background: #3c89e8;
     }
-
+    .auth-btn-primary:hover {
+      background: #1554ad;
+    }
     .auth-btn-danger {
       color: #ff6b6b;
     }
@@ -198,17 +210,17 @@
     .auth-page-btn {
       min-width: 30px;
       height: 30px;
-      border: 1px solid #333;
-      background: #181818;
-      color: #ccc;
+      border: 1px solid var(--input-line);
+      background: var(--input);
+      color: var(--text);
       border-radius: 6px;
       cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
 
     .auth-page-btn.active {
-      background: #1677ff;
-      border-color: #1677ff;
-      color: #fff;
+      border-color: #1668dc;
+      color: #1668dc;
     }
 
     .auth-page-btn:disabled {
@@ -228,6 +240,7 @@
       justify-content: center;
       overflow-y: auto;
       padding: 15px;
+      transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
 
     .auth-modal-backdrop.open {
@@ -241,6 +254,7 @@
       background: #1f1f1f;
       border: 1px solid transparent;
       border-radius: 8px;
+      transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
       box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
     }
 

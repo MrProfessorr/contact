@@ -667,39 +667,32 @@
 .auth-pagination {
   width: 100%;
 
-  display: grid;
-
-  grid-template-columns:
-    minmax(150px, 1fr)
-    auto
-    minmax(150px, 1fr);
-
+  display: flex;
   align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 
-  gap: 12px;
+  gap: 8px;
 
-  padding-top: 14px;
+  padding: 10px;
 
-  color: var(--muted);
-
-  font-size: 12px;
+  border-top: 1px solid var(--line);
 }
 
 
 .auth-pagination-info {
-  justify-self: start;
-
+  color: var(--text);
+  font-size: 14px;
   white-space: nowrap;
+  margin-right: 3px;
 }
 
 
 .auth-pagination-center {
-  justify-self: center;
-
   display: flex;
   align-items: center;
-
-  gap: 5px;
+  justify-content: flex-start;
+  gap: 4px;
 }
 
 
@@ -835,40 +828,17 @@
 ========================= */
 
 .auth-page-size {
-  position: relative;
-
-  justify-self: end;
-
   width: 105px;
+  flex: 0 0 105px;
 }
-
-
-
-
-/* =========================
-   RESPONSIVE
-========================= */
-
 @media (max-width: 760px) {
 
   .auth-table {
     min-width: 900px;
   }
 
-
   .auth-pagination {
-    grid-template-columns: 1fr;
-
-    justify-items: center;
-
-    gap: 10px;
-  }
-
-
-  .auth-pagination-info,
-  .auth-pagination-center,
-  .auth-page-size {
-    justify-self: center;
+    justify-content: flex-end;
   }
 
 }

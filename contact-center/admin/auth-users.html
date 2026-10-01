@@ -1500,7 +1500,7 @@ async function callAuthBackend(
 
   return result;
 }
-let authUsers = [];
+
 async function loadAuthUsers() {
 
   try {
@@ -1514,13 +1514,13 @@ async function loadAuthUsers() {
       );
 
 
-    authUsers =
-      Array.isArray(result?.users)
-        ? result.users
-        : [];
+allAuthUsers =
+  Array.isArray(result?.users)
+    ? result.users
+    : [];
 
 
-    renderAuthUsers();
+   renderUsers();
 
   } catch (error) {
 
@@ -1530,9 +1530,9 @@ async function loadAuthUsers() {
     );
 
 
-    authUsers = [];
+   allAuthUsers = [];
 
-    renderAuthUsers();
+    renderUsers();
 
 
     window.showToast?.(

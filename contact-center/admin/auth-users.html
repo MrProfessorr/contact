@@ -2990,21 +2990,27 @@ document
           );
 
 
-        closeModal(
-          createAuthModal
-        );
+closeModal(
+  createAuthModal
+);
 
 
-        window.showToast?.(
-          `Username ${result?.username || username} created successfully.`,
-          "success",
-          4000
-        );
+window.showToast?.(
+  `Username ${result?.username || username} created successfully.`,
+  "success",
+  4000
+);
 
 
-        currentPage = 1;
+/* Reset button terus selepas create berjaya */
+submitBtn.disabled = false;
+submitBtn.textContent = oldText;
 
-        await loadAuthUsers();
+
+currentPage = 1;
+
+/* Refresh list selepas create */
+await loadAuthUsers();
 
       }
       catch (error) {

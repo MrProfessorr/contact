@@ -1597,7 +1597,196 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
    color:#fff;
 }
 
+/* =========================================================
+   ADMIN HEADER MODULE DROPDOWN
+   Example: Skin Config
+========================================================= */
 
+.admin-header-module-dropdown {
+  position:relative;
+
+  display:flex;
+  align-items:center;
+
+  flex:0 0 auto;
+
+  overflow:visible;
+}
+
+
+/* =========================================================
+   DROPDOWN BUTTON
+========================================================= */
+
+.admin-header-module-dropdown-button {
+  position:relative;
+}
+
+
+/* =========================================================
+   DROPDOWN POPUP
+========================================================= */
+
+.admin-header-module-dropdown-popup {
+  position:absolute;
+
+  top:calc(100% + 8px);
+  left:0;
+  right:auto;
+
+  width:max-content;
+  min-width:180px;
+  max-width:280px;
+
+  padding:4px;
+
+  border:0;
+  border-radius:8px;
+
+  color:var(--text);
+  background:#001528;
+
+  box-shadow:
+    0 6px 16px 0 rgba(0,0,0,.08),
+    0 3px 6px -4px rgba(0,0,0,.12),
+    0 9px 28px 8px rgba(0,0,0,.05);
+
+  opacity:0;
+  visibility:hidden;
+
+  transform:translateY(-4px);
+
+  pointer-events:none;
+
+  z-index:10030;
+
+  transition:
+    opacity .15s ease,
+    transform .15s ease,
+    visibility .15s ease;
+}
+
+
+/* =========================================================
+   AUTO POPUP DIRECTION
+========================================================= */
+
+/* Ada ruang kanan */
+.admin-header-module-dropdown.popup-right
+.admin-header-module-dropdown-popup {
+  left:0;
+  right:auto;
+}
+
+
+/* Ruang kanan tak cukup */
+.admin-header-module-dropdown.popup-left
+.admin-header-module-dropdown-popup {
+  left:auto;
+  right:0;
+}
+
+
+/* =========================================================
+   OPEN
+========================================================= */
+
+.admin-header-module-dropdown.open
+.admin-header-module-dropdown-popup {
+  opacity:1;
+  visibility:visible;
+
+  transform:translateY(0);
+
+  pointer-events:auto;
+}
+
+
+/* Parent button kekal highlight ketika dropdown open */
+
+.admin-header-module-dropdown.open
+.admin-header-module-dropdown-button {
+  color:#ffffff;
+  background:#ffffff1f;
+}
+
+
+/* =========================================================
+   DROPDOWN ITEM
+========================================================= */
+
+.admin-header-module-dropdown-item {
+  width:100%;
+  min-height:38px;
+
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  padding:5px 12px;
+
+  border:0;
+  border-radius:6px;
+
+  color:var(--text);
+  background:transparent;
+
+  font-family:inherit;
+  font-size:14px;
+  font-weight:400;
+
+  text-align:left;
+  white-space:nowrap;
+
+  cursor:pointer;
+
+  transition:
+    color .15s ease,
+    background .15s ease;
+}
+
+
+/* HOVER */
+
+.admin-header-module-dropdown-item:hover {
+  background:var(--list-hover);
+}
+
+
+/* ACTIVE */
+
+.admin-header-module-dropdown-item.active {
+  color:#ffffff;
+  background:#fff3;
+}
+
+
+/* =========================================================
+   DROPDOWN ITEM ICON
+========================================================= */
+
+.admin-header-module-dropdown-item-icon {
+  display:block;
+
+  width:19.2px;
+  height:19.2px;
+
+  flex:0 0 19.2px;
+
+  fill:#ffffff;
+}
+
+
+/* TEXT */
+
+.admin-header-module-dropdown-item span {
+  display:block;
+
+  min-width:0;
+
+  white-space:nowrap;
+}
 /* =========================================================
    MORE BUTTON (...)
 ========================================================= */
@@ -1789,7 +1978,20 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
     flex-basis:18px;
   }
 
+  .admin-header-module-dropdown-item {
+    min-height:36px;
+    padding:5px 10px;
+  }
 
+  .admin-header-module-dropdown-item-icon {
+    width:18px;
+    height:18px;
+    flex-basis:18px;
+  }
+
+  .admin-header-module-dropdown-popup {
+    min-width:170px;
+  }
   .admin-header-more {
     margin-left:2px;
   }

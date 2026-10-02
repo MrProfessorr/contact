@@ -5017,6 +5017,7 @@ window.addEventListener(
     loadAdminSiteOptions();
     syncSuperadminMenu();
     syncAdminPermissionMenu();
+    renderAdminHeaderModules();
      
     visibleMenuItems =
       getVisibleAdminMenuItems();
@@ -9737,6 +9738,133 @@ function getVisibleAdminMenuItems() {
   );
 
 }
+/* =====================================================
+   RENDER ADMIN HEADER MODULES
+===================================================== */
+
+function renderAdminHeaderModules() {
+
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+  if (!profile) {
+    adminHeaderModules.innerHTML = "";
+    return;
+  }
+
+
+  const isSuperadmin =
+    profile.role === "superadmin";
+
+
+  const visibleHeaderItems =
+    adminHeaderMenuItems.filter(
+      item => {
+
+        if (isSuperadmin) {
+          return true;
+        }
+
+        if (item.superadminOnly) {
+          return false;
+        }
+
+        if (!item.permission) {
+          return true;
+        }
+
+
+        const [
+          group,
+          action
+        ] =
+          item.permission.split(".");
+
+
+        return (
+          profile
+            ?.permissions
+            ?.[group]
+            ?.[action] === true
+        );
+
+      }
+    );
+
+
+  adminHeaderModules.innerHTML =
+    visibleHeaderItems
+      .map(
+        item => {
+
+          const active =
+            currentPage === item.file;
+
+          return `
+            <button
+              type="button"
+              class="admin-header-module${
+                active ? " active" : ""
+              }"
+              data-header-file="${escapeSharedText(
+                item.file
+              )}"
+              data-header-name="${escapeSharedText(
+                item.name
+              )}"
+            >
+
+              <svg
+                class="admin-header-module-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="${escapeSharedText(
+                    item.icon
+                  )}"
+                ></path>
+              </svg>
+
+              <span>
+                ${escapeSharedText(
+                  item.name
+                )}
+              </span>
+
+            </button>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+adminHeaderModules.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        "[data-header-file]"
+      );
+
+
+    if (!button) {
+      return;
+    }
+
+
+    navigateToTab({
+      file:
+        button.dataset.headerFile,
+
+      name:
+        button.dataset.headerName
+    });
+
+  }
+);
 function syncAdminPermissionMenu() {
 
   const profile =

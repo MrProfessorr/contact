@@ -1706,7 +1706,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   display:flex;
   align-items:center;
   gap:10px;
-  padding:7px 10px;
+  padding:5px 12px;
   border:0;
   border-radius:6px;
   color:var(--text);

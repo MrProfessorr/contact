@@ -720,7 +720,6 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   min-width:0;
   max-width:100%;
   overflow:hidden;
-  gap:4px;
 }
 
 
@@ -783,12 +782,10 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .shared-chip-dropdown-overflow {
   flex:0 0 auto;
-
   display:inline-flex;
   align-items:center;
   justify-content:center;
-
-  height:24px;
+  height:22px;
 
   padding:
     0 7px;
@@ -796,7 +793,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   margin:
     2px 4px 2px 0;
 
-  border-radius:4px;
+  border-radius:6px;
 
   color:var(--text);
 
@@ -1008,9 +1005,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 .shared-chip-dropdown-values:empty
 + .shared-chip-dropdown-placeholder {
   display:block;
-
   margin-right:auto;
-
   text-align:left;
 }
 

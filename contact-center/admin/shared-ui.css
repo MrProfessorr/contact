@@ -1484,23 +1484,46 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   border-color:
     var(--input-line-focus) !important;
 }
+
 /* =========================================================
    ADMIN HEADER MODULES
 ========================================================= */
 
 .admin-header-modules {
+  position:relative;
+
+  display:flex;
+  align-items:center;
+
+  flex:1 1 auto;
+  min-width:0;
+
+  margin-left:12px;
+  margin-right:12px;
+
+  overflow:visible;
+}
+
+
+/* =========================================================
+   VISIBLE MODULE AREA
+========================================================= */
+
+.admin-header-module-visible {
   display:flex;
   align-items:center;
   gap:6px;
-  flex:1 1 auto;
+
+  flex:0 1 auto;
   min-width:0;
-  margin-left:12px;
-  margin-right:12px;
+
   overflow:hidden;
 }
 
 
-/* MODULE BUTTON */
+/* =========================================================
+   MODULE BUTTON
+========================================================= */
 
 .admin-header-module {
   height:40px;
@@ -1511,14 +1534,13 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
   gap:8px;
 
-  flex:0 1 auto;
+  flex:0 0 auto;
   min-width:40px;
 
   padding:0 12px;
 
   border:0;
   border-radius:8px;
-
   outline:none;
 
   color:rgba(255,255,255,.75);
@@ -1539,14 +1561,17 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 }
 
 
-/* SVG */
+/* ICON */
 
 .admin-header-module-icon {
   display:block;
+
   width:19.2px;
   height:19.2px;
+
   flex:0 0 19.2px;
-  fill:#ffffff;
+
+  fill:currentColor;
 }
 
 
@@ -1554,14 +1579,10 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-header-module span {
   display:block;
+
   min-width:0;
-  max-width:120px;
-  overflow:hidden;
+
   white-space:nowrap;
-  text-overflow:ellipsis;
-  transition:
-    max-width .2s ease,
-    opacity .15s ease;
 }
 
 
@@ -1581,46 +1602,209 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 }
 
 
-/* ACTIVE HOVER */
-
 .admin-header-module.active:hover {
   background:#3c89e8;
 }
 
+
 /* =========================================================
-   ADMIN HEADER MODULES - RESPONSIVE
+   MORE BUTTON (...)
 ========================================================= */
 
-@media (max-width:900px) {
+.admin-header-more {
+  position:relative;
 
-  .admin-header-module {
-    width:40px;
-    min-width:40px;
+  flex:0 0 auto;
 
-    padding:0;
-
-    gap:0;
-  }
-
-  .admin-header-module span {
-    display:none;
-  }
-
+  margin-left:6px;
 }
+
+
+.admin-header-more[hidden] {
+  display:none !important;
+}
+
+
+.admin-header-more-button {
+  width:40px;
+  height:40px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:0;
+  border-radius:8px;
+  outline:none;
+
+  color:rgba(255,255,255,.75);
+  background:transparent;
+
+  cursor:pointer;
+
+  transition:
+    color .2s ease,
+    background .2s ease;
+}
+
+
+.admin-header-more-button svg {
+  display:block;
+
+  width:20px;
+  height:20px;
+
+  fill:currentColor;
+}
+
+
+.admin-header-more-button:hover,
+.admin-header-more.open
+.admin-header-more-button {
+  color:#ffffff;
+  background:rgba(255,255,255,.08);
+}
+
+
+.admin-header-more-button.active {
+  color:#ffffff;
+  background:#1677ff;
+}
+
+
+/* =========================================================
+   MORE POPUP
+========================================================= */
+
+.admin-header-more-popup {
+  position:absolute;
+
+  top:calc(100% + 8px);
+  right:0;
+
+  width:max-content;
+  min-width:190px;
+  max-width:280px;
+
+  padding:6px;
+
+  border:0;
+  border-radius:8px;
+
+  color:var(--text);
+  background:var(--dropdown-bg);
+
+  box-shadow:
+    0 6px 16px 0 rgba(0,0,0,.08),
+    0 3px 6px -4px rgba(0,0,0,.12),
+    0 9px 28px 8px rgba(0,0,0,.05);
+
+  opacity:0;
+  visibility:hidden;
+
+  transform:translateY(-4px);
+
+  pointer-events:none;
+
+  z-index:10020;
+
+  transition:
+    opacity .15s ease,
+    transform .15s ease,
+    visibility .15s ease;
+}
+
+
+.admin-header-more.open
+.admin-header-more-popup {
+  opacity:1;
+  visibility:visible;
+
+  transform:translateY(0);
+
+  pointer-events:auto;
+}
+
+
+/* =========================================================
+   MORE POPUP ITEM
+========================================================= */
+
+.admin-header-more-item {
+  width:100%;
+  min-height:38px;
+
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  padding:7px 10px;
+
+  border:0;
+  border-radius:6px;
+
+  color:var(--text);
+  background:transparent;
+
+  font-family:inherit;
+  font-size:14px;
+  font-weight:400;
+
+  text-align:left;
+  white-space:nowrap;
+
+  cursor:pointer;
+
+  transition:
+    color .15s ease,
+    background .15s ease;
+}
+
+
+.admin-header-more-item:hover {
+  background:var(--list-hover);
+}
+
+
+.admin-header-more-item.active {
+  color:#ffffff;
+  background:#1677ff;
+}
+
+
+.admin-header-more-item-icon {
+  display:block;
+
+  width:18px;
+  height:18px;
+
+  flex:0 0 18px;
+
+  fill:currentColor;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
 @media (max-width:650px) {
 
   .admin-header-modules {
-    gap:2px;
     margin-left:4px;
+    margin-right:4px;
   }
+
 
   .admin-header-module {
-    width:36px;
-    min-width:36px;
     height:36px;
 
-    padding:0;
+    padding:0 10px;
   }
+
 
   .admin-header-module-icon {
     width:18px;
@@ -1629,10 +1813,24 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
     flex-basis:18px;
   }
 
+
+  .admin-header-more {
+    margin-left:2px;
+  }
+
+
+  .admin-header-more-button {
+    width:36px;
+    height:36px;
+  }
+
+
+  .admin-header-more-button svg {
+    width:18px;
+    height:18px;
+  }
+
 }
-/* =========================================================
-   ADMIN SIDEBAR NAVIGATION
-========================================================= */
 /* =========================================================
    ADMIN HEADER TIME
 ========================================================= */

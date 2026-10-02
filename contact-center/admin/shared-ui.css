@@ -885,15 +885,24 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
     var(--list-hover);
 }
 /* =========================================================
-   ADMIN SITE SELECTOR - COMPACT
+   ADMIN SITE SELECTOR - RESPONSIVE
 ========================================================= */
 
 .admin-site-selector {
-  width:150px;
+  width:100%;
   min-width:150px;
-  max-width:150px;
+  max-width:100%;
 
-  flex:0 0 150px;
+  flex:1 1 auto;
+
+  box-sizing:border-box;
+}
+
+
+.admin-site-selector
+.shared-chip-dropdown {
+  width:100%;
+  min-width:150px;
 }
 
 
@@ -901,14 +910,18 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 .shared-chip-dropdown-trigger {
   width:100%;
   min-width:150px;
+
+  padding-inline:12px 32px;
 }
 
 
 .admin-site-selector
 .shared-chip-dropdown-values {
-  flex-wrap:nowrap;
+  flex:1 1 auto;
 
   min-width:0;
+
+  flex-wrap:nowrap;
 
   overflow:hidden;
 }
@@ -916,10 +929,10 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-site-selector
 .shared-chip-dropdown-chip {
-  flex:0 1 auto;
+  flex:0 0 auto;
 
   min-width:0;
-  max-width:120px;
+  max-width:140px;
 }
 
 

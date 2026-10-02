@@ -10272,6 +10272,9 @@ adminHeaderModules.addEventListener(
   }
 );
 
+let adminHeaderMoreCloseTimer = null;
+
+
 adminHeaderModules.addEventListener(
   "mouseover",
   event => {
@@ -10285,6 +10288,11 @@ adminHeaderModules.addEventListener(
     if (!moreWrapper) {
       return;
     }
+
+
+    clearTimeout(
+      adminHeaderMoreCloseTimer
+    );
 
 
     moreWrapper.classList.add(
@@ -10320,30 +10328,60 @@ adminHeaderModules.addEventListener(
     }
 
 
-    const next =
+    const nextTarget =
       event.relatedTarget;
 
 
     if (
-      next &&
-      moreWrapper.contains(next)
+      nextTarget &&
+      moreWrapper.contains(
+        nextTarget
+      )
     ) {
       return;
     }
 
 
-    moreWrapper.classList.remove(
-      "open"
+    clearTimeout(
+      adminHeaderMoreCloseTimer
     );
 
 
-    moreWrapper
-      .querySelector(
-        ".admin-header-more-button"
-      )
-      ?.setAttribute(
-        "aria-expanded",
-        "false"
+    adminHeaderMoreCloseTimer =
+      setTimeout(
+        () => {
+
+          /*
+            Check sekali lagi.
+            Jangan tutup kalau mouse
+            sudah masuk popup.
+          */
+
+          if (
+            moreWrapper.matches(
+              ":hover"
+            )
+          ) {
+            return;
+          }
+
+
+          moreWrapper.classList.remove(
+            "open"
+          );
+
+
+          moreWrapper
+            .querySelector(
+              ".admin-header-more-button"
+            )
+            ?.setAttribute(
+              "aria-expanded",
+              "false"
+            );
+
+        },
+        250
       );
 
   }

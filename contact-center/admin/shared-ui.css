@@ -924,10 +924,20 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-site-selector
 .shared-chip-dropdown-chip {
-  flex:0 1 auto;
-
-  min-width:0;
-  max-width:120px;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 170px;
+    align-items: center;
+    margin-inline-end: 4px;
+    padding-inline: 7px 4px;
+    border-radius: 6px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-color: #ffffff2e;
+    color: #fff;
+    background: #ffffff29;
 }
 
 

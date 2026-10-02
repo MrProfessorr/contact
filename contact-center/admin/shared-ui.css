@@ -1551,8 +1551,9 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   cursor:pointer;
   user-select:none;
   transition:
-    color 0.3s ease,
-    background .2s ease;
+  color .35s ease,
+  background-color .35s ease,
+  opacity .35s ease;
 }
 
 
@@ -1684,7 +1685,26 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
     visibility .15s ease;
 }
 
+/* =========================================================
+   MORE POPUP DIRECTION
+   Auto left / right from JS
+========================================================= */
 
+/* Normal: popup buka menuju kanan */
+.admin-header-more.popup-right
+.admin-header-more-popup {
+  left:0;
+  right:auto;
+}
+
+
+/* Bila ruang kanan tidak cukup:
+   popup buka menuju kiri */
+.admin-header-more.popup-left
+.admin-header-more-popup {
+  left:auto;
+  right:0;
+}
 .admin-header-more.open
 .admin-header-more-popup {
   opacity:1;

@@ -1551,9 +1551,9 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   cursor:pointer;
   user-select:none;
   transition:
-  color .35s ease,
-  background-color .35s ease,
-  opacity .35s ease;
+  color .3s ease,
+  background-color .3s ease,
+  opacity .3s ease;
 }
 
 

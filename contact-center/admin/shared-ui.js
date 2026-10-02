@@ -4698,7 +4698,18 @@ function initAdminSidebar() {
       .split("/")
       .pop() ||
     "index.html";
+/* =====================================================
+   ADMIN HEADER MODULE MENU
+===================================================== */
 
+const adminHeaderMenuItems = [
+  {
+    file: "visitors.html",
+    name: "Dashboard",
+    permission: "visitors.show",
+    icon: "M13 9V3h8v6zM3 13V3h8v10zm10 8V11h8v10zM3 21v-6h8v6z"
+  }
+];
 /* =====================================================
    ADMIN SITE SELECTOR
 ===================================================== */
@@ -4795,7 +4806,21 @@ else {
   );
 
 }
+/* =====================================================
+   ADMIN HEADER MODULE CONTAINER
+===================================================== */
 
+const adminHeaderModules =
+  document.createElement("div");
+
+adminHeaderModules.className =
+  "admin-header-modules";
+
+
+adminSiteSelector.insertAdjacentElement(
+  "afterend",
+  adminHeaderModules
+);
 
 const adminSiteDropdown =
   createSharedChipDropdown(
@@ -4878,11 +4903,6 @@ window.getAdminActiveSite =
 ===================================================== */
 
 async function loadAdminSiteOptions() {
-
-  /*
-    admin.js belum selesai
-    load profile.
-  */
 
   if (
     typeof window.getAdminSites !==

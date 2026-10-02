@@ -743,10 +743,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   min-width:0;
   max-width:120px;
   height:24px;
-
-  margin:
-    2px 4px 2px 0;
-
+  margin:2px 0;
   padding:
     0 4px 0 8px;
 
@@ -793,8 +790,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   padding:
     0 7px;
 
-  margin:
-    2px 4px 2px 0;
+  margin:2px 0;
 
   border-radius:4px;
 

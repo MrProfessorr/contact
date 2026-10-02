@@ -4713,7 +4713,16 @@ function initAdminSidebar() {
 /* =====================================================
    ADMIN HEADER MODULE MENU
 ===================================================== */
-
+const ADMIN_HEADER_MORE_ICON = `
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <circle cx="5" cy="12" r="1.8"></circle>
+    <circle cx="12" cy="12" r="1.8"></circle>
+    <circle cx="19" cy="12" r="1.8"></circle>
+  </svg>
+`;
 const adminHeaderMenuItems = [
   {
     file: "visitors.html",
@@ -9780,31 +9789,28 @@ function getVisibleAdminMenuItems() {
   );
 
 }
-/* =====================================================
-   RENDER ADMIN HEADER MODULES
-===================================================== */
+let currentVisibleHeaderItems = [];
 
 function renderAdminHeaderModules() {
 
   const profile =
     window.getCurrentAdminProfile?.();
 
-
   const profileReady =
     !!profile;
-
 
   const isSuperadmin =
     profile?.role === "superadmin";
 
 
-  const visibleHeaderItems =
+  currentVisibleHeaderItems =
     adminHeaderMenuItems.filter(
       item => {
-         
-if (!profileReady) {
-  return !item.superadminOnly;
-}
+
+        if (!profileReady) {
+          return !item.superadminOnly;
+        }
+
         if (isSuperadmin) {
           return true;
         }
@@ -9836,58 +9842,414 @@ if (!profileReady) {
     );
 
 
-  adminHeaderModules.innerHTML =
-    visibleHeaderItems
-      .map(
-        item => {
+  adminHeaderModules.innerHTML = `
 
-          const active =
-            currentPage === item.file;
+    <div
+      class="admin-header-module-visible"
+    ></div>
 
-          return `
-            <button
-              type="button"
-              class="admin-header-module${
-                active ? " active" : ""
-              }"
-              data-header-file="${escapeSharedText(
-                item.file
-              )}"
-              data-header-name="${escapeSharedText(
-                item.name
-              )}"
-            >
+    <div
+      class="admin-header-more"
+      hidden
+    >
 
-              <svg
-                class="admin-header-module-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  d="${escapeSharedText(
-                    item.icon
-                  )}"
-                ></path>
-              </svg>
+      <button
+        type="button"
+        class="admin-header-more-button"
+        aria-label="More modules"
+        aria-expanded="false"
+      >
+        ${ADMIN_HEADER_MORE_ICON}
+      </button>
 
-              <span>
-                ${escapeSharedText(
-                  item.name
-                )}
-              </span>
+      <div
+        class="admin-header-more-popup"
+      ></div>
 
-            </button>
-          `;
+    </div>
 
-        }
-      )
-      .join("");
+  `;
+
+
+  updateAdminHeaderOverflow();
 
 }
+function createAdminHeaderModuleButton(
+  item
+) {
+
+  const active =
+    currentPage === item.file;
+
+
+  return `
+    <button
+      type="button"
+      class="admin-header-module${
+        active ? " active" : ""
+      }"
+      data-header-file="${escapeSharedText(
+        item.file
+      )}"
+      data-header-name="${escapeSharedText(
+        item.name
+      )}"
+    >
+
+      <svg
+        class="admin-header-module-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="${escapeSharedText(
+            item.icon
+          )}"
+        ></path>
+      </svg>
+
+      <span>
+        ${escapeSharedText(
+          item.name
+        )}
+      </span>
+
+    </button>
+  `;
+
+}
+
+
+function createAdminHeaderOverflowItem(
+  item
+) {
+
+  const active =
+    currentPage === item.file;
+
+
+  return `
+    <button
+      type="button"
+      class="admin-header-more-item${
+        active ? " active" : ""
+      }"
+      data-header-file="${escapeSharedText(
+        item.file
+      )}"
+      data-header-name="${escapeSharedText(
+        item.name
+      )}"
+    >
+
+      <svg
+        class="admin-header-more-item-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="${escapeSharedText(
+            item.icon
+          )}"
+        ></path>
+      </svg>
+
+      <span>
+        ${escapeSharedText(
+          item.name
+        )}
+      </span>
+
+    </button>
+  `;
+
+}
+
+
+let adminHeaderOverflowFrame =
+  null;
+
+
+function updateAdminHeaderOverflow() {
+
+  if (adminHeaderOverflowFrame) {
+    cancelAnimationFrame(
+      adminHeaderOverflowFrame
+    );
+  }
+
+
+  adminHeaderOverflowFrame =
+    requestAnimationFrame(
+      () => {
+
+        adminHeaderOverflowFrame =
+          null;
+
+
+        const visibleBox =
+          adminHeaderModules.querySelector(
+            ".admin-header-module-visible"
+          );
+
+        const moreWrapper =
+          adminHeaderModules.querySelector(
+            ".admin-header-more"
+          );
+
+        const moreButton =
+          adminHeaderModules.querySelector(
+            ".admin-header-more-button"
+          );
+
+        const popup =
+          adminHeaderModules.querySelector(
+            ".admin-header-more-popup"
+          );
+
+
+        if (
+          !visibleBox ||
+          !moreWrapper ||
+          !moreButton ||
+          !popup
+        ) {
+          return;
+        }
+
+
+        /*
+          Start by showing every module.
+        */
+
+        visibleBox.innerHTML =
+          currentVisibleHeaderItems
+            .map(
+              createAdminHeaderModuleButton
+            )
+            .join("");
+
+
+        popup.innerHTML =
+          "";
+
+        moreWrapper.hidden =
+          true;
+
+
+        /*
+          Width available for header modules.
+        */
+
+        const availableWidth =
+          adminHeaderModules.clientWidth;
+
+
+        if (availableWidth <= 0) {
+          return;
+        }
+
+
+        const buttons =
+          Array.from(
+            visibleBox.querySelectorAll(
+              ".admin-header-module"
+            )
+          );
+
+
+        /*
+          First check whether everything fits.
+        */
+
+        const fullWidth =
+          visibleBox.scrollWidth;
+
+
+        if (
+          fullWidth <= availableWidth
+        ) {
+          return;
+        }
+
+
+        /*
+          We need the ... button.
+        */
+
+        moreWrapper.hidden =
+          false;
+
+
+        const moreWidth =
+          moreWrapper.offsetWidth || 40;
+
+        const gap =
+          6;
+
+        const allowedWidth =
+          Math.max(
+            0,
+            availableWidth -
+            moreWidth -
+            gap
+          );
+
+
+        let usedWidth =
+          0;
+
+        let visibleCount =
+          0;
+
+
+        buttons.forEach(
+          button => {
+
+            const width =
+              button.offsetWidth;
+
+
+            const nextWidth =
+              visibleCount === 0
+                ? width
+                : usedWidth + gap + width;
+
+
+            if (
+              nextWidth <= allowedWidth
+            ) {
+
+              usedWidth =
+                nextWidth;
+
+              visibleCount++;
+
+            }
+
+          }
+        );
+
+
+        /*
+          Keep at least one normal module
+          when possible.
+        */
+
+        if (
+          visibleCount === 0 &&
+          buttons.length > 0 &&
+          allowedWidth > 40
+        ) {
+          visibleCount = 1;
+        }
+
+
+        const visibleItems =
+          currentVisibleHeaderItems.slice(
+            0,
+            visibleCount
+          );
+
+        const overflowItems =
+          currentVisibleHeaderItems.slice(
+            visibleCount
+          );
+
+
+        visibleBox.innerHTML =
+          visibleItems
+            .map(
+              createAdminHeaderModuleButton
+            )
+            .join("");
+
+
+        popup.innerHTML =
+          overflowItems
+            .map(
+              createAdminHeaderOverflowItem
+            )
+            .join("");
+
+
+        moreWrapper.hidden =
+          overflowItems.length === 0;
+
+
+        /*
+          Highlight ... when current page
+          lives inside overflow.
+        */
+
+        const overflowHasActive =
+          overflowItems.some(
+            item =>
+              item.file ===
+              currentPage
+          );
+
+
+        moreButton.classList.toggle(
+          "active",
+          overflowHasActive
+        );
+
+      }
+    );
+
+}
+const adminHeaderResizeObserver =
+  new ResizeObserver(
+    () => {
+      updateAdminHeaderOverflow();
+    }
+  );
+
+
+adminHeaderResizeObserver.observe(
+  adminHeaderModules
+);
+
+
+window.addEventListener(
+  "resize",
+  updateAdminHeaderOverflow
+);
 adminHeaderModules.addEventListener(
   "click",
   event => {
 
+         const moreButton =
+      event.target.closest(
+        ".admin-header-more-button"
+      );
+
+
+    if (moreButton) {
+
+      event.stopPropagation();
+
+      const moreWrapper =
+        moreButton.closest(
+          ".admin-header-more"
+        );
+
+
+      const isOpen =
+        moreWrapper.classList.toggle(
+          "open"
+        );
+
+
+      moreButton.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
+
+
+      return;
+    }
     const button =
       event.target.closest(
         "[data-header-file]"
@@ -9909,6 +10271,125 @@ adminHeaderModules.addEventListener(
 
   }
 );
+
+adminHeaderModules.addEventListener(
+  "mouseover",
+  event => {
+
+    const moreWrapper =
+      event.target.closest(
+        ".admin-header-more"
+      );
+
+
+    if (!moreWrapper) {
+      return;
+    }
+
+
+    moreWrapper.classList.add(
+      "open"
+    );
+
+
+    moreWrapper
+      .querySelector(
+        ".admin-header-more-button"
+      )
+      ?.setAttribute(
+        "aria-expanded",
+        "true"
+      );
+
+  }
+);
+
+
+adminHeaderModules.addEventListener(
+  "mouseout",
+  event => {
+
+    const moreWrapper =
+      event.target.closest(
+        ".admin-header-more"
+      );
+
+
+    if (!moreWrapper) {
+      return;
+    }
+
+
+    const next =
+      event.relatedTarget;
+
+
+    if (
+      next &&
+      moreWrapper.contains(next)
+    ) {
+      return;
+    }
+
+
+    moreWrapper.classList.remove(
+      "open"
+    );
+
+
+    moreWrapper
+      .querySelector(
+        ".admin-header-more-button"
+      )
+      ?.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+  }
+);
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      adminHeaderModules.contains(
+        event.target
+      )
+    ) {
+      return;
+    }
+
+
+    const moreWrapper =
+      adminHeaderModules.querySelector(
+        ".admin-header-more"
+      );
+
+
+    if (!moreWrapper) {
+      return;
+    }
+
+
+    moreWrapper.classList.remove(
+      "open"
+    );
+
+
+    moreWrapper
+      .querySelector(
+        ".admin-header-more-button"
+      )
+      ?.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+  }
+);
+   
 renderAdminHeaderModules();
 function syncAdminPermissionMenu() {
 

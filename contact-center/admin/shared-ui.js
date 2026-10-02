@@ -2686,7 +2686,8 @@ const ADMIN_WORKSPACE_ACTIVE_KEY =
   "adminWorkspaceActiveTab";
 const ADMIN_WORKSPACE_CLOSED_KEY =
   "adminWorkspaceClosedTab";
-
+const ADMIN_WORKSPACE_MENU_KEY =
+  "adminWorkspaceAllowedMenu";
 
 function getAdminWorkspaceClosedStorageKey() {
 

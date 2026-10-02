@@ -901,13 +901,23 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   width:150px;
   min-width:150px;
   max-width:150px;
+  min-height: 36px;
+  border-radius: 8px;
+  background: #ffffff1a;
+  color: #fff;
+  border-color: #ffffff29;
+}
+.admin-site-selector
+.shared-chip-dropdown-panel {
+  width:150px;
+  min-width:150px;
+  max-width:150px;
+  box-sizing:border-box;
 }
 .admin-site-selector
 .shared-chip-dropdown-values {
   flex-wrap:nowrap;
-
   min-width:0;
-
   overflow:hidden;
 }
 

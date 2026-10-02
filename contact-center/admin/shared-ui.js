@@ -10234,7 +10234,9 @@ adminHeaderModules.addEventListener(
         moreButton.closest(
           ".admin-header-more"
         );
-
+updateAdminHeaderMoreDirection(
+  moreWrapper
+);
 
       const isOpen =
         moreWrapper.classList.toggle(
@@ -10274,7 +10276,102 @@ adminHeaderModules.addEventListener(
 
 let adminHeaderMoreCloseTimer = null;
 
+function updateAdminHeaderMoreDirection(
+  moreWrapper
+) {
 
+  if (!moreWrapper) {
+    return;
+  }
+
+
+  const popup =
+    moreWrapper.querySelector(
+      ".admin-header-more-popup"
+    );
+
+
+  if (!popup) {
+    return;
+  }
+
+
+  /*
+    Reset direction lama.
+  */
+
+  moreWrapper.classList.remove(
+    "popup-left",
+    "popup-right"
+  );
+
+
+  /*
+    Ukur posisi button ...
+  */
+
+  const wrapperRect =
+    moreWrapper.getBoundingClientRect();
+
+
+  /*
+    Ukur lebar sebenar popup.
+
+    scrollWidth masih boleh baca
+    walaupun popup belum visible.
+  */
+
+  const popupWidth =
+    Math.max(
+      popup.scrollWidth,
+      popup.offsetWidth,
+      190
+    );
+
+
+  const viewportWidth =
+    document.documentElement.clientWidth;
+
+
+  const safeGap =
+    12;
+
+
+  /*
+    Ruang dari button menuju
+    tepi kanan / kiri browser.
+  */
+
+  const spaceRight =
+    viewportWidth -
+    wrapperRect.left -
+    safeGap;
+
+
+  const spaceLeft =
+    wrapperRect.right -
+    safeGap;
+
+
+  if (
+    spaceRight < popupWidth &&
+    spaceLeft > spaceRight
+  ) {
+
+    moreWrapper.classList.add(
+      "popup-left"
+    );
+
+  }
+  else {
+
+    moreWrapper.classList.add(
+      "popup-right"
+    );
+
+  }
+
+}
 adminHeaderModules.addEventListener(
   "mouseover",
   event => {
@@ -10294,7 +10391,9 @@ adminHeaderModules.addEventListener(
       adminHeaderMoreCloseTimer
     );
 
-
+updateAdminHeaderMoreDirection(
+  moreWrapper
+);
     moreWrapper.classList.add(
       "open"
     );
@@ -10350,12 +10449,6 @@ adminHeaderModules.addEventListener(
     adminHeaderMoreCloseTimer =
       setTimeout(
         () => {
-
-          /*
-            Check sekali lagi.
-            Jangan tutup kalau mouse
-            sudah masuk popup.
-          */
 
           if (
             moreWrapper.matches(

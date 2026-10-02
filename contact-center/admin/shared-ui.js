@@ -10010,8 +10010,45 @@ function createAdminHeaderModuleButton(
 
         ${
           item.children
-            .map(
-              child => `
+item.children
+  .filter(
+    child => {
+
+      const profile =
+        window.getCurrentAdminProfile?.();
+
+
+      if (
+        profile?.role ===
+        "superadmin"
+      ) {
+        return true;
+      }
+
+
+      if (!child.permission) {
+        return true;
+      }
+
+
+      const [
+        group,
+        action
+      ] =
+        child.permission.split(".");
+
+
+      return (
+        profile
+          ?.permissions
+          ?.[group]
+          ?.[action] === true
+      );
+
+    }
+  )
+  .map(
+    child => `
                 <button
                   type="button"
                   class="admin-header-module-dropdown-item${

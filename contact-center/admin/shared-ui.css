@@ -855,8 +855,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   justify-content:center;
   height:24px;
   padding:0 8px;
-  border:
-    1px solid#ffffff2e
+  border:1px solid#ffffff2e;
   border-radius:6px;
   color:#fff;
   background:

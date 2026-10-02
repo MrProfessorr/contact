@@ -860,14 +860,11 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 }
 .admin-site-selector
 .shared-chip-dropdown-overflow {
-  height:26px;
+  height:22px;
   min-width:38px;
-
-  padding:2px 3px;
-
+  padding: 7px 4px;
   border:1px solid #ffffff2e;
   border-radius:6px;
-
   background:#ffffff14;
 }
 /* =========================================================

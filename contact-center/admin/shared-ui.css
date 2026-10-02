@@ -975,13 +975,10 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 
 .shared-chip-dropdown-chip-remove svg {
-  width:10px;
-  height:10px;
-
+  width:14px;
+  height:14px;
   display:block;
-
-  fill:
-    currentColor;
+  fill: currentColor;
 }
 
 

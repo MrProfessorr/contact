@@ -1673,6 +1673,10 @@ function initAuthStatusFilter() {
     return;
   }
 
+  if (!authStatusFilter) {
+    return;
+  }
+
   if (
     typeof window.createSharedChipDropdown !==
     "function"
@@ -1706,8 +1710,9 @@ function initAuthStatusFilter() {
       }
     );
 }
-initAuthStatusFilter();
-    const authTableBody =
+
+const authTableBody =
+      
       document.getElementById(
         "authTableBody"
       );

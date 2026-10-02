@@ -1879,17 +1879,22 @@ function render() {
       .filter(Boolean);
 
 
-  /*
-    Header compact:
-    tampil maksimum 1 chip.
-    Selebihnya jadi +N.
-  */
+const isAdminSiteSelector =
+  !!container.closest(
+    ".admin-site-selector"
+  );
 
-  const visibleItems =
-    selected.slice(0, 1);
 
-  const hiddenItems =
-    selected.slice(1);
+const visibleItems =
+  isAdminSiteSelector
+    ? selected.slice(0, 1)
+    : selected;
+
+
+const hiddenItems =
+  isAdminSiteSelector
+    ? selected.slice(1)
+    : [];
 
 
   valuesBox.innerHTML =

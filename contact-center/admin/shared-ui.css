@@ -1662,9 +1662,9 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   top:calc(100% + 8px);
   left:0;
   width:max-content;
-  min-width:190px;
+  min-width:160px;
   max-width:280px;
-  padding:6px;
+  padding:4px;
   border:0;
   border-radius:8px;
   color:var(--text);
@@ -1703,29 +1703,20 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 .admin-header-more-item {
   width:100%;
   min-height:38px;
-
   display:flex;
   align-items:center;
-
   gap:10px;
-
   padding:7px 10px;
-
   border:0;
   border-radius:6px;
-
   color:var(--text);
   background:transparent;
-
   font-family:inherit;
   font-size:14px;
   font-weight:400;
-
   text-align:left;
   white-space:nowrap;
-
   cursor:pointer;
-
   transition:
     color .15s ease,
     background .15s ease;
@@ -1745,13 +1736,10 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-header-more-item-icon {
   display:block;
-
-  width:18px;
-  height:18px;
-
-  flex:0 0 18px;
-
-  fill:currentColor;
+  width:19.2px;
+  height:19.2px;
+  flex:0 0 19.2px;
+  fill:#ffffff;
 }
 
 

@@ -969,9 +969,9 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 }
 .admin-site-selector
 .shared-chip-dropdown-panel {
-  width:100%;
+  width:150px;
   min-width:150px;
-  max-width:240px;
+  max-width:150px;
 
   box-sizing:border-box;
 }

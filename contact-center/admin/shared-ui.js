@@ -4720,6 +4720,12 @@ const adminHeaderMenuItems = [
     name: "Dashboard",
     permission: "visitors.show",
     icon: "M13 9V3h8v6zM3 13V3h8v10zm10 8V11h8v10zM3 21v-6h8v6z"
+  },
+  {
+    file: "contacts.html",
+    name: "Contact Manage",
+    permission: "contacts.show",
+    icon: "M24 23h-24v-13.275l2-1.455v-7.27h20v7.272l2 1.453v13.275zm-20-10.472v-9.528h16v9.527l-8 5.473-8-5.472zm14-.528h-12v-1h12v1zm0-3v1h-12v-1h12zm-7-1h-5v-3h5v3zm7 0h-6v-1h6v1zm0-2h-6v-1h6v1z"
   }
 ];
 /* =====================================================

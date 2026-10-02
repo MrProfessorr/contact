@@ -1665,35 +1665,53 @@ const authStatusFilter =
   );
 
 
-const authStatusDropdown =
-  window.createSharedChipDropdown?.(
-    authStatusFilter,
-    {
-      placeholder:
-        "All Status",
+let authStatusDropdown = null;
 
-      options: [
-        {
-          value: "active",
-          label: "Active"
-        },
-        {
-          value: "inactive",
-          label: "Inactive"
+function initAuthStatusFilter() {
+
+  if (authStatusDropdown) {
+    return;
+  }
+
+  if (
+    typeof window.createSharedChipDropdown !==
+    "function"
+  ) {
+    return;
+  }
+
+  authStatusDropdown =
+    window.createSharedChipDropdown(
+      authStatusFilter,
+      {
+        placeholder: "All Status",
+
+        options: [
+          {
+            value: "active",
+            label: "Active"
+          },
+          {
+            value: "inactive",
+            label: "Inactive"
+          }
+        ],
+
+        value: [],
+
+        onChange() {
+          currentPage = 1;
+          renderUsers();
         }
-      ],
-
-      value: [],
-
-      onChange() {
-
-        currentPage = 1;
-
-        renderUsers();
-
       }
-    }
-  );
+    );
+}
+  initAuthStatusFilter();
+
+window.addEventListener(
+  "admin-profile-ready",
+  initAuthStatusFilter
+);
     const authTableBody =
       document.getElementById(
         "authTableBody"

@@ -3565,25 +3565,44 @@ padding:0 12px;
 ========================================================= */
 
 .admin-site-selector {
-  width:220px;
+  width:100%;
   min-width:150px;
   max-width:320px;
+  height:40px;
 
-  flex:
-    0 1 220px;
+  flex:1 1 150px;
 
-  box-sizing:
-    border-box;
+  display:flex;
+  align-items:center;
 
-  margin-left:
-    16px;
+  margin:0 2px;
+  padding-inline:12px;
+
+  border-radius:8px;
+
+  box-sizing:border-box;
+
+  transition:
+    background-color .18s ease,
+    color .18s ease;
+}
+
+
+.admin-site-selector:hover {
+  background:rgba(255,255,255,.08);
+}
+
+
+.admin-site-selector > .shared-chip-dropdown {
+  width:100%;
+  min-width:0;
 }
 
 
 .admin-site-selector
-.shared-chip-dropdown-panel {
-  min-width:
-    150px;
+.shared-chip-dropdown-trigger {
+  width:100%;
+  min-width:0;
 }
 
 

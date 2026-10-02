@@ -2689,6 +2689,71 @@ const ADMIN_WORKSPACE_CLOSED_KEY =
 const ADMIN_WORKSPACE_MENU_KEY =
   "adminWorkspaceAllowedMenu";
 
+function getAdminWorkspaceMenuStorageKey() {
+  return ADMIN_WORKSPACE_MENU_KEY;
+}
+
+function getAdminWorkspaceMenu() {
+
+  try {
+
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          getAdminWorkspaceMenuStorageKey()
+        ) || "[]"
+      );
+
+    return Array.isArray(data)
+      ? data
+      : [];
+
+  }
+  catch {
+
+    return [];
+
+  }
+
+}
+
+
+function saveAdminWorkspaceMenu(
+  menuItems
+) {
+
+  if (!Array.isArray(menuItems)) {
+    return;
+  }
+
+  const safeMenu =
+    menuItems.map(
+      item => ({
+        file:
+          String(
+            item.file || ""
+          ),
+
+        name:
+          String(
+            item.name || ""
+          )
+      })
+    )
+    .filter(
+      item =>
+        item.file &&
+        item.name
+    );
+
+  localStorage.setItem(
+    getAdminWorkspaceMenuStorageKey(),
+    JSON.stringify(
+      safeMenu
+    )
+  );
+
+}
 function getAdminWorkspaceClosedStorageKey() {
 
   const profile =
@@ -2938,14 +3003,18 @@ function initAdminWorkspaceTabs(
     );
 
 
-  if (
-    !adminNav ||
-    document.getElementById(
-      "adminWorkspaceTabs"
-    )
-  ) {
-    return;
-  }
+if (!adminNav) {
+  return;
+}
+
+const existingWorkspace =
+  document.getElementById(
+    "adminWorkspaceTabs"
+  );
+
+if (existingWorkspace) {
+  existingWorkspace.remove();
+}
 
 
 const currentPage =
@@ -4529,6 +4598,27 @@ requestAnimationFrame(
   renderTabs();
 
 }
+function restoreCachedAdminWorkspace() {
+
+  if (ADMIN_IS_WORKSPACE_FRAME) {
+    return;
+  }
+
+  const cachedMenu =
+    getAdminWorkspaceMenu();
+
+  if (
+    !Array.isArray(cachedMenu) ||
+    cachedMenu.length === 0
+  ) {
+    return;
+  }
+
+  initAdminWorkspaceTabs(
+    cachedMenu
+  );
+
+}
 function initAdminSidebar() {
 
  if (ADMIN_IS_WORKSPACE_FRAME) {
@@ -4899,7 +4989,9 @@ window.addEventListener(
      
     visibleMenuItems =
       getVisibleAdminMenuItems();
-     
+     saveAdminWorkspaceMenu(
+  visibleMenuItems
+);
     const allowedFiles =
       new Set(
         visibleMenuItems.map(
@@ -9852,13 +9944,9 @@ closeAdminSidebar();
 
 }
 
-
-/*
-  shared-ui.js bro sudah dipanggil
-  di bawah HTML, jadi boleh init terus.
-*/
-
 initAdminSidebar();
+restoreCachedAdminWorkspace();
+   
   /* =======================================================
      GLOBAL
      Available to every page

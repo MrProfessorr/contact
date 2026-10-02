@@ -1551,7 +1551,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   cursor:pointer;
   user-select:none;
   transition:
-    color .2s ease,
+    color 0.3s ease,
     background .2s ease;
 }
 
@@ -1563,7 +1563,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   width:19.2px;
   height:19.2px;
   flex:0 0 19.2px;
-  fill:currentColor;
+  fill:#ffffff;
 }
 
 
@@ -1579,7 +1579,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-header-module:hover {
   color:#ffffff;
-  background:rgba(255,255,255,.08);
+  background:#ffffff1f;
 }
 
 
@@ -1603,9 +1603,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-header-more {
   position:relative;
-
   flex:0 0 auto;
-
   margin-left:6px;
 }
 
@@ -1670,22 +1668,16 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   border:0;
   border-radius:8px;
   color:var(--text);
-  background:var(--dropdown-bg);
-
+  background:#001528;
   box-shadow:
     0 6px 16px 0 rgba(0,0,0,.08),
     0 3px 6px -4px rgba(0,0,0,.12),
     0 9px 28px 8px rgba(0,0,0,.05);
-
   opacity:0;
   visibility:hidden;
-
   transform:translateY(-4px);
-
   pointer-events:none;
-
   z-index:10020;
-
   transition:
     opacity .15s ease,
     transform .15s ease,

@@ -987,18 +987,18 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 ========================================================= */
 
 .admin-site-selector {
-  width:150px;
+  width:auto;
   min-width:150px;
-  max-width:150px;
+  max-width:220px;
 
-  flex:0 0 150px;
+  flex:0 1 auto;
 }
 
 .admin-site-selector
 .shared-chip-dropdown-trigger {
-  width:100%;
-  min-width:0;
-  max-width:none;
+  width:max-content;
+  min-width:150px;
+  max-width:220px;
 
   min-height:36px;
 
@@ -1009,9 +1009,9 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 }
 .admin-site-selector
 .shared-chip-dropdown-panel {
-  width:150px;
+  width:100%;
   min-width:150px;
-  max-width:150px;
+  max-width:220px;
 
   box-sizing:border-box;
 }

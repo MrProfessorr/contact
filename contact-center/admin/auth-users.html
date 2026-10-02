@@ -1147,10 +1147,19 @@
     </button>
   </div>
 
-  <div
+<div class="auth-status-filter">
+
+  <select
     id="authStatusFilter"
-    class="auth-status-filter"
-  ></div>
+    data-shared-dropdown
+    data-placeholder="All Status"
+  >
+    <option value="">All Status</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+  </select>
+
+</div>
 
 </div>
             
@@ -1641,8 +1650,9 @@ import {
 } from "./admin.js";
 
 
-    requireAdmin();
-    setupLogout();
+requireAdmin();
+setupLogout();
+initSharedDropdowns();
 
 
     const authSearch =
@@ -1663,53 +1673,6 @@ const authStatusFilter =
   document.getElementById(
     "authStatusFilter"
   );
-
-
-let authStatusDropdown = null;
-
-function initAuthStatusFilter() {
-
-  if (authStatusDropdown) {
-    return;
-  }
-
-  if (!authStatusFilter) {
-    return;
-  }
-
-  if (
-    typeof window.createSharedChipDropdown !==
-    "function"
-  ) {
-    return;
-  }
-
-  authStatusDropdown =
-    window.createSharedChipDropdown(
-      authStatusFilter,
-      {
-        placeholder: "All Status",
-
-        options: [
-          {
-            value: "active",
-            label: "Active"
-          },
-          {
-            value: "inactive",
-            label: "Inactive"
-          }
-        ],
-
-        value: [],
-
-        onChange() {
-          currentPage = 1;
-          renderUsers();
-        }
-      }
-    );
-}
 
 const authTableBody =
       
@@ -1908,9 +1871,8 @@ function filteredUsers() {
       .toLowerCase();
 
 
-  const selectedStatuses =
-    authStatusDropdown
-      ?.getValue?.() || [];
+const selectedStatus =
+  authStatusFilter?.value || "";
 
 
   return allAuthUsers.filter(
@@ -1945,11 +1907,9 @@ function filteredUsers() {
           : "inactive";
 
 
-      const matchesStatus =
-        selectedStatuses.length === 0 ||
-        selectedStatuses.includes(
-          userStatus
-        );
+const matchesStatus =
+  !selectedStatus ||
+  selectedStatus === userStatus;
 
 
       return (
@@ -1960,7 +1920,16 @@ function filteredUsers() {
     }
   );
 }
+authStatusFilter?.addEventListener(
+  "change",
+  () => {
 
+    currentPage = 1;
+
+    renderUsers();
+
+  }
+);
   function getPaginationPages(current, total) {
 
   if (total <= 6) {
@@ -3704,7 +3673,6 @@ selectedAuthUser = null;
 
 
 setupPageSize();
-initAuthStatusFilter();
 window.addEventListener(
   "admin-profile-ready",
   async () => {
@@ -3723,8 +3691,6 @@ window.addEventListener(
 
       return;
     }
-
-    initAuthStatusFilter();
 
     await loadAuthUsers();
 

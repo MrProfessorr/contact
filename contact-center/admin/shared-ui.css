@@ -853,25 +853,17 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-
-  min-width:30px;
-  height:22px;
-
-  padding:0 7px;
-
+  height:24px;
+  padding:0 8px;
   border:
-    1px solid
-    rgba(255,255,255,.18);
-
+    1px solid#ffffff2e
   border-radius:6px;
-
   color:#fff;
-
   background:
-    rgba(255,255,255,.16);
+    #ffffff29;
 
   font-size:12px;
-  line-height:1;
+  line-height: 22px;
 
   white-space:nowrap;
   box-sizing:border-box;
@@ -901,12 +893,13 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 }
 .admin-site-selector
 .shared-chip-dropdown-overflow {
-  height:22px;
-  min-width:38px;
-  padding: 7px 4px;
-  border:1px solid #ffffff2e;
-  border-radius:6px;
-  background:#ffffff14;
+    line-height: 22px;
+    border: 1px solid #ffffff2e;
+    border-radius: 6px;
+    background: #ffffff14;
+    padding-inline: 7px 4px;
+    align-items: center;
+    display: inline-flex;
 }
 /* =========================================================
    CHIP OVERFLOW POPUP

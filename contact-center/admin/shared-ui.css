@@ -946,19 +946,18 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 ========================================================= */
 
 .admin-site-selector {
-  width:max-content;
+  width:150px;
   min-width:150px;
-  max-width:240px;
+  max-width:150px;
 
-  flex:0 1 auto;
+  flex:0 0 150px;
 }
-
 
 .admin-site-selector
 .shared-chip-dropdown-trigger {
-  width:max-content;
-  min-width:150px;
-  max-width:240px;
+  width:100%;
+  min-width:0;
+  max-width:none;
 
   min-height:36px;
 
@@ -3628,32 +3627,6 @@ padding:0 12px;
     translate(-50%,-50%);
   pointer-events:none;
 }
-/* =========================================================
-   ADMIN SITE SELECTOR
-========================================================= */
-
-.admin-site-selector {
-  width:220px;
-  min-width:150px;
-  max-width:320px;
-
-  flex:
-    0 1 220px;
-
-  box-sizing:
-    border-box;
-
-  margin-left:
-    16px;
-}
-
-
-.admin-site-selector
-.shared-chip-dropdown-panel {
-  min-width:
-    150px;
-}
-
 
 /* MOBILE */
 

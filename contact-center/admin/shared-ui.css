@@ -782,6 +782,7 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 ========================================================= */
 
 /* OUTER */
+/* OUTER = CHIP BELAKANG */
 .shared-chip-dropdown-overflow {
   flex:0 0 auto;
 
@@ -789,22 +790,22 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   align-items:center;
   justify-content:center;
 
-  height:24px;
+  height:26px;
+  min-width:38px;
 
-  margin:
-    2px 4px 2px 0;
+  margin:2px 4px 2px 0;
+  padding:2px 3px;
 
-  padding:0;
+  border:1px solid #ffffff2e;
+  border-radius:6px;
 
-  border:0;
-  background:transparent;
+  background:#ffffff14;
 
   white-space:nowrap;
   box-sizing:border-box;
 
   cursor:default;
 }
-
 
 /* INNER +N */
 .shared-chip-dropdown-overflow-inner {
@@ -856,6 +857,18 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 .shared-chip-dropdown-overflow-inner {
   border-color:#ffffff2e;
   background:#ffffff29;
+}
+.admin-site-selector
+.shared-chip-dropdown-overflow {
+  height:26px;
+  min-width:38px;
+
+  padding:2px 3px;
+
+  border:1px solid #ffffff2e;
+  border-radius:6px;
+
+  background:#ffffff14;
 }
 /* =========================================================
    CHIP OVERFLOW POPUP

@@ -2699,7 +2699,37 @@ const ADMIN_WORKSPACE_CLOSED_KEY =
   "adminWorkspaceClosedTab";
 const ADMIN_WORKSPACE_MENU_KEY =
   "adminWorkspaceAllowedMenu";
+const ADMIN_WORKSPACE_UID_KEY =
+  "adminWorkspaceUid";
+function getAdminWorkspaceUid() {
 
+  const profile =
+    window.getCurrentAdminProfile?.();
+
+  const profileUid =
+    String(
+      profile?.uid || ""
+    ).trim();
+
+
+  if (profileUid) {
+
+    sessionStorage.setItem(
+      ADMIN_WORKSPACE_UID_KEY,
+      profileUid
+    );
+
+    return profileUid;
+  }
+
+
+  return String(
+    sessionStorage.getItem(
+      ADMIN_WORKSPACE_UID_KEY
+    ) || ""
+  ).trim();
+
+}
 function getAdminWorkspaceMenuStorageKey() {
   return ADMIN_WORKSPACE_MENU_KEY;
 }
@@ -2767,14 +2797,8 @@ function saveAdminWorkspaceMenu(
 }
 function getAdminWorkspaceClosedStorageKey() {
 
-  const profile =
-    window.getCurrentAdminProfile?.();
-
-
   const uid =
-    String(
-      profile?.uid || ""
-    ).trim();
+    getAdminWorkspaceUid();
 
 
   if (!uid) {
@@ -2797,14 +2821,8 @@ function getAdminWorkspaceClosedStorageKey() {
 
 function getAdminWorkspaceStorageKey() {
 
-  const profile =
-    window.getCurrentAdminProfile?.();
-
-
   const uid =
-    String(
-      profile?.uid || ""
-    ).trim();
+    getAdminWorkspaceUid();
 
 
   if (!uid) {
@@ -2828,14 +2846,8 @@ function getAdminWorkspaceStorageKey() {
 
 function getAdminWorkspaceActiveStorageKey() {
 
-  const profile =
-    window.getCurrentAdminProfile?.();
-
-
   const uid =
-    String(
-      profile?.uid || ""
-    ).trim();
+    getAdminWorkspaceUid();
 
 
   if (!uid) {
@@ -10107,6 +10119,7 @@ closeAdminSidebar();
 }
 
 initAdminSidebar();
+restoreCachedAdminWorkspace();
   /* =======================================================
      GLOBAL
      Available to every page

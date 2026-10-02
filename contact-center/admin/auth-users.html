@@ -3704,7 +3704,7 @@ selectedAuthUser = null;
 
 
 setupPageSize();
-
+initAuthStatusFilter();
 window.addEventListener(
   "admin-profile-ready",
   async () => {
@@ -3724,10 +3724,6 @@ window.addEventListener(
       return;
     }
 
-    /*
-      Pastikan Status Filter
-      wujud selepas Shared UI + profile ready.
-    */
     initAuthStatusFilter();
 
     await loadAuthUsers();

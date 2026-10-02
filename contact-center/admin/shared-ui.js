@@ -1932,23 +1932,29 @@ function render() {
     +N CHIP
   */
 
-  if (
-    hiddenItems.length > 0
-  ) {
+if (
+  hiddenItems.length > 0
+) {
 
-    valuesBox.insertAdjacentHTML(
-      "beforeend",
-      `
+  valuesBox.insertAdjacentHTML(
+    "beforeend",
+    `
+      <span
+        class="shared-chip-dropdown-overflow"
+        tabindex="0"
+      >
+
         <span
-          class="shared-chip-dropdown-overflow"
-          tabindex="0"
+          class="shared-chip-dropdown-overflow-inner"
         >
           +${hiddenItems.length}
         </span>
-      `
-    );
 
-  }
+      </span>
+    `
+  );
+
+}
 
 
   /*

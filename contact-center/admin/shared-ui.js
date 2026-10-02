@@ -10107,8 +10107,6 @@ closeAdminSidebar();
 }
 
 initAdminSidebar();
-restoreCachedAdminWorkspace();
-   
   /* =======================================================
      GLOBAL
      Available to every page

@@ -10008,10 +10008,9 @@ function createAdminHeaderModuleButton(
         class="admin-header-module-dropdown-popup"
       >
 
-        ${
-          item.children
-item.children
-  .filter(
+${
+  item.children
+    .filter(
     child => {
 
       const profile =

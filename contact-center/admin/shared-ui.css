@@ -743,7 +743,10 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   min-width:0;
   max-width:120px;
   height:24px;
-  margin:2px 0;
+
+  margin:
+    2px 4px 2px 0;
+
   padding:
     0 4px 0 8px;
 
@@ -790,7 +793,8 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   padding:
     0 7px;
 
-  margin:2px 0;
+  margin:
+    2px 4px 2px 0;
 
   border-radius:4px;
 
@@ -881,24 +885,16 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
     var(--list-hover);
 }
 /* =========================================================
-   ADMIN SITE SELECTOR - RESPONSIVE
+   ADMIN SITE SELECTOR - COMPACT
 ========================================================= */
 
 .admin-site-selector {
   width:100%;
   min-width:150px;
-  max-width:100%;
+  max-width:320px;
 
-  flex:1 1 auto;
-
-  box-sizing:border-box;
-}
-
-
-.admin-site-selector
-.shared-chip-dropdown {
-  width:100%;
-  min-width:150px;
+  flex:
+    1 1 150px;
 }
 
 
@@ -906,18 +902,14 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 .shared-chip-dropdown-trigger {
   width:100%;
   min-width:150px;
-
-  padding-inline:12px 32px;
 }
 
 
 .admin-site-selector
 .shared-chip-dropdown-values {
-  flex:1 1 auto;
+  flex-wrap:nowrap;
 
   min-width:0;
-
-  flex-wrap:nowrap;
 
   overflow:hidden;
 }
@@ -925,10 +917,10 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 .admin-site-selector
 .shared-chip-dropdown-chip {
-  flex:0 0 auto;
+  flex:0 1 auto;
 
   min-width:0;
-  max-width:140px;
+  max-width:120px;
 }
 
 

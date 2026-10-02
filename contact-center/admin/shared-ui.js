@@ -9747,20 +9747,22 @@ function renderAdminHeaderModules() {
   const profile =
     window.getCurrentAdminProfile?.();
 
-  if (!profile) {
-    adminHeaderModules.innerHTML = "";
-    return;
-  }
+
+  const profileReady =
+    !!profile;
 
 
   const isSuperadmin =
-    profile.role === "superadmin";
+    profile?.role === "superadmin";
 
 
   const visibleHeaderItems =
     adminHeaderMenuItems.filter(
       item => {
-
+         
+if (!profileReady) {
+  return !item.superadminOnly;
+}
         if (isSuperadmin) {
           return true;
         }
@@ -9865,6 +9867,7 @@ adminHeaderModules.addEventListener(
 
   }
 );
+renderAdminHeaderModules();
 function syncAdminPermissionMenu() {
 
   const profile =

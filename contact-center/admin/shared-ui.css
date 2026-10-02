@@ -1118,9 +1118,8 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
 
 .shared-chip-dropdown-icon {
-  width:12px;
-  height:12px;
-
+  width:14px;
+  height:14px;
   display:block;
 
   fill:

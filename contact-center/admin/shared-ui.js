@@ -1991,7 +1991,43 @@ if (
     "has-value",
     selectedValues.size > 0
   );
+/*
+  CLOSED:
+  - selected ada = tunjuk chips
+  - selected kosong = tunjuk Select Site
 
+  OPEN:
+  - tunjuk input search untuk typing
+*/
+
+const isOpen =
+  container.classList.contains(
+    "open"
+  );
+
+
+if (isOpen) {
+
+  valuesBox.style.display =
+    "none";
+
+  searchInput.style.display =
+    "";
+
+}
+else {
+
+  searchInput.style.display =
+    selectedValues.size > 0
+      ? "none"
+      : "";
+
+  valuesBox.style.display =
+    selectedValues.size > 0
+      ? ""
+      : "none";
+
+}
 
   /*
     Dropdown options asal.
@@ -2104,7 +2140,22 @@ function open() {
     "open"
   );
 
+  if (searchInput) {
+
+    searchInput.value = "";
+
+  }
+
   render();
+
+
+  requestAnimationFrame(
+    () => {
+
+      searchInput?.focus();
+
+    }
+  );
 
 }
 
@@ -2173,11 +2224,18 @@ trigger.addEventListener(
     if (
       event.target === searchInput
     ) {
+
+      if (
+        !container.classList.contains(
+          "open"
+        )
+      ) {
+        open();
+      }
+
       return;
     }
 
-
-    searchInput?.focus();
 
     open();
 
@@ -2431,33 +2489,30 @@ overflowPopup.addEventListener(
      RIGHT ICON
   ===================================================== */
 
-  iconButton.addEventListener(
-    "click",
-    event => {
+iconButton.addEventListener(
+  "click",
+  event => {
 
-      event.stopPropagation();
-      if (
-        selectedValues.size &&
-        !container.classList.contains(
-          "open"
-        )
-      ) {
-
-        selectedValues.clear();
-
-        render();
-
-        notifyChange();
-
-        return;
-
-      }
+    event.stopPropagation();
 
 
-      toggle();
+    if (
+      container.classList.contains(
+        "open"
+      )
+    ) {
+
+      close();
+
+      return;
 
     }
-  );
+
+
+    open();
+
+  }
+);
 
 
   /* =====================================================

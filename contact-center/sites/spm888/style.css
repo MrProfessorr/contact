@@ -760,11 +760,8 @@ background-repeat:
 
 
 .status-search-wrap input:focus {
-  border-color:
-    var(--border2);
+  border-color:#f9ff00;
 
-  background:
-    #333333;
 }
 
 

@@ -1807,7 +1807,7 @@ container.appendChild(
       ".shared-chip-dropdown-icon-btn"
     );
 
-
+const searchInput = null;
   /* =====================================================
      GET OPTION
   ===================================================== */

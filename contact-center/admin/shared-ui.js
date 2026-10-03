@@ -55,12 +55,6 @@ function applyAdminTheme(
 
   }
 
-
-  /*
-    Sync every theme switch
-    that currently exists.
-  */
-
   document
     .querySelectorAll(
       "[data-admin-theme-switch]"
@@ -1965,11 +1959,6 @@ const hiddenItems =
       `)
       .join("");
 
-
-  /*
-    +N CHIP
-  */
-
 if (
   hiddenItems.length > 0
 ) {
@@ -2425,13 +2414,6 @@ overflowPopup.addEventListener(
     event => {
 
       event.stopPropagation();
-
-
-      /*
-        Closed + has chip + hover
-        = clear all.
-      */
-
       if (
         selectedValues.size &&
         !container.classList.contains(
@@ -5145,14 +5127,21 @@ adminSiteMobileButton.addEventListener(
     event.stopPropagation();
 
 
-    if (
+    const isOpen =
       adminSiteSelector.classList.contains(
         "mobile-site-open"
-      )
-    ) {
+      );
+
+
+    if (isOpen) {
 
       adminSiteSelector.classList.remove(
         "mobile-site-open"
+      );
+
+      adminSiteMobileButton.setAttribute(
+        "aria-expanded",
+        "false"
       );
 
       adminSiteDropdown?.close();
@@ -5165,20 +5154,9 @@ adminSiteMobileButton.addEventListener(
       "mobile-site-open"
     );
 
-
-    adminSiteDropdown?.open();
-
-
-    requestAnimationFrame(
-      () => {
-
-        adminSiteSelector
-          .querySelector(
-            ".shared-chip-dropdown-search"
-          )
-          ?.focus();
-
-      }
+    adminSiteMobileButton.setAttribute(
+      "aria-expanded",
+      "true"
     );
 
   }
@@ -6437,10 +6415,6 @@ async function translateAdminTree(
 
   try {
 
-    /*
-      Translate root attributes.
-    */
-
     if (
       root.nodeType ===
         Node.ELEMENT_NODE
@@ -6452,11 +6426,6 @@ async function translateAdminTree(
       );
 
     }
-
-
-    /*
-      All text nodes.
-    */
 
     const textWalker =
       document.createTreeWalker(

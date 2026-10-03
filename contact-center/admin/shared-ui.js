@@ -1748,7 +1748,13 @@ function createSharedChipDropdown(
       <div
         class="shared-chip-dropdown-values"
       ></div>
-
+<input
+  type="text"
+  class="shared-chip-dropdown-search"
+  autocomplete="off"
+  spellcheck="false"
+  aria-label="Search options"
+>
       <span
         class="shared-chip-dropdown-placeholder"
       >
@@ -1785,7 +1791,10 @@ function createSharedChipDropdown(
     container.querySelector(
       ".shared-chip-dropdown-values"
     );
-
+const searchInput =
+  container.querySelector(
+    ".shared-chip-dropdown-search"
+  );
 
   const panel =
     container.querySelector(
@@ -1994,9 +2003,37 @@ if (
     Dropdown options asal.
   */
 
-  panel.innerHTML =
-    config.options
-      .map(option => {
+const searchKeyword =
+  String(
+    searchInput?.value || ""
+  )
+    .trim()
+    .toLowerCase();
+
+
+const filteredOptions =
+  config.options.filter(
+    option => {
+
+      if (!searchKeyword) {
+        return true;
+      }
+
+      return String(
+        option.label || option.value || ""
+      )
+        .toLowerCase()
+        .includes(
+          searchKeyword
+        );
+
+    }
+  );
+
+
+panel.innerHTML =
+  filteredOptions
+    .map(option => {
 
         const value =
           String(
@@ -2053,22 +2090,53 @@ if (
      OPEN / CLOSE
   ===================================================== */
 
-  function open() {
+function open() {
 
-    container.classList.add(
-      "open"
-    );
+  container.classList.add(
+    "open"
+  );
+
+
+  if (searchInput) {
+
+    searchInput.value =
+      "";
+
+  }
+
+
+  render();
+
+
+  requestAnimationFrame(
+    () => {
+
+      searchInput?.focus();
+
+    }
+  );
+
+}
+
+
+function close() {
+
+  container.classList.remove(
+    "open"
+  );
+
+
+  if (searchInput) {
+
+    searchInput.value =
+      "";
 
   }
 
 
-  function close() {
+  render();
 
-    container.classList.remove(
-      "open"
-    );
-
-  }
+}
 
 
   function toggle() {
@@ -2090,41 +2158,114 @@ if (
 
   }
 
+/* =====================================================
+   SEARCH INPUT
+===================================================== */
 
+searchInput?.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+
+    if (
+      !container.classList.contains(
+        "open"
+      )
+    ) {
+
+      open();
+
+    }
+
+  }
+);
+
+
+searchInput?.addEventListener(
+  "focus",
+  () => {
+
+    if (
+      !container.classList.contains(
+        "open"
+      )
+    ) {
+
+      open();
+
+    }
+
+  }
+);
+
+
+searchInput?.addEventListener(
+  "input",
+  () => {
+
+    if (
+      !container.classList.contains(
+        "open"
+      )
+    ) {
+
+      open();
+
+    }
+
+
+    render();
+
+  }
+);
   /* =====================================================
      TRIGGER CLICK
   ===================================================== */
 
-  trigger.addEventListener(
-    "click",
-    event => {
+trigger.addEventListener(
+  "click",
+  event => {
 
-      if (
-        event.target.closest(
-          ".shared-chip-dropdown-chip-remove"
-        )
-      ) {
-
-        return;
-
-      }
+    if (
+      event.target.closest(
+        ".shared-chip-dropdown-chip-remove"
+      )
+    ) {
+      return;
+    }
 
 
-      if (
-        event.target.closest(
-          ".shared-chip-dropdown-icon-btn"
-        )
-      ) {
-
-        return;
-
-      }
+    if (
+      event.target.closest(
+        ".shared-chip-dropdown-icon-btn"
+      )
+    ) {
+      return;
+    }
 
 
-      toggle();
+    event.stopPropagation();
+
+
+    if (
+      !container.classList.contains(
+        "open"
+      )
+    ) {
+
+      open();
 
     }
-  );
+    else {
+
+      searchInput?.focus();
+
+    }
+
+  }
+);
 
 
   /* =====================================================

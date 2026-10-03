@@ -9894,37 +9894,7 @@ if (!profileReady) {
   `;
 
 
-  adminHeaderModules.classList.remove(
-    "header-ready"
-  );
-
-  adminHeaderModules.classList.add(
-    "header-entering"
-  );
-
-
   updateAdminHeaderOverflow();
-
-
-  requestAnimationFrame(
-    () => {
-
-      requestAnimationFrame(
-        () => {
-
-          adminHeaderModules.classList.remove(
-            "header-entering"
-          );
-
-          adminHeaderModules.classList.add(
-            "header-ready"
-          );
-
-        }
-      );
-
-    }
-  );
 
 }
 function restoreCachedAdminHeaderModules() {
@@ -9934,10 +9904,19 @@ function restoreCachedAdminHeaderModules() {
       "adminInternalTabNavigation"
     ) === "1";
 
+  /*
+    Refresh biasa:
+    jangan tampilkan cache.
+    Tunggu permission/profile Firebase.
+  */
   if (!isInternalNavigation) {
     return false;
   }
 
+  /*
+    Flag hanya berlaku sekali.
+    Jadi F5 selepas ini tetap tunggu profile.
+  */
   sessionStorage.removeItem(
     "adminInternalTabNavigation"
   );
@@ -10012,38 +9991,7 @@ function restoreCachedAdminHeaderModules() {
     </div>
   `;
 
-  adminHeaderModules.classList.remove(
-    "header-ready"
-  );
-
-  adminHeaderModules.classList.add(
-    "header-entering"
-  );
-
-
   updateAdminHeaderOverflow();
-
-
-  requestAnimationFrame(
-    () => {
-
-      requestAnimationFrame(
-        () => {
-
-          adminHeaderModules.classList.remove(
-            "header-entering"
-          );
-
-          adminHeaderModules.classList.add(
-            "header-ready"
-          );
-
-        }
-      );
-
-    }
-  );
-
 
   return true;
 }
@@ -10773,13 +10721,31 @@ function updateAdminHeaderMoreDirection(
     return;
   }
 
+
+  /*
+    Reset direction lama.
+  */
+
   moreWrapper.classList.remove(
     "popup-left",
     "popup-right"
   );
 
+
+  /*
+    Ukur posisi button ...
+  */
+
   const wrapperRect =
     moreWrapper.getBoundingClientRect();
+
+
+  /*
+    Ukur lebar sebenar popup.
+
+    scrollWidth masih boleh baca
+    walaupun popup belum visible.
+  */
 
   const popupWidth =
     Math.max(
@@ -10795,6 +10761,12 @@ function updateAdminHeaderMoreDirection(
 
   const safeGap =
     12;
+
+
+  /*
+    Ruang dari button menuju
+    tepi kanan / kiri browser.
+  */
 
   const spaceRight =
     viewportWidth -
@@ -11545,8 +11517,17 @@ function showToast(
   messageElement.className =
     "custom-toast-message";
 
+
+  /*
+    textContent digunakan supaya
+    message tidak inject HTML.
+  */
+
   messageElement.textContent =
     String(message ?? "");
+
+
+  /* CLOSE */
 
   const closeButton =
     document.createElement(

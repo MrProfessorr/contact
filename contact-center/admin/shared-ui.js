@@ -1906,7 +1906,16 @@ trigger.style.position =
 
 
 iconButton.style.position =
-  "relative";
+  "absolute";
+
+iconButton.style.right =
+  "8px";
+
+iconButton.style.top =
+  "50%";
+
+iconButton.style.transform =
+  "translateY(-50%)";
 
 iconButton.style.zIndex =
   "2";

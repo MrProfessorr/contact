@@ -55,6 +55,12 @@ function applyAdminTheme(
 
   }
 
+
+  /*
+    Sync every theme switch
+    that currently exists.
+  */
+
   document
     .querySelectorAll(
       "[data-admin-theme-switch]"
@@ -1617,6 +1623,9 @@ function createSharedChipDropdown(
     return null;
   }
 
+
+  /* PREVENT DOUBLE INIT */
+
   if (
     container._sharedChipDropdown
   ) {
@@ -1731,47 +1740,40 @@ function createSharedChipDropdown(
 
 
   container.innerHTML = `
-<div
-  class="shared-chip-dropdown-trigger"
->
+    <div
+      class="shared-chip-dropdown-trigger"
+      tabindex="0"
+    >
 
-  <div
-    class="shared-chip-dropdown-values"
-  ></div>
+      <div
+        class="shared-chip-dropdown-values"
+      ></div>
 
-  <input
-    type="text"
-    class="shared-chip-dropdown-search"
-    placeholder="${escapeSharedText(
-      config.placeholder
-    )}"
-    autocomplete="off"
-    spellcheck="false"
-  >
+      <span
+        class="shared-chip-dropdown-placeholder"
+      >
+        ${escapeSharedText(
+          config.placeholder
+        )}
+      </span>
 
-  <button
-    class="shared-chip-dropdown-icon-btn"
-    type="button"
-    aria-label="Toggle options"
-  >
-    ${arrowIcon}
-    ${searchIcon}
-    ${clearIcon}
-  </button>
+      <button
+        class="shared-chip-dropdown-icon-btn"
+        type="button"
+        aria-label="Toggle options"
+      >
+        ${arrowIcon}
+        ${searchIcon}
+        ${clearIcon}
+      </button>
 
-</div>
+    </div>
 
-
-<div
-  class="shared-chip-dropdown-panel"
->
-
-  <div
-    class="shared-chip-dropdown-options"
-  ></div>
-
-</div>
+    <div
+      class="shared-chip-dropdown-panel"
+    ></div>
   `;
+
 
   const trigger =
     container.querySelector(
@@ -1788,16 +1790,6 @@ function createSharedChipDropdown(
   const panel =
     container.querySelector(
       ".shared-chip-dropdown-panel"
-    );
-  const searchInput =
-    container.querySelector(
-      ".shared-chip-dropdown-search"
-    );
-
-
-  const optionList =
-    container.querySelector(
-      ".shared-chip-dropdown-options"
     );
 const overflowPopup =
   document.createElement("div");
@@ -1940,6 +1932,11 @@ const hiddenItems =
       `)
       .join("");
 
+
+  /*
+    +N CHIP
+  */
+
 if (
   hiddenItems.length > 0
 ) {
@@ -1991,80 +1988,14 @@ if (
     "has-value",
     selectedValues.size > 0
   );
-/*
-  CLOSED:
-  - selected ada = tunjuk chips
-  - selected kosong = tunjuk Select Site
 
-  OPEN:
-  - tunjuk input search untuk typing
-*/
-
-const isOpen =
-  container.classList.contains(
-    "open"
-  );
-
-
-if (isOpen) {
-
-  valuesBox.style.display =
-    "none";
-
-  searchInput.style.display =
-    "";
-
-}
-else {
-
-  searchInput.style.display =
-    selectedValues.size > 0
-      ? "none"
-      : "";
-
-  valuesBox.style.display =
-    selectedValues.size > 0
-      ? ""
-      : "none";
-
-}
 
   /*
     Dropdown options asal.
   */
 
-  const searchKeyword =
-    String(
-      searchInput?.value || ""
-    )
-      .trim()
-      .toLowerCase();
-
-
-  const filteredOptions =
-    config.options.filter(
-      option => {
-
-        if (!searchKeyword) {
-          return true;
-        }
-
-        return String(
-          option.label ||
-          option.value ||
-          ""
-        )
-          .toLowerCase()
-          .includes(
-            searchKeyword
-          );
-
-      }
-    );
-
-
-  optionList.innerHTML =
-    filteredOptions
+  panel.innerHTML =
+    config.options
       .map(option => {
 
         const value =
@@ -2114,19 +2045,7 @@ else {
 
       })
       .join("");
-  if (
-    filteredOptions.length === 0
-  ) {
 
-    optionList.innerHTML = `
-      <div
-        class="shared-chip-dropdown-empty"
-      >
-        No site found
-      </div>
-    `;
-
-  }
 }
 
 
@@ -2134,45 +2053,22 @@ else {
      OPEN / CLOSE
   ===================================================== */
 
-function open() {
+  function open() {
 
-  container.classList.add(
-    "open"
-  );
-
-  if (searchInput) {
-
-    searchInput.value = "";
+    container.classList.add(
+      "open"
+    );
 
   }
 
-  render();
 
+  function close() {
 
-  requestAnimationFrame(
-    () => {
+    container.classList.remove(
+      "open"
+    );
 
-      searchInput?.focus();
-
-    }
-  );
-
-}
-
-
-function close() {
-
-  container.classList.remove(
-    "open"
-  );
-
-  if (searchInput) {
-    searchInput.value = "";
   }
-
-  render();
-
-}
 
 
   function toggle() {
@@ -2199,55 +2095,43 @@ function close() {
      TRIGGER CLICK
   ===================================================== */
 
-trigger.addEventListener(
-  "click",
-  event => {
-
-    if (
-      event.target.closest(
-        ".shared-chip-dropdown-chip-remove"
-      )
-    ) {
-      return;
-    }
-
-
-    if (
-      event.target.closest(
-        ".shared-chip-dropdown-icon-btn"
-      )
-    ) {
-      return;
-    }
-
-
-    if (
-      event.target === searchInput
-    ) {
+  trigger.addEventListener(
+    "click",
+    event => {
 
       if (
-        !container.classList.contains(
-          "open"
+        event.target.closest(
+          ".shared-chip-dropdown-chip-remove"
         )
       ) {
-        open();
+
+        return;
+
       }
 
-      return;
+
+      if (
+        event.target.closest(
+          ".shared-chip-dropdown-icon-btn"
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      toggle();
+
     }
-
-
-    open();
-
-  }
-);
+  );
 
 
   /* =====================================================
      OPTION CLICK
   ===================================================== */
 
-   optionList.addEventListener(
+  panel.addEventListener(
     "click",
     event => {
 
@@ -2304,66 +2188,7 @@ trigger.addEventListener(
     }
   );
 
-  /* =====================================================
-     SEARCH OPTIONS
-  ===================================================== */
 
-searchInput?.addEventListener(
-  "input",
-  () => {
-
-    if (
-      !container.classList.contains(
-        "open"
-      )
-    ) {
-      open();
-    }
-
-    render();
-
-  }
-);
-
-searchInput?.addEventListener(
-  "click",
-  event => {
-
-    event.stopPropagation();
-
-    if (
-      !container.classList.contains(
-        "open"
-      )
-    ) {
-      open();
-    }
-
-  }
-);
-searchInput?.addEventListener(
-  "focus",
-  () => {
-
-    if (
-      !container.classList.contains(
-        "open"
-      )
-    ) {
-      open();
-    }
-
-  }
-);
-
-  searchInput?.addEventListener(
-    "keydown",
-    event => {
-
-      event.stopPropagation();
-
-    }
-  );
   /* =====================================================
      REMOVE ONE CHIP
   ===================================================== */
@@ -2489,30 +2314,40 @@ overflowPopup.addEventListener(
      RIGHT ICON
   ===================================================== */
 
-iconButton.addEventListener(
-  "click",
-  event => {
+  iconButton.addEventListener(
+    "click",
+    event => {
 
-    event.stopPropagation();
+      event.stopPropagation();
 
 
-    if (
-      container.classList.contains(
-        "open"
-      )
-    ) {
+      /*
+        Closed + has chip + hover
+        = clear all.
+      */
 
-      close();
+      if (
+        selectedValues.size &&
+        !container.classList.contains(
+          "open"
+        )
+      ) {
 
-      return;
+        selectedValues.clear();
+
+        render();
+
+        notifyChange();
+
+        return;
+
+      }
+
+
+      toggle();
 
     }
-
-
-    open();
-
-  }
-);
+  );
 
 
   /* =====================================================
@@ -2845,11 +2680,7 @@ localStorage.setItem(
     "1"
   );
 
-sessionStorage.setItem(
-  "adminInternalTabNavigation",
-  "1"
-);
-   
+
   window.location.href =
     `./${tab.file}`;
 
@@ -5027,52 +4858,7 @@ const adminSiteSelector =
 
 adminSiteSelector.className =
   "admin-site-selector";
-const adminSiteMobileButton =
-  document.createElement(
-    "button"
-  );
 
-
-adminSiteMobileButton.type =
-  "button";
-
-
-adminSiteMobileButton.className =
-  "admin-site-mobile-button";
-
-
-adminSiteMobileButton.setAttribute(
-  "aria-label",
-  "Select Site"
-);
-
-adminSiteMobileButton.setAttribute(
-  "aria-expanded",
-  "false"
-);
-adminSiteMobileButton.innerHTML = `
-  <svg
-    class="admin-site-mobile-icon"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path
-      d="M14 22V8c0-2.828 0-4.243-.879-5.121C12.243 2 10.828 2 8 2s-4.243 0-5.121.879C2 3.757 2 5.172 2 8v8c0 2.828 0 4.243.879 5.121C3.757 22 5.172 22 8 22zM6.5 11h-1m5 0h-1m-3-4h-1m1 8h-1m5-8h-1m1 8h-1m9 0h-1m1-4h-1m.5-3h-4v14h4c1.886 0 2.828 0 3.414-.586S22 19.886 22 18v-6c0-1.886 0-2.828-.586-3.414S19.886 8 18 8Z"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.7"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-
-  <span
-    class="admin-site-mobile-badge"
-    hidden
-  >
-    0
-  </span>
-`;
 
 const adminBrand =
   adminNavInner.querySelector(
@@ -5110,41 +4896,7 @@ adminSiteSelector.insertAdjacentElement(
   "afterend",
   adminHeaderModules
 );
-function updateAdminSiteMobileBadge(
-  values = currentAdminSelectedSites
-) {
 
-  const badge =
-    adminSiteMobileButton.querySelector(
-      ".admin-site-mobile-badge"
-    );
-
-
-  if (!badge) {
-    return;
-  }
-
-
-  const count =
-    Array.isArray(values)
-      ? values.length
-      : 0;
-
-
-  badge.textContent =
-    String(count);
-
-
-  badge.hidden =
-    count === 0;
-
-
-  adminSiteMobileButton.classList.toggle(
-    "has-value",
-    count > 0
-  );
-
-}
 const adminSiteDropdown =
   createSharedChipDropdown(
     adminSiteSelector,
@@ -5169,9 +4921,7 @@ currentAdminSelectedSites =
           String(value)
       )
     : [];
-updateAdminSiteMobileBadge(
-  currentAdminSelectedSites
-);
+
         window.dispatchEvent(
           new CustomEvent(
             "admin-site-change",
@@ -5193,159 +4943,8 @@ updateAdminSiteMobileBadge(
 
     }
   );
-adminSiteSelector.prepend(
-  adminSiteMobileButton
-);
-
-updateAdminSiteMobileBadge(
-  currentAdminSelectedSites
-);
-adminSiteMobileButton.addEventListener(
-  "click",
-  event => {
-
-    event.stopPropagation();
 
 
-    const isOpen =
-      adminSiteSelector.classList.contains(
-        "mobile-site-open"
-      );
-
-
-    if (isOpen) {
-
-      adminSiteSelector.classList.remove(
-        "mobile-site-open"
-      );
-
-      adminSiteMobileButton.setAttribute(
-        "aria-expanded",
-        "false"
-      );
-
-      adminSiteDropdown?.close();
-
-      return;
-    }
-
-
-    adminSiteSelector.classList.add(
-      "mobile-site-open"
-    );
-
-    adminSiteMobileButton.setAttribute(
-      "aria-expanded",
-      "true"
-    );
-
-  }
-);
-/* =====================================================
-   MOBILE SITE SELECTOR - ESCAPE
-===================================================== */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key !== "Escape"
-    ) {
-      return;
-    }
-
-
-    if (
-      !adminSiteSelector.classList.contains(
-        "mobile-site-open"
-      )
-    ) {
-      return;
-    }
-
-
-    adminSiteSelector.classList.remove(
-      "mobile-site-open"
-    );
-
-    adminSiteMobileButton.setAttribute(
-      "aria-expanded",
-      "false"
-    );
-
-    adminSiteDropdown?.close();
-
-  }
-);
-/* =====================================================
-   MOBILE SITE SELECTOR - RESET ON DESKTOP
-===================================================== */
-
-window.addEventListener(
-  "resize",
-  () => {
-
-    if (
-      window.innerWidth <= 650
-    ) {
-      return;
-    }
-
-
-    adminSiteSelector.classList.remove(
-      "mobile-site-open"
-    );
-
-    adminSiteMobileButton.setAttribute(
-      "aria-expanded",
-      "false"
-    );
-
-    adminSiteDropdown?.close();
-
-  }
-);
-  /* =====================================================
-   MOBILE SITE SELECTOR - CLICK OUTSIDE
-===================================================== */
-
-document.addEventListener(
-  "click",
-  event => {
-
-    if (
-      !adminSiteSelector.classList.contains(
-        "mobile-site-open"
-      )
-    ) {
-      return;
-    }
-
-
-    if (
-      adminSiteSelector.contains(
-        event.target
-      )
-    ) {
-      return;
-    }
-
-
-    adminSiteSelector.classList.remove(
-      "mobile-site-open"
-    );
-
-    adminSiteMobileButton.setAttribute(
-      "aria-expanded",
-      "false"
-    );
-
-    adminSiteDropdown?.close();
-
-  }
-);
-   
 window.getAdminSelectedSites =
   function () {
 
@@ -5397,6 +4996,12 @@ async function loadAdminSiteOptions() {
         false
       );
 
+
+    /*
+      Format yang diperlukan
+      shared chip dropdown.
+    */
+
     const options =
       sites.map(
         site => ({
@@ -5417,6 +5022,11 @@ async function loadAdminSiteOptions() {
         })
       );
 
+
+    /*
+      Update dropdown tanpa
+      create dropdown baru.
+    */
 
     adminSiteDropdown
       ?.setOptions(
@@ -5451,9 +5061,7 @@ currentAdminSelectedSites =
         validSites,
         false
       );
-updateAdminSiteMobileBadge(
-  validSites
-);
+
 adminSiteSelector
   .style.display =
   "";
@@ -6594,6 +6202,10 @@ async function translateAdminTree(
 
   try {
 
+    /*
+      Translate root attributes.
+    */
+
     if (
       root.nodeType ===
         Node.ELEMENT_NODE
@@ -6605,6 +6217,11 @@ async function translateAdminTree(
       );
 
     }
+
+
+    /*
+      All text nodes.
+    */
 
     const textWalker =
       document.createTreeWalker(
@@ -10281,104 +9898,6 @@ if (!profileReady) {
   updateAdminHeaderOverflow();
 
 }
-function restoreCachedAdminHeaderModules() {
-
-  const isInternalNavigation =
-    sessionStorage.getItem(
-      "adminInternalTabNavigation"
-    ) === "1";
-
-  /*
-    Refresh biasa:
-    jangan tampilkan cache.
-    Tunggu permission/profile Firebase.
-  */
-  if (!isInternalNavigation) {
-    return false;
-  }
-
-  /*
-    Flag hanya berlaku sekali.
-    Jadi F5 selepas ini tetap tunggu profile.
-  */
-  sessionStorage.removeItem(
-    "adminInternalTabNavigation"
-  );
-
-  const cachedMenu =
-    getAdminWorkspaceMenu();
-
-  if (
-    !Array.isArray(cachedMenu) ||
-    cachedMenu.length === 0
-  ) {
-    return false;
-  }
-
-  const allowedFiles =
-    new Set(
-      cachedMenu.map(
-        item => String(item.file || "")
-      )
-    );
-
-  currentVisibleHeaderItems =
-    adminHeaderMenuItems.filter(
-      item => {
-
-        if (
-          allowedFiles.has(
-            String(item.file || "")
-          )
-        ) {
-          return true;
-        }
-
-        /*
-          Support parent dropdown.
-          Example Skin Config.
-        */
-        return (
-          Array.isArray(item.children) &&
-          item.children.some(
-            child =>
-              allowedFiles.has(
-                String(child.file || "")
-              )
-          )
-        );
-
-      }
-    );
-
-  adminHeaderModules.innerHTML = `
-    <div
-      class="admin-header-module-visible"
-    ></div>
-
-    <div
-      class="admin-header-more"
-      hidden
-    >
-      <button
-        type="button"
-        class="admin-header-more-button"
-        aria-label="More modules"
-        aria-expanded="false"
-      >
-        ${ADMIN_HEADER_MORE_ICON}
-      </button>
-
-      <div
-        class="admin-header-more-popup"
-      ></div>
-    </div>
-  `;
-
-  updateAdminHeaderOverflow();
-
-  return true;
-}
 function createAdminHeaderModuleButton(
   item
 ) {
@@ -11406,11 +10925,7 @@ document.addEventListener(
   }
 );
    
-if (
-  !restoreCachedAdminHeaderModules()
-) {
-  renderAdminHeaderModules();
-}
+renderAdminHeaderModules();
 function syncAdminPermissionMenu() {
 
   const profile =
@@ -11901,6 +11416,12 @@ function showToast(
   messageElement.className =
     "custom-toast-message";
 
+
+  /*
+    textContent digunakan supaya
+    message tidak inject HTML.
+  */
+
   messageElement.textContent =
     String(message ?? "");
 
@@ -11971,6 +11492,11 @@ function showToast(
     toast
   );
 
+
+  /*
+    Trigger enter animation.
+  */
+
   requestAnimationFrame(
     () => {
 
@@ -11986,6 +11512,11 @@ function showToast(
 
     }
   );
+
+
+  /*
+    AUTO CLOSE
+  */
 
   if (
     duration > 0

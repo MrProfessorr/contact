@@ -1623,9 +1623,6 @@ function createSharedChipDropdown(
     return null;
   }
 
-
-  /* PREVENT DOUBLE INIT */
-
   if (
     container._sharedChipDropdown
   ) {
@@ -1769,11 +1766,37 @@ function createSharedChipDropdown(
 
     </div>
 
+
     <div
       class="shared-chip-dropdown-panel"
-    ></div>
-  `;
+    >
 
+      <div
+        class="shared-chip-dropdown-search-wrap"
+      >
+        <input
+          type="text"
+          class="shared-chip-dropdown-search"
+          placeholder="Search site"
+          autocomplete="off"
+          spellcheck="false"
+        >
+
+        <span
+          class="shared-chip-dropdown-search-icon"
+          aria-hidden="true"
+        >
+          ${searchIcon}
+        </span>
+      </div>
+
+
+      <div
+        class="shared-chip-dropdown-options"
+      ></div>
+
+    </div>
+  `;
 
   const trigger =
     container.querySelector(
@@ -1790,6 +1813,16 @@ function createSharedChipDropdown(
   const panel =
     container.querySelector(
       ".shared-chip-dropdown-panel"
+    );
+  const searchInput =
+    container.querySelector(
+      ".shared-chip-dropdown-search"
+    );
+
+
+  const optionList =
+    container.querySelector(
+      ".shared-chip-dropdown-options"
     );
 const overflowPopup =
   document.createElement("div");
@@ -1994,8 +2027,38 @@ if (
     Dropdown options asal.
   */
 
-  panel.innerHTML =
-    config.options
+  const searchKeyword =
+    String(
+      searchInput?.value || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const filteredOptions =
+    config.options.filter(
+      option => {
+
+        if (!searchKeyword) {
+          return true;
+        }
+
+        return String(
+          option.label ||
+          option.value ||
+          ""
+        )
+          .toLowerCase()
+          .includes(
+            searchKeyword
+          );
+
+      }
+    );
+
+
+  optionList.innerHTML =
+    filteredOptions
       .map(option => {
 
         const value =
@@ -2045,7 +2108,19 @@ if (
 
       })
       .join("");
+  if (
+    filteredOptions.length === 0
+  ) {
 
+    optionList.innerHTML = `
+      <div
+        class="shared-chip-dropdown-empty"
+      >
+        No site found
+      </div>
+    `;
+
+  }
 }
 
 
@@ -2131,7 +2206,7 @@ if (
      OPTION CLICK
   ===================================================== */
 
-  panel.addEventListener(
+   optionList.addEventListener(
     "click",
     event => {
 
@@ -2188,7 +2263,38 @@ if (
     }
   );
 
+  /* =====================================================
+     SEARCH OPTIONS
+  ===================================================== */
 
+  searchInput?.addEventListener(
+    "input",
+    () => {
+
+      render();
+
+    }
+  );
+
+
+  searchInput?.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+    }
+  );
+
+
+  searchInput?.addEventListener(
+    "keydown",
+    event => {
+
+      event.stopPropagation();
+
+    }
+  );
   /* =====================================================
      REMOVE ONE CHIP
   ===================================================== */
@@ -4862,7 +4968,54 @@ const adminSiteSelector =
 
 adminSiteSelector.className =
   "admin-site-selector";
+const adminSiteMobileButton =
+  document.createElement(
+    "button"
+  );
 
+
+adminSiteMobileButton.type =
+  "button";
+
+
+adminSiteMobileButton.className =
+  "admin-site-mobile-button";
+
+
+adminSiteMobileButton.setAttribute(
+  "aria-label",
+  "Select Site"
+);
+
+
+adminSiteMobileButton.innerHTML = `
+  <svg
+    class="admin-site-mobile-icon"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      d="M14 22V8c0-2.828 0-4.243-.879-5.121C12.243 2 10.828 2 8 2s-4.243 0-5.121.879C2 3.757 2 5.172 2 8v8c0 2.828 0 4.243.879 5.121C3.757 22 5.172 22 8 22zM6.5 11h-1m5 0h-1m-3-4h-1m1 8h-1m5-8h-1m1 8h-1m9 0h-1m1-4h-1m.5-3h-4v14h4c1.886 0 2.828 0 3.414-.586S22 19.886 22 18v-6c0-1.886 0-2.828-.586-3.414S19.886 8 18 8Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+
+  <span
+    class="admin-site-mobile-badge"
+    hidden
+  >
+    0
+  </span>
+`;
+
+
+adminSiteSelector.appendChild(
+  adminSiteMobileButton
+);
 
 const adminBrand =
   adminNavInner.querySelector(
@@ -4900,7 +5053,41 @@ adminSiteSelector.insertAdjacentElement(
   "afterend",
   adminHeaderModules
 );
+function updateAdminSiteMobileBadge(
+  values = currentAdminSelectedSites
+) {
 
+  const badge =
+    adminSiteMobileButton.querySelector(
+      ".admin-site-mobile-badge"
+    );
+
+
+  if (!badge) {
+    return;
+  }
+
+
+  const count =
+    Array.isArray(values)
+      ? values.length
+      : 0;
+
+
+  badge.textContent =
+    String(count);
+
+
+  badge.hidden =
+    count === 0;
+
+
+  adminSiteMobileButton.classList.toggle(
+    "has-value",
+    count > 0
+  );
+
+}
 const adminSiteDropdown =
   createSharedChipDropdown(
     adminSiteSelector,
@@ -4925,7 +5112,9 @@ currentAdminSelectedSites =
           String(value)
       )
     : [];
-
+updateAdminSiteMobileBadge(
+  currentAdminSelectedSites
+);
         window.dispatchEvent(
           new CustomEvent(
             "admin-site-change",
@@ -4948,7 +5137,51 @@ currentAdminSelectedSites =
     }
   );
 
+adminSiteMobileButton.addEventListener(
+  "click",
+  event => {
 
+    event.stopPropagation();
+
+
+    if (
+      adminSiteSelector.classList.contains(
+        "mobile-site-open"
+      )
+    ) {
+
+      adminSiteSelector.classList.remove(
+        "mobile-site-open"
+      );
+
+      adminSiteDropdown?.close();
+
+      return;
+    }
+
+
+    adminSiteSelector.classList.add(
+      "mobile-site-open"
+    );
+
+
+    adminSiteDropdown?.open();
+
+
+    requestAnimationFrame(
+      () => {
+
+        adminSiteSelector
+          .querySelector(
+            ".shared-chip-dropdown-search"
+          )
+          ?.focus();
+
+      }
+    );
+
+  }
+);
 window.getAdminSelectedSites =
   function () {
 
@@ -5060,7 +5293,9 @@ currentAdminSelectedSites =
         validSites,
         false
       );
-
+updateAdminSiteMobileBadge(
+  validSites
+);
 adminSiteSelector
   .style.display =
   "";

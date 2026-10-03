@@ -693,19 +693,14 @@ background-repeat:
   justify-content: center;
   border-radius: 50%;
   font-size: 10px;
+  transition: .18s ease;
 }
-
 
 .filter-btn:hover {
-  border-color: var(--border2);
-  background: rgba(255,255,255,.20);
+  border-color: #fbff52;
 }
-
-
 .filter-btn.active {
   border-color: #f9ff00;
-  background: linear-gradient(180deg, #000000 0%, #000000 100%) padding-box, linear-gradient(180deg, #F8DD76 0%, #FCDF79 50%, #BA8618 100%) border-box !important;
-  box-shadow: 0 7px 20px rgba(37,100,209,.18);
 }
 /* =========================================================
    STATUS SEARCH

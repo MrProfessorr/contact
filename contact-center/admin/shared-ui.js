@@ -1748,13 +1748,6 @@ function createSharedChipDropdown(
       <div
         class="shared-chip-dropdown-values"
       ></div>
-<input
-  type="text"
-  class="shared-chip-dropdown-search"
-  autocomplete="off"
-  spellcheck="false"
-  aria-label="Search options"
->
       <span
         class="shared-chip-dropdown-placeholder"
       >
@@ -1791,10 +1784,7 @@ function createSharedChipDropdown(
     container.querySelector(
       ".shared-chip-dropdown-values"
     );
-const searchInput =
-  container.querySelector(
-    ".shared-chip-dropdown-search"
-  );
+
 
   const panel =
     container.querySelector(

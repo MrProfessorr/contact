@@ -334,23 +334,20 @@
 
   border-radius:
     6px;
-
-  background-color:
-    #cd9f15;
-
+  border: 1px solid #00000000;
+  background: linear-gradient(145deg, #f8dd76, #280000);
   box-shadow:
     rgba(0,0,0,.10)
     0 5px 14px 0;
-
   font-size:
-    12px;
+    14px;
 
   font-weight:
     600;
 
   letter-spacing:
     .4px;
-
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 2px 5px rgba(0, 0, 0, 0.25);
   transition:
     .18s ease;
 }

@@ -1731,65 +1731,46 @@ function createSharedChipDropdown(
 
 
   container.innerHTML = `
-    <div
-      class="shared-chip-dropdown-trigger"
-      tabindex="0"
-    >
+<div
+  class="shared-chip-dropdown-trigger"
+>
 
-      <div
-        class="shared-chip-dropdown-values"
-      ></div>
+  <div
+    class="shared-chip-dropdown-values"
+  ></div>
 
-      <span
-        class="shared-chip-dropdown-placeholder"
-      >
-        ${escapeSharedText(
-          config.placeholder
-        )}
-      </span>
+  <input
+    type="text"
+    class="shared-chip-dropdown-search"
+    placeholder="${escapeSharedText(
+      config.placeholder
+    )}"
+    autocomplete="off"
+    spellcheck="false"
+  >
 
-      <button
-        class="shared-chip-dropdown-icon-btn"
-        type="button"
-        aria-label="Toggle options"
-      >
-        ${arrowIcon}
-        ${searchIcon}
-        ${clearIcon}
-      </button>
+  <button
+    class="shared-chip-dropdown-icon-btn"
+    type="button"
+    aria-label="Toggle options"
+  >
+    ${arrowIcon}
+    ${searchIcon}
+    ${clearIcon}
+  </button>
 
-    </div>
-
-
-    <div
-      class="shared-chip-dropdown-panel"
-    >
-
-      <div
-        class="shared-chip-dropdown-search-wrap"
-      >
-        <input
-          type="text"
-          class="shared-chip-dropdown-search"
-          placeholder="Search site"
-          autocomplete="off"
-          spellcheck="false"
-        >
-
-        <span
-          class="shared-chip-dropdown-search-icon"
-          aria-hidden="true"
-        >
-          ${searchIcon}
-        </span>
-      </div>
+</div>
 
 
-      <div
-        class="shared-chip-dropdown-options"
-      ></div>
+<div
+  class="shared-chip-dropdown-panel"
+>
 
-    </div>
+  <div
+    class="shared-chip-dropdown-options"
+  ></div>
+
+</div>
   `;
 
   const trigger =
@@ -2159,36 +2140,41 @@ if (
      TRIGGER CLICK
   ===================================================== */
 
-  trigger.addEventListener(
-    "click",
-    event => {
+trigger.addEventListener(
+  "click",
+  event => {
 
-      if (
-        event.target.closest(
-          ".shared-chip-dropdown-chip-remove"
-        )
-      ) {
-
-        return;
-
-      }
-
-
-      if (
-        event.target.closest(
-          ".shared-chip-dropdown-icon-btn"
-        )
-      ) {
-
-        return;
-
-      }
-
-
-      toggle();
-
+    if (
+      event.target.closest(
+        ".shared-chip-dropdown-chip-remove"
+      )
+    ) {
+      return;
     }
-  );
+
+
+    if (
+      event.target.closest(
+        ".shared-chip-dropdown-icon-btn"
+      )
+    ) {
+      return;
+    }
+
+
+    if (
+      event.target === searchInput
+    ) {
+      return;
+    }
+
+
+    searchInput?.focus();
+
+    open();
+
+  }
+);
 
 
   /* =====================================================
@@ -2256,25 +2242,53 @@ if (
      SEARCH OPTIONS
   ===================================================== */
 
-  searchInput?.addEventListener(
-    "input",
-    () => {
+searchInput?.addEventListener(
+  "input",
+  () => {
 
-      render();
-
+    if (
+      !container.classList.contains(
+        "open"
+      )
+    ) {
+      open();
     }
-  );
 
+    render();
 
-  searchInput?.addEventListener(
-    "click",
-    event => {
+  }
+);
 
-      event.stopPropagation();
+searchInput?.addEventListener(
+  "click",
+  event => {
 
+    event.stopPropagation();
+
+    if (
+      !container.classList.contains(
+        "open"
+      )
+    ) {
+      open();
     }
-  );
 
+  }
+);
+searchInput?.addEventListener(
+  "focus",
+  () => {
+
+    if (
+      !container.classList.contains(
+        "open"
+      )
+    ) {
+      open();
+    }
+
+  }
+);
 
   searchInput?.addEventListener(
     "keydown",

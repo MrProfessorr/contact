@@ -2674,13 +2674,6 @@ localStorage.setItem(
   tab.file
 );
 
-
-  sessionStorage.setItem(
-    "adminShowContentLoading",
-    "1"
-  );
-
-
   window.location.href =
     `./${tab.file}`;
 
@@ -3036,7 +3029,10 @@ const existingWorkspace =
   );
 
 if (existingWorkspace) {
-  existingWorkspace.remove();
+
+
+  return;
+
 }
 
 

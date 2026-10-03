@@ -186,32 +186,15 @@
 
 
 .notice-tag {
-  display:
-    inline-flex;
-
-  padding:
-    5px 7px;
-
-  border:
-    1px solid #f8dd76;
-
-  border-radius:
-    6px;
-
-  color:
-    #f8dd76;
-
-  background:
-    #18150b;
-
-  font-size:
-    7px;
-
-  font-weight:
-    900;
-
-  letter-spacing:
-    .5px;
+    display: inline-flex;
+    padding: 5px 12px;
+    border: 1px solid #f8dd76;
+    border-radius: 6px;
+    color: #f8dd76;
+    background: #280000;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: .5px;
 }
 
 
@@ -272,7 +255,7 @@
     100%;
 
   color:
-    #cad5e5;
+    #ffffff;
 
   font-size:
     14px;
@@ -285,9 +268,10 @@
 
   word-break:
     break-word;
-
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 2px 5px rgba(0, 0, 0, 0.25);
   transition:
     max-height .35s ease;
+   
 }
 
 

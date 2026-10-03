@@ -2139,7 +2139,29 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   .shared-chip-dropdown-trigger {
     display:none;
   }
+.admin-site-selector
+.admin-site-mobile-icon {
+  display:block;
 
+  width:20px;
+  height:20px;
+
+  flex:0 0 20px;
+
+  color:#ffffff;
+
+  fill:none;
+  stroke:currentColor;
+
+  visibility:visible;
+  opacity:1;
+}
+
+.admin-site-selector
+.admin-site-mobile-icon path {
+  fill:none;
+  stroke:currentColor;
+}
   /* Popup site */
 
   .admin-site-selector

@@ -1802,12 +1802,119 @@ container.appendChild(
   overflowPopup
 );
 
-  const iconButton =
-    container.querySelector(
-      ".shared-chip-dropdown-icon-btn"
-    );
+const iconButton =
+  container.querySelector(
+    ".shared-chip-dropdown-icon-btn"
+  );
 
-const searchInput = null;
+
+const placeholder =
+  container.querySelector(
+    ".shared-chip-dropdown-placeholder"
+  );
+
+
+/*
+  Real search input.
+
+  Input ini BUKAN kotak kedua.
+  Ia hanya mengambil tempat placeholder/chips
+  ketika dropdown sedang OPEN.
+*/
+
+const searchInput =
+  document.createElement(
+    "input"
+  );
+
+
+searchInput.type =
+  "text";
+
+searchInput.className =
+  "shared-chip-dropdown-search";
+
+searchInput.placeholder =
+  config.placeholder;
+
+searchInput.autocomplete =
+  "off";
+
+searchInput.spellcheck =
+  false;
+
+
+/*
+  Buang style default browser supaya
+  tidak muncul kotak putih dalam trigger.
+*/
+
+searchInput.style.position =
+  "absolute";
+
+searchInput.style.left =
+  "10px";
+
+searchInput.style.right =
+  "34px";
+
+searchInput.style.top =
+  "0";
+
+searchInput.style.bottom =
+  "0";
+
+searchInput.style.width =
+  "calc(100% - 44px)";
+
+searchInput.style.height =
+  "100%";
+
+searchInput.style.margin =
+  "0";
+
+searchInput.style.padding =
+  "0";
+
+searchInput.style.border =
+  "0";
+
+searchInput.style.outline =
+  "0";
+
+searchInput.style.boxShadow =
+  "none";
+
+searchInput.style.background =
+  "transparent";
+
+searchInput.style.color =
+  "inherit";
+
+searchInput.style.font =
+  "inherit";
+
+searchInput.style.display =
+  "none";
+
+searchInput.style.zIndex =
+  "1";
+
+
+trigger.style.position =
+  "relative";
+
+
+iconButton.style.position =
+  "relative";
+
+iconButton.style.zIndex =
+  "2";
+
+
+trigger.appendChild(
+  searchInput
+);
   /* =====================================================
      GET OPTION
   ===================================================== */
@@ -2087,12 +2194,24 @@ function open() {
   );
 
 
-  if (searchInput) {
+  /*
+    OPEN MODE:
 
-    searchInput.value =
-      "";
+    Sembunyikan chips / Select Site.
+    Input mengambil tempat yang SAMA.
+  */
 
-  }
+  valuesBox.style.display =
+    "none";
+
+  placeholder.style.display =
+    "none";
+
+  searchInput.style.display =
+    "block";
+
+  searchInput.value =
+    "";
 
 
   render();
@@ -2101,7 +2220,12 @@ function open() {
   requestAnimationFrame(
     () => {
 
-      searchInput?.focus();
+      searchInput.focus();
+
+      searchInput.setSelectionRange(
+        0,
+        0
+      );
 
     }
   );
@@ -2116,18 +2240,28 @@ function close() {
   );
 
 
-  if (searchInput) {
+  searchInput.value =
+    "";
 
-    searchInput.value =
-      "";
+  searchInput.style.display =
+    "none";
 
-  }
+
+  /*
+    Kembalikan UI asal:
+    Select Site atau chips.
+  */
+
+  valuesBox.style.display =
+    "";
+
+  placeholder.style.display =
+    "";
 
 
   render();
 
 }
-
 
   function toggle() {
 

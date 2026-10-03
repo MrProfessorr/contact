@@ -65,13 +65,13 @@
   overflow: hidden;
 
   border:
-    1px solid #f9ff00;
+    1px solid #f8dd76;
 
   border-radius:
     10px;
 
   background:
-    #0a0a0a;
+    #280000;
 
   font-size:
     20px;
@@ -103,7 +103,7 @@
 
 .contact-content h3 {
   max-width: 100%;
-
+  font-weight: 500;
   margin-bottom:
     4px;
 
@@ -118,6 +118,9 @@
 
   font-size:
     14px;
+   text-shadow:
+  0 1px 2px rgba(0, 0, 0, 0.55),
+  0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 
@@ -126,14 +129,14 @@
     6px;
 
   color:
-    #f8dd76;
+    #280000;
 
   font-size:
-    12px;
+    14px;
 
   overflow-wrap:
     anywhere;
-
+ font-weight:700;
   word-break:
     break-word;
 }

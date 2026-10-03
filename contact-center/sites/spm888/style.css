@@ -676,7 +676,7 @@ background-repeat:
   border:1px solid var(--border);
   border-radius: 6px;
   color:#f8dd76;
-  background: linear-gradient(180deg, #ed6b6b 0%, #280000 100%);
+  background: linear-gradient(145deg, #f8dd76, #280000);
   transition:.18s ease;
 }
 

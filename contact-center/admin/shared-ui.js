@@ -2680,7 +2680,11 @@ localStorage.setItem(
     "1"
   );
 
-
+sessionStorage.setItem(
+  "adminInternalTabNavigation",
+  "1"
+);
+   
   window.location.href =
     `./${tab.file}`;
 
@@ -5022,11 +5026,6 @@ async function loadAdminSiteOptions() {
         })
       );
 
-
-    /*
-      Update dropdown tanpa
-      create dropdown baru.
-    */
 
     adminSiteDropdown
       ?.setOptions(
@@ -9898,6 +9897,104 @@ if (!profileReady) {
   updateAdminHeaderOverflow();
 
 }
+function restoreCachedAdminHeaderModules() {
+
+  const isInternalNavigation =
+    sessionStorage.getItem(
+      "adminInternalTabNavigation"
+    ) === "1";
+
+  /*
+    Refresh biasa:
+    jangan tampilkan cache.
+    Tunggu permission/profile Firebase.
+  */
+  if (!isInternalNavigation) {
+    return false;
+  }
+
+  /*
+    Flag hanya berlaku sekali.
+    Jadi F5 selepas ini tetap tunggu profile.
+  */
+  sessionStorage.removeItem(
+    "adminInternalTabNavigation"
+  );
+
+  const cachedMenu =
+    getAdminWorkspaceMenu();
+
+  if (
+    !Array.isArray(cachedMenu) ||
+    cachedMenu.length === 0
+  ) {
+    return false;
+  }
+
+  const allowedFiles =
+    new Set(
+      cachedMenu.map(
+        item => String(item.file || "")
+      )
+    );
+
+  currentVisibleHeaderItems =
+    adminHeaderMenuItems.filter(
+      item => {
+
+        if (
+          allowedFiles.has(
+            String(item.file || "")
+          )
+        ) {
+          return true;
+        }
+
+        /*
+          Support parent dropdown.
+          Example Skin Config.
+        */
+        return (
+          Array.isArray(item.children) &&
+          item.children.some(
+            child =>
+              allowedFiles.has(
+                String(child.file || "")
+              )
+          )
+        );
+
+      }
+    );
+
+  adminHeaderModules.innerHTML = `
+    <div
+      class="admin-header-module-visible"
+    ></div>
+
+    <div
+      class="admin-header-more"
+      hidden
+    >
+      <button
+        type="button"
+        class="admin-header-more-button"
+        aria-label="More modules"
+        aria-expanded="false"
+      >
+        ${ADMIN_HEADER_MORE_ICON}
+      </button>
+
+      <div
+        class="admin-header-more-popup"
+      ></div>
+    </div>
+  `;
+
+  updateAdminHeaderOverflow();
+
+  return true;
+}
 function createAdminHeaderModuleButton(
   item
 ) {
@@ -10925,7 +11022,11 @@ document.addEventListener(
   }
 );
    
-renderAdminHeaderModules();
+if (
+  !restoreCachedAdminHeaderModules()
+) {
+  renderAdminHeaderModules();
+}
 function syncAdminPermissionMenu() {
 
   const profile =

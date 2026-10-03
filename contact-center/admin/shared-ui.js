@@ -5012,11 +5012,6 @@ adminSiteMobileButton.innerHTML = `
   </span>
 `;
 
-
-adminSiteSelector.appendChild(
-  adminSiteMobileButton
-);
-
 const adminBrand =
   adminNavInner.querySelector(
     ".admin-brand"
@@ -5136,7 +5131,13 @@ updateAdminSiteMobileBadge(
 
     }
   );
+adminSiteSelector.prepend(
+  adminSiteMobileButton
+);
 
+updateAdminSiteMobileBadge(
+  currentAdminSelectedSites
+);
 adminSiteMobileButton.addEventListener(
   "click",
   event => {

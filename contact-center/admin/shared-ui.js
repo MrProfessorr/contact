@@ -9831,9 +9831,9 @@ function renderAdminHeaderModules() {
     adminHeaderMenuItems.filter(
       item => {
 
-        if (!profileReady) {
-          return !item.superadminOnly;
-        }
+if (!profileReady) {
+  return false;
+}
 
         if (isSuperadmin) {
           return true;

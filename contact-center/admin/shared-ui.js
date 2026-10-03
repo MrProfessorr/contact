@@ -4969,7 +4969,10 @@ adminSiteMobileButton.setAttribute(
   "Select Site"
 );
 
-
+adminSiteMobileButton.setAttribute(
+  "aria-expanded",
+  "false"
+);
 adminSiteMobileButton.innerHTML = `
   <svg
     class="admin-site-mobile-icon"
@@ -11722,12 +11725,6 @@ function showToast(
   messageElement.className =
     "custom-toast-message";
 
-
-  /*
-    textContent digunakan supaya
-    message tidak inject HTML.
-  */
-
   messageElement.textContent =
     String(message ?? "");
 
@@ -11798,11 +11795,6 @@ function showToast(
     toast
   );
 
-
-  /*
-    Trigger enter animation.
-  */
-
   requestAnimationFrame(
     () => {
 
@@ -11818,11 +11810,6 @@ function showToast(
 
     }
   );
-
-
-  /*
-    AUTO CLOSE
-  */
 
   if (
     duration > 0

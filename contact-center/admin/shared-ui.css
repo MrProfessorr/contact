@@ -2116,29 +2116,68 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 ========================================================= */
 
 @media (max-width:650px) {
-  /* =========================================
-     MOBILE SITE SELECTOR
-  ========================================= */
+/* =========================================
+   MOBILE SITE SELECTOR
+========================================= */
 
-  .admin-site-selector {
-    width:36px;
-    min-width:36px;
-    max-width:36px;
+.admin-site-selector {
+  width:36px;
+  min-width:36px;
+  max-width:36px;
 
-    flex:0 0 36px;
-  }
+  flex:0 0 36px;
 
-  .admin-site-selector
-  .admin-site-mobile-button {
-    display:flex;
-  }
+  display:flex;
+  align-items:center;
+  gap:4px;
 
-  /* Trigger asal disembunyikan di phone */
+  overflow:visible;
+}
 
-  .admin-site-selector
-  .shared-chip-dropdown-trigger {
-    display:none;
-  }
+
+/* BUILDING BUTTON */
+
+.admin-site-selector
+.admin-site-mobile-button {
+  display:flex;
+
+  width:36px;
+  min-width:36px;
+  max-width:36px;
+
+  flex:0 0 36px;
+}
+
+
+/* CHIP INPUT DEFAULT = HIDDEN */
+
+.admin-site-selector
+.shared-chip-dropdown-trigger {
+  display:none;
+}
+
+
+/* CLICK BUILDING -> CHIP INPUT MUNCUL */
+
+.admin-site-selector.mobile-site-open {
+  width:auto;
+  min-width:36px;
+  max-width:none;
+
+  flex:0 1 auto;
+}
+
+
+.admin-site-selector.mobile-site-open
+.shared-chip-dropdown-trigger {
+  display:flex;
+
+  width:180px;
+  min-width:180px;
+  max-width:220px;
+
+  flex:0 1 220px;
+}
 .admin-site-selector
 .admin-site-mobile-icon {
   display:block;
@@ -2182,10 +2221,6 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
     z-index:10050;
   }
 
-  .admin-site-selector.mobile-site-open
-  .shared-chip-dropdown-panel {
-    display:block;
-  }
 .admin-header-modules {
   flex:0 1 auto;
   width:auto;
@@ -4434,19 +4469,4 @@ padding:0 12px;
   pointer-events:none;
 }
 
-/* MOBILE */
 
-@media(max-width:650px) {
-
-  .admin-site-selector {
-    width:150px;
-    min-width:120px;
-
-    flex:
-      0 1 150px;
-
-    margin-left:
-      8px;
-  }
-
-}

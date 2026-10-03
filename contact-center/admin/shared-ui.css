@@ -1513,13 +1513,10 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
   display:flex;
   align-items:center;
   gap:6px;
-
   flex:0 1 auto;
   min-width:0;
-
-  overflow:hidden;
+  overflow:visible;
 }
-
 
 /* =========================================================
    MODULE BUTTON

@@ -881,19 +881,13 @@ background-repeat:
   padding: 12px;
   border:1px solid var(--border);
   border-radius: 8px;
-  background: linear-gradient(180deg, #525252 0%, #0A0A0A 100%);
+  background: linear-gradient(145deg, #f8dd76, #280000);
   transition:.18s ease;
 }
 
 .status-item:last-child {
   margin-bottom: 0;
 }
-
-.status-item:hover {
-  border-color: var(--border2);
-  background: rgba(255, 255, 255, 0.20);
-}
-
 
 .status-top {
 
@@ -916,18 +910,15 @@ background-repeat:
   white-space: nowrap;
   font-size: 14px;
   font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 
 .status-value {
-  color: var(--muted);
-
+  color: ##280000;
   font-size: 14px;
-
   line-height: 1.45;
-
   overflow-wrap: anywhere;
-
   word-break: break-word;
 }
 

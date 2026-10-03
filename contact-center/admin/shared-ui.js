@@ -5164,6 +5164,111 @@ adminSiteMobileButton.addEventListener(
 
   }
 );
+/* =====================================================
+   MOBILE SITE SELECTOR - ESCAPE
+===================================================== */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key !== "Escape"
+    ) {
+      return;
+    }
+
+
+    if (
+      !adminSiteSelector.classList.contains(
+        "mobile-site-open"
+      )
+    ) {
+      return;
+    }
+
+
+    adminSiteSelector.classList.remove(
+      "mobile-site-open"
+    );
+
+    adminSiteMobileButton.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+    adminSiteDropdown?.close();
+
+  }
+);
+/* =====================================================
+   MOBILE SITE SELECTOR - RESET ON DESKTOP
+===================================================== */
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    if (
+      window.innerWidth <= 650
+    ) {
+      return;
+    }
+
+
+    adminSiteSelector.classList.remove(
+      "mobile-site-open"
+    );
+
+    adminSiteMobileButton.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+    adminSiteDropdown?.close();
+
+  }
+);
+  /* =====================================================
+   MOBILE SITE SELECTOR - CLICK OUTSIDE
+===================================================== */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      !adminSiteSelector.classList.contains(
+        "mobile-site-open"
+      )
+    ) {
+      return;
+    }
+
+
+    if (
+      adminSiteSelector.contains(
+        event.target
+      )
+    ) {
+      return;
+    }
+
+
+    adminSiteSelector.classList.remove(
+      "mobile-site-open"
+    );
+
+    adminSiteMobileButton.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+    adminSiteDropdown?.close();
+
+  }
+);
+   
 window.getAdminSelectedSites =
   function () {
 
@@ -5214,12 +5319,6 @@ async function loadAdminSiteOptions() {
       await window.getAdminSites(
         false
       );
-
-
-    /*
-      Format yang diperlukan
-      shared chip dropdown.
-    */
 
     const options =
       sites.map(

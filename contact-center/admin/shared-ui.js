@@ -2098,22 +2098,30 @@ if (
      OPEN / CLOSE
   ===================================================== */
 
-  function open() {
+function open() {
 
-    container.classList.add(
-      "open"
-    );
+  container.classList.add(
+    "open"
+  );
 
+  render();
+
+}
+
+
+function close() {
+
+  container.classList.remove(
+    "open"
+  );
+
+  if (searchInput) {
+    searchInput.value = "";
   }
 
+  render();
 
-  function close() {
-
-    container.classList.remove(
-      "open"
-    );
-
-  }
+}
 
 
   function toggle() {

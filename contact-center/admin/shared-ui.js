@@ -1748,6 +1748,7 @@ function createSharedChipDropdown(
       <div
         class="shared-chip-dropdown-values"
       ></div>
+
       <span
         class="shared-chip-dropdown-placeholder"
       >
@@ -1802,128 +1803,12 @@ container.appendChild(
   overflowPopup
 );
 
-const iconButton =
-  container.querySelector(
-    ".shared-chip-dropdown-icon-btn"
-  );
+  const iconButton =
+    container.querySelector(
+      ".shared-chip-dropdown-icon-btn"
+    );
 
 
-const placeholder =
-  container.querySelector(
-    ".shared-chip-dropdown-placeholder"
-  );
-
-
-/*
-  Real search input.
-
-  Input ini BUKAN kotak kedua.
-  Ia hanya mengambil tempat placeholder/chips
-  ketika dropdown sedang OPEN.
-*/
-
-const searchInput =
-  document.createElement(
-    "input"
-  );
-
-
-searchInput.type =
-  "text";
-
-searchInput.className =
-  "shared-chip-dropdown-search";
-
-searchInput.placeholder =
-  config.placeholder;
-
-searchInput.autocomplete =
-  "off";
-
-searchInput.spellcheck =
-  false;
-
-
-/*
-  Buang style default browser supaya
-  tidak muncul kotak putih dalam trigger.
-*/
-
-searchInput.style.position =
-  "absolute";
-
-searchInput.style.left =
-  "10px";
-
-searchInput.style.right =
-  "34px";
-
-searchInput.style.top =
-  "0";
-
-searchInput.style.bottom =
-  "0";
-
-searchInput.style.width =
-  "calc(100% - 44px)";
-
-searchInput.style.height =
-  "100%";
-
-searchInput.style.margin =
-  "0";
-
-searchInput.style.padding =
-  "0";
-
-searchInput.style.border =
-  "0";
-
-searchInput.style.outline =
-  "0";
-
-searchInput.style.boxShadow =
-  "none";
-
-searchInput.style.background =
-  "transparent";
-
-searchInput.style.color =
-  "inherit";
-
-searchInput.style.font =
-  "inherit";
-
-searchInput.style.display =
-  "none";
-
-searchInput.style.zIndex =
-  "1";
-
-
-trigger.style.position =
-  "relative";
-
-
-iconButton.style.position =
-  "absolute";
-
-iconButton.style.right =
-  "8px";
-
-iconButton.style.top =
-  "50%";
-
-iconButton.style.transform =
-  "translateY(-50%)";
-
-iconButton.style.zIndex =
-  "2";
-
-
-trigger.appendChild(
-  searchInput
-);
   /* =====================================================
      GET OPTION
   ===================================================== */
@@ -2109,37 +1994,9 @@ if (
     Dropdown options asal.
   */
 
-const searchKeyword =
-  String(
-    searchInput?.value || ""
-  )
-    .trim()
-    .toLowerCase();
-
-
-const filteredOptions =
-  config.options.filter(
-    option => {
-
-      if (!searchKeyword) {
-        return true;
-      }
-
-      return String(
-        option.label || option.value || ""
-      )
-        .toLowerCase()
-        .includes(
-          searchKeyword
-        );
-
-    }
-  );
-
-
-panel.innerHTML =
-  filteredOptions
-    .map(option => {
+  panel.innerHTML =
+    config.options
+      .map(option => {
 
         const value =
           String(
@@ -2196,81 +2053,23 @@ panel.innerHTML =
      OPEN / CLOSE
   ===================================================== */
 
-function open() {
+  function open() {
 
-  container.classList.add(
-    "open"
-  );
+    container.classList.add(
+      "open"
+    );
 
-
-  /*
-    OPEN MODE:
-
-    Sembunyikan chips / Select Site.
-    Input mengambil tempat yang SAMA.
-  */
-
-  valuesBox.style.display =
-    "none";
-
-  placeholder.style.display =
-    "none";
-
-  searchInput.style.display =
-    "block";
-
-  searchInput.value =
-    "";
+  }
 
 
-  render();
+  function close() {
 
+    container.classList.remove(
+      "open"
+    );
 
-  requestAnimationFrame(
-    () => {
+  }
 
-      searchInput.focus();
-
-      searchInput.setSelectionRange(
-        0,
-        0
-      );
-
-    }
-  );
-
-}
-
-
-function close() {
-
-  container.classList.remove(
-    "open"
-  );
-
-
-  searchInput.value =
-    "";
-
-  searchInput.style.display =
-    "none";
-
-
-  /*
-    Kembalikan UI asal:
-    Select Site atau chips.
-  */
-
-  valuesBox.style.display =
-    "";
-
-  placeholder.style.display =
-    "";
-
-
-  render();
-
-}
 
   function toggle() {
 
@@ -2291,114 +2090,41 @@ function close() {
 
   }
 
-/* =====================================================
-   SEARCH INPUT
-===================================================== */
 
-searchInput?.addEventListener(
-  "click",
-  event => {
-
-    event.stopPropagation();
-
-
-    if (
-      !container.classList.contains(
-        "open"
-      )
-    ) {
-
-      open();
-
-    }
-
-  }
-);
-
-
-searchInput?.addEventListener(
-  "focus",
-  () => {
-
-    if (
-      !container.classList.contains(
-        "open"
-      )
-    ) {
-
-      open();
-
-    }
-
-  }
-);
-
-
-searchInput?.addEventListener(
-  "input",
-  () => {
-
-    if (
-      !container.classList.contains(
-        "open"
-      )
-    ) {
-
-      open();
-
-    }
-
-
-    render();
-
-  }
-);
   /* =====================================================
      TRIGGER CLICK
   ===================================================== */
 
-trigger.addEventListener(
-  "click",
-  event => {
+  trigger.addEventListener(
+    "click",
+    event => {
 
-    if (
-      event.target.closest(
-        ".shared-chip-dropdown-chip-remove"
-      )
-    ) {
-      return;
-    }
+      if (
+        event.target.closest(
+          ".shared-chip-dropdown-chip-remove"
+        )
+      ) {
 
+        return;
 
-    if (
-      event.target.closest(
-        ".shared-chip-dropdown-icon-btn"
-      )
-    ) {
-      return;
-    }
+      }
 
 
-    event.stopPropagation();
+      if (
+        event.target.closest(
+          ".shared-chip-dropdown-icon-btn"
+        )
+      ) {
+
+        return;
+
+      }
 
 
-    if (
-      !container.classList.contains(
-        "open"
-      )
-    ) {
-
-      open();
+      toggle();
 
     }
-    else {
-
-      searchInput?.focus();
-
-    }
-
-  }
-);
+  );
 
 
   /* =====================================================

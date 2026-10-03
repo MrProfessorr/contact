@@ -1964,7 +1964,22 @@ select[data-shared-dropdown]:not(.shared-dropdown-native):focus {
 
     flex-basis:18px;
   }
+  /* PHONE = HEADER MODULE ICON ONLY */
 
+  .admin-header-module {
+    width:36px;
+    min-width:36px;
+    padding:0;
+    gap:0;
+  }
+
+  .admin-header-module > span {
+    display:none;
+  }
+
+  .admin-header-module-icon {
+    flex:0 0 18px;
+  }
   .admin-header-module-dropdown-item {
     min-height:36px;
     padding:5px 10px;

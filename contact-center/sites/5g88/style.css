@@ -687,8 +687,10 @@ background-repeat:
 
 
 .filter-btn span {
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 14px;
+  color: #f8dd76;
+  font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 
@@ -731,7 +733,7 @@ background-repeat:
 
 .status-search-wrap input {
   width: 100%;
-  height: 38px;
+  height: 43px;
 
   padding:
     0 36px 0 35px;
@@ -743,12 +745,12 @@ background-repeat:
   border:
     1px solid var(--border);
 
-  border-radius: 8px;
+  border-radius: 12px;
 
   background:
     #2f2f2f;
 
-  font-size: 11px;
+  font-size: 14px;
 
   transition:
     border-color .18s ease,
@@ -782,8 +784,8 @@ background-repeat:
   transform:
     translateY(-50%);
 
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 
   display: flex;
   align-items: center;
@@ -894,33 +896,23 @@ background-repeat:
   margin-bottom: 0;
 }
 
-.status-item:hover {
-  border-color: var(--border2);
-  background: rgba(255, 255, 255, 0.20);
-}
-
-
 .status-top {
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 7px;
-
   margin-bottom: 6px;
 }
 
 
 .status-name {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 14px;
-  font-weight: 600;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 

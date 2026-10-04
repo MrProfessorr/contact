@@ -708,7 +708,6 @@ background-repeat:
 
 .filter-btn:hover {
   border-color: var(--border2);
-  background: rgba(255,255,255,.20);
 }
 
 

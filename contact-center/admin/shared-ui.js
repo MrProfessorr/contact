@@ -502,7 +502,14 @@ element.innerHTML =
 
     };
 
+  const DEFAULT_ADMIN_TAB = {
+    file: "livechat.html",
+    name: "Live Chat",
+    group: "main"
+  };
 
+  const EMPTY_WORKSPACE_ONCE_KEY =
+    "adminEmptyWorkspaceOnce";
     /* =====================================================
        ICONS
     ===================================================== */
